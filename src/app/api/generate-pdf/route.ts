@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { BulgarianInvoiceData } from '../../../types';
 
+export const runtime = 'nodejs';
+export const maxDuration = 60;
+
 const BANK = {
   name: 'Обединена Българска Банка (ОББ)',
   bic: 'UBBSBGSF',
