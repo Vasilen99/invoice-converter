@@ -1,9 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 const PROMPT = `You are an invoice data extraction specialist. Extract all available data from this Stripe invoice PDF and return it as a valid JSON object with the following structure (use empty string "" for missing fields):
 {
@@ -37,6 +32,9 @@ Notes:
 
 export async function POST(req: NextRequest) {
   try {
+    const { default: OpenAI } = await import('openai');
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
     const formData = await req.formData();
     const file = formData.get('file') as File;
 
