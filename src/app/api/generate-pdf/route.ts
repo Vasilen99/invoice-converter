@@ -223,10 +223,12 @@ export async function POST(req: NextRequest) {
     let browser;
     if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
       const puppeteer = (await import('puppeteer-core')).default;
-      const chromium = (await import('@sparticuz/chromium')).default;
+      const chromium = (await import('@sparticuz/chromium-min')).default;
       browser = await puppeteer.launch({
         args: chromium.args,
-        executablePath: await chromium.executablePath(),
+        executablePath: await chromium.executablePath(
+          'https://github.com/Sparticuz/chromium/releases/download/v148.0.0/chromium-v148.0.0-pack.tar'
+        ),
         headless: true,
       });
     } else {
