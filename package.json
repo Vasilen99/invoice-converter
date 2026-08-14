@@ -2,6 +2,7 @@
   "name": "invoice-converter",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,27 +10,46 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@base-ui/react": "^1.7.0",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/adapter-ppg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
     "@sparticuz/chromium-min": "^148.0.0",
+    "@supabase/ssr": "^0.12.4",
     "@tailwindcss/postcss": "^4.2.4",
-    "@types/react-pdf": "^6.2.0",
+    "@types/react-pdf": "^5.0.7",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "dotenv": "^17.4.2",
+    "framer-motion": "^13.1.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.14.0",
-    "next": "latest",
+    "motion": "^13.1.0",
+    "next": "^16.3.1",
+    "next-intl": "^4.13.6",
     "openai": "^6.35.0",
-    "puppeteer": "^24.42.0",
-    "puppeteer-core": "^24.42.0",
+    "pg": "^8.23.0",
+    "puppeteer": "^25.7.0",
+    "puppeteer-core": "^25.7.0",
+    "radix-ui": "^1.6.7",
     "react": "latest",
     "react-dom": "latest",
     "react-pdf": "^10.4.1",
-    "tailwindcss": "latest"
+    "shadcn": "^4.17.0",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "latest",
+    "tw-animate-css": "^1.4.0",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@types/node": "25.6.0",
+    "@types/pg": "^8.21.0",
     "@types/react": "19.2.14",
     "autoprefixer": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
-    "postcss": "latest"
+    "postcss": "latest",
+    "prisma": "^7.9.1"
   }
 }

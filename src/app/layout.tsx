@@ -1,14 +1,28 @@
 import React from 'react';
 import './globals.css';
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale } from 'next-intl/server';
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+
+const Layout: React.FC<{ children: React.ReactNode }> = async ({ children }) => {
+    const locale = await getLocale();
     return (
-        <html lang="bg" suppressHydrationWarning>
+        <html lang={locale} suppressHydrationWarning className={cn("dark font-sans", geist.variable)}>
             <head>
                 <link rel="icon" href="/favicon.ico" />
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `try{if(localStorage.getItem('theme')==='light'){document.documentElement.classList.remove('dark')}}catch(e){}`,
+                    }}
+                />
             </head>
             <body suppressHydrationWarning>
-                {children}
+                <NextIntlClientProvider>
+                    {children}
+                </NextIntlClientProvider>
             </body>
         </html>
     );

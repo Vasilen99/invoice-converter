@@ -1,0 +1,152 @@
+{
+  "header": {
+    "home": "Home",
+    "howItWorks": "How it works",
+    "about": "About",
+    "themeToggle": "Toggle theme",
+    "cta": "Convert now",
+    "login": "Log in"
+  },
+  "auth": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to continue to InvoiceAI",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "name@example.com",
+    "continueWithEmail": "Continue with email",
+    "or": "or",
+    "continueWithGoogle": "Continue with Google",
+    "terms": "By signing in you agree to our Terms of Service and Privacy Policy."
+  },
+  "hero": {
+    "badge": "AI-powered invoice converter",
+    "titleStart": "Any invoice.",
+    "titleHighlight": "Bulgarian format.",
+    "titleEnd": "In seconds.",
+    "subtitle": "Stop retyping invoices by hand. Upload a PDF from Stripe, PayPal, Wix or Google and AI will generate a fully compliant Bulgarian invoice — ready for your accountant.",
+    "ctaPrimary": "Convert an invoice for free",
+    "ctaSecondary": "See how it works",
+    "trustedBy": "Works with invoices from"
+  },
+  "problem": {
+    "title": "Sound familiar?",
+    "subtitle": "Every month Bulgarian companies lose hours manually retyping foreign invoices.",
+    "cards": {
+      "manual": { "title": "Manual retyping", "desc": "Copying field by field from a PDF into a template. Every month. For every invoice." },
+      "errors": { "title": "Data errors", "desc": "One wrong digit in the company ID or VAT amount — and accounting sends the invoice back." },
+      "compliance": { "title": "VAT non-compliance", "desc": "Foreign invoices don't contain the mandatory fields required by Bulgarian law." },
+      "time": { "title": "Wasted time", "desc": "15+ minutes per invoice. With 20 invoices a month, that's 5 hours of pure loss." }
+    }
+  },
+  "solution": {
+    "title": "One upload. Done.",
+    "subtitle": "AI extracts every field from the original invoice and transforms it into a fully compliant Bulgarian format.",
+    "steps": {
+      "upload": { "label": "Upload", "desc": "Drop a PDF invoice from any provider" },
+      "extract": { "label": "Extract", "desc": "AI reads and recognizes every field instantly" },
+      "generate": { "label": "Generate", "desc": "An invoice meeting all VAT law requirements is created" },
+      "download": { "label": "Download", "desc": "Get a perfect PDF, ready for accounting" }
+    }
+  },
+  "providers": {
+    "title": "Works with all popular platforms",
+    "subtitle": "Stripe, PayPal, Wix, Google, Shopify and many more — if it's a PDF invoice, we understand it."
+  },
+  "features": {
+    "title": "Why InvoiceAI?",
+    "items": {
+      "ai": { "title": "AI accuracy", "desc": "GPT-4o reads even non-standard formats with over 99% precision." },
+      "compliance": { "title": "VAT law compliance", "desc": "All mandatory fields — company ID, VAT number, accountable person, tax base, amount in words." },
+      "speed": { "title": "Lightning fast", "desc": "From upload to finished PDF in under 30 seconds." },
+      "edit": { "title": "Full control", "desc": "Review and edit every field before generating." },
+      "secure": { "title": "Secure", "desc": "Files are processed instantly and never stored on the server." },
+      "free": { "title": "No installation", "desc": "Works directly in the browser — on desktop, tablet or phone." }
+    }
+  },
+  "finalCta": {
+    "title": "Ready to save hours every month?",
+    "subtitle": "Upload your first invoice and see the magic yourself.",
+    "button": "Start for free"
+  },
+  "converter": {
+    "title": "Convert your invoice",
+    "subtitle": "Upload a PDF and let AI do the rest."
+  },
+  "footer": {
+    "tagline": "Turn any foreign invoice into a fully compliant Bulgarian one in under 30 seconds. No retyping, no errors, no headaches.",
+    "cta": "Convert your first invoice free",
+    "linksTitle": "Explore",
+    "links": {
+      "home": "Home",
+      "howItWorks": "How it works",
+      "features": "Features",
+      "converter": "Converter"
+    },
+    "whyTitle": "Why teams trust us",
+    "trust": {
+      "secure": "Files never stored on our servers",
+      "accuracy": "99%+ AI extraction accuracy",
+      "speed": "PDF ready in under 30 seconds"
+    },
+    "rights": "All rights reserved.",
+    "poweredBy": "Powered by GPT-4o · Built for WEB SERVICES BULGARIA LTD"
+  },
+  "uploader": {
+    "dropHere": "Drop it here!",
+    "clickOrDrag": "Click to upload or drag and drop",
+    "onlyPdf": "PDF files only · Stripe invoices supported",
+    "choosePdf": "Choose PDF",
+    "invalidPdf": "Please upload a valid PDF file.",
+    "extractFailed": "Failed to extract data from the invoice.",
+    "somethingWrong": "Something went wrong",
+    "close": "Close",
+    "remove": "Remove",
+    "downloadPdf": "Download PDF",
+    "generating": "Generating…",
+    "stripeInvoice": "Stripe Invoice",
+    "bulgarianInvoice": "Bulgarian Invoice",
+    "aiReading": "AI is reading your invoice",
+    "dataExtracted": "Data extracted — review and edit if needed",
+    "generateInvoice": "Generate Bulgarian Invoice",
+    "generatingPdf": "Generating PDF…",
+    "downloadBulgarianPdf": "Download Bulgarian Invoice (PDF)",
+    "addRow": "+ Add row",
+    "row": "Row {number}",
+    "aiSteps": {
+      "step1": "Reading invoice structure…",
+      "step2": "Identifying buyer and seller…",
+      "step3": "Extracting invoice line items…",
+      "step4": "Calculating totals…",
+      "step5": "Converting to Bulgarian format…"
+    },
+    "sections": {
+      "invoice": "Invoice",
+      "seller": "Supplier (Seller)",
+      "buyer": "Recipient (Buyer)",
+      "items": "Line items",
+      "totals": "Totals"
+    },
+    "fields": {
+      "number": "Number",
+      "date": "Date",
+      "taxEventDate": "Tax event date",
+      "location": "Place of issue",
+      "currency": "Currency",
+      "name": "Company name",
+      "eik": "Company ID (EIK)",
+      "vatNumber": "VAT number",
+      "city": "City",
+      "address": "Address",
+      "mol": "Accountable person",
+      "description": "Description",
+      "unit": "Unit",
+      "quantity": "Quantity",
+      "unitPrice": "Unit price",
+      "vatPercent": "VAT %",
+      "value": "Value",
+      "subtotal": "Tax base",
+      "vatAmount": "VAT amount",
+      "total": "Total due",
+      "totalInWords": "Amount in words"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                BigInt   @id @default(autoincrement())
+  registration_date DateTime @default(now()) @db.Timestamptz(6)
+  first_name        String?
+  last_name         String?
+  email             String?
+  auth_uid          String?  @unique
+  image             String?
+
+  @@map("user")
+}
