@@ -51,7 +51,18 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  Account: 'Account',
+  User: 'User',
+  CompanyRegistryCache: 'CompanyRegistryCache',
+  AccountMember: 'AccountMember',
+  Organization: 'Organization',
+  Contragent: 'Contragent',
+  SourceDocument: 'SourceDocument',
+  GeneratedInvoice: 'GeneratedInvoice',
+  InvoiceLineItem: 'InvoiceLineItem',
+  CreditPackage: 'CreditPackage',
+  Order: 'Order',
+  CreditTransaction: 'CreditTransaction'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -70,6 +81,17 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const AccountScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  creditBalance: 'creditBalance',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
   registration_date: 'registration_date',
@@ -83,12 +105,182 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const CompanyRegistryCacheScalarFieldEnum = {
+  id: 'id',
+  bulstat: 'bulstat',
+  legalName: 'legalName',
+  vatNumber: 'vatNumber',
+  address: 'address',
+  rawLookupData: 'rawLookupData',
+  lastFetchedAt: 'lastFetchedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CompanyRegistryCacheScalarFieldEnum = (typeof CompanyRegistryCacheScalarFieldEnum)[keyof typeof CompanyRegistryCacheScalarFieldEnum]
+
+
+export const AccountMemberScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  userId: 'userId',
+  role: 'role',
+  invitedAt: 'invitedAt',
+  acceptedAt: 'acceptedAt'
+} as const
+
+export type AccountMemberScalarFieldEnum = (typeof AccountMemberScalarFieldEnum)[keyof typeof AccountMemberScalarFieldEnum]
+
+
+export const OrganizationScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  legalName: 'legalName',
+  bulstat: 'bulstat',
+  vatNumber: 'vatNumber',
+  address: 'address',
+  molName: 'molName',
+  source: 'source',
+  registryId: 'registryId',
+  invoiceSeriesPrefix: 'invoiceSeriesPrefix',
+  nextInvoiceSeq: 'nextInvoiceSeq',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const ContragentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  bulstat: 'bulstat',
+  vatNumber: 'vatNumber',
+  name: 'name',
+  address: 'address',
+  email: 'email',
+  source: 'source',
+  registryId: 'registryId',
+  rawLookupData: 'rawLookupData',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContragentScalarFieldEnum = (typeof ContragentScalarFieldEnum)[keyof typeof ContragentScalarFieldEnum]
+
+
+export const SourceDocumentScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  uploadedByUserId: 'uploadedByUserId',
+  sourceType: 'sourceType',
+  originalFileUrl: 'originalFileUrl',
+  originalFilename: 'originalFilename',
+  mimeType: 'mimeType',
+  status: 'status',
+  parsedData: 'parsedData',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type SourceDocumentScalarFieldEnum = (typeof SourceDocumentScalarFieldEnum)[keyof typeof SourceDocumentScalarFieldEnum]
+
+
+export const GeneratedInvoiceScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  sourceDocumentId: 'sourceDocumentId',
+  contragentId: 'contragentId',
+  invoiceSeries: 'invoiceSeries',
+  invoiceNumber: 'invoiceNumber',
+  issueDate: 'issueDate',
+  taxEventDate: 'taxEventDate',
+  currency: 'currency',
+  originalCurrency: 'originalCurrency',
+  exchangeRate: 'exchangeRate',
+  subtotal: 'subtotal',
+  vatAmount: 'vatAmount',
+  totalAmount: 'totalAmount',
+  pdfFileUrl: 'pdfFileUrl',
+  status: 'status',
+  creditsCost: 'creditsCost',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GeneratedInvoiceScalarFieldEnum = (typeof GeneratedInvoiceScalarFieldEnum)[keyof typeof GeneratedInvoiceScalarFieldEnum]
+
+
+export const InvoiceLineItemScalarFieldEnum = {
+  id: 'id',
+  generatedInvoiceId: 'generatedInvoiceId',
+  description: 'description',
+  quantity: 'quantity',
+  unitPrice: 'unitPrice',
+  vatRate: 'vatRate',
+  lineTotal: 'lineTotal'
+} as const
+
+export type InvoiceLineItemScalarFieldEnum = (typeof InvoiceLineItemScalarFieldEnum)[keyof typeof InvoiceLineItemScalarFieldEnum]
+
+
+export const CreditPackageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  creditsAmount: 'creditsAmount',
+  priceAmount: 'priceAmount',
+  currency: 'currency',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder'
+} as const
+
+export type CreditPackageScalarFieldEnum = (typeof CreditPackageScalarFieldEnum)[keyof typeof CreditPackageScalarFieldEnum]
+
+
+export const OrderScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  packageId: 'packageId',
+  amount: 'amount',
+  currency: 'currency',
+  provider: 'provider',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const CreditTransactionScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  organizationId: 'organizationId',
+  type: 'type',
+  amount: 'amount',
+  balanceAfter: 'balanceAfter',
+  orderId: 'orderId',
+  generatedInvoiceId: 'generatedInvoiceId',
+  consumedByUserId: 'consumedByUserId',
+  note: 'note',
+  createdAt: 'createdAt'
+} as const
+
+export type CreditTransactionScalarFieldEnum = (typeof CreditTransactionScalarFieldEnum)[keyof typeof CreditTransactionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -105,4 +297,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

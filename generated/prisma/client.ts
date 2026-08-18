@@ -31,8 +31,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Accounts
+ * const accounts = await prisma.account.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,7 +42,62 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
+ * Model Account
+ * 
+ */
+export type Account = Prisma.AccountModel
+/**
  * Model User
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model CompanyRegistryCache
+ * 
+ */
+export type CompanyRegistryCache = Prisma.CompanyRegistryCacheModel
+/**
+ * Model AccountMember
+ * 
+ */
+export type AccountMember = Prisma.AccountMemberModel
+/**
+ * Model Organization
+ * 
+ */
+export type Organization = Prisma.OrganizationModel
+/**
+ * Model Contragent
+ * 
+ */
+export type Contragent = Prisma.ContragentModel
+/**
+ * Model SourceDocument
+ * 
+ */
+export type SourceDocument = Prisma.SourceDocumentModel
+/**
+ * Model GeneratedInvoice
+ * 
+ */
+export type GeneratedInvoice = Prisma.GeneratedInvoiceModel
+/**
+ * Model InvoiceLineItem
+ * 
+ */
+export type InvoiceLineItem = Prisma.InvoiceLineItemModel
+/**
+ * Model CreditPackage
+ * 
+ */
+export type CreditPackage = Prisma.CreditPackageModel
+/**
+ * Model Order
+ * 
+ */
+export type Order = Prisma.OrderModel
+/**
+ * Model CreditTransaction
+ * 
+ */
+export type CreditTransaction = Prisma.CreditTransactionModel

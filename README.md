@@ -30,7 +30,7 @@ To get started with the Invoice Converter project, follow these steps:
    ```
 
 4. **Open your browser**:
-   Navigate to `http://localhost:3000` to see the application in action.
+   Navigate to `http://localhost:8080` to see the application in action.
 
 ## Project Structure
 

@@ -16,7 +16,6 @@ export const userStore = create<UserStore>((set) => ({
   },
   fetchUser: async () => {
     const userResult = await callApi("/auth/user/get");
-
     if (userResult) {
       set({ user: userResult });
     }

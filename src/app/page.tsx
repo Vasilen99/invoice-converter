@@ -14,6 +14,7 @@ import { Solution } from "@/components/landing-page/solution";
 import { Problem } from "@/components/landing-page/problem";
 import { Header } from "@/components/landing-page/header";
 import { Footer } from "@/components/landing-page/footer";
+import { userStore } from "@/store/user";
 
 /* ─────────────────────────── Hero ─────────────────────────── */
 
@@ -102,6 +103,8 @@ const Hero = () => {
 /* ─────────────────────────── Page ─────────────────────────── */
 
 const HomePage = () => {
+  const {user} = userStore();
+  console.log(user)
   return (
     <>
       <Header />
@@ -137,3 +140,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

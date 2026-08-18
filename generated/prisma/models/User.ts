@@ -31,11 +31,11 @@ export type UserAvgAggregateOutputType = {
 }
 
 export type UserSumAggregateOutputType = {
-  id: bigint | null
+  id: number | null
 }
 
 export type UserMinAggregateOutputType = {
-  id: bigint | null
+  id: number | null
   registration_date: Date | null
   first_name: string | null
   last_name: string | null
@@ -45,7 +45,7 @@ export type UserMinAggregateOutputType = {
 }
 
 export type UserMaxAggregateOutputType = {
-  id: bigint | null
+  id: number | null
   registration_date: Date | null
   first_name: string | null
   last_name: string | null
@@ -192,7 +192,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 export type UserGroupByOutputType = {
-  id: bigint
+  id: number
   registration_date: Date
   first_name: string | null
   last_name: string | null
@@ -225,13 +225,15 @@ export type UserWhereInput = {
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  id?: Prisma.BigIntFilter<"User"> | bigint | number
+  id?: Prisma.IntFilter<"User"> | number
   registration_date?: Prisma.DateTimeFilter<"User"> | Date | string
   first_name?: Prisma.StringNullableFilter<"User"> | string | null
   last_name?: Prisma.StringNullableFilter<"User"> | string | null
   email?: Prisma.StringNullableFilter<"User"> | string | null
   auth_uid?: Prisma.StringNullableFilter<"User"> | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
+  accountMembers?: Prisma.AccountMemberListRelationFilter
+  creditTransactions?: Prisma.CreditTransactionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -242,10 +244,12 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   auth_uid?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
+  accountMembers?: Prisma.AccountMemberOrderByRelationAggregateInput
+  creditTransactions?: Prisma.CreditTransactionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
-  id?: bigint | number
+  id?: number
   auth_uid?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
@@ -255,6 +259,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   last_name?: Prisma.StringNullableFilter<"User"> | string | null
   email?: Prisma.StringNullableFilter<"User"> | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
+  accountMembers?: Prisma.AccountMemberListRelationFilter
+  creditTransactions?: Prisma.CreditTransactionListRelationFilter
 }, "id" | "auth_uid">
 
 export type UserOrderByWithAggregationInput = {
@@ -276,7 +282,7 @@ export type UserScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
-  id?: Prisma.BigIntWithAggregatesFilter<"User"> | bigint | number
+  id?: Prisma.IntWithAggregatesFilter<"User"> | number
   registration_date?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   first_name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   last_name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -286,47 +292,53 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
-  id?: bigint | number
   registration_date?: Date | string
   first_name?: string | null
   last_name?: string | null
   email?: string | null
   auth_uid?: string | null
   image?: string | null
+  accountMembers?: Prisma.AccountMemberCreateNestedManyWithoutUserInput
+  creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutConsumedByUserInput
 }
 
 export type UserUncheckedCreateInput = {
-  id?: bigint | number
+  id?: number
   registration_date?: Date | string
   first_name?: string | null
   last_name?: string | null
   email?: string | null
   auth_uid?: string | null
   image?: string | null
+  accountMembers?: Prisma.AccountMemberUncheckedCreateNestedManyWithoutUserInput
+  creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutConsumedByUserInput
 }
 
 export type UserUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   registration_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   auth_uid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountMembers?: Prisma.AccountMemberUpdateManyWithoutUserNestedInput
+  creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutConsumedByUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   registration_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   auth_uid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountMembers?: Prisma.AccountMemberUncheckedUpdateManyWithoutUserNestedInput
+  creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutConsumedByUserNestedInput
 }
 
 export type UserCreateManyInput = {
-  id?: bigint | number
+  id?: number
   registration_date?: Date | string
   first_name?: string | null
   last_name?: string | null
@@ -336,7 +348,6 @@ export type UserCreateManyInput = {
 }
 
 export type UserUpdateManyMutationInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   registration_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -346,7 +357,7 @@ export type UserUpdateManyMutationInput = {
 }
 
 export type UserUncheckedUpdateManyInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   registration_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -393,22 +404,204 @@ export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
-export type BigIntFieldUpdateOperationsInput = {
-  set?: bigint | number
-  increment?: bigint | number
-  decrement?: bigint | number
-  multiply?: bigint | number
-  divide?: bigint | number
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type UserCreateNestedOneWithoutAccountMembersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountMembersInput, Prisma.UserUncheckedCreateWithoutAccountMembersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountMembersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAccountMembersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountMembersInput, Prisma.UserUncheckedCreateWithoutAccountMembersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountMembersInput
+  upsert?: Prisma.UserUpsertWithoutAccountMembersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountMembersInput, Prisma.UserUpdateWithoutAccountMembersInput>, Prisma.UserUncheckedUpdateWithoutAccountMembersInput>
+}
+
+export type UserCreateNestedOneWithoutCreditTransactionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreditTransactionsInput, Prisma.UserUncheckedCreateWithoutCreditTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreditTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreditTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreditTransactionsInput, Prisma.UserUncheckedCreateWithoutCreditTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreditTransactionsInput
+  upsert?: Prisma.UserUpsertWithoutCreditTransactionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreditTransactionsInput, Prisma.UserUpdateWithoutCreditTransactionsInput>, Prisma.UserUncheckedUpdateWithoutCreditTransactionsInput>
+}
+
+export type UserCreateWithoutAccountMembersInput = {
+  registration_date?: Date | string
+  first_name?: string | null
+  last_name?: string | null
+  email?: string | null
+  auth_uid?: string | null
+  image?: string | null
+  creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutConsumedByUserInput
+}
+
+export type UserUncheckedCreateWithoutAccountMembersInput = {
+  id?: number
+  registration_date?: Date | string
+  first_name?: string | null
+  last_name?: string | null
+  email?: string | null
+  auth_uid?: string | null
+  image?: string | null
+  creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutConsumedByUserInput
+}
+
+export type UserCreateOrConnectWithoutAccountMembersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountMembersInput, Prisma.UserUncheckedCreateWithoutAccountMembersInput>
+}
+
+export type UserUpsertWithoutAccountMembersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAccountMembersInput, Prisma.UserUncheckedUpdateWithoutAccountMembersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountMembersInput, Prisma.UserUncheckedCreateWithoutAccountMembersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAccountMembersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAccountMembersInput, Prisma.UserUncheckedUpdateWithoutAccountMembersInput>
+}
+
+export type UserUpdateWithoutAccountMembersInput = {
+  registration_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auth_uid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutConsumedByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAccountMembersInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registration_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auth_uid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutConsumedByUserNestedInput
+}
+
+export type UserCreateWithoutCreditTransactionsInput = {
+  registration_date?: Date | string
+  first_name?: string | null
+  last_name?: string | null
+  email?: string | null
+  auth_uid?: string | null
+  image?: string | null
+  accountMembers?: Prisma.AccountMemberCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCreditTransactionsInput = {
+  id?: number
+  registration_date?: Date | string
+  first_name?: string | null
+  last_name?: string | null
+  email?: string | null
+  auth_uid?: string | null
+  image?: string | null
+  accountMembers?: Prisma.AccountMemberUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCreditTransactionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreditTransactionsInput, Prisma.UserUncheckedCreateWithoutCreditTransactionsInput>
+}
+
+export type UserUpsertWithoutCreditTransactionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreditTransactionsInput, Prisma.UserUncheckedUpdateWithoutCreditTransactionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreditTransactionsInput, Prisma.UserUncheckedCreateWithoutCreditTransactionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreditTransactionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreditTransactionsInput, Prisma.UserUncheckedUpdateWithoutCreditTransactionsInput>
+}
+
+export type UserUpdateWithoutCreditTransactionsInput = {
+  registration_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auth_uid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountMembers?: Prisma.AccountMemberUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreditTransactionsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registration_date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auth_uid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accountMembers?: Prisma.AccountMemberUncheckedUpdateManyWithoutUserNestedInput
+}
+
+
+/**
+ * Count Type UserCountOutputType
+ */
+
+export type UserCountOutputType = {
+  accountMembers: number
+  creditTransactions: number
+}
+
+export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  accountMembers?: boolean | UserCountOutputTypeCountAccountMembersArgs
+  creditTransactions?: boolean | UserCountOutputTypeCountCreditTransactionsArgs
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserCountOutputType
+   */
+  select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAccountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccountMemberWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreditTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreditTransactionWhereInput
+}
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -419,6 +612,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   auth_uid?: boolean
   image?: boolean
+  accountMembers?: boolean | Prisma.User$accountMembersArgs<ExtArgs>
+  creditTransactions?: boolean | Prisma.User$creditTransactionsArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -452,12 +648,22 @@ export type UserSelectScalar = {
 }
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "registration_date" | "first_name" | "last_name" | "email" | "auth_uid" | "image", ExtArgs["result"]["user"]>
+export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  accountMembers?: boolean | Prisma.User$accountMembersArgs<ExtArgs>
+  creditTransactions?: boolean | Prisma.User$creditTransactionsArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
-  objects: {}
+  objects: {
+    accountMembers: Prisma.$AccountMemberPayload<ExtArgs>[]
+    creditTransactions: Prisma.$CreditTransactionPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: bigint
+    id: number
     registration_date: Date
     first_name: string | null
     last_name: string | null
@@ -858,6 +1064,8 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  accountMembers<T extends Prisma.User$accountMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  creditTransactions<T extends Prisma.User$creditTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$creditTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreditTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -887,7 +1095,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  * Fields of the User model
  */
 export interface UserFieldRefs {
-  readonly id: Prisma.FieldRef<"User", 'BigInt'>
+  readonly id: Prisma.FieldRef<"User", 'Int'>
   readonly registration_date: Prisma.FieldRef<"User", 'DateTime'>
   readonly first_name: Prisma.FieldRef<"User", 'String'>
   readonly last_name: Prisma.FieldRef<"User", 'String'>
@@ -911,6 +1119,10 @@ export type UserFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which User to fetch.
    */
   where: Prisma.UserWhereUniqueInput
@@ -929,6 +1141,10 @@ export type UserFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which User to fetch.
    */
   where: Prisma.UserWhereUniqueInput
@@ -946,6 +1162,10 @@ export type UserFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * Filter, which User to fetch.
    */
@@ -995,6 +1215,10 @@ export type UserFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which User to fetch.
    */
   where?: Prisma.UserWhereInput
@@ -1042,6 +1266,10 @@ export type UserFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * Filter, which Users to fetch.
    */
@@ -1091,6 +1319,10 @@ export type UserCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * The data needed to create a User.
    */
   data?: Prisma.XOR<Prisma.UserCreateInput, Prisma.UserUncheckedCreateInput>
@@ -1138,6 +1370,10 @@ export type UserUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * The data needed to update a User.
    */
@@ -1205,6 +1441,10 @@ export type UserUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * The filter to search for the User to update in case it exists.
    */
   where: Prisma.UserWhereUniqueInput
@@ -1231,6 +1471,10 @@ export type UserDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter which User to delete.
    */
   where: Prisma.UserWhereUniqueInput
@@ -1251,6 +1495,54 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * User.accountMembers
+ */
+export type User$accountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AccountMember
+   */
+  select?: Prisma.AccountMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AccountMember
+   */
+  omit?: Prisma.AccountMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountMemberInclude<ExtArgs> | null
+  where?: Prisma.AccountMemberWhereInput
+  orderBy?: Prisma.AccountMemberOrderByWithRelationInput | Prisma.AccountMemberOrderByWithRelationInput[]
+  cursor?: Prisma.AccountMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AccountMemberScalarFieldEnum | Prisma.AccountMemberScalarFieldEnum[]
+}
+
+/**
+ * User.creditTransactions
+ */
+export type User$creditTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreditTransaction
+   */
+  select?: Prisma.CreditTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreditTransaction
+   */
+  omit?: Prisma.CreditTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreditTransactionInclude<ExtArgs> | null
+  where?: Prisma.CreditTransactionWhereInput
+  orderBy?: Prisma.CreditTransactionOrderByWithRelationInput | Prisma.CreditTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.CreditTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CreditTransactionScalarFieldEnum | Prisma.CreditTransactionScalarFieldEnum[]
+}
+
+/**
  * User without action
  */
 export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1262,4 +1554,8 @@ export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
 }

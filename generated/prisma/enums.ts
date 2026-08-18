@@ -9,7 +9,79 @@
 * 🟢 You can import this file directly.
 */
 
+export const AccountRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  STAFF: 'STAFF'
+} as const
+
+export type AccountRole = (typeof AccountRole)[keyof typeof AccountRole]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const CompanyLookupSource = {
+  MANUAL: 'MANUAL',
+  NAP_API: 'NAP_API'
+} as const
+
+export type CompanyLookupSource = (typeof CompanyLookupSource)[keyof typeof CompanyLookupSource]
+
+
+export const SourceType = {
+  STRIPE: 'STRIPE',
+  WIX: 'WIX',
+  PAYPAL: 'PAYPAL',
+  OTHER: 'OTHER'
+} as const
+
+export type SourceType = (typeof SourceType)[keyof typeof SourceType]
+
+
+export const SourceDocumentStatus = {
+  UPLOADED: 'UPLOADED',
+  PARSING: 'PARSING',
+  PARSED: 'PARSED',
+  FAILED: 'FAILED',
+  CONVERTED: 'CONVERTED'
+} as const
+
+export type SourceDocumentStatus = (typeof SourceDocumentStatus)[keyof typeof SourceDocumentStatus]
+
+
+export const InvoiceStatus = {
+  DRAFT: 'DRAFT',
+  ISSUED: 'ISSUED',
+  VOID: 'VOID',
+  CREDIT_NOTE: 'CREDIT_NOTE'
+} as const
+
+export type InvoiceStatus = (typeof InvoiceStatus)[keyof typeof InvoiceStatus]
+
+
+export const PaymentProvider = {
+  STRIPE: 'STRIPE',
+  PAYPAL: 'PAYPAL',
+  MANUAL: 'MANUAL'
+} as const
+
+export type PaymentProvider = (typeof PaymentProvider)[keyof typeof PaymentProvider]
+
+
+export const OrderStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const CreditTransactionType = {
+  PURCHASE: 'PURCHASE',
+  CONSUMPTION: 'CONSUMPTION',
+  REFUND: 'REFUND',
+  BONUS: 'BONUS',
+  ADJUSTMENT: 'ADJUSTMENT'
+} as const
+
+export type CreditTransactionType = (typeof CreditTransactionType)[keyof typeof CreditTransactionType]
