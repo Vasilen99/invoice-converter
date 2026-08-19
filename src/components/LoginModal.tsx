@@ -208,7 +208,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen: boolean) => !isOpen && onClose()}
+    >
       <DialogContent
         from="bottom"
         overlayClassName="bg-background/60 backdrop-blur-md"

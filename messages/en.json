@@ -156,5 +156,31 @@
       "total": "Total due",
       "totalInWords": "Amount in words"
     }
+  },
+  "dashboardNaming": "Dashboard",
+  "dashboard": {
+    "general": "General",
+    "overview": "Overview",
+    "reports": "Reports",
+    "documents": "Documents",
+    "uploadDocument": "Upload document",
+    "invoices": "Invoices",
+    "contragents": "Contragents",
+    "creditNotes": "Credit notes",
+    "recurringInvoices": "Recurring invoices",
+    "team": "Team",
+    "members": "Members",
+    "rolesAndPermissions": "Roles and permissions",
+    "billing": "Billing",
+    "creditsAndPackages": "Credits and packages",
+    "orderHistory": "Order history",
+    "usageByMember": "Usage by member",
+    "settings": "Settings",
+    "organizationProfile": "Organization profile",
+    "myAccount": "My account",
+    "integrations": "Integrations",
+    "notifications": "Notifications",
+    "localizations": "Localizations",
+    "logout": "Log out"
   }
 }
