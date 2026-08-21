@@ -181,6 +181,7 @@
     "integrations": "Integrations",
     "notifications": "Notifications",
     "localizations": "Localizations",
-    "logout": "Log out"
+    "logout": "Log out",
+    "actionButtons": "Action buttons"
   }
 }

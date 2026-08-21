@@ -181,6 +181,8 @@
     "integrations": "Интеграции",
     "notifications": "Известия",
     "localizations": "Локализации",
-    "logout": "Изход"
+    "logout": "Изход",
+    "actionButtons": "Бутони за действия"
+
   }
 }

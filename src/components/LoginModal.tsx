@@ -215,13 +215,15 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
       <DialogContent
         from="bottom"
         overlayClassName="bg-background/60 backdrop-blur-md"
-        className="glass w-full max-w-md rounded-2xl border border-border p-8 shadow-2xl"
+        className="glass max-w-[min(450px,calc(100%-2rem))] rounded-2xl border border-border p-8 shadow-2xl"
       >
         <motion.div
           initial="hidden"
           animate="show"
           variants={{
-            show: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+            show: {
+              transition: { staggerChildren: 0.07, delayChildren: 0.1 },
+            },
           }}
           className="flex flex-col gap-5"
         >

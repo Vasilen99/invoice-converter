@@ -38,6 +38,9 @@ import {
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { FadeIn } from "@/components/motion";
+import ThemeToggle from "@/components/ThemeToggle";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useEffect, useState } from "react";
 
 const NAVIGATION_CONFIG = [
   {
@@ -155,8 +158,12 @@ const NAVIGATION_CONFIG = [
 export default function Dashboard() {
   const t = useTranslations();
   const router = useRouter();
+  const [open, setOpen] = useState<boolean>(true);
+  useEffect(() => {
+    console.log("open", open);
+  }, [open]);
   return (
-    <SidebarProvider>
+    <SidebarProvider open={open} onOpenChange={() => setOpen(!open)}>
       <Sidebar className="overflow-y-auto border-r border-border bg-sidebar">
         <SidebarHeader className="border-b border-sidebar-border">
           <FadeIn className="flex items-center gap-3 px-2">
@@ -171,6 +178,11 @@ export default function Dashboard() {
                 Sofia Consulting EOOD
               </span>
             </div>
+            {open && (
+              <FadeIn className="flex items-center gap-3">
+                <SidebarTrigger className="size-12 text-foreground hover:text-foreground transition-colors" />
+              </FadeIn>
+            )}
           </FadeIn>
         </SidebarHeader>
         <SidebarContent className="relative py-6 px-4 no-scrollbar">
@@ -202,6 +214,19 @@ export default function Dashboard() {
               </SidebarGroup>
             </FadeIn>
           ))}
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+              {t("dashboard.actionButtons")}
+            </SidebarGroupLabel>
+            <SidebarMenu className="flex-row! gap-1 !justify-between">
+              <SidebarMenuItem className="w-fit" key={"language-switcher"}>
+                <LanguageSwitcher />
+              </SidebarMenuItem>
+              <SidebarMenuItem className="w-fit" key={"theme-toggle"}>
+                <ThemeToggle />
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
         </SidebarContent>
         <SidebarFooter className="border-t border-sidebar-border">
           <SidebarMenu>
@@ -216,11 +241,13 @@ export default function Dashboard() {
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset className="relative left-0 top-16 h-[calc(100vh-4rem)]">
-        <FadeIn className="flex items-center gap-3">
-          <SidebarTrigger className="text-foreground hover:text-foreground transition-colors" />
-        </FadeIn>
-      </SidebarInset>
+      {!open && (
+        <SidebarInset className="relative ml-3 lg:top-16 top-10 h-[calc(100vh-4rem)]">
+          <FadeIn className="flex items-center gap-3">
+            <SidebarTrigger className="size-12 text-foreground hover:text-foreground transition-colors" />
+          </FadeIn>
+        </SidebarInset>
+      )}
     </SidebarProvider>
   );
 }
