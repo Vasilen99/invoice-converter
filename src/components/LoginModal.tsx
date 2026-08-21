@@ -168,12 +168,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
         sessionStorage.setItem("loginReturnPath", currentPathname);
       }
 
-      const redirectTo = `${server}/api/auth/social-login-callback?next=${encodeURIComponent(currentPathname)}`;
-
       const result = await supabase.auth.signInWithOAuth({
         provider: customProvider,
         options: {
-          redirectTo,
           skipBrowserRedirect: false,
         },
       });

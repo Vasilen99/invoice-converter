@@ -184,5 +184,22 @@
     "logout": "Изход",
     "actionButtons": "Бутони за действия"
 
+  },
+  "account": {
+    "accountHeader": "Профил",
+    "accountSubheader": "Управлявайте вашия профил и настройки на акаунта.",
+    "accountName": "Име на акаунта",
+    "accountNamePlaceholder": "ПримерноИмеООД",
+    "creditBalance": "Кредитен баланс",
+    "addCredits": "Добави кредити",
+    "createdAt": "Създаден на",
+    "lastUpdatedAt": "Последно обновен на",
+    "saveChanges": "Запази промените",
+    "saving": "Запазване..."
+  },
+  "errorMessages": {
+    "saveError": "Проблем при запазването",
+    "saveErrorDescription": "Имаше проблем при запазването на данните. Моля, опитайте отново по-късно.",
+    "accountNameRequired": "Името на акаунта е задължително"
   }
 }

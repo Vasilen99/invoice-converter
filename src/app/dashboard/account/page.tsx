@@ -1,7 +1,9 @@
 import AccountDashboardPage from "@/page-components/account-dashboard";
+import { getAccountData } from "./action";
+const Page = async () => {
+  const accountData = await getAccountData();
 
-const Page = () => {
-  return <AccountDashboardPage />;
+  return <AccountDashboardPage initialData={accountData} />;
 };
 
 export default Page;

@@ -41,7 +41,7 @@ import { FadeIn } from "@/components/motion";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useEffect, useState } from "react";
-
+import { accountLink } from "../../utility/links";
 const NAVIGATION_CONFIG = [
   {
     labelKey: "dashboard.general",
@@ -133,7 +133,7 @@ const NAVIGATION_CONFIG = [
       },
       {
         nameKey: "dashboard.myAccount",
-        href: "/dashboard/my-account",
+        href: `/dashboard/${accountLink}`,
         icon: User,
       },
       {
@@ -159,11 +159,13 @@ export default function Dashboard() {
   const t = useTranslations();
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(true);
-  useEffect(() => {
-    console.log("open", open);
-  }, [open]);
+
   return (
-    <SidebarProvider open={open} onOpenChange={() => setOpen(!open)}>
+    <SidebarProvider
+      open={open}
+      onOpenChange={() => setOpen(!open)}
+      defaultOpen={true}
+    >
       <Sidebar className="overflow-y-auto border-r border-border bg-sidebar">
         <SidebarHeader className="border-b border-sidebar-border">
           <FadeIn className="flex items-center gap-3 px-2">
