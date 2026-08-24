@@ -156,5 +156,33 @@
       "total": "Общо за плащане",
       "totalInWords": "Сума с думи"
     }
+  },
+  "dashboardNaming": "Табло",
+  "dashboard": {
+    "general": "Основни",
+    "overview": "Преглед",
+    "reports": "Отчети",
+    "documents": "Документи",
+    "uploadDocument": "Качване на документ",
+    "invoices": "Фактури",
+    "contragents": "Контрагенти",
+    "creditNotes": "Кредитни известия",
+    "recurringInvoices": "Повтарящи се фактури",
+    "team": "Екип",
+    "members": "Членове",
+    "rolesAndPermissions": "Роли и разрешения",
+    "billing": "Фактуриране",
+    "creditsAndPackages": "Кредити и пакети",
+    "orderHistory": "История на поръчките",
+    "usageByMember": "Използване по член",
+    "settings": "Настройки",
+    "organizationProfile": "Профил на организацията",
+    "myAccount": "Моят профил",
+    "integrations": "Интеграции",
+    "notifications": "Известия",
+    "localizations": "Локализации",
+    "logout": "Изход",
+    "actionButtons": "Бутони за действия"
+
   }
 }
