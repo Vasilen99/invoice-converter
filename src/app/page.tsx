@@ -124,7 +124,6 @@ const HomePage = () => {
           <Features />
           <FinalCta />
           {/* <Converter /> */}
-          <Footer />
         </div>
       </main>
     </>

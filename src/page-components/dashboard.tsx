@@ -13,6 +13,7 @@ import {
   SidebarGroupLabel,
   SidebarTrigger,
   SidebarInset,
+  useSidebar,
 } from "@/components/animate-ui/components/radix/sidebar";
 import { Button } from "@/components/ui/button";
 import {
@@ -158,29 +159,24 @@ const NAVIGATION_CONFIG = [
   },
 ];
 
-export default function Dashboard() {
-  const isMobile = useIsMobile(1024);
+function DashboardSidebarContent() {
   const t = useTranslations();
   const router = useRouter();
-  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(!isMobile);
+  const { setOpenMobile } = useSidebar();
   const { logout, user } = useUserStore();
-
-  useEffect(() => {
-    // Sync sidebar open state when isMobile status changes
-    setIsPanelOpen(!isMobile);
-  }, [isMobile]);
 
   const accountName =
     user?.accountName && user.accountName.length > 15
       ? `${user.accountName.slice(0, 15)}...`
       : user?.accountName;
 
+  const handleNavigation = (href: string) => {
+    setOpenMobile(false); // Close mobile sidebar
+    router.push(href);
+  };
+
   return (
-    <SidebarProvider
-      open={isPanelOpen}
-      onOpenChange={setIsPanelOpen}
-      defaultOpen={!isMobile}
-    >
+    <>
       <Sidebar className="overflow-y-auto border-r border-border bg-sidebar">
         <SidebarHeader className="border-b border-sidebar-border">
           <FadeIn className="flex items-center gap-3 px-2">
@@ -216,7 +212,7 @@ export default function Dashboard() {
                       <SidebarMenuItem key={item.nameKey}>
                         <SidebarMenuButton asChild>
                           <Button
-                            onClick={() => router.push(item.href)}
+                            onClick={() => handleNavigation(item.href)}
                             variant="ghost"
                             className="flex justify-start items-center gap-3 text-muted-foreground hover:text-foreground hover:bg-accent/30 transition-all rounded-lg group"
                           >
@@ -235,7 +231,7 @@ export default function Dashboard() {
             <SidebarGroupLabel className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
               {t("dashboard.actionButtons")}
             </SidebarGroupLabel>
-            <SidebarMenu className="flex-row! gap-1 !justify-between">
+            <SidebarMenu className="flex-row! gap-1 justify-between!">
               <SidebarMenuItem className="w-fit" key={"language-switcher"}>
                 <LanguageSwitcher />
               </SidebarMenuItem>
@@ -261,6 +257,26 @@ export default function Dashboard() {
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
+    </>
+  );
+}
+
+export default function Dashboard() {
+  const isMobile = useIsMobile(1024);
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(!isMobile);
+
+  useEffect(() => {
+    // Sync sidebar open state when isMobile status changes
+    setIsPanelOpen(!isMobile);
+  }, [isMobile]);
+
+  return (
+    <SidebarProvider
+      open={isPanelOpen}
+      onOpenChange={setIsPanelOpen}
+      defaultOpen={!isMobile}
+    >
+      <DashboardSidebarContent />
       {!isPanelOpen && (
         <SidebarInset className="relative ml-3 lg:top-16 top-10 h-[calc(100vh-4rem)]">
           <div className="flex items-center gap-3">
