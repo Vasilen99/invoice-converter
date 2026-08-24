@@ -32,3 +32,5 @@ export const globalStore = create<GlobalStore>((set, get) => ({
   theme: "light",
   setTheme: (newTheme: string) => set(() => ({ theme: newTheme })),
 }));
+
+export const useGlobalStore = globalStore;

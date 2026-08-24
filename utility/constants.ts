@@ -5,8 +5,13 @@ export const EMAIL_REGEX =
 
 const dev = process.env.NODE_ENV !== "production";
 
-//TODO: Add Prod server URL when deploying to production
-export const server = dev ? "http://localhost:8080" : "https://invoice-converter-fawn.vercel.app";
+// Use NEXT_PUBLIC_APP_URL for flexibility, falls back to localhost:8000
+// This allows easy override via environment variables for different environments
+const devServer = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:8000";
+
+export const server = dev
+  ? devServer
+  : "https://invoice-converter-fawn.vercel.app";
 
 export const INITIAL_STATUS: AlertStatus = {
   status: "",
@@ -14,6 +19,5 @@ export const INITIAL_STATUS: AlertStatus = {
   statusContent: "",
 };
 
-export const PROTECTED_ROUTES = [
-  "/generator",
-];
+export const PLATFORM_NAME = "Invoice Converter";
+export const PROTECTED_ROUTES = ["/generator"];

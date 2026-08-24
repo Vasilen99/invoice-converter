@@ -5,8 +5,15 @@ import { cn } from "@/lib/utils";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import AppProvider from "@/components/AppProvider";
-import { Footer } from "@/components/landing-page/footer";
+import dynamic from "next/dynamic";
 
+const Footer = dynamic(() =>
+  import("@/components/landing-page/footer").then((mod) => mod.Footer),
+);
+
+const Alert = dynamic(() =>
+  import("@/components/Alert").then((mod) => mod.AlertDemo),
+);
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const Layout: React.FC<{ children: React.ReactNode }> = async ({
@@ -32,6 +39,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = async ({
           <AppProvider>
             {children}
             <Footer />
+            <Alert />
           </AppProvider>
         </NextIntlClientProvider>
       </body>
