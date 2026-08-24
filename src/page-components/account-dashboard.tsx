@@ -8,6 +8,9 @@ import React, { useState, useEffect } from "react";
 import { ArrowRightIcon } from "lucide-react";
 import { callApi } from "../../utility/hooks/apiFetch";
 import { globalStore } from "@/store/global";
+import { useUserStore } from "@/store/user";
+import { creditsLink } from "../../utility/links";
+import { useRouter } from "next/navigation";
 interface AccountData {
   id: number;
   name: string;
@@ -24,48 +27,55 @@ export default function AccountDashboardPage({
   initialData,
 }: AccountDashboardPageProps) {
   const t = useTranslations();
-  const [accountName, setAccountName] = useState<string>("");
+  const router = useRouter();
+  const [accName, setAccName] = useState<string>("");
   const [accountData, setAccountData] = useState<AccountData | null>(
     initialData || null,
   );
   const { setAlertStatus, isLoading } = globalStore();
+  const { setUser, user } = useUserStore();
   useEffect(() => {
     if (initialData) {
-      setAccountName(initialData.name || "");
+      setAccName(initialData.name || "");
       setAccountData(initialData);
     }
   }, [initialData]);
 
   const handleAccountNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAccountName(e.target.value);
+    setAccName(e.target.value);
   };
 
   const handleSaveChanges = async () => {
-    if (!accountName.trim()) {
-      setAlertStatus({
-        status: "error",
-        statusHeader: `${t("errorMessages.accountNameRequired")}`,
-      });
-      return;
-    }
+    // if (!accName.trim()) {
+    //   setAlertStatus({
+    //     status: "error",
+    //     statusHeader: `${t("errorMessagesAccount.accountNameRequired")}`,
+    //   });
+    //   return;
+    // }
 
     try {
-      const accountData = await callApi("/account/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const accountData = await callApi(
+        "/account/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ accountName: accName.trim() }),
         },
-        body: JSON.stringify({ accountName: accountName.trim() }),
-      });
-      if (accountData) {
+        true,
+      );
+      if (accountData && user) {
         setAccountData(accountData);
+        setUser({ ...user, accountName: accountData.name });
       }
     } catch (err) {
       console.error("Error saving account:", err);
       setAlertStatus({
         status: "error",
-        statusHeader: "Save Error",
-        statusContent: "Failed to save account changes",
+        statusHeader: t("errorLogin.loginErrorServerErrorHeader"),
+        statusContent: t("errorLogin.loginErrorServerErrorMessage"),
       });
     }
   };
@@ -89,13 +99,13 @@ export default function AccountDashboardPage({
         </FadeIn>
         <FadeIn delay={0.02}>
           <div className="flex flex-col w-fit gap-6">
-            <div className="grid lg:grid-cols-2 lg:grid-rows-2 grid-cols-1 gap-8">
+            <div className="grid grid-cols-1 gap-8">
               <div className="flex flex-col gap-2 items-start">
                 <Label className="text-base text-muted-foreground">
                   {t("account.accountName")}
                 </Label>
                 <Input
-                  value={accountName}
+                  value={accName}
                   onChange={handleAccountNameChange}
                   placeholder={t("account.accountNamePlaceholder")}
                 />
@@ -107,7 +117,10 @@ export default function AccountDashboardPage({
                 <Label className="text-base text-muted-foreground">
                   {accountData?.creditBalance ?? 0}
                 </Label>
-                <Button className="flex gap-3">
+                <Button
+                  onClick={() => router.push(`/${creditsLink}`)}
+                  className="flex gap-3"
+                >
                   {t("account.addCredits")}{" "}
                   <ArrowRightIcon
                     size={12}

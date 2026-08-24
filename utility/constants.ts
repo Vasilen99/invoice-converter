@@ -19,4 +19,5 @@ export const INITIAL_STATUS: AlertStatus = {
   statusContent: "",
 };
 
+export const PLATFORM_NAME = "Invoice Converter";
 export const PROTECTED_ROUTES = ["/generator"];

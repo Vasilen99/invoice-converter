@@ -1,8 +1,8 @@
 import { prisma } from "../../../../../utility/prisma";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getUserServer } from "../../../../../utility/get-user-server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const userClaims = await getUserServer();
 

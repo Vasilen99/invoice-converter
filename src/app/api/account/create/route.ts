@@ -11,8 +11,8 @@ export async function POST(req: NextRequest) {
         {
           alert: {
             status: "error",
-            header: "Unauthorized",
-            message: "You must be logged in to perform this action",
+            header: "errorMessagesCommon.unauthorizedErrorHeader",
+            message: "errorMessagesCommon.unauthorizedErrorMessage",
           },
         },
         { status: 401, headers: { "content-type": "application/json" } },
@@ -27,8 +27,8 @@ export async function POST(req: NextRequest) {
         {
           alert: {
             status: "error",
-            header: "Validation Error",
-            message: "Account name is required",
+            header: "errorMessagesAccount.accountNameRequired",
+            message: "errorMessagesAccount.accountNameRequiredMessage",
           },
         },
         { status: 400, headers: { "content-type": "application/json" } },
@@ -45,8 +45,8 @@ export async function POST(req: NextRequest) {
         {
           alert: {
             status: "error",
-            header: "User Not Found",
-            message: "User account does not exist",
+            header: "errorMessagesCommon.userNotFoundHeader",
+            message: "errroMessagesCommon.userNotFoundMessage",
           },
         },
         { status: 404, headers: { "content-type": "application/json" } },
@@ -87,20 +87,16 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       {
-        data: {
-          id: account.id,
-          name: account.name,
-          creditBalance: account.creditBalance,
-          createdAt: account.createdAt,
-          updatedAt: account.updatedAt,
-        },
         alert: {
           status: "success",
-          header: isCreating ? "Account Created" : "Account Updated",
+          header: isCreating
+            ? "successMessagesAccount.successCreationHeader"
+            : "successMessagesAccount.successUpdateHeader",
           message: isCreating
-            ? "Your account has been successfully created"
-            : "Your account has been successfully updated",
+            ? "successMessagesAccount.successCreationMessage"
+            : "successMessagesAccount.successUpdateMessage",
         },
+        data: account,
       },
       { status: 200, headers: { "content-type": "application/json" } },
     );

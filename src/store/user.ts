@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { callApi } from "../../utility/hooks/apiFetch";
 import { User } from "../../utility/types";
 import { create } from "zustand";
@@ -9,7 +10,7 @@ export type UserStore = {
   logout: () => void;
 };
 
-export const userStore = create<UserStore>((set) => ({
+export const useUserStore = create<UserStore>((set) => ({
   user: null,
   setUser: (user) => {
     set(() => ({ user }));
@@ -24,5 +25,6 @@ export const userStore = create<UserStore>((set) => ({
     const result = await callApi("/auth/logout");
     if (!result) return;
     set({ user: null });
+    redirect("/");
   },
 }));

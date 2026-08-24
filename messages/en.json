@@ -197,9 +197,33 @@
     "saving": "Saving..."
   }
   ,
-  "errorMessages": {
+  "errorMessagesAccount": {
     "saveError": "Error",
     "saveErrorDescription": "Server error occured while saving the data. Please try again later.",
-    "accountNameRequired": "Account name is required"
+    "accountNameRequired": "Account name is required",
+    "accountNameRequiredMessage": "Please provide a valid account name."
+  },
+  "errorMessagesCommon": {
+    "serverErrorHeader": "Server error",
+    "serverErrorMessage": "There was a server error with your request. Please try again.",
+    "unauthorizedErrorHeader": "Unauthorized", 
+    "unauthorizedErrorMessage": "Please, log into your account.",
+    "userNotFoundHeader": "User not found",
+    "userNotFoundMessage": "The user was not found in our database."
+  },
+  "successMessagesAccount": {
+    "successCreationHeader": "Account created successfully.",
+    "successCreationMessage": "Your account was created successfully.",
+    "successUpdateHeader": "Account updated successfully.",
+    "successUpdateMessage": "Your account was updated successfully."
+  },
+  "errorLogin": {
+    "loginErrorHeader": "Login error",
+    "loginErrorMessage": "There was an error during login. Please try again.",
+    "loginErrorServerErrorHeader": "Server error",
+    "loginErrorServerErrorMessage": "There was a server error during login. Please try again later."
+  },
+  "redirectLogin": {
+    "redirectHeader": "Redirecting to Google login..."
   }
 }

@@ -197,9 +197,33 @@
     "saveChanges": "Запази промените",
     "saving": "Запазване..."
   },
-  "errorMessages": {
+  "errorMessagesAccount": {
     "saveError": "Проблем при запазването",
     "saveErrorDescription": "Имаше проблем при запазването на данните. Моля, опитайте отново по-късно.",
-    "accountNameRequired": "Името на акаунта е задължително"
+    "accountNameRequired": "Името на акаунта е задължително.",
+    "accountNameRequiredMessage": "Моля, въведете валидно име на акаунта."
+  },
+  "errorMessagesCommon": {
+    "serverErrorHeader": "Сървърна грешка",
+    "serverErrorMessage": "Имаше проблем при обработване на заявката. Моля опитайте отново.",
+    "unauthorizedErrorHeader": "Не сте аутентикирани", 
+    "unauthorizedErrorMessage": "Моля, влезте в профила си.",
+    "userNotFoundHeader": "Потребителя не е намерен",
+    "userNotFoundMessage": "Потребителят не беше намерен в базата данни."
+  },
+  "successMessagesAccount": {
+    "successCreationHeader": "Акаунтът е създаден успешно.",
+    "successCreationMessage": "Вашият акаунт беше създаден успешно.",
+    "successUpdateHeader": "Акаунтът е обновен успешно.",
+    "successUpdateMessage": "Вашият акаунт беше обновен успешно."
+  },
+  "errorLogin": {
+    "loginErrorHeader": "Грешка при вход",
+    "loginErrorMessage": "Възникна грешка при влизане. Моля, опитайте отново.",
+    "loginErrorServerErrorHeader": "Сървърна грешка",
+    "loginErrorServerErrorMessage": "Възникна сървърна грешка при влизане. Моля, опитайте отново по-късно."
+  },
+  "redirectLogin": {
+    "redirectHeader": "Пренасочваме ви към Google страницата за вход..."
   }
 }

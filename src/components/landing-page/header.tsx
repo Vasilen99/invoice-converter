@@ -1,12 +1,19 @@
 "use client";
 
-import { Zap, ArrowRight, User, LayoutDashboard, LogOut, ChevronDown } from "lucide-react";
+import {
+  Zap,
+  ArrowRight,
+  User,
+  LayoutDashboard,
+  LogOut,
+  ChevronDown,
+} from "lucide-react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import ThemeToggle from "../ThemeToggle";
 import LanguageSwitcher from "../LanguageSwitcher";
 import LoginModal from "../LoginModal";
-import { userStore } from "@/store/user";
+import { useUserStore } from "@/store/user";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +25,7 @@ import {
 export const Header = () => {
   const t = useTranslations("header");
   const [loginOpen, setLoginOpen] = useState(false);
-  const { user, logout } = userStore();
+  const { user, logout } = useUserStore();
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border backdrop-blur-xl bg-background/60">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -76,7 +83,7 @@ export const Header = () => {
           ) : (
             <button
               onClick={() => setLoginOpen(true)}
-              className="px-4 py-1.5 rounded-full border border-border text-xs font-bold text-foreground hover:bg-muted transition-colors"
+              className="px-4 py-1.5 rounded-full border border-border text-xs font-bold text-foreground hover:bg-muted transition-colors lg:hover:cursor-pointer"
             >
               {t("login")}
             </button>

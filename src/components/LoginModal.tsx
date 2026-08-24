@@ -13,10 +13,10 @@ import {
 } from "@/components/animate-ui/components/radix/dialog";
 import { createClient } from "../../utility/supabase/client";
 import { globalStore } from "@/store/global";
-import { userStore } from "@/store/user";
-import { usePathname } from "next/navigation";
-//import { EMAIL_REGEX, server } from "../../utility/constants";
 import { server } from "../../utility/constants";
+import { dashboardLink } from "../../utility/links";
+
+//import { EMAIL_REGEX, server } from "../../utility/constants";
 
 // import { callApi } from "../../utility/hooks/apiFetch";
 
@@ -48,15 +48,15 @@ interface LoginModalProps {
 
 const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
   const t = useTranslations("auth");
-
+  const alertsT = useTranslations();
   // const [state, setState] = useState({ email: "" });
   // const [step, setStep] = useState<"email" | "code">("email");
   // const [code, setCode] = useState("");
   // const [isVerifying, setIsVerifying] = useState(false);
   const supabase = createClient();
   const globalState = globalStore();
-  const userState = userStore();
-  const currentPathname = usePathname();
+  // const userState = useUserStore();
+  // const currentPathname = usePathname();
 
   // const validateLoginData = () => {
   //   if (!state.email.trim().length) {
@@ -164,13 +164,18 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
     try {
       globalState.setIsLoading(true);
 
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("loginReturnPath", currentPathname);
-      }
+      // We shall need this in the case where we are going to have page with "Success message" after login
+      // if (typeof window !== "undefined") {
+      //   sessionStorage.setItem("loginReturnPath", currentPathname);
+      // }
+
+      // Configure redirect URL for OAuth callback - redirect to dashboard after successful login
+      const redirectTo = `${server}/api/auth/social-login-callback?next=${encodeURIComponent(`/${dashboardLink}`)}`;
 
       const result = await supabase.auth.signInWithOAuth({
         provider: customProvider,
         options: {
+          redirectTo,
           skipBrowserRedirect: false,
         },
       });
@@ -178,8 +183,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
       if (result.error) {
         globalState.setAlertStatus({
           status: "error",
-          statusHeader: "Грешка при вход",
-          statusContent: `Не успяхме да ви логнем чрез ${customProvider === "google" ? "Google" : "Facebook"}. Моля, опитайте отново.`,
+          statusHeader: alertsT("errorLogin.loginErrorHeader"),
+          statusContent: alertsT("errorLogin.loginErrorMessage"),
         });
         return;
       }
@@ -187,17 +192,17 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
       // Web browser — OAuth redirect was initiated successfully.
       globalState.setAlertStatus({
         status: "success",
-        statusHeader: "Пренасочване...",
-        statusContent: `Пренасочваме ви към ${customProvider === "google" ? "Google" : "Facebook"} за потвърждение.`,
+        statusHeader: alertsT("redirectLogin.redirectHeader"),
       });
 
-      userState.fetchUser();
+      // fetchUser() will be called automatically by AppProvider's auth listener
+      // when the OAuth callback completes and session is established
     } catch (err) {
       console.error(err);
       globalState.setAlertStatus({
         status: "error",
-        statusHeader: "Грешка при вход",
-        statusContent: `Възникна проблем при влизането чрез ${customProvider === "google" ? "Google" : "Facebook"}. Моля, опитайте отново или използвайте друг начин за вход.`,
+        statusHeader: alertsT("errorLogin.loginErrorServerErrorHeader"),
+        statusContent: alertsT("errorLogin.loginErrorServerErrorMessage"),
       });
     } finally {
       globalState.setIsLoading(false);
@@ -291,7 +296,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
               onClick={() => socialLogin("google")}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-border bg-background/50 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+              className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-border bg-background/50 py-2.5 text-sm font-medium transition-colors hover:bg-muted lg:hover:cursor-pointer"
             >
               <GoogleIcon />
               {t("continueWithGoogle")}

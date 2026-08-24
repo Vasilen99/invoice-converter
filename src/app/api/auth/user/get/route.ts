@@ -22,6 +22,17 @@ export async function GET() {
       last_name: true,
       email: true,
       image: true,
+      accountMembers: {
+        where: { user: { auth_uid: userClaims.sub } },
+        select: {
+          account: {
+            select: {
+              name: true,
+            },
+          },
+        },
+        take: 1,
+      },
     },
   });
 
@@ -35,8 +46,16 @@ export async function GET() {
     );
   }
 
+  const accountName = userData.accountMembers[0]?.account?.name || null;
+  const { ...userDataWithoutMembers } = userData;
+
   return NextResponse.json(
-    { data: { ...userData } },
+    {
+      data: {
+        ...userDataWithoutMembers,
+        accountName,
+      },
+    },
     {
       status: 200,
       headers: { "content-type": "application/json" },

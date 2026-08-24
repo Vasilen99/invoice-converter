@@ -3,14 +3,13 @@
 import { Sparkles, ArrowRight, ArrowDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { FadeIn } from "../components/motion";
-import { Converter } from "@/components/landing-page/converter";
+// import { Converter } from "@/components/landing-page/converter";
 import { FinalCta } from "@/components/landing-page/final-cta";
 import { Features } from "@/components/landing-page/features";
 import { Solution } from "@/components/landing-page/solution";
 import { Problem } from "@/components/landing-page/problem";
 import { Header } from "@/components/landing-page/header";
 import { Footer } from "@/components/landing-page/footer";
-import { userStore } from "@/store/user";
 
 /* ─────────────────────────── Hero ─────────────────────────── */
 
@@ -98,8 +97,6 @@ const Hero = () => {
 /* ─────────────────────────── Page ─────────────────────────── */
 
 const HomePage = () => {
-  const { user } = userStore();
-  console.log(user);
   return (
     <>
       <Header />

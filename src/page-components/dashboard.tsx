@@ -40,8 +40,10 @@ import { useRouter } from "next/navigation";
 import { FadeIn } from "@/components/motion";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { accountLink } from "../../utility/links";
+import { useUserStore } from "@/store/user";
+import { PLATFORM_NAME } from "../../utility/constants";
 const NAVIGATION_CONFIG = [
   {
     labelKey: "dashboard.general",
@@ -159,7 +161,12 @@ export default function Dashboard() {
   const t = useTranslations();
   const router = useRouter();
   const [open, setOpen] = useState<boolean>(true);
+  const { logout, user } = useUserStore();
 
+  const accountName =
+    user?.accountName && user.accountName.length > 15
+      ? `${user.accountName.slice(0, 15)}...`
+      : user?.accountName;
   return (
     <SidebarProvider
       open={open}
@@ -172,13 +179,15 @@ export default function Dashboard() {
             <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
               <Building2 className="h-6 w-6 text-foreground" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-foreground text-sm">
-                Servify Invoices
+            <div className="flex flex-col gap-1">
+              <span className="font-bold text-foreground text-sm leading-4">
+                {PLATFORM_NAME}
               </span>
-              <span className="text-xs text-muted-foreground">
-                Sofia Consulting EOOD
-              </span>
+              {accountName && (
+                <span className="text-xs text-muted-foreground">
+                  {accountName}
+                </span>
+              )}
             </div>
             {open && (
               <FadeIn className="flex items-center gap-3">
@@ -234,7 +243,10 @@ export default function Dashboard() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <Button className="flex justify-start items-center gap-3 text-primary-foreground hover:text-primary-foreground/80 hover:bg-destructive/10 transition-all rounded-lg group">
+                <Button
+                  onClick={() => logout()}
+                  className="flex justify-start items-center gap-3 text-primary-foreground hover:text-primary-foreground/80 hover:bg-destructive/10 transition-all rounded-lg group"
+                >
                   <LogOut className="h-5 w-5 group-hover:scale-110 transition-transform" />
                   <span className="text-sm">{t("dashboard.logout")}</span>
                 </Button>
