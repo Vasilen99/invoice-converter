@@ -177,6 +177,7 @@
     "usageByMember": "Използване по член",
     "settings": "Настройки",
     "organizationProfile": "Профил на организацията",
+    "organizations": "Организации",
     "myAccount": "Моят профил",
     "integrations": "Интеграции",
     "notifications": "Известия",
@@ -196,6 +197,20 @@
     "lastUpdatedAt": "Последно обновен на",
     "saveChanges": "Запази промените",
     "saving": "Запазване..."
+  },
+  "organizations": {
+      "organizationsHeader": "Организации",
+      "organizationsSubheader": "Управлявайте вашите организации и техните настройки.",
+      "organizationName": "Име на организацията",
+      "organizationNamePlaceholder": "ПримернаОрганизацияООД",
+      "addOrganization": "Добави организация",
+      "addOrganizationDescription": "Добавете нова организация, за да управлявате фактурите й.",
+      "createdAt": "Създадена на",
+      "lastUpdatedAt": "Последно обновена на",
+      "saveChanges": "Запази промените",
+      "saving": "Запазване...",
+      "add": "Добави",
+      "noOrganizations": "Все още нямате организации. Добавете първата си организация, за да започнете."
   },
   "errorMessagesAccount": {
     "saveError": "Проблем при запазването",

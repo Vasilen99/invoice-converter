@@ -42,7 +42,11 @@ import { FadeIn } from "@/components/motion";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useEffect, useState } from "react";
-import { accountLink } from "../../utility/links";
+import {
+  accountLink,
+  dashboardLink,
+  organizationsLink,
+} from "../../utility/links";
 import { useUserStore } from "@/store/user";
 import { PLATFORM_NAME } from "../../utility/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -52,13 +56,18 @@ const NAVIGATION_CONFIG = [
     items: [
       {
         nameKey: "dashboard.overview",
-        href: "/dashboard",
+        href: dashboardLink,
         icon: BarChart3,
       },
       {
         nameKey: "dashboard.reports",
         href: "/dashboard/reports",
         icon: BarChart3,
+      },
+      {
+        nameKey: "dashboard.organizations",
+        href: organizationsLink,
+        icon: Users,
       },
     ],
   },
@@ -137,7 +146,7 @@ const NAVIGATION_CONFIG = [
       },
       {
         nameKey: "dashboard.myAccount",
-        href: `/dashboard/${accountLink}`,
+        href: accountLink,
         icon: User,
       },
       {

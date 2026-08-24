@@ -175,6 +175,7 @@
     "creditsAndPackages": "Credits and packages",
     "orderHistory": "Order history",
     "usageByMember": "Usage by member",
+    "organizations": "Organizations",
     "settings": "Settings",
     "organizationProfile": "Organization profile",
     "myAccount": "My account",
@@ -182,7 +183,8 @@
     "notifications": "Notifications",
     "localizations": "Localizations",
     "logout": "Log out",
-    "actionButtons": "Action buttons"
+    "actionButtons": "Action buttons",
+    "noOrganizations": "You don't have any organizations yet. Add your first organization to get started."
   },
   "account": {
     "accountHeader": "Account",
@@ -195,8 +197,20 @@
     "addCredits": "Add credits",
     "saveChanges": "Save changes",
     "saving": "Saving..."
-  }
-  ,
+  },
+    "organizations": {
+      "organizationsHeader": "Organizations",
+      "organizationsSubheader": "Manage your organizations and their settings.",
+      "organizationName": "Organization name",
+      "organizationNamePlaceholder": "ExampleOrganizationLTD",
+      "addOrganization": "Add organization",
+      "addOrganizationDescription": "Add a new organization to manage its invoices.",
+      "createdAt": "Created at",
+      "lastUpdatedAt": "Last updated at",
+      "saveChanges": "Save changes",
+      "add": "Add",
+      "saving": "Saving..."
+  },
   "errorMessagesAccount": {
     "saveError": "Error",
     "saveErrorDescription": "Server error occured while saving the data. Please try again later.",

@@ -1,4 +1,5 @@
-const accountLink = "account";
 const dashboardLink = "dashboard";
-const creditsLink = `${dashboardLink}/credits`;
-export { accountLink, dashboardLink, creditsLink };
+const creditsLink = "credits";
+const organizationsLink = "organizations";
+const accountLink = "account";
+export { accountLink, dashboardLink, creditsLink, organizationsLink };
