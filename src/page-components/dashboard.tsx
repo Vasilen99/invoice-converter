@@ -40,10 +40,11 @@ import { useRouter } from "next/navigation";
 import { FadeIn } from "@/components/motion";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { accountLink } from "../../utility/links";
 import { useUserStore } from "@/store/user";
 import { PLATFORM_NAME } from "../../utility/constants";
+import { useIsMobile } from "@/hooks/use-mobile";
 const NAVIGATION_CONFIG = [
   {
     labelKey: "dashboard.general",
@@ -158,20 +159,27 @@ const NAVIGATION_CONFIG = [
 ];
 
 export default function Dashboard() {
+  const isMobile = useIsMobile(1024);
   const t = useTranslations();
   const router = useRouter();
-  const [open, setOpen] = useState<boolean>(true);
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(!isMobile);
   const { logout, user } = useUserStore();
+
+  useEffect(() => {
+    // Sync sidebar open state when isMobile status changes
+    setIsPanelOpen(!isMobile);
+  }, [isMobile]);
 
   const accountName =
     user?.accountName && user.accountName.length > 15
       ? `${user.accountName.slice(0, 15)}...`
       : user?.accountName;
+
   return (
     <SidebarProvider
-      open={open}
-      onOpenChange={() => setOpen(!open)}
-      defaultOpen={true}
+      open={isPanelOpen}
+      onOpenChange={setIsPanelOpen}
+      defaultOpen={!isMobile}
     >
       <Sidebar className="overflow-y-auto border-r border-border bg-sidebar">
         <SidebarHeader className="border-b border-sidebar-border">
@@ -189,11 +197,9 @@ export default function Dashboard() {
                 </span>
               )}
             </div>
-            {open && (
-              <FadeIn className="flex items-center gap-3">
-                <SidebarTrigger className="size-12 text-foreground hover:text-foreground transition-colors" />
-              </FadeIn>
-            )}
+            <div className="flex items-center">
+              <SidebarTrigger className="size-12 text-foreground hover:text-foreground transition-colors" />
+            </div>
           </FadeIn>
         </SidebarHeader>
         <SidebarContent className="relative py-6 px-4 no-scrollbar">
@@ -255,11 +261,11 @@ export default function Dashboard() {
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      {!open && (
+      {!isPanelOpen && (
         <SidebarInset className="relative ml-3 lg:top-16 top-10 h-[calc(100vh-4rem)]">
-          <FadeIn className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <SidebarTrigger className="size-12 text-foreground hover:text-foreground transition-colors" />
-          </FadeIn>
+          </div>
         </SidebarInset>
       )}
     </SidebarProvider>

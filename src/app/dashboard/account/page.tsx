@@ -1,7 +1,7 @@
 import AccountDashboardPage from "@/page-components/account-dashboard";
 import { getAccountData } from "./action";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const Page = async () => {
   const accountData = await getAccountData();
