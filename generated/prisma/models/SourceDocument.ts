@@ -39,9 +39,6 @@ export type SourceDocumentSumAggregateOutputType = {
 }
 
 export type SourceDocumentMinAggregateOutputType = {
-  id: number | null
-  organizationId: number | null
-  uploadedByUserId: number | null
   sourceType: $Enums.SourceType | null
   originalFileUrl: string | null
   originalFilename: string | null
@@ -49,12 +46,12 @@ export type SourceDocumentMinAggregateOutputType = {
   status: $Enums.SourceDocumentStatus | null
   errorMessage: string | null
   createdAt: Date | null
+  id: number | null
+  organizationId: number | null
+  uploadedByUserId: number | null
 }
 
 export type SourceDocumentMaxAggregateOutputType = {
-  id: number | null
-  organizationId: number | null
-  uploadedByUserId: number | null
   sourceType: $Enums.SourceType | null
   originalFileUrl: string | null
   originalFilename: string | null
@@ -62,12 +59,12 @@ export type SourceDocumentMaxAggregateOutputType = {
   status: $Enums.SourceDocumentStatus | null
   errorMessage: string | null
   createdAt: Date | null
+  id: number | null
+  organizationId: number | null
+  uploadedByUserId: number | null
 }
 
 export type SourceDocumentCountAggregateOutputType = {
-  id: number
-  organizationId: number
-  uploadedByUserId: number
   sourceType: number
   originalFileUrl: number
   originalFilename: number
@@ -76,6 +73,9 @@ export type SourceDocumentCountAggregateOutputType = {
   parsedData: number
   errorMessage: number
   createdAt: number
+  id: number
+  organizationId: number
+  uploadedByUserId: number
   _all: number
 }
 
@@ -93,9 +93,6 @@ export type SourceDocumentSumAggregateInputType = {
 }
 
 export type SourceDocumentMinAggregateInputType = {
-  id?: true
-  organizationId?: true
-  uploadedByUserId?: true
   sourceType?: true
   originalFileUrl?: true
   originalFilename?: true
@@ -103,12 +100,12 @@ export type SourceDocumentMinAggregateInputType = {
   status?: true
   errorMessage?: true
   createdAt?: true
+  id?: true
+  organizationId?: true
+  uploadedByUserId?: true
 }
 
 export type SourceDocumentMaxAggregateInputType = {
-  id?: true
-  organizationId?: true
-  uploadedByUserId?: true
   sourceType?: true
   originalFileUrl?: true
   originalFilename?: true
@@ -116,12 +113,12 @@ export type SourceDocumentMaxAggregateInputType = {
   status?: true
   errorMessage?: true
   createdAt?: true
-}
-
-export type SourceDocumentCountAggregateInputType = {
   id?: true
   organizationId?: true
   uploadedByUserId?: true
+}
+
+export type SourceDocumentCountAggregateInputType = {
   sourceType?: true
   originalFileUrl?: true
   originalFilename?: true
@@ -130,6 +127,9 @@ export type SourceDocumentCountAggregateInputType = {
   parsedData?: true
   errorMessage?: true
   createdAt?: true
+  id?: true
+  organizationId?: true
+  uploadedByUserId?: true
   _all?: true
 }
 
@@ -220,9 +220,6 @@ export type SourceDocumentGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 export type SourceDocumentGroupByOutputType = {
-  id: number
-  organizationId: number
-  uploadedByUserId: number
   sourceType: $Enums.SourceType
   originalFileUrl: string
   originalFilename: string
@@ -231,6 +228,9 @@ export type SourceDocumentGroupByOutputType = {
   parsedData: runtime.JsonValue | null
   errorMessage: string | null
   createdAt: Date
+  id: number
+  organizationId: number
+  uploadedByUserId: number
   _count: SourceDocumentCountAggregateOutputType | null
   _avg: SourceDocumentAvgAggregateOutputType | null
   _sum: SourceDocumentSumAggregateOutputType | null
@@ -257,9 +257,6 @@ export type SourceDocumentWhereInput = {
   AND?: Prisma.SourceDocumentWhereInput | Prisma.SourceDocumentWhereInput[]
   OR?: Prisma.SourceDocumentWhereInput[]
   NOT?: Prisma.SourceDocumentWhereInput | Prisma.SourceDocumentWhereInput[]
-  id?: Prisma.IntFilter<"SourceDocument"> | number
-  organizationId?: Prisma.IntFilter<"SourceDocument"> | number
-  uploadedByUserId?: Prisma.IntFilter<"SourceDocument"> | number
   sourceType?: Prisma.EnumSourceTypeFilter<"SourceDocument"> | $Enums.SourceType
   originalFileUrl?: Prisma.StringFilter<"SourceDocument"> | string
   originalFilename?: Prisma.StringFilter<"SourceDocument"> | string
@@ -268,14 +265,14 @@ export type SourceDocumentWhereInput = {
   parsedData?: Prisma.JsonNullableFilter<"SourceDocument">
   errorMessage?: Prisma.StringNullableFilter<"SourceDocument"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SourceDocument"> | Date | string
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  id?: Prisma.IntFilter<"SourceDocument"> | number
+  organizationId?: Prisma.IntFilter<"SourceDocument"> | number
+  uploadedByUserId?: Prisma.IntFilter<"SourceDocument"> | number
   generatedInvoice?: Prisma.XOR<Prisma.GeneratedInvoiceNullableScalarRelationFilter, Prisma.GeneratedInvoiceWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }
 
 export type SourceDocumentOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  uploadedByUserId?: Prisma.SortOrder
   sourceType?: Prisma.SortOrder
   originalFileUrl?: Prisma.SortOrder
   originalFilename?: Prisma.SortOrder
@@ -284,8 +281,11 @@ export type SourceDocumentOrderByWithRelationInput = {
   parsedData?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  organization?: Prisma.OrganizationOrderByWithRelationInput
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  uploadedByUserId?: Prisma.SortOrder
   generatedInvoice?: Prisma.GeneratedInvoiceOrderByWithRelationInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
 }
 
 export type SourceDocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -293,8 +293,6 @@ export type SourceDocumentWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SourceDocumentWhereInput | Prisma.SourceDocumentWhereInput[]
   OR?: Prisma.SourceDocumentWhereInput[]
   NOT?: Prisma.SourceDocumentWhereInput | Prisma.SourceDocumentWhereInput[]
-  organizationId?: Prisma.IntFilter<"SourceDocument"> | number
-  uploadedByUserId?: Prisma.IntFilter<"SourceDocument"> | number
   sourceType?: Prisma.EnumSourceTypeFilter<"SourceDocument"> | $Enums.SourceType
   originalFileUrl?: Prisma.StringFilter<"SourceDocument"> | string
   originalFilename?: Prisma.StringFilter<"SourceDocument"> | string
@@ -303,14 +301,13 @@ export type SourceDocumentWhereUniqueInput = Prisma.AtLeast<{
   parsedData?: Prisma.JsonNullableFilter<"SourceDocument">
   errorMessage?: Prisma.StringNullableFilter<"SourceDocument"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SourceDocument"> | Date | string
-  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  organizationId?: Prisma.IntFilter<"SourceDocument"> | number
+  uploadedByUserId?: Prisma.IntFilter<"SourceDocument"> | number
   generatedInvoice?: Prisma.XOR<Prisma.GeneratedInvoiceNullableScalarRelationFilter, Prisma.GeneratedInvoiceWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
 }, "id">
 
 export type SourceDocumentOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  uploadedByUserId?: Prisma.SortOrder
   sourceType?: Prisma.SortOrder
   originalFileUrl?: Prisma.SortOrder
   originalFilename?: Prisma.SortOrder
@@ -319,6 +316,9 @@ export type SourceDocumentOrderByWithAggregationInput = {
   parsedData?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  uploadedByUserId?: Prisma.SortOrder
   _count?: Prisma.SourceDocumentCountOrderByAggregateInput
   _avg?: Prisma.SourceDocumentAvgOrderByAggregateInput
   _max?: Prisma.SourceDocumentMaxOrderByAggregateInput
@@ -330,9 +330,6 @@ export type SourceDocumentScalarWhereWithAggregatesInput = {
   AND?: Prisma.SourceDocumentScalarWhereWithAggregatesInput | Prisma.SourceDocumentScalarWhereWithAggregatesInput[]
   OR?: Prisma.SourceDocumentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SourceDocumentScalarWhereWithAggregatesInput | Prisma.SourceDocumentScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"SourceDocument"> | number
-  organizationId?: Prisma.IntWithAggregatesFilter<"SourceDocument"> | number
-  uploadedByUserId?: Prisma.IntWithAggregatesFilter<"SourceDocument"> | number
   sourceType?: Prisma.EnumSourceTypeWithAggregatesFilter<"SourceDocument"> | $Enums.SourceType
   originalFileUrl?: Prisma.StringWithAggregatesFilter<"SourceDocument"> | string
   originalFilename?: Prisma.StringWithAggregatesFilter<"SourceDocument"> | string
@@ -341,10 +338,12 @@ export type SourceDocumentScalarWhereWithAggregatesInput = {
   parsedData?: Prisma.JsonNullableWithAggregatesFilter<"SourceDocument">
   errorMessage?: Prisma.StringNullableWithAggregatesFilter<"SourceDocument"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SourceDocument"> | Date | string
+  id?: Prisma.IntWithAggregatesFilter<"SourceDocument"> | number
+  organizationId?: Prisma.IntWithAggregatesFilter<"SourceDocument"> | number
+  uploadedByUserId?: Prisma.IntWithAggregatesFilter<"SourceDocument"> | number
 }
 
 export type SourceDocumentCreateInput = {
-  uploadedByUserId: number
   sourceType: $Enums.SourceType
   originalFileUrl: string
   originalFilename: string
@@ -353,14 +352,12 @@ export type SourceDocumentCreateInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
   createdAt?: Date | string
-  organization: Prisma.OrganizationCreateNestedOneWithoutSourceDocumentsInput
+  uploadedByUserId: number
   generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutSourceDocumentInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutSourceDocumentsInput
 }
 
 export type SourceDocumentUncheckedCreateInput = {
-  id?: number
-  organizationId: number
-  uploadedByUserId: number
   sourceType: $Enums.SourceType
   originalFileUrl: string
   originalFilename: string
@@ -369,11 +366,13 @@ export type SourceDocumentUncheckedCreateInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
   createdAt?: Date | string
+  id?: number
+  organizationId: number
+  uploadedByUserId: number
   generatedInvoice?: Prisma.GeneratedInvoiceUncheckedCreateNestedOneWithoutSourceDocumentInput
 }
 
 export type SourceDocumentUpdateInput = {
-  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   sourceType?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
   originalFileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalFilename?: Prisma.StringFieldUpdateOperationsInput | string
@@ -382,14 +381,12 @@ export type SourceDocumentUpdateInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutSourceDocumentsNestedInput
+  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutSourceDocumentNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutSourceDocumentsNestedInput
 }
 
 export type SourceDocumentUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   sourceType?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
   originalFileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalFilename?: Prisma.StringFieldUpdateOperationsInput | string
@@ -398,13 +395,13 @@ export type SourceDocumentUncheckedUpdateInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   generatedInvoice?: Prisma.GeneratedInvoiceUncheckedUpdateOneWithoutSourceDocumentNestedInput
 }
 
 export type SourceDocumentCreateManyInput = {
-  id?: number
-  organizationId: number
-  uploadedByUserId: number
   sourceType: $Enums.SourceType
   originalFileUrl: string
   originalFilename: string
@@ -413,10 +410,12 @@ export type SourceDocumentCreateManyInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
   createdAt?: Date | string
+  id?: number
+  organizationId: number
+  uploadedByUserId: number
 }
 
 export type SourceDocumentUpdateManyMutationInput = {
-  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   sourceType?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
   originalFileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalFilename?: Prisma.StringFieldUpdateOperationsInput | string
@@ -425,12 +424,10 @@ export type SourceDocumentUpdateManyMutationInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type SourceDocumentUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   sourceType?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
   originalFileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalFilename?: Prisma.StringFieldUpdateOperationsInput | string
@@ -439,6 +436,9 @@ export type SourceDocumentUncheckedUpdateManyInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type SourceDocumentListRelationFilter = {
@@ -452,9 +452,6 @@ export type SourceDocumentOrderByRelationAggregateInput = {
 }
 
 export type SourceDocumentCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  uploadedByUserId?: Prisma.SortOrder
   sourceType?: Prisma.SortOrder
   originalFileUrl?: Prisma.SortOrder
   originalFilename?: Prisma.SortOrder
@@ -463,6 +460,9 @@ export type SourceDocumentCountOrderByAggregateInput = {
   parsedData?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  uploadedByUserId?: Prisma.SortOrder
 }
 
 export type SourceDocumentAvgOrderByAggregateInput = {
@@ -472,9 +472,6 @@ export type SourceDocumentAvgOrderByAggregateInput = {
 }
 
 export type SourceDocumentMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  uploadedByUserId?: Prisma.SortOrder
   sourceType?: Prisma.SortOrder
   originalFileUrl?: Prisma.SortOrder
   originalFilename?: Prisma.SortOrder
@@ -482,12 +479,12 @@ export type SourceDocumentMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  uploadedByUserId?: Prisma.SortOrder
 }
 
 export type SourceDocumentMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  uploadedByUserId?: Prisma.SortOrder
   sourceType?: Prisma.SortOrder
   originalFileUrl?: Prisma.SortOrder
   originalFilename?: Prisma.SortOrder
@@ -495,6 +492,9 @@ export type SourceDocumentMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  uploadedByUserId?: Prisma.SortOrder
 }
 
 export type SourceDocumentSumOrderByAggregateInput = {
@@ -575,7 +575,6 @@ export type SourceDocumentUpdateOneWithoutGeneratedInvoiceNestedInput = {
 }
 
 export type SourceDocumentCreateWithoutOrganizationInput = {
-  uploadedByUserId: number
   sourceType: $Enums.SourceType
   originalFileUrl: string
   originalFilename: string
@@ -584,12 +583,11 @@ export type SourceDocumentCreateWithoutOrganizationInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
   createdAt?: Date | string
+  uploadedByUserId: number
   generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutSourceDocumentInput
 }
 
 export type SourceDocumentUncheckedCreateWithoutOrganizationInput = {
-  id?: number
-  uploadedByUserId: number
   sourceType: $Enums.SourceType
   originalFileUrl: string
   originalFilename: string
@@ -598,6 +596,8 @@ export type SourceDocumentUncheckedCreateWithoutOrganizationInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
   createdAt?: Date | string
+  id?: number
+  uploadedByUserId: number
   generatedInvoice?: Prisma.GeneratedInvoiceUncheckedCreateNestedOneWithoutSourceDocumentInput
 }
 
@@ -631,9 +631,6 @@ export type SourceDocumentScalarWhereInput = {
   AND?: Prisma.SourceDocumentScalarWhereInput | Prisma.SourceDocumentScalarWhereInput[]
   OR?: Prisma.SourceDocumentScalarWhereInput[]
   NOT?: Prisma.SourceDocumentScalarWhereInput | Prisma.SourceDocumentScalarWhereInput[]
-  id?: Prisma.IntFilter<"SourceDocument"> | number
-  organizationId?: Prisma.IntFilter<"SourceDocument"> | number
-  uploadedByUserId?: Prisma.IntFilter<"SourceDocument"> | number
   sourceType?: Prisma.EnumSourceTypeFilter<"SourceDocument"> | $Enums.SourceType
   originalFileUrl?: Prisma.StringFilter<"SourceDocument"> | string
   originalFilename?: Prisma.StringFilter<"SourceDocument"> | string
@@ -642,10 +639,12 @@ export type SourceDocumentScalarWhereInput = {
   parsedData?: Prisma.JsonNullableFilter<"SourceDocument">
   errorMessage?: Prisma.StringNullableFilter<"SourceDocument"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SourceDocument"> | Date | string
+  id?: Prisma.IntFilter<"SourceDocument"> | number
+  organizationId?: Prisma.IntFilter<"SourceDocument"> | number
+  uploadedByUserId?: Prisma.IntFilter<"SourceDocument"> | number
 }
 
 export type SourceDocumentCreateWithoutGeneratedInvoiceInput = {
-  uploadedByUserId: number
   sourceType: $Enums.SourceType
   originalFileUrl: string
   originalFilename: string
@@ -654,13 +653,11 @@ export type SourceDocumentCreateWithoutGeneratedInvoiceInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
   createdAt?: Date | string
+  uploadedByUserId: number
   organization: Prisma.OrganizationCreateNestedOneWithoutSourceDocumentsInput
 }
 
 export type SourceDocumentUncheckedCreateWithoutGeneratedInvoiceInput = {
-  id?: number
-  organizationId: number
-  uploadedByUserId: number
   sourceType: $Enums.SourceType
   originalFileUrl: string
   originalFilename: string
@@ -669,6 +666,9 @@ export type SourceDocumentUncheckedCreateWithoutGeneratedInvoiceInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
   createdAt?: Date | string
+  id?: number
+  organizationId: number
+  uploadedByUserId: number
 }
 
 export type SourceDocumentCreateOrConnectWithoutGeneratedInvoiceInput = {
@@ -688,7 +688,6 @@ export type SourceDocumentUpdateToOneWithWhereWithoutGeneratedInvoiceInput = {
 }
 
 export type SourceDocumentUpdateWithoutGeneratedInvoiceInput = {
-  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   sourceType?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
   originalFileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalFilename?: Prisma.StringFieldUpdateOperationsInput | string
@@ -697,13 +696,11 @@ export type SourceDocumentUpdateWithoutGeneratedInvoiceInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutSourceDocumentsNestedInput
 }
 
 export type SourceDocumentUncheckedUpdateWithoutGeneratedInvoiceInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   sourceType?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
   originalFileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalFilename?: Prisma.StringFieldUpdateOperationsInput | string
@@ -712,11 +709,12 @@ export type SourceDocumentUncheckedUpdateWithoutGeneratedInvoiceInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type SourceDocumentCreateManyOrganizationInput = {
-  id?: number
-  uploadedByUserId: number
   sourceType: $Enums.SourceType
   originalFileUrl: string
   originalFilename: string
@@ -725,10 +723,11 @@ export type SourceDocumentCreateManyOrganizationInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
   createdAt?: Date | string
+  id?: number
+  uploadedByUserId: number
 }
 
 export type SourceDocumentUpdateWithoutOrganizationInput = {
-  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   sourceType?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
   originalFileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalFilename?: Prisma.StringFieldUpdateOperationsInput | string
@@ -737,12 +736,11 @@ export type SourceDocumentUpdateWithoutOrganizationInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutSourceDocumentNestedInput
 }
 
 export type SourceDocumentUncheckedUpdateWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   sourceType?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
   originalFileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalFilename?: Prisma.StringFieldUpdateOperationsInput | string
@@ -751,12 +749,12 @@ export type SourceDocumentUncheckedUpdateWithoutOrganizationInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   generatedInvoice?: Prisma.GeneratedInvoiceUncheckedUpdateOneWithoutSourceDocumentNestedInput
 }
 
 export type SourceDocumentUncheckedUpdateManyWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
   sourceType?: Prisma.EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
   originalFileUrl?: Prisma.StringFieldUpdateOperationsInput | string
   originalFilename?: Prisma.StringFieldUpdateOperationsInput | string
@@ -765,14 +763,13 @@ export type SourceDocumentUncheckedUpdateManyWithoutOrganizationInput = {
   parsedData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uploadedByUserId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
 
 export type SourceDocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  organizationId?: boolean
-  uploadedByUserId?: boolean
   sourceType?: boolean
   originalFileUrl?: boolean
   originalFilename?: boolean
@@ -781,14 +778,14 @@ export type SourceDocumentSelect<ExtArgs extends runtime.Types.Extensions.Intern
   parsedData?: boolean
   errorMessage?: boolean
   createdAt?: boolean
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  id?: boolean
+  organizationId?: boolean
+  uploadedByUserId?: boolean
   generatedInvoice?: boolean | Prisma.SourceDocument$generatedInvoiceArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sourceDocument"]>
 
 export type SourceDocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  organizationId?: boolean
-  uploadedByUserId?: boolean
   sourceType?: boolean
   originalFileUrl?: boolean
   originalFilename?: boolean
@@ -797,13 +794,13 @@ export type SourceDocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   parsedData?: boolean
   errorMessage?: boolean
   createdAt?: boolean
+  id?: boolean
+  organizationId?: boolean
+  uploadedByUserId?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sourceDocument"]>
 
 export type SourceDocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  organizationId?: boolean
-  uploadedByUserId?: boolean
   sourceType?: boolean
   originalFileUrl?: boolean
   originalFilename?: boolean
@@ -812,13 +809,13 @@ export type SourceDocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   parsedData?: boolean
   errorMessage?: boolean
   createdAt?: boolean
+  id?: boolean
+  organizationId?: boolean
+  uploadedByUserId?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sourceDocument"]>
 
 export type SourceDocumentSelectScalar = {
-  id?: boolean
-  organizationId?: boolean
-  uploadedByUserId?: boolean
   sourceType?: boolean
   originalFileUrl?: boolean
   originalFilename?: boolean
@@ -827,12 +824,15 @@ export type SourceDocumentSelectScalar = {
   parsedData?: boolean
   errorMessage?: boolean
   createdAt?: boolean
+  id?: boolean
+  organizationId?: boolean
+  uploadedByUserId?: boolean
 }
 
-export type SourceDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "uploadedByUserId" | "sourceType" | "originalFileUrl" | "originalFilename" | "mimeType" | "status" | "parsedData" | "errorMessage" | "createdAt", ExtArgs["result"]["sourceDocument"]>
+export type SourceDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"sourceType" | "originalFileUrl" | "originalFilename" | "mimeType" | "status" | "parsedData" | "errorMessage" | "createdAt" | "id" | "organizationId" | "uploadedByUserId", ExtArgs["result"]["sourceDocument"]>
 export type SourceDocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   generatedInvoice?: boolean | Prisma.SourceDocument$generatedInvoiceArgs<ExtArgs>
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }
 export type SourceDocumentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
@@ -844,13 +844,10 @@ export type SourceDocumentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type $SourceDocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SourceDocument"
   objects: {
-    organization: Prisma.$OrganizationPayload<ExtArgs>
     generatedInvoice: Prisma.$GeneratedInvoicePayload<ExtArgs> | null
+    organization: Prisma.$OrganizationPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    organizationId: number
-    uploadedByUserId: number
     sourceType: $Enums.SourceType
     originalFileUrl: string
     originalFilename: string
@@ -859,6 +856,9 @@ export type $SourceDocumentPayload<ExtArgs extends runtime.Types.Extensions.Inte
     parsedData: runtime.JsonValue | null
     errorMessage: string | null
     createdAt: Date
+    id: number
+    organizationId: number
+    uploadedByUserId: number
   }, ExtArgs["result"]["sourceDocument"]>
   composites: {}
 }
@@ -942,8 +942,8 @@ export interface SourceDocumentDelegate<ExtArgs extends runtime.Types.Extensions
    * // Get first 10 SourceDocuments
    * const sourceDocuments = await prisma.sourceDocument.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const sourceDocumentWithIdOnly = await prisma.sourceDocument.findMany({ select: { id: true } })
+   * // Only select the `originalFileUrl`
+   * const sourceDocumentWithOriginalFileUrlOnly = await prisma.sourceDocument.findMany({ select: { originalFileUrl: true } })
    * 
    */
   findMany<T extends SourceDocumentFindManyArgs>(args?: Prisma.SelectSubset<T, SourceDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SourceDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -987,9 +987,9 @@ export interface SourceDocumentDelegate<ExtArgs extends runtime.Types.Extensions
    *   ]
    * })
    * 
-   * // Create many SourceDocuments and only return the `id`
-   * const sourceDocumentWithIdOnly = await prisma.sourceDocument.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many SourceDocuments and only return the `originalFileUrl`
+   * const sourceDocumentWithOriginalFileUrlOnly = await prisma.sourceDocument.createManyAndReturn({
+   *   select: { originalFileUrl: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1078,9 +1078,9 @@ export interface SourceDocumentDelegate<ExtArgs extends runtime.Types.Extensions
    *   ]
    * })
    * 
-   * // Update zero or more SourceDocuments and only return the `id`
-   * const sourceDocumentWithIdOnly = await prisma.sourceDocument.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more SourceDocuments and only return the `originalFileUrl`
+   * const sourceDocumentWithOriginalFileUrlOnly = await prisma.sourceDocument.updateManyAndReturn({
+   *   select: { originalFileUrl: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1253,8 +1253,8 @@ readonly fields: SourceDocumentFieldRefs;
  */
 export interface Prisma__SourceDocumentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   generatedInvoice<T extends Prisma.SourceDocument$generatedInvoiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SourceDocument$generatedInvoiceArgs<ExtArgs>>): Prisma.Prisma__GeneratedInvoiceClient<runtime.Types.Result.GetResult<Prisma.$GeneratedInvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1284,9 +1284,6 @@ export interface Prisma__SourceDocumentClient<T, Null = never, ExtArgs extends r
  * Fields of the SourceDocument model
  */
 export interface SourceDocumentFieldRefs {
-  readonly id: Prisma.FieldRef<"SourceDocument", 'Int'>
-  readonly organizationId: Prisma.FieldRef<"SourceDocument", 'Int'>
-  readonly uploadedByUserId: Prisma.FieldRef<"SourceDocument", 'Int'>
   readonly sourceType: Prisma.FieldRef<"SourceDocument", 'SourceType'>
   readonly originalFileUrl: Prisma.FieldRef<"SourceDocument", 'String'>
   readonly originalFilename: Prisma.FieldRef<"SourceDocument", 'String'>
@@ -1295,6 +1292,9 @@ export interface SourceDocumentFieldRefs {
   readonly parsedData: Prisma.FieldRef<"SourceDocument", 'Json'>
   readonly errorMessage: Prisma.FieldRef<"SourceDocument", 'String'>
   readonly createdAt: Prisma.FieldRef<"SourceDocument", 'DateTime'>
+  readonly id: Prisma.FieldRef<"SourceDocument", 'Int'>
+  readonly organizationId: Prisma.FieldRef<"SourceDocument", 'Int'>
+  readonly uploadedByUserId: Prisma.FieldRef<"SourceDocument", 'Int'>
 }
     
 

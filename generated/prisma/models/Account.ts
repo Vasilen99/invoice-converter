@@ -221,9 +221,9 @@ export type AccountWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   members?: Prisma.AccountMemberListRelationFilter
-  organizations?: Prisma.OrganizationListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
   orders?: Prisma.OrderListRelationFilter
+  organizations?: Prisma.OrganizationListRelationFilter
 }
 
 export type AccountOrderByWithRelationInput = {
@@ -233,9 +233,9 @@ export type AccountOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   members?: Prisma.AccountMemberOrderByRelationAggregateInput
-  organizations?: Prisma.OrganizationOrderByRelationAggregateInput
   creditTransactions?: Prisma.CreditTransactionOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
+  organizations?: Prisma.OrganizationOrderByRelationAggregateInput
 }
 
 export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -248,9 +248,9 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   members?: Prisma.AccountMemberListRelationFilter
-  organizations?: Prisma.OrganizationListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
   orders?: Prisma.OrderListRelationFilter
+  organizations?: Prisma.OrganizationListRelationFilter
 }, "id">
 
 export type AccountOrderByWithAggregationInput = {
@@ -283,9 +283,9 @@ export type AccountCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.AccountMemberCreateNestedManyWithoutAccountInput
-  organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderCreateNestedManyWithoutAccountInput
+  organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateInput = {
@@ -295,9 +295,9 @@ export type AccountUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.AccountMemberUncheckedCreateNestedManyWithoutAccountInput
-  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutAccountInput
+  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUpdateInput = {
@@ -306,9 +306,9 @@ export type AccountUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.AccountMemberUpdateManyWithoutAccountNestedInput
-  organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUpdateManyWithoutAccountNestedInput
+  organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateInput = {
@@ -318,9 +318,9 @@ export type AccountUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.AccountMemberUncheckedUpdateManyWithoutAccountNestedInput
-  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutAccountNestedInput
+  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyInput = {
@@ -462,9 +462,9 @@ export type AccountCreateWithoutMembersInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderCreateNestedManyWithoutAccountInput
+  organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutMembersInput = {
@@ -473,9 +473,9 @@ export type AccountUncheckedCreateWithoutMembersInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutAccountInput
+  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutMembersInput = {
@@ -499,9 +499,9 @@ export type AccountUpdateWithoutMembersInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUpdateManyWithoutAccountNestedInput
+  organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutMembersInput = {
@@ -510,9 +510,9 @@ export type AccountUncheckedUpdateWithoutMembersInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutAccountNestedInput
+  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutOrganizationsInput = {
@@ -579,8 +579,8 @@ export type AccountCreateWithoutOrdersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.AccountMemberCreateNestedManyWithoutAccountInput
-  organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutAccountInput
+  organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutOrdersInput = {
@@ -590,8 +590,8 @@ export type AccountUncheckedCreateWithoutOrdersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.AccountMemberUncheckedCreateNestedManyWithoutAccountInput
-  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutAccountInput
+  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutOrdersInput = {
@@ -616,8 +616,8 @@ export type AccountUpdateWithoutOrdersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.AccountMemberUpdateManyWithoutAccountNestedInput
-  organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutAccountNestedInput
+  organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutOrdersInput = {
@@ -627,8 +627,8 @@ export type AccountUncheckedUpdateWithoutOrdersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.AccountMemberUncheckedUpdateManyWithoutAccountNestedInput
-  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutAccountNestedInput
+  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutCreditTransactionsInput = {
@@ -637,8 +637,8 @@ export type AccountCreateWithoutCreditTransactionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.AccountMemberCreateNestedManyWithoutAccountInput
-  organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderCreateNestedManyWithoutAccountInput
+  organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutCreditTransactionsInput = {
@@ -648,8 +648,8 @@ export type AccountUncheckedCreateWithoutCreditTransactionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.AccountMemberUncheckedCreateNestedManyWithoutAccountInput
-  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutAccountInput
+  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutCreditTransactionsInput = {
@@ -674,8 +674,8 @@ export type AccountUpdateWithoutCreditTransactionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.AccountMemberUpdateManyWithoutAccountNestedInput
-  organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUpdateManyWithoutAccountNestedInput
+  organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutCreditTransactionsInput = {
@@ -685,8 +685,8 @@ export type AccountUncheckedUpdateWithoutCreditTransactionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.AccountMemberUncheckedUpdateManyWithoutAccountNestedInput
-  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutAccountNestedInput
+  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 
@@ -696,16 +696,16 @@ export type AccountUncheckedUpdateWithoutCreditTransactionsInput = {
 
 export type AccountCountOutputType = {
   members: number
-  organizations: number
   creditTransactions: number
   orders: number
+  organizations: number
 }
 
 export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | AccountCountOutputTypeCountMembersArgs
-  organizations?: boolean | AccountCountOutputTypeCountOrganizationsArgs
   creditTransactions?: boolean | AccountCountOutputTypeCountCreditTransactionsArgs
   orders?: boolean | AccountCountOutputTypeCountOrdersArgs
+  organizations?: boolean | AccountCountOutputTypeCountOrganizationsArgs
 }
 
 /**
@@ -728,13 +728,6 @@ export type AccountCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types
 /**
  * AccountCountOutputType without action
  */
-export type AccountCountOutputTypeCountOrganizationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.OrganizationWhereInput
-}
-
-/**
- * AccountCountOutputType without action
- */
 export type AccountCountOutputTypeCountCreditTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CreditTransactionWhereInput
 }
@@ -746,6 +739,13 @@ export type AccountCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.
   where?: Prisma.OrderWhereInput
 }
 
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountOrganizationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationWhereInput
+}
+
 
 export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -754,9 +754,9 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   members?: boolean | Prisma.Account$membersArgs<ExtArgs>
-  organizations?: boolean | Prisma.Account$organizationsArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Account$creditTransactionsArgs<ExtArgs>
   orders?: boolean | Prisma.Account$ordersArgs<ExtArgs>
+  organizations?: boolean | Prisma.Account$organizationsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
@@ -787,9 +787,9 @@ export type AccountSelectScalar = {
 export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "creditBalance" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
 export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Account$membersArgs<ExtArgs>
-  organizations?: boolean | Prisma.Account$organizationsArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Account$creditTransactionsArgs<ExtArgs>
   orders?: boolean | Prisma.Account$ordersArgs<ExtArgs>
+  organizations?: boolean | Prisma.Account$organizationsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -799,9 +799,9 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Account"
   objects: {
     members: Prisma.$AccountMemberPayload<ExtArgs>[]
-    organizations: Prisma.$OrganizationPayload<ExtArgs>[]
     creditTransactions: Prisma.$CreditTransactionPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
+    organizations: Prisma.$OrganizationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1204,9 +1204,9 @@ readonly fields: AccountFieldRefs;
 export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   members<T extends Prisma.Account$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  organizations<T extends Prisma.Account$organizationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$organizationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   creditTransactions<T extends Prisma.Account$creditTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$creditTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreditTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.Account$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  organizations<T extends Prisma.Account$organizationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$organizationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1658,30 +1658,6 @@ export type Account$membersArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Account.organizations
- */
-export type Account$organizationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Organization
-   */
-  select?: Prisma.OrganizationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Organization
-   */
-  omit?: Prisma.OrganizationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrganizationInclude<ExtArgs> | null
-  where?: Prisma.OrganizationWhereInput
-  orderBy?: Prisma.OrganizationOrderByWithRelationInput | Prisma.OrganizationOrderByWithRelationInput[]
-  cursor?: Prisma.OrganizationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.OrganizationScalarFieldEnum | Prisma.OrganizationScalarFieldEnum[]
-}
-
-/**
  * Account.creditTransactions
  */
 export type Account$creditTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1727,6 +1703,30 @@ export type Account$ordersArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
+}
+
+/**
+ * Account.organizations
+ */
+export type Account$organizationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Organization
+   */
+  select?: Prisma.OrganizationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Organization
+   */
+  omit?: Prisma.OrganizationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationInclude<ExtArgs> | null
+  where?: Prisma.OrganizationWhereInput
+  orderBy?: Prisma.OrganizationOrderByWithRelationInput | Prisma.OrganizationOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationScalarFieldEnum | Prisma.OrganizationScalarFieldEnum[]
 }
 
 /**

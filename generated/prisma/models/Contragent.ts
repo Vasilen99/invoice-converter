@@ -39,44 +39,44 @@ export type ContragentSumAggregateOutputType = {
 }
 
 export type ContragentMinAggregateOutputType = {
-  id: number | null
-  organizationId: number | null
   bulstat: string | null
   vatNumber: string | null
   name: string | null
   email: string | null
-  source: $Enums.CompanyLookupSource | null
-  registryId: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  id: number | null
+  organizationId: number | null
+  registryId: number | null
+  source: $Enums.CompanyLookupSource | null
 }
 
 export type ContragentMaxAggregateOutputType = {
-  id: number | null
-  organizationId: number | null
   bulstat: string | null
   vatNumber: string | null
   name: string | null
   email: string | null
-  source: $Enums.CompanyLookupSource | null
-  registryId: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  id: number | null
+  organizationId: number | null
+  registryId: number | null
+  source: $Enums.CompanyLookupSource | null
 }
 
 export type ContragentCountAggregateOutputType = {
-  id: number
-  organizationId: number
   bulstat: number
   vatNumber: number
   name: number
   address: number
   email: number
-  source: number
-  registryId: number
   rawLookupData: number
   createdAt: number
   updatedAt: number
+  id: number
+  organizationId: number
+  registryId: number
+  source: number
   _all: number
 }
 
@@ -94,44 +94,44 @@ export type ContragentSumAggregateInputType = {
 }
 
 export type ContragentMinAggregateInputType = {
-  id?: true
-  organizationId?: true
   bulstat?: true
   vatNumber?: true
   name?: true
   email?: true
-  source?: true
-  registryId?: true
   createdAt?: true
   updatedAt?: true
+  id?: true
+  organizationId?: true
+  registryId?: true
+  source?: true
 }
 
 export type ContragentMaxAggregateInputType = {
-  id?: true
-  organizationId?: true
   bulstat?: true
   vatNumber?: true
   name?: true
   email?: true
-  source?: true
-  registryId?: true
   createdAt?: true
   updatedAt?: true
+  id?: true
+  organizationId?: true
+  registryId?: true
+  source?: true
 }
 
 export type ContragentCountAggregateInputType = {
-  id?: true
-  organizationId?: true
   bulstat?: true
   vatNumber?: true
   name?: true
   address?: true
   email?: true
-  source?: true
-  registryId?: true
   rawLookupData?: true
   createdAt?: true
   updatedAt?: true
+  id?: true
+  organizationId?: true
+  registryId?: true
+  source?: true
   _all?: true
 }
 
@@ -222,18 +222,18 @@ export type ContragentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type ContragentGroupByOutputType = {
-  id: number
-  organizationId: number
   bulstat: string | null
   vatNumber: string | null
   name: string
   address: runtime.JsonValue | null
   email: string | null
-  source: $Enums.CompanyLookupSource
-  registryId: number | null
   rawLookupData: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
+  id: number
+  organizationId: number
+  registryId: number | null
+  source: $Enums.CompanyLookupSource
   _count: ContragentCountAggregateOutputType | null
   _avg: ContragentAvgAggregateOutputType | null
   _sum: ContragentSumAggregateOutputType | null
@@ -260,38 +260,38 @@ export type ContragentWhereInput = {
   AND?: Prisma.ContragentWhereInput | Prisma.ContragentWhereInput[]
   OR?: Prisma.ContragentWhereInput[]
   NOT?: Prisma.ContragentWhereInput | Prisma.ContragentWhereInput[]
-  id?: Prisma.IntFilter<"Contragent"> | number
-  organizationId?: Prisma.IntFilter<"Contragent"> | number
   bulstat?: Prisma.StringNullableFilter<"Contragent"> | string | null
   vatNumber?: Prisma.StringNullableFilter<"Contragent"> | string | null
   name?: Prisma.StringFilter<"Contragent"> | string
   address?: Prisma.JsonNullableFilter<"Contragent">
   email?: Prisma.StringNullableFilter<"Contragent"> | string | null
-  source?: Prisma.EnumCompanyLookupSourceFilter<"Contragent"> | $Enums.CompanyLookupSource
-  registryId?: Prisma.IntNullableFilter<"Contragent"> | number | null
   rawLookupData?: Prisma.JsonNullableFilter<"Contragent">
   createdAt?: Prisma.DateTimeFilter<"Contragent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Contragent"> | Date | string
-  registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
+  id?: Prisma.IntFilter<"Contragent"> | number
+  organizationId?: Prisma.IntFilter<"Contragent"> | number
+  registryId?: Prisma.IntNullableFilter<"Contragent"> | number | null
+  source?: Prisma.EnumCompanyLookupSourceFilter<"Contragent"> | $Enums.CompanyLookupSource
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
   invoices?: Prisma.GeneratedInvoiceListRelationFilter
 }
 
 export type ContragentOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   bulstat?: Prisma.SortOrderInput | Prisma.SortOrder
   vatNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   rawLookupData?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  registry?: Prisma.CompanyRegistryCacheOrderByWithRelationInput
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  registryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
+  registry?: Prisma.CompanyRegistryCacheOrderByWithRelationInput
   invoices?: Prisma.GeneratedInvoiceOrderByRelationAggregateInput
 }
 
@@ -301,35 +301,35 @@ export type ContragentWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ContragentWhereInput | Prisma.ContragentWhereInput[]
   OR?: Prisma.ContragentWhereInput[]
   NOT?: Prisma.ContragentWhereInput | Prisma.ContragentWhereInput[]
-  organizationId?: Prisma.IntFilter<"Contragent"> | number
   bulstat?: Prisma.StringNullableFilter<"Contragent"> | string | null
   vatNumber?: Prisma.StringNullableFilter<"Contragent"> | string | null
   name?: Prisma.StringFilter<"Contragent"> | string
   address?: Prisma.JsonNullableFilter<"Contragent">
   email?: Prisma.StringNullableFilter<"Contragent"> | string | null
-  source?: Prisma.EnumCompanyLookupSourceFilter<"Contragent"> | $Enums.CompanyLookupSource
-  registryId?: Prisma.IntNullableFilter<"Contragent"> | number | null
   rawLookupData?: Prisma.JsonNullableFilter<"Contragent">
   createdAt?: Prisma.DateTimeFilter<"Contragent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Contragent"> | Date | string
-  registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
+  organizationId?: Prisma.IntFilter<"Contragent"> | number
+  registryId?: Prisma.IntNullableFilter<"Contragent"> | number | null
+  source?: Prisma.EnumCompanyLookupSourceFilter<"Contragent"> | $Enums.CompanyLookupSource
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
   invoices?: Prisma.GeneratedInvoiceListRelationFilter
 }, "id" | "organizationId_bulstat">
 
 export type ContragentOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   bulstat?: Prisma.SortOrderInput | Prisma.SortOrder
   vatNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   rawLookupData?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  registryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   _count?: Prisma.ContragentCountOrderByAggregateInput
   _avg?: Prisma.ContragentAvgOrderByAggregateInput
   _max?: Prisma.ContragentMaxOrderByAggregateInput
@@ -341,18 +341,18 @@ export type ContragentScalarWhereWithAggregatesInput = {
   AND?: Prisma.ContragentScalarWhereWithAggregatesInput | Prisma.ContragentScalarWhereWithAggregatesInput[]
   OR?: Prisma.ContragentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ContragentScalarWhereWithAggregatesInput | Prisma.ContragentScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Contragent"> | number
-  organizationId?: Prisma.IntWithAggregatesFilter<"Contragent"> | number
   bulstat?: Prisma.StringNullableWithAggregatesFilter<"Contragent"> | string | null
   vatNumber?: Prisma.StringNullableWithAggregatesFilter<"Contragent"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Contragent"> | string
   address?: Prisma.JsonNullableWithAggregatesFilter<"Contragent">
   email?: Prisma.StringNullableWithAggregatesFilter<"Contragent"> | string | null
-  source?: Prisma.EnumCompanyLookupSourceWithAggregatesFilter<"Contragent"> | $Enums.CompanyLookupSource
-  registryId?: Prisma.IntNullableWithAggregatesFilter<"Contragent"> | number | null
   rawLookupData?: Prisma.JsonNullableWithAggregatesFilter<"Contragent">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Contragent"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Contragent"> | Date | string
+  id?: Prisma.IntWithAggregatesFilter<"Contragent"> | number
+  organizationId?: Prisma.IntWithAggregatesFilter<"Contragent"> | number
+  registryId?: Prisma.IntNullableWithAggregatesFilter<"Contragent"> | number | null
+  source?: Prisma.EnumCompanyLookupSourceWithAggregatesFilter<"Contragent"> | $Enums.CompanyLookupSource
 }
 
 export type ContragentCreateInput = {
@@ -361,28 +361,28 @@ export type ContragentCreateInput = {
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutContragentsInput
+  source?: $Enums.CompanyLookupSource
   organization: Prisma.OrganizationCreateNestedOneWithoutContragentsInput
+  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutContragentsInput
   invoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutContragentInput
 }
 
 export type ContragentUncheckedCreateInput = {
-  id?: number
-  organizationId: number
   bulstat?: string | null
   vatNumber?: string | null
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  organizationId: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
   invoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutContragentInput
 }
 
@@ -392,44 +392,44 @@ export type ContragentUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutContragentsNestedInput
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutContragentsNestedInput
+  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutContragentsNestedInput
   invoices?: Prisma.GeneratedInvoiceUpdateManyWithoutContragentNestedInput
 }
 
 export type ContragentUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutContragentNestedInput
 }
 
 export type ContragentCreateManyInput = {
-  id?: number
-  organizationId: number
   bulstat?: string | null
   vatNumber?: string | null
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  organizationId: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
 }
 
 export type ContragentUpdateManyMutationInput = {
@@ -438,25 +438,25 @@ export type ContragentUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
 }
 
 export type ContragentUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
 }
 
 export type ContragentListRelationFilter = {
@@ -475,18 +475,18 @@ export type ContragentOrganizationIdBulstatCompoundUniqueInput = {
 }
 
 export type ContragentCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrder
   rawLookupData?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  registryId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type ContragentAvgOrderByAggregateInput = {
@@ -496,29 +496,29 @@ export type ContragentAvgOrderByAggregateInput = {
 }
 
 export type ContragentMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  registryId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type ContragentMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  registryId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type ContragentSumOrderByAggregateInput = {
@@ -636,26 +636,26 @@ export type ContragentCreateWithoutRegistryInput = {
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  source?: $Enums.CompanyLookupSource
   organization: Prisma.OrganizationCreateNestedOneWithoutContragentsInput
   invoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutContragentInput
 }
 
 export type ContragentUncheckedCreateWithoutRegistryInput = {
-  id?: number
-  organizationId: number
   bulstat?: string | null
   vatNumber?: string | null
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  organizationId: number
+  source?: $Enums.CompanyLookupSource
   invoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutContragentInput
 }
 
@@ -689,18 +689,18 @@ export type ContragentScalarWhereInput = {
   AND?: Prisma.ContragentScalarWhereInput | Prisma.ContragentScalarWhereInput[]
   OR?: Prisma.ContragentScalarWhereInput[]
   NOT?: Prisma.ContragentScalarWhereInput | Prisma.ContragentScalarWhereInput[]
-  id?: Prisma.IntFilter<"Contragent"> | number
-  organizationId?: Prisma.IntFilter<"Contragent"> | number
   bulstat?: Prisma.StringNullableFilter<"Contragent"> | string | null
   vatNumber?: Prisma.StringNullableFilter<"Contragent"> | string | null
   name?: Prisma.StringFilter<"Contragent"> | string
   address?: Prisma.JsonNullableFilter<"Contragent">
   email?: Prisma.StringNullableFilter<"Contragent"> | string | null
-  source?: Prisma.EnumCompanyLookupSourceFilter<"Contragent"> | $Enums.CompanyLookupSource
-  registryId?: Prisma.IntNullableFilter<"Contragent"> | number | null
   rawLookupData?: Prisma.JsonNullableFilter<"Contragent">
   createdAt?: Prisma.DateTimeFilter<"Contragent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Contragent"> | Date | string
+  id?: Prisma.IntFilter<"Contragent"> | number
+  organizationId?: Prisma.IntFilter<"Contragent"> | number
+  registryId?: Prisma.IntNullableFilter<"Contragent"> | number | null
+  source?: Prisma.EnumCompanyLookupSourceFilter<"Contragent"> | $Enums.CompanyLookupSource
 }
 
 export type ContragentCreateWithoutOrganizationInput = {
@@ -709,26 +709,26 @@ export type ContragentCreateWithoutOrganizationInput = {
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  source?: $Enums.CompanyLookupSource
   registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutContragentsInput
   invoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutContragentInput
 }
 
 export type ContragentUncheckedCreateWithoutOrganizationInput = {
-  id?: number
   bulstat?: string | null
   vatNumber?: string | null
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
   invoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutContragentInput
 }
 
@@ -764,27 +764,27 @@ export type ContragentCreateWithoutInvoicesInput = {
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutContragentsInput
+  source?: $Enums.CompanyLookupSource
   organization: Prisma.OrganizationCreateNestedOneWithoutContragentsInput
+  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutContragentsInput
 }
 
 export type ContragentUncheckedCreateWithoutInvoicesInput = {
-  id?: number
-  organizationId: number
   bulstat?: string | null
   vatNumber?: string | null
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  organizationId: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
 }
 
 export type ContragentCreateOrConnectWithoutInvoicesInput = {
@@ -809,41 +809,41 @@ export type ContragentUpdateWithoutInvoicesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutContragentsNestedInput
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutContragentsNestedInput
+  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutContragentsNestedInput
 }
 
 export type ContragentUncheckedUpdateWithoutInvoicesInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
 }
 
 export type ContragentCreateManyRegistryInput = {
-  id?: number
-  organizationId: number
   bulstat?: string | null
   vatNumber?: string | null
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  organizationId: number
+  source?: $Enums.CompanyLookupSource
 }
 
 export type ContragentUpdateWithoutRegistryInput = {
@@ -852,55 +852,55 @@ export type ContragentUpdateWithoutRegistryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutContragentsNestedInput
   invoices?: Prisma.GeneratedInvoiceUpdateManyWithoutContragentNestedInput
 }
 
 export type ContragentUncheckedUpdateWithoutRegistryInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutContragentNestedInput
 }
 
 export type ContragentUncheckedUpdateManyWithoutRegistryInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
 }
 
 export type ContragentCreateManyOrganizationInput = {
-  id?: number
   bulstat?: string | null
   vatNumber?: string | null
   name: string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
 }
 
 export type ContragentUpdateWithoutOrganizationInput = {
@@ -909,41 +909,41 @@ export type ContragentUpdateWithoutOrganizationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutContragentsNestedInput
   invoices?: Prisma.GeneratedInvoiceUpdateManyWithoutContragentNestedInput
 }
 
 export type ContragentUncheckedUpdateWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutContragentNestedInput
 }
 
 export type ContragentUncheckedUpdateManyWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
 }
 
 
@@ -978,109 +978,109 @@ export type ContragentCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.T
 
 
 export type ContragentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  organizationId?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   name?: boolean
   address?: boolean
   email?: boolean
-  source?: boolean
-  registryId?: boolean
   rawLookupData?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
+  id?: boolean
+  organizationId?: boolean
+  registryId?: boolean
+  source?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
   invoices?: boolean | Prisma.Contragent$invoicesArgs<ExtArgs>
   _count?: boolean | Prisma.ContragentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["contragent"]>
 
 export type ContragentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  organizationId?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   name?: boolean
   address?: boolean
   email?: boolean
-  source?: boolean
-  registryId?: boolean
   rawLookupData?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
+  id?: boolean
+  organizationId?: boolean
+  registryId?: boolean
+  source?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
 }, ExtArgs["result"]["contragent"]>
 
 export type ContragentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  organizationId?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   name?: boolean
   address?: boolean
   email?: boolean
-  source?: boolean
-  registryId?: boolean
   rawLookupData?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
+  id?: boolean
+  organizationId?: boolean
+  registryId?: boolean
+  source?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
 }, ExtArgs["result"]["contragent"]>
 
 export type ContragentSelectScalar = {
-  id?: boolean
-  organizationId?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   name?: boolean
   address?: boolean
   email?: boolean
-  source?: boolean
-  registryId?: boolean
   rawLookupData?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  id?: boolean
+  organizationId?: boolean
+  registryId?: boolean
+  source?: boolean
 }
 
-export type ContragentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "bulstat" | "vatNumber" | "name" | "address" | "email" | "source" | "registryId" | "rawLookupData" | "createdAt" | "updatedAt", ExtArgs["result"]["contragent"]>
+export type ContragentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"bulstat" | "vatNumber" | "name" | "address" | "email" | "rawLookupData" | "createdAt" | "updatedAt" | "id" | "organizationId" | "registryId" | "source", ExtArgs["result"]["contragent"]>
 export type ContragentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
   invoices?: boolean | Prisma.Contragent$invoicesArgs<ExtArgs>
   _count?: boolean | Prisma.ContragentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ContragentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
 }
 export type ContragentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
 }
 
 export type $ContragentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Contragent"
   objects: {
-    registry: Prisma.$CompanyRegistryCachePayload<ExtArgs> | null
     organization: Prisma.$OrganizationPayload<ExtArgs>
+    registry: Prisma.$CompanyRegistryCachePayload<ExtArgs> | null
     invoices: Prisma.$GeneratedInvoicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    organizationId: number
     bulstat: string | null
     vatNumber: string | null
     name: string
     address: runtime.JsonValue | null
     email: string | null
-    source: $Enums.CompanyLookupSource
-    registryId: number | null
     rawLookupData: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
+    id: number
+    organizationId: number
+    registryId: number | null
+    source: $Enums.CompanyLookupSource
   }, ExtArgs["result"]["contragent"]>
   composites: {}
 }
@@ -1164,8 +1164,8 @@ export interface ContragentDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * // Get first 10 Contragents
    * const contragents = await prisma.contragent.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const contragentWithIdOnly = await prisma.contragent.findMany({ select: { id: true } })
+   * // Only select the `bulstat`
+   * const contragentWithBulstatOnly = await prisma.contragent.findMany({ select: { bulstat: true } })
    * 
    */
   findMany<T extends ContragentFindManyArgs>(args?: Prisma.SelectSubset<T, ContragentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContragentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1209,9 +1209,9 @@ export interface ContragentDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    * 
-   * // Create many Contragents and only return the `id`
-   * const contragentWithIdOnly = await prisma.contragent.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Contragents and only return the `bulstat`
+   * const contragentWithBulstatOnly = await prisma.contragent.createManyAndReturn({
+   *   select: { bulstat: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1300,9 +1300,9 @@ export interface ContragentDelegate<ExtArgs extends runtime.Types.Extensions.Int
    *   ]
    * })
    * 
-   * // Update zero or more Contragents and only return the `id`
-   * const contragentWithIdOnly = await prisma.contragent.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Contragents and only return the `bulstat`
+   * const contragentWithBulstatOnly = await prisma.contragent.updateManyAndReturn({
+   *   select: { bulstat: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1475,8 +1475,8 @@ readonly fields: ContragentFieldRefs;
  */
 export interface Prisma__ContragentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  registry<T extends Prisma.Contragent$registryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contragent$registryArgs<ExtArgs>>): Prisma.Prisma__CompanyRegistryCacheClient<runtime.Types.Result.GetResult<Prisma.$CompanyRegistryCachePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  registry<T extends Prisma.Contragent$registryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contragent$registryArgs<ExtArgs>>): Prisma.Prisma__CompanyRegistryCacheClient<runtime.Types.Result.GetResult<Prisma.$CompanyRegistryCachePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   invoices<T extends Prisma.Contragent$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Contragent$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GeneratedInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1507,18 +1507,18 @@ export interface Prisma__ContragentClient<T, Null = never, ExtArgs extends runti
  * Fields of the Contragent model
  */
 export interface ContragentFieldRefs {
-  readonly id: Prisma.FieldRef<"Contragent", 'Int'>
-  readonly organizationId: Prisma.FieldRef<"Contragent", 'Int'>
   readonly bulstat: Prisma.FieldRef<"Contragent", 'String'>
   readonly vatNumber: Prisma.FieldRef<"Contragent", 'String'>
   readonly name: Prisma.FieldRef<"Contragent", 'String'>
   readonly address: Prisma.FieldRef<"Contragent", 'Json'>
   readonly email: Prisma.FieldRef<"Contragent", 'String'>
-  readonly source: Prisma.FieldRef<"Contragent", 'CompanyLookupSource'>
-  readonly registryId: Prisma.FieldRef<"Contragent", 'Int'>
   readonly rawLookupData: Prisma.FieldRef<"Contragent", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Contragent", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Contragent", 'DateTime'>
+  readonly id: Prisma.FieldRef<"Contragent", 'Int'>
+  readonly organizationId: Prisma.FieldRef<"Contragent", 'Int'>
+  readonly registryId: Prisma.FieldRef<"Contragent", 'Int'>
+  readonly source: Prisma.FieldRef<"Contragent", 'CompanyLookupSource'>
 }
     
 

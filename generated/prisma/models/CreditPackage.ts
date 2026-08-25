@@ -27,93 +27,93 @@ export type AggregateCreditPackage = {
 }
 
 export type CreditPackageAvgAggregateOutputType = {
-  id: number | null
   creditsAmount: number | null
   priceAmount: runtime.Decimal | null
   sortOrder: number | null
+  id: number | null
 }
 
 export type CreditPackageSumAggregateOutputType = {
-  id: number | null
   creditsAmount: number | null
   priceAmount: runtime.Decimal | null
   sortOrder: number | null
+  id: number | null
 }
 
 export type CreditPackageMinAggregateOutputType = {
-  id: number | null
   name: string | null
   creditsAmount: number | null
   priceAmount: runtime.Decimal | null
   currency: string | null
   isActive: boolean | null
   sortOrder: number | null
+  id: number | null
 }
 
 export type CreditPackageMaxAggregateOutputType = {
-  id: number | null
   name: string | null
   creditsAmount: number | null
   priceAmount: runtime.Decimal | null
   currency: string | null
   isActive: boolean | null
   sortOrder: number | null
+  id: number | null
 }
 
 export type CreditPackageCountAggregateOutputType = {
-  id: number
   name: number
   creditsAmount: number
   priceAmount: number
   currency: number
   isActive: number
   sortOrder: number
+  id: number
   _all: number
 }
 
 
 export type CreditPackageAvgAggregateInputType = {
-  id?: true
   creditsAmount?: true
   priceAmount?: true
   sortOrder?: true
+  id?: true
 }
 
 export type CreditPackageSumAggregateInputType = {
-  id?: true
   creditsAmount?: true
   priceAmount?: true
   sortOrder?: true
+  id?: true
 }
 
 export type CreditPackageMinAggregateInputType = {
-  id?: true
   name?: true
   creditsAmount?: true
   priceAmount?: true
   currency?: true
   isActive?: true
   sortOrder?: true
+  id?: true
 }
 
 export type CreditPackageMaxAggregateInputType = {
-  id?: true
   name?: true
   creditsAmount?: true
   priceAmount?: true
   currency?: true
   isActive?: true
   sortOrder?: true
+  id?: true
 }
 
 export type CreditPackageCountAggregateInputType = {
-  id?: true
   name?: true
   creditsAmount?: true
   priceAmount?: true
   currency?: true
   isActive?: true
   sortOrder?: true
+  id?: true
   _all?: true
 }
 
@@ -204,13 +204,13 @@ export type CreditPackageGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 export type CreditPackageGroupByOutputType = {
-  id: number
   name: string
   creditsAmount: number
   priceAmount: runtime.Decimal
   currency: string
   isActive: boolean
   sortOrder: number
+  id: number
   _count: CreditPackageCountAggregateOutputType | null
   _avg: CreditPackageAvgAggregateOutputType | null
   _sum: CreditPackageSumAggregateOutputType | null
@@ -237,24 +237,24 @@ export type CreditPackageWhereInput = {
   AND?: Prisma.CreditPackageWhereInput | Prisma.CreditPackageWhereInput[]
   OR?: Prisma.CreditPackageWhereInput[]
   NOT?: Prisma.CreditPackageWhereInput | Prisma.CreditPackageWhereInput[]
-  id?: Prisma.IntFilter<"CreditPackage"> | number
   name?: Prisma.StringFilter<"CreditPackage"> | string
   creditsAmount?: Prisma.IntFilter<"CreditPackage"> | number
   priceAmount?: Prisma.DecimalFilter<"CreditPackage"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"CreditPackage"> | string
   isActive?: Prisma.BoolFilter<"CreditPackage"> | boolean
   sortOrder?: Prisma.IntFilter<"CreditPackage"> | number
+  id?: Prisma.IntFilter<"CreditPackage"> | number
   orders?: Prisma.OrderListRelationFilter
 }
 
 export type CreditPackageOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   creditsAmount?: Prisma.SortOrder
   priceAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   orders?: Prisma.OrderOrderByRelationAggregateInput
 }
 
@@ -273,13 +273,13 @@ export type CreditPackageWhereUniqueInput = Prisma.AtLeast<{
 }, "id">
 
 export type CreditPackageOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   creditsAmount?: Prisma.SortOrder
   priceAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  id?: Prisma.SortOrder
   _count?: Prisma.CreditPackageCountOrderByAggregateInput
   _avg?: Prisma.CreditPackageAvgOrderByAggregateInput
   _max?: Prisma.CreditPackageMaxOrderByAggregateInput
@@ -291,13 +291,13 @@ export type CreditPackageScalarWhereWithAggregatesInput = {
   AND?: Prisma.CreditPackageScalarWhereWithAggregatesInput | Prisma.CreditPackageScalarWhereWithAggregatesInput[]
   OR?: Prisma.CreditPackageScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CreditPackageScalarWhereWithAggregatesInput | Prisma.CreditPackageScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"CreditPackage"> | number
   name?: Prisma.StringWithAggregatesFilter<"CreditPackage"> | string
   creditsAmount?: Prisma.IntWithAggregatesFilter<"CreditPackage"> | number
   priceAmount?: Prisma.DecimalWithAggregatesFilter<"CreditPackage"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringWithAggregatesFilter<"CreditPackage"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"CreditPackage"> | boolean
   sortOrder?: Prisma.IntWithAggregatesFilter<"CreditPackage"> | number
+  id?: Prisma.IntWithAggregatesFilter<"CreditPackage"> | number
 }
 
 export type CreditPackageCreateInput = {
@@ -311,13 +311,13 @@ export type CreditPackageCreateInput = {
 }
 
 export type CreditPackageUncheckedCreateInput = {
-  id?: number
   name: string
   creditsAmount: number
   priceAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   isActive?: boolean
   sortOrder?: number
+  id?: number
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutPackageInput
 }
 
@@ -332,24 +332,24 @@ export type CreditPackageUpdateInput = {
 }
 
 export type CreditPackageUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   creditsAmount?: Prisma.IntFieldUpdateOperationsInput | number
   priceAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   orders?: Prisma.OrderUncheckedUpdateManyWithoutPackageNestedInput
 }
 
 export type CreditPackageCreateManyInput = {
-  id?: number
   name: string
   creditsAmount: number
   priceAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   isActive?: boolean
   sortOrder?: number
+  id?: number
 }
 
 export type CreditPackageUpdateManyMutationInput = {
@@ -362,57 +362,57 @@ export type CreditPackageUpdateManyMutationInput = {
 }
 
 export type CreditPackageUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   creditsAmount?: Prisma.IntFieldUpdateOperationsInput | number
   priceAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type CreditPackageCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   creditsAmount?: Prisma.SortOrder
   priceAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 export type CreditPackageAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   creditsAmount?: Prisma.SortOrder
   priceAmount?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 export type CreditPackageMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   creditsAmount?: Prisma.SortOrder
   priceAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 export type CreditPackageMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   creditsAmount?: Prisma.SortOrder
   priceAmount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 export type CreditPackageSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   creditsAmount?: Prisma.SortOrder
   priceAmount?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
+  id?: Prisma.SortOrder
 }
 
 export type CreditPackageScalarRelationFilter = {
@@ -448,13 +448,13 @@ export type CreditPackageCreateWithoutOrdersInput = {
 }
 
 export type CreditPackageUncheckedCreateWithoutOrdersInput = {
-  id?: number
   name: string
   creditsAmount: number
   priceAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   isActive?: boolean
   sortOrder?: number
+  id?: number
 }
 
 export type CreditPackageCreateOrConnectWithoutOrdersInput = {
@@ -483,13 +483,13 @@ export type CreditPackageUpdateWithoutOrdersInput = {
 }
 
 export type CreditPackageUncheckedUpdateWithoutOrdersInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   creditsAmount?: Prisma.IntFieldUpdateOperationsInput | number
   priceAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -524,48 +524,48 @@ export type CreditPackageCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.
 
 
 export type CreditPackageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   name?: boolean
   creditsAmount?: boolean
   priceAmount?: boolean
   currency?: boolean
   isActive?: boolean
   sortOrder?: boolean
+  id?: boolean
   orders?: boolean | Prisma.CreditPackage$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.CreditPackageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["creditPackage"]>
 
 export type CreditPackageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   name?: boolean
   creditsAmount?: boolean
   priceAmount?: boolean
   currency?: boolean
   isActive?: boolean
   sortOrder?: boolean
+  id?: boolean
 }, ExtArgs["result"]["creditPackage"]>
 
 export type CreditPackageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   name?: boolean
   creditsAmount?: boolean
   priceAmount?: boolean
   currency?: boolean
   isActive?: boolean
   sortOrder?: boolean
+  id?: boolean
 }, ExtArgs["result"]["creditPackage"]>
 
 export type CreditPackageSelectScalar = {
-  id?: boolean
   name?: boolean
   creditsAmount?: boolean
   priceAmount?: boolean
   currency?: boolean
   isActive?: boolean
   sortOrder?: boolean
+  id?: boolean
 }
 
-export type CreditPackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "creditsAmount" | "priceAmount" | "currency" | "isActive" | "sortOrder", ExtArgs["result"]["creditPackage"]>
+export type CreditPackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"name" | "creditsAmount" | "priceAmount" | "currency" | "isActive" | "sortOrder" | "id", ExtArgs["result"]["creditPackage"]>
 export type CreditPackageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | Prisma.CreditPackage$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.CreditPackageCountOutputTypeDefaultArgs<ExtArgs>
@@ -579,13 +579,13 @@ export type $CreditPackagePayload<ExtArgs extends runtime.Types.Extensions.Inter
     orders: Prisma.$OrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
     name: string
     creditsAmount: number
     priceAmount: runtime.Decimal
     currency: string
     isActive: boolean
     sortOrder: number
+    id: number
   }, ExtArgs["result"]["creditPackage"]>
   composites: {}
 }
@@ -669,8 +669,8 @@ export interface CreditPackageDelegate<ExtArgs extends runtime.Types.Extensions.
    * // Get first 10 CreditPackages
    * const creditPackages = await prisma.creditPackage.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const creditPackageWithIdOnly = await prisma.creditPackage.findMany({ select: { id: true } })
+   * // Only select the `name`
+   * const creditPackageWithNameOnly = await prisma.creditPackage.findMany({ select: { name: true } })
    * 
    */
   findMany<T extends CreditPackageFindManyArgs>(args?: Prisma.SelectSubset<T, CreditPackageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreditPackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -714,9 +714,9 @@ export interface CreditPackageDelegate<ExtArgs extends runtime.Types.Extensions.
    *   ]
    * })
    * 
-   * // Create many CreditPackages and only return the `id`
-   * const creditPackageWithIdOnly = await prisma.creditPackage.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many CreditPackages and only return the `name`
+   * const creditPackageWithNameOnly = await prisma.creditPackage.createManyAndReturn({
+   *   select: { name: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -805,9 +805,9 @@ export interface CreditPackageDelegate<ExtArgs extends runtime.Types.Extensions.
    *   ]
    * })
    * 
-   * // Update zero or more CreditPackages and only return the `id`
-   * const creditPackageWithIdOnly = await prisma.creditPackage.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more CreditPackages and only return the `name`
+   * const creditPackageWithNameOnly = await prisma.creditPackage.updateManyAndReturn({
+   *   select: { name: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1010,13 +1010,13 @@ export interface Prisma__CreditPackageClient<T, Null = never, ExtArgs extends ru
  * Fields of the CreditPackage model
  */
 export interface CreditPackageFieldRefs {
-  readonly id: Prisma.FieldRef<"CreditPackage", 'Int'>
   readonly name: Prisma.FieldRef<"CreditPackage", 'String'>
   readonly creditsAmount: Prisma.FieldRef<"CreditPackage", 'Int'>
   readonly priceAmount: Prisma.FieldRef<"CreditPackage", 'Decimal'>
   readonly currency: Prisma.FieldRef<"CreditPackage", 'String'>
   readonly isActive: Prisma.FieldRef<"CreditPackage", 'Boolean'>
   readonly sortOrder: Prisma.FieldRef<"CreditPackage", 'Int'>
+  readonly id: Prisma.FieldRef<"CreditPackage", 'Int'>
 }
     
 

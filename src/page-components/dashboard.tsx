@@ -16,6 +16,7 @@ import {
   useSidebar,
 } from "@/components/animate-ui/components/radix/sidebar";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   Building2,
   BarChart3,
@@ -179,10 +180,10 @@ function DashboardSidebarContent() {
       ? `${user.accountName.slice(0, 15)}...`
       : user?.accountName;
 
-  const handleNavigation = (href: string) => {
-    setOpenMobile(false); // Close mobile sidebar
-    router.push(href);
-  };
+  // const handleNavigation = (href: string) => {
+  //   setOpenMobile(false); // Close mobile sidebar
+  //   router.push(href);
+  // };
 
   return (
     <>
@@ -220,14 +221,15 @@ function DashboardSidebarContent() {
                     return (
                       <SidebarMenuItem key={item.nameKey}>
                         <SidebarMenuButton asChild>
-                          <Button
-                            onClick={() => handleNavigation(item.href)}
-                            variant="ghost"
-                            className="flex justify-start items-center gap-3 text-muted-foreground hover:text-foreground hover:bg-accent/30 transition-all rounded-lg group"
-                          >
-                            <IconComponent className="h-5 w-5 group-hover:scale-110 transition-transform" />
-                            <span className="text-sm">{t(item.nameKey)}</span>
-                          </Button>
+                          <Link href={item.href}>
+                            <Button
+                              variant="ghost"
+                              className="flex justify-start items-center gap-3 text-muted-foreground hover:text-foreground hover:bg-accent/30 transition-all rounded-lg group"
+                            >
+                              <IconComponent className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                              <span className="text-sm">{t(item.nameKey)}</span>
+                            </Button>
+                          </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     );

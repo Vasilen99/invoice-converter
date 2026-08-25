@@ -27,133 +27,133 @@ export type AggregateCreditTransaction = {
 }
 
 export type CreditTransactionAvgAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  organizationId: number | null
   amount: number | null
   balanceAfter: number | null
+  accountId: number | null
+  consumedByUserId: number | null
+  id: number | null
+  organizationId: number | null
   orderId: number | null
   generatedInvoiceId: number | null
-  consumedByUserId: number | null
 }
 
 export type CreditTransactionSumAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  organizationId: number | null
   amount: number | null
   balanceAfter: number | null
+  accountId: number | null
+  consumedByUserId: number | null
+  id: number | null
+  organizationId: number | null
   orderId: number | null
   generatedInvoiceId: number | null
-  consumedByUserId: number | null
 }
 
 export type CreditTransactionMinAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  organizationId: number | null
   type: $Enums.CreditTransactionType | null
   amount: number | null
   balanceAfter: number | null
-  orderId: number | null
-  generatedInvoiceId: number | null
-  consumedByUserId: number | null
   note: string | null
   createdAt: Date | null
+  accountId: number | null
+  consumedByUserId: number | null
+  id: number | null
+  organizationId: number | null
+  orderId: number | null
+  generatedInvoiceId: number | null
 }
 
 export type CreditTransactionMaxAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  organizationId: number | null
   type: $Enums.CreditTransactionType | null
   amount: number | null
   balanceAfter: number | null
-  orderId: number | null
-  generatedInvoiceId: number | null
-  consumedByUserId: number | null
   note: string | null
   createdAt: Date | null
+  accountId: number | null
+  consumedByUserId: number | null
+  id: number | null
+  organizationId: number | null
+  orderId: number | null
+  generatedInvoiceId: number | null
 }
 
 export type CreditTransactionCountAggregateOutputType = {
-  id: number
-  accountId: number
-  organizationId: number
   type: number
   amount: number
   balanceAfter: number
-  orderId: number
-  generatedInvoiceId: number
-  consumedByUserId: number
   note: number
   createdAt: number
+  accountId: number
+  consumedByUserId: number
+  id: number
+  organizationId: number
+  orderId: number
+  generatedInvoiceId: number
   _all: number
 }
 
 
 export type CreditTransactionAvgAggregateInputType = {
-  id?: true
-  accountId?: true
-  organizationId?: true
   amount?: true
   balanceAfter?: true
+  accountId?: true
+  consumedByUserId?: true
+  id?: true
+  organizationId?: true
   orderId?: true
   generatedInvoiceId?: true
-  consumedByUserId?: true
 }
 
 export type CreditTransactionSumAggregateInputType = {
-  id?: true
-  accountId?: true
-  organizationId?: true
   amount?: true
   balanceAfter?: true
+  accountId?: true
+  consumedByUserId?: true
+  id?: true
+  organizationId?: true
   orderId?: true
   generatedInvoiceId?: true
-  consumedByUserId?: true
 }
 
 export type CreditTransactionMinAggregateInputType = {
-  id?: true
-  accountId?: true
-  organizationId?: true
   type?: true
   amount?: true
   balanceAfter?: true
-  orderId?: true
-  generatedInvoiceId?: true
-  consumedByUserId?: true
   note?: true
   createdAt?: true
+  accountId?: true
+  consumedByUserId?: true
+  id?: true
+  organizationId?: true
+  orderId?: true
+  generatedInvoiceId?: true
 }
 
 export type CreditTransactionMaxAggregateInputType = {
-  id?: true
-  accountId?: true
-  organizationId?: true
   type?: true
   amount?: true
   balanceAfter?: true
-  orderId?: true
-  generatedInvoiceId?: true
-  consumedByUserId?: true
   note?: true
   createdAt?: true
+  accountId?: true
+  consumedByUserId?: true
+  id?: true
+  organizationId?: true
+  orderId?: true
+  generatedInvoiceId?: true
 }
 
 export type CreditTransactionCountAggregateInputType = {
-  id?: true
-  accountId?: true
-  organizationId?: true
   type?: true
   amount?: true
   balanceAfter?: true
-  orderId?: true
-  generatedInvoiceId?: true
-  consumedByUserId?: true
   note?: true
   createdAt?: true
+  accountId?: true
+  consumedByUserId?: true
+  id?: true
+  organizationId?: true
+  orderId?: true
+  generatedInvoiceId?: true
   _all?: true
 }
 
@@ -244,17 +244,17 @@ export type CreditTransactionGroupByArgs<ExtArgs extends runtime.Types.Extension
 }
 
 export type CreditTransactionGroupByOutputType = {
-  id: number
-  accountId: number
-  organizationId: number | null
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId: number | null
-  generatedInvoiceId: number | null
-  consumedByUserId: number | null
   note: string | null
   createdAt: Date
+  accountId: number
+  consumedByUserId: number | null
+  id: number
+  organizationId: number | null
+  orderId: number | null
+  generatedInvoiceId: number | null
   _count: CreditTransactionCountAggregateOutputType | null
   _avg: CreditTransactionAvgAggregateOutputType | null
   _sum: CreditTransactionSumAggregateOutputType | null
@@ -281,41 +281,41 @@ export type CreditTransactionWhereInput = {
   AND?: Prisma.CreditTransactionWhereInput | Prisma.CreditTransactionWhereInput[]
   OR?: Prisma.CreditTransactionWhereInput[]
   NOT?: Prisma.CreditTransactionWhereInput | Prisma.CreditTransactionWhereInput[]
-  id?: Prisma.IntFilter<"CreditTransaction"> | number
-  accountId?: Prisma.IntFilter<"CreditTransaction"> | number
-  organizationId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
   type?: Prisma.EnumCreditTransactionTypeFilter<"CreditTransaction"> | $Enums.CreditTransactionType
   amount?: Prisma.IntFilter<"CreditTransaction"> | number
   balanceAfter?: Prisma.IntFilter<"CreditTransaction"> | number
-  orderId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
-  generatedInvoiceId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
-  consumedByUserId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
   note?: Prisma.StringNullableFilter<"CreditTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CreditTransaction"> | Date | string
+  accountId?: Prisma.IntFilter<"CreditTransaction"> | number
+  consumedByUserId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
+  id?: Prisma.IntFilter<"CreditTransaction"> | number
+  organizationId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
+  orderId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
+  generatedInvoiceId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
-  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
-  order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
-  generatedInvoice?: Prisma.XOR<Prisma.GeneratedInvoiceNullableScalarRelationFilter, Prisma.GeneratedInvoiceWhereInput> | null
   consumedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  generatedInvoice?: Prisma.XOR<Prisma.GeneratedInvoiceNullableScalarRelationFilter, Prisma.GeneratedInvoiceWhereInput> | null
+  order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
 }
 
 export type CreditTransactionOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
-  orderId?: Prisma.SortOrderInput | Prisma.SortOrder
-  generatedInvoiceId?: Prisma.SortOrderInput | Prisma.SortOrder
-  consumedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  consumedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  orderId?: Prisma.SortOrderInput | Prisma.SortOrder
+  generatedInvoiceId?: Prisma.SortOrderInput | Prisma.SortOrder
   account?: Prisma.AccountOrderByWithRelationInput
-  organization?: Prisma.OrganizationOrderByWithRelationInput
-  order?: Prisma.OrderOrderByWithRelationInput
-  generatedInvoice?: Prisma.GeneratedInvoiceOrderByWithRelationInput
   consumedByUser?: Prisma.UserOrderByWithRelationInput
+  generatedInvoice?: Prisma.GeneratedInvoiceOrderByWithRelationInput
+  order?: Prisma.OrderOrderByWithRelationInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
 }
 
 export type CreditTransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -325,33 +325,33 @@ export type CreditTransactionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.CreditTransactionWhereInput | Prisma.CreditTransactionWhereInput[]
   OR?: Prisma.CreditTransactionWhereInput[]
   NOT?: Prisma.CreditTransactionWhereInput | Prisma.CreditTransactionWhereInput[]
-  accountId?: Prisma.IntFilter<"CreditTransaction"> | number
-  organizationId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
   type?: Prisma.EnumCreditTransactionTypeFilter<"CreditTransaction"> | $Enums.CreditTransactionType
   amount?: Prisma.IntFilter<"CreditTransaction"> | number
   balanceAfter?: Prisma.IntFilter<"CreditTransaction"> | number
-  consumedByUserId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
   note?: Prisma.StringNullableFilter<"CreditTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CreditTransaction"> | Date | string
+  accountId?: Prisma.IntFilter<"CreditTransaction"> | number
+  consumedByUserId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
+  organizationId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
-  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
-  order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
-  generatedInvoice?: Prisma.XOR<Prisma.GeneratedInvoiceNullableScalarRelationFilter, Prisma.GeneratedInvoiceWhereInput> | null
   consumedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  generatedInvoice?: Prisma.XOR<Prisma.GeneratedInvoiceNullableScalarRelationFilter, Prisma.GeneratedInvoiceWhereInput> | null
+  order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
 }, "id" | "orderId" | "generatedInvoiceId">
 
 export type CreditTransactionOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
-  orderId?: Prisma.SortOrderInput | Prisma.SortOrder
-  generatedInvoiceId?: Prisma.SortOrderInput | Prisma.SortOrder
-  consumedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  consumedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  orderId?: Prisma.SortOrderInput | Prisma.SortOrder
+  generatedInvoiceId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.CreditTransactionCountOrderByAggregateInput
   _avg?: Prisma.CreditTransactionAvgOrderByAggregateInput
   _max?: Prisma.CreditTransactionMaxOrderByAggregateInput
@@ -363,17 +363,17 @@ export type CreditTransactionScalarWhereWithAggregatesInput = {
   AND?: Prisma.CreditTransactionScalarWhereWithAggregatesInput | Prisma.CreditTransactionScalarWhereWithAggregatesInput[]
   OR?: Prisma.CreditTransactionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CreditTransactionScalarWhereWithAggregatesInput | Prisma.CreditTransactionScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"CreditTransaction"> | number
-  accountId?: Prisma.IntWithAggregatesFilter<"CreditTransaction"> | number
-  organizationId?: Prisma.IntNullableWithAggregatesFilter<"CreditTransaction"> | number | null
   type?: Prisma.EnumCreditTransactionTypeWithAggregatesFilter<"CreditTransaction"> | $Enums.CreditTransactionType
   amount?: Prisma.IntWithAggregatesFilter<"CreditTransaction"> | number
   balanceAfter?: Prisma.IntWithAggregatesFilter<"CreditTransaction"> | number
-  orderId?: Prisma.IntNullableWithAggregatesFilter<"CreditTransaction"> | number | null
-  generatedInvoiceId?: Prisma.IntNullableWithAggregatesFilter<"CreditTransaction"> | number | null
-  consumedByUserId?: Prisma.IntNullableWithAggregatesFilter<"CreditTransaction"> | number | null
   note?: Prisma.StringNullableWithAggregatesFilter<"CreditTransaction"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CreditTransaction"> | Date | string
+  accountId?: Prisma.IntWithAggregatesFilter<"CreditTransaction"> | number
+  consumedByUserId?: Prisma.IntNullableWithAggregatesFilter<"CreditTransaction"> | number | null
+  id?: Prisma.IntWithAggregatesFilter<"CreditTransaction"> | number
+  organizationId?: Prisma.IntNullableWithAggregatesFilter<"CreditTransaction"> | number | null
+  orderId?: Prisma.IntNullableWithAggregatesFilter<"CreditTransaction"> | number | null
+  generatedInvoiceId?: Prisma.IntNullableWithAggregatesFilter<"CreditTransaction"> | number | null
 }
 
 export type CreditTransactionCreateInput = {
@@ -383,24 +383,24 @@ export type CreditTransactionCreateInput = {
   note?: string | null
   createdAt?: Date | string
   account: Prisma.AccountCreateNestedOneWithoutCreditTransactionsInput
-  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
-  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
-  generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutCreditTransactionInput
   consumedByUser?: Prisma.UserCreateNestedOneWithoutCreditTransactionsInput
+  generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutCreditTransactionInput
+  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
 }
 
 export type CreditTransactionUncheckedCreateInput = {
-  id?: number
-  accountId: number
-  organizationId?: number | null
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId?: number | null
-  generatedInvoiceId?: number | null
-  consumedByUserId?: number | null
   note?: string | null
   createdAt?: Date | string
+  accountId: number
+  consumedByUserId?: number | null
+  id?: number
+  organizationId?: number | null
+  orderId?: number | null
+  generatedInvoiceId?: number | null
 }
 
 export type CreditTransactionUpdateInput = {
@@ -410,38 +410,38 @@ export type CreditTransactionUpdateInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   account?: Prisma.AccountUpdateOneRequiredWithoutCreditTransactionsNestedInput
-  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
-  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
-  generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutCreditTransactionNestedInput
   consumedByUser?: Prisma.UserUpdateOneWithoutCreditTransactionsNestedInput
+  generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutCreditTransactionNestedInput
+  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
 }
 
 export type CreditTransactionUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CreditTransactionCreateManyInput = {
-  id?: number
-  accountId: number
-  organizationId?: number | null
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId?: number | null
-  generatedInvoiceId?: number | null
-  consumedByUserId?: number | null
   note?: string | null
   createdAt?: Date | string
+  accountId: number
+  consumedByUserId?: number | null
+  id?: number
+  organizationId?: number | null
+  orderId?: number | null
+  generatedInvoiceId?: number | null
 }
 
 export type CreditTransactionUpdateManyMutationInput = {
@@ -453,17 +453,17 @@ export type CreditTransactionUpdateManyMutationInput = {
 }
 
 export type CreditTransactionUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CreditTransactionListRelationFilter = {
@@ -482,67 +482,67 @@ export type CreditTransactionNullableScalarRelationFilter = {
 }
 
 export type CreditTransactionCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
-  generatedInvoiceId?: Prisma.SortOrder
-  consumedByUserId?: Prisma.SortOrder
   note?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  consumedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
+  generatedInvoiceId?: Prisma.SortOrder
 }
 
 export type CreditTransactionAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  consumedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   generatedInvoiceId?: Prisma.SortOrder
-  consumedByUserId?: Prisma.SortOrder
 }
 
 export type CreditTransactionMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
-  generatedInvoiceId?: Prisma.SortOrder
-  consumedByUserId?: Prisma.SortOrder
   note?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  consumedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
+  generatedInvoiceId?: Prisma.SortOrder
 }
 
 export type CreditTransactionMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
-  orderId?: Prisma.SortOrder
-  generatedInvoiceId?: Prisma.SortOrder
-  consumedByUserId?: Prisma.SortOrder
   note?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  consumedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  orderId?: Prisma.SortOrder
+  generatedInvoiceId?: Prisma.SortOrder
 }
 
 export type CreditTransactionSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  consumedByUserId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   generatedInvoiceId?: Prisma.SortOrder
-  consumedByUserId?: Prisma.SortOrder
 }
 
 export type CreditTransactionCreateNestedManyWithoutAccountInput = {
@@ -745,23 +745,23 @@ export type CreditTransactionCreateWithoutAccountInput = {
   balanceAfter: number
   note?: string | null
   createdAt?: Date | string
-  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
-  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
-  generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutCreditTransactionInput
   consumedByUser?: Prisma.UserCreateNestedOneWithoutCreditTransactionsInput
+  generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutCreditTransactionInput
+  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
 }
 
 export type CreditTransactionUncheckedCreateWithoutAccountInput = {
-  id?: number
-  organizationId?: number | null
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId?: number | null
-  generatedInvoiceId?: number | null
-  consumedByUserId?: number | null
   note?: string | null
   createdAt?: Date | string
+  consumedByUserId?: number | null
+  id?: number
+  organizationId?: number | null
+  orderId?: number | null
+  generatedInvoiceId?: number | null
 }
 
 export type CreditTransactionCreateOrConnectWithoutAccountInput = {
@@ -794,17 +794,17 @@ export type CreditTransactionScalarWhereInput = {
   AND?: Prisma.CreditTransactionScalarWhereInput | Prisma.CreditTransactionScalarWhereInput[]
   OR?: Prisma.CreditTransactionScalarWhereInput[]
   NOT?: Prisma.CreditTransactionScalarWhereInput | Prisma.CreditTransactionScalarWhereInput[]
-  id?: Prisma.IntFilter<"CreditTransaction"> | number
-  accountId?: Prisma.IntFilter<"CreditTransaction"> | number
-  organizationId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
   type?: Prisma.EnumCreditTransactionTypeFilter<"CreditTransaction"> | $Enums.CreditTransactionType
   amount?: Prisma.IntFilter<"CreditTransaction"> | number
   balanceAfter?: Prisma.IntFilter<"CreditTransaction"> | number
-  orderId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
-  generatedInvoiceId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
-  consumedByUserId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
   note?: Prisma.StringNullableFilter<"CreditTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CreditTransaction"> | Date | string
+  accountId?: Prisma.IntFilter<"CreditTransaction"> | number
+  consumedByUserId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
+  id?: Prisma.IntFilter<"CreditTransaction"> | number
+  organizationId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
+  orderId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
+  generatedInvoiceId?: Prisma.IntNullableFilter<"CreditTransaction"> | number | null
 }
 
 export type CreditTransactionCreateWithoutConsumedByUserInput = {
@@ -814,22 +814,22 @@ export type CreditTransactionCreateWithoutConsumedByUserInput = {
   note?: string | null
   createdAt?: Date | string
   account: Prisma.AccountCreateNestedOneWithoutCreditTransactionsInput
-  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
-  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
   generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutCreditTransactionInput
+  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
 }
 
 export type CreditTransactionUncheckedCreateWithoutConsumedByUserInput = {
-  id?: number
-  accountId: number
-  organizationId?: number | null
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId?: number | null
-  generatedInvoiceId?: number | null
   note?: string | null
   createdAt?: Date | string
+  accountId: number
+  id?: number
+  organizationId?: number | null
+  orderId?: number | null
+  generatedInvoiceId?: number | null
 }
 
 export type CreditTransactionCreateOrConnectWithoutConsumedByUserInput = {
@@ -865,22 +865,22 @@ export type CreditTransactionCreateWithoutOrganizationInput = {
   note?: string | null
   createdAt?: Date | string
   account: Prisma.AccountCreateNestedOneWithoutCreditTransactionsInput
-  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
-  generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutCreditTransactionInput
   consumedByUser?: Prisma.UserCreateNestedOneWithoutCreditTransactionsInput
+  generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutCreditTransactionInput
+  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
 }
 
 export type CreditTransactionUncheckedCreateWithoutOrganizationInput = {
-  id?: number
-  accountId: number
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId?: number | null
-  generatedInvoiceId?: number | null
-  consumedByUserId?: number | null
   note?: string | null
   createdAt?: Date | string
+  accountId: number
+  consumedByUserId?: number | null
+  id?: number
+  orderId?: number | null
+  generatedInvoiceId?: number | null
 }
 
 export type CreditTransactionCreateOrConnectWithoutOrganizationInput = {
@@ -916,22 +916,22 @@ export type CreditTransactionCreateWithoutGeneratedInvoiceInput = {
   note?: string | null
   createdAt?: Date | string
   account: Prisma.AccountCreateNestedOneWithoutCreditTransactionsInput
-  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
-  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
   consumedByUser?: Prisma.UserCreateNestedOneWithoutCreditTransactionsInput
+  order?: Prisma.OrderCreateNestedOneWithoutCreditTransactionInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
 }
 
 export type CreditTransactionUncheckedCreateWithoutGeneratedInvoiceInput = {
-  id?: number
-  accountId: number
-  organizationId?: number | null
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId?: number | null
-  consumedByUserId?: number | null
   note?: string | null
   createdAt?: Date | string
+  accountId: number
+  consumedByUserId?: number | null
+  id?: number
+  organizationId?: number | null
+  orderId?: number | null
 }
 
 export type CreditTransactionCreateOrConnectWithoutGeneratedInvoiceInput = {
@@ -957,22 +957,22 @@ export type CreditTransactionUpdateWithoutGeneratedInvoiceInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   account?: Prisma.AccountUpdateOneRequiredWithoutCreditTransactionsNestedInput
-  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
-  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
   consumedByUser?: Prisma.UserUpdateOneWithoutCreditTransactionsNestedInput
+  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
 }
 
 export type CreditTransactionUncheckedUpdateWithoutGeneratedInvoiceInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CreditTransactionCreateWithoutOrderInput = {
@@ -982,22 +982,22 @@ export type CreditTransactionCreateWithoutOrderInput = {
   note?: string | null
   createdAt?: Date | string
   account: Prisma.AccountCreateNestedOneWithoutCreditTransactionsInput
-  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
-  generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutCreditTransactionInput
   consumedByUser?: Prisma.UserCreateNestedOneWithoutCreditTransactionsInput
+  generatedInvoice?: Prisma.GeneratedInvoiceCreateNestedOneWithoutCreditTransactionInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutCreditTransactionsInput
 }
 
 export type CreditTransactionUncheckedCreateWithoutOrderInput = {
-  id?: number
-  accountId: number
-  organizationId?: number | null
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  generatedInvoiceId?: number | null
-  consumedByUserId?: number | null
   note?: string | null
   createdAt?: Date | string
+  accountId: number
+  consumedByUserId?: number | null
+  id?: number
+  organizationId?: number | null
+  generatedInvoiceId?: number | null
 }
 
 export type CreditTransactionCreateOrConnectWithoutOrderInput = {
@@ -1023,35 +1023,35 @@ export type CreditTransactionUpdateWithoutOrderInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   account?: Prisma.AccountUpdateOneRequiredWithoutCreditTransactionsNestedInput
-  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
-  generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutCreditTransactionNestedInput
   consumedByUser?: Prisma.UserUpdateOneWithoutCreditTransactionsNestedInput
+  generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutCreditTransactionNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
 }
 
 export type CreditTransactionUncheckedUpdateWithoutOrderInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CreditTransactionCreateManyAccountInput = {
-  id?: number
-  organizationId?: number | null
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId?: number | null
-  generatedInvoiceId?: number | null
-  consumedByUserId?: number | null
   note?: string | null
   createdAt?: Date | string
+  consumedByUserId?: number | null
+  id?: number
+  organizationId?: number | null
+  orderId?: number | null
+  generatedInvoiceId?: number | null
 }
 
 export type CreditTransactionUpdateWithoutAccountInput = {
@@ -1060,49 +1060,49 @@ export type CreditTransactionUpdateWithoutAccountInput = {
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
-  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
-  generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutCreditTransactionNestedInput
   consumedByUser?: Prisma.UserUpdateOneWithoutCreditTransactionsNestedInput
+  generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutCreditTransactionNestedInput
+  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
 }
 
 export type CreditTransactionUncheckedUpdateWithoutAccountInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CreditTransactionUncheckedUpdateManyWithoutAccountInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CreditTransactionCreateManyConsumedByUserInput = {
-  id?: number
-  accountId: number
-  organizationId?: number | null
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId?: number | null
-  generatedInvoiceId?: number | null
   note?: string | null
   createdAt?: Date | string
+  accountId: number
+  id?: number
+  organizationId?: number | null
+  orderId?: number | null
+  generatedInvoiceId?: number | null
 }
 
 export type CreditTransactionUpdateWithoutConsumedByUserInput = {
@@ -1112,48 +1112,48 @@ export type CreditTransactionUpdateWithoutConsumedByUserInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   account?: Prisma.AccountUpdateOneRequiredWithoutCreditTransactionsNestedInput
-  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
-  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
   generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutCreditTransactionNestedInput
+  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutCreditTransactionsNestedInput
 }
 
 export type CreditTransactionUncheckedUpdateWithoutConsumedByUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CreditTransactionUncheckedUpdateManyWithoutConsumedByUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CreditTransactionCreateManyOrganizationInput = {
-  id?: number
-  accountId: number
   type: $Enums.CreditTransactionType
   amount: number
   balanceAfter: number
-  orderId?: number | null
-  generatedInvoiceId?: number | null
-  consumedByUserId?: number | null
   note?: string | null
   createdAt?: Date | string
+  accountId: number
+  consumedByUserId?: number | null
+  id?: number
+  orderId?: number | null
+  generatedInvoiceId?: number | null
 }
 
 export type CreditTransactionUpdateWithoutOrganizationInput = {
@@ -1163,154 +1163,154 @@ export type CreditTransactionUpdateWithoutOrganizationInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   account?: Prisma.AccountUpdateOneRequiredWithoutCreditTransactionsNestedInput
-  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
-  generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutCreditTransactionNestedInput
   consumedByUser?: Prisma.UserUpdateOneWithoutCreditTransactionsNestedInput
+  generatedInvoice?: Prisma.GeneratedInvoiceUpdateOneWithoutCreditTransactionNestedInput
+  order?: Prisma.OrderUpdateOneWithoutCreditTransactionNestedInput
 }
 
 export type CreditTransactionUncheckedUpdateWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type CreditTransactionUncheckedUpdateManyWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumCreditTransactionTypeFieldUpdateOperationsInput | $Enums.CreditTransactionType
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   balanceAfter?: Prisma.IntFieldUpdateOperationsInput | number
-  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  consumedByUserId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  orderId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  generatedInvoiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
 
 export type CreditTransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  accountId?: boolean
-  organizationId?: boolean
   type?: boolean
   amount?: boolean
   balanceAfter?: boolean
-  orderId?: boolean
-  generatedInvoiceId?: boolean
-  consumedByUserId?: boolean
   note?: boolean
   createdAt?: boolean
+  accountId?: boolean
+  consumedByUserId?: boolean
+  id?: boolean
+  organizationId?: boolean
+  orderId?: boolean
+  generatedInvoiceId?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
-  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
-  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
   consumedByUser?: boolean | Prisma.CreditTransaction$consumedByUserArgs<ExtArgs>
+  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
+  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
+  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["creditTransaction"]>
 
 export type CreditTransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  accountId?: boolean
-  organizationId?: boolean
   type?: boolean
   amount?: boolean
   balanceAfter?: boolean
-  orderId?: boolean
-  generatedInvoiceId?: boolean
-  consumedByUserId?: boolean
   note?: boolean
   createdAt?: boolean
+  accountId?: boolean
+  consumedByUserId?: boolean
+  id?: boolean
+  organizationId?: boolean
+  orderId?: boolean
+  generatedInvoiceId?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
-  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
-  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
   consumedByUser?: boolean | Prisma.CreditTransaction$consumedByUserArgs<ExtArgs>
+  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
+  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
+  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["creditTransaction"]>
 
 export type CreditTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  accountId?: boolean
-  organizationId?: boolean
   type?: boolean
   amount?: boolean
   balanceAfter?: boolean
-  orderId?: boolean
-  generatedInvoiceId?: boolean
-  consumedByUserId?: boolean
   note?: boolean
   createdAt?: boolean
+  accountId?: boolean
+  consumedByUserId?: boolean
+  id?: boolean
+  organizationId?: boolean
+  orderId?: boolean
+  generatedInvoiceId?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
-  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
-  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
   consumedByUser?: boolean | Prisma.CreditTransaction$consumedByUserArgs<ExtArgs>
+  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
+  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
+  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["creditTransaction"]>
 
 export type CreditTransactionSelectScalar = {
-  id?: boolean
-  accountId?: boolean
-  organizationId?: boolean
   type?: boolean
   amount?: boolean
   balanceAfter?: boolean
-  orderId?: boolean
-  generatedInvoiceId?: boolean
-  consumedByUserId?: boolean
   note?: boolean
   createdAt?: boolean
+  accountId?: boolean
+  consumedByUserId?: boolean
+  id?: boolean
+  organizationId?: boolean
+  orderId?: boolean
+  generatedInvoiceId?: boolean
 }
 
-export type CreditTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "accountId" | "organizationId" | "type" | "amount" | "balanceAfter" | "orderId" | "generatedInvoiceId" | "consumedByUserId" | "note" | "createdAt", ExtArgs["result"]["creditTransaction"]>
+export type CreditTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"type" | "amount" | "balanceAfter" | "note" | "createdAt" | "accountId" | "consumedByUserId" | "id" | "organizationId" | "orderId" | "generatedInvoiceId", ExtArgs["result"]["creditTransaction"]>
 export type CreditTransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
-  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
-  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
   consumedByUser?: boolean | Prisma.CreditTransaction$consumedByUserArgs<ExtArgs>
+  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
+  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
+  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
 }
 export type CreditTransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
-  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
-  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
   consumedByUser?: boolean | Prisma.CreditTransaction$consumedByUserArgs<ExtArgs>
+  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
+  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
+  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
 }
 export type CreditTransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
-  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
-  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
-  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
   consumedByUser?: boolean | Prisma.CreditTransaction$consumedByUserArgs<ExtArgs>
+  generatedInvoice?: boolean | Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>
+  order?: boolean | Prisma.CreditTransaction$orderArgs<ExtArgs>
+  organization?: boolean | Prisma.CreditTransaction$organizationArgs<ExtArgs>
 }
 
 export type $CreditTransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CreditTransaction"
   objects: {
     account: Prisma.$AccountPayload<ExtArgs>
-    organization: Prisma.$OrganizationPayload<ExtArgs> | null
-    order: Prisma.$OrderPayload<ExtArgs> | null
-    generatedInvoice: Prisma.$GeneratedInvoicePayload<ExtArgs> | null
     consumedByUser: Prisma.$UserPayload<ExtArgs> | null
+    generatedInvoice: Prisma.$GeneratedInvoicePayload<ExtArgs> | null
+    order: Prisma.$OrderPayload<ExtArgs> | null
+    organization: Prisma.$OrganizationPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    accountId: number
-    organizationId: number | null
     type: $Enums.CreditTransactionType
     amount: number
     balanceAfter: number
-    orderId: number | null
-    generatedInvoiceId: number | null
-    consumedByUserId: number | null
     note: string | null
     createdAt: Date
+    accountId: number
+    consumedByUserId: number | null
+    id: number
+    organizationId: number | null
+    orderId: number | null
+    generatedInvoiceId: number | null
   }, ExtArgs["result"]["creditTransaction"]>
   composites: {}
 }
@@ -1394,8 +1394,8 @@ export interface CreditTransactionDelegate<ExtArgs extends runtime.Types.Extensi
    * // Get first 10 CreditTransactions
    * const creditTransactions = await prisma.creditTransaction.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const creditTransactionWithIdOnly = await prisma.creditTransaction.findMany({ select: { id: true } })
+   * // Only select the `amount`
+   * const creditTransactionWithAmountOnly = await prisma.creditTransaction.findMany({ select: { amount: true } })
    * 
    */
   findMany<T extends CreditTransactionFindManyArgs>(args?: Prisma.SelectSubset<T, CreditTransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreditTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1439,9 +1439,9 @@ export interface CreditTransactionDelegate<ExtArgs extends runtime.Types.Extensi
    *   ]
    * })
    * 
-   * // Create many CreditTransactions and only return the `id`
-   * const creditTransactionWithIdOnly = await prisma.creditTransaction.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many CreditTransactions and only return the `amount`
+   * const creditTransactionWithAmountOnly = await prisma.creditTransaction.createManyAndReturn({
+   *   select: { amount: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1530,9 +1530,9 @@ export interface CreditTransactionDelegate<ExtArgs extends runtime.Types.Extensi
    *   ]
    * })
    * 
-   * // Update zero or more CreditTransactions and only return the `id`
-   * const creditTransactionWithIdOnly = await prisma.creditTransaction.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more CreditTransactions and only return the `amount`
+   * const creditTransactionWithAmountOnly = await prisma.creditTransaction.updateManyAndReturn({
+   *   select: { amount: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1706,10 +1706,10 @@ readonly fields: CreditTransactionFieldRefs;
 export interface Prisma__CreditTransactionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   account<T extends Prisma.AccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountDefaultArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  organization<T extends Prisma.CreditTransaction$organizationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreditTransaction$organizationArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  order<T extends Prisma.CreditTransaction$orderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreditTransaction$orderArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  generatedInvoice<T extends Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>>): Prisma.Prisma__GeneratedInvoiceClient<runtime.Types.Result.GetResult<Prisma.$GeneratedInvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   consumedByUser<T extends Prisma.CreditTransaction$consumedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreditTransaction$consumedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  generatedInvoice<T extends Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreditTransaction$generatedInvoiceArgs<ExtArgs>>): Prisma.Prisma__GeneratedInvoiceClient<runtime.Types.Result.GetResult<Prisma.$GeneratedInvoicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  order<T extends Prisma.CreditTransaction$orderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreditTransaction$orderArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  organization<T extends Prisma.CreditTransaction$organizationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreditTransaction$organizationArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1739,17 +1739,17 @@ export interface Prisma__CreditTransactionClient<T, Null = never, ExtArgs extend
  * Fields of the CreditTransaction model
  */
 export interface CreditTransactionFieldRefs {
-  readonly id: Prisma.FieldRef<"CreditTransaction", 'Int'>
-  readonly accountId: Prisma.FieldRef<"CreditTransaction", 'Int'>
-  readonly organizationId: Prisma.FieldRef<"CreditTransaction", 'Int'>
   readonly type: Prisma.FieldRef<"CreditTransaction", 'CreditTransactionType'>
   readonly amount: Prisma.FieldRef<"CreditTransaction", 'Int'>
   readonly balanceAfter: Prisma.FieldRef<"CreditTransaction", 'Int'>
-  readonly orderId: Prisma.FieldRef<"CreditTransaction", 'Int'>
-  readonly generatedInvoiceId: Prisma.FieldRef<"CreditTransaction", 'Int'>
-  readonly consumedByUserId: Prisma.FieldRef<"CreditTransaction", 'Int'>
   readonly note: Prisma.FieldRef<"CreditTransaction", 'String'>
   readonly createdAt: Prisma.FieldRef<"CreditTransaction", 'DateTime'>
+  readonly accountId: Prisma.FieldRef<"CreditTransaction", 'Int'>
+  readonly consumedByUserId: Prisma.FieldRef<"CreditTransaction", 'Int'>
+  readonly id: Prisma.FieldRef<"CreditTransaction", 'Int'>
+  readonly organizationId: Prisma.FieldRef<"CreditTransaction", 'Int'>
+  readonly orderId: Prisma.FieldRef<"CreditTransaction", 'Int'>
+  readonly generatedInvoiceId: Prisma.FieldRef<"CreditTransaction", 'Int'>
 }
     
 
@@ -2151,41 +2151,22 @@ export type CreditTransactionDeleteManyArgs<ExtArgs extends runtime.Types.Extens
 }
 
 /**
- * CreditTransaction.organization
+ * CreditTransaction.consumedByUser
  */
-export type CreditTransaction$organizationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type CreditTransaction$consumedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Organization
+   * Select specific fields to fetch from the User
    */
-  select?: Prisma.OrganizationSelect<ExtArgs> | null
+  select?: Prisma.UserSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Organization
+   * Omit specific fields from the User
    */
-  omit?: Prisma.OrganizationOmit<ExtArgs> | null
+  omit?: Prisma.UserOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.OrganizationInclude<ExtArgs> | null
-  where?: Prisma.OrganizationWhereInput
-}
-
-/**
- * CreditTransaction.order
- */
-export type CreditTransaction$orderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Order
-   */
-  select?: Prisma.OrderSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Order
-   */
-  omit?: Prisma.OrderOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrderInclude<ExtArgs> | null
-  where?: Prisma.OrderWhereInput
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**
@@ -2208,22 +2189,41 @@ export type CreditTransaction$generatedInvoiceArgs<ExtArgs extends runtime.Types
 }
 
 /**
- * CreditTransaction.consumedByUser
+ * CreditTransaction.order
  */
-export type CreditTransaction$consumedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type CreditTransaction$orderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the Order
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.OrderSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the Order
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.OrderOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
+}
+
+/**
+ * CreditTransaction.organization
+ */
+export type CreditTransaction$organizationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Organization
+   */
+  select?: Prisma.OrganizationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Organization
+   */
+  omit?: Prisma.OrganizationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationInclude<ExtArgs> | null
+  where?: Prisma.OrganizationWhereInput
 }
 
 /**

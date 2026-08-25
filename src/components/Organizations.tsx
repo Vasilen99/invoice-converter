@@ -2,6 +2,7 @@
 import { FadeIn } from "./motion";
 import { useTranslations } from "next-intl";
 import { Button } from "./ui/button";
+import { callApi } from "../../utility/hooks/apiFetch";
 import {
   Dialog,
   DialogContent,
@@ -10,11 +11,145 @@ import {
 } from "@/components/animate-ui/components/radix/dialog";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
+import dynamic from "next/dynamic";
+import type {
+  OrganizationFormData,
+  OrganizationLight,
+} from "../../utility/types";
+import type { SearchResult } from "@/hooks/use-organization-search";
+import { Edit2, Trash2 } from "lucide-react";
+import { useGlobalStore } from "@/store/global";
 
-export default function Organizations() {
+const ManualAddOrganization = dynamic(() => import("./ManualAddOrganization"), {
+  ssr: false,
+});
+
+const SearchOrganizations = dynamic(() => import("./SearchOrganizations"), {
+  ssr: false,
+});
+
+interface StoredOrganization extends SearchResult {
+  id: number;
+}
+
+export default function Organizations({
+  organizations,
+}: {
+  organizations: OrganizationLight[];
+}) {
   const t = useTranslations();
-  const organizations = []; // Replace with actual data fetching logic
+  const { setAlertStatus } = useGlobalStore();
+  const [organizationsList, setOrganizationsList] =
+    useState<StoredOrganization[]>(organizations);
   const [open, setOpen] = useState<boolean>(false);
+  const [searchMode, setSearchMode] = useState<boolean>(true);
+  const [manualFormData, setManualFormData] = useState<OrganizationFormData>({
+    legalName: "",
+    bulstat: "",
+    vatNumber: "",
+    molName: "",
+    invoiceSeriesPrefix: "INV",
+    address: {
+      country: "",
+      region: "",
+      district: "",
+      municipality: "",
+      settlement: "",
+      area: "",
+      street: "",
+      streetNumber: "",
+      block: "",
+      entrance: "",
+      floor: "",
+      apartment: "",
+      postCode: "",
+    },
+  });
+
+  const handleSearchResultSelect = async (result: SearchResult) => {
+    // Check if already added
+    if (organizationsList.some((org) => org.bulstat === result.bulstat)) {
+      setAlertStatus({
+        status: "info",
+        statusHeader: t("organizations.alreadyAddedHeader"),
+        statusContent: t("organizations.alreadyAddedMessage"),
+      });
+      return;
+    }
+
+    // Transform search result to API format with comprehensive data including address
+    const organizationData = {
+      legalName: result.legalName,
+      bulstat: result.bulstat,
+      vatNumber: result.vatRegistered ? null : null, // Will be filled from registry cache if available
+      address: {
+        country: result.address?.country || "",
+        region: result.address?.region || "",
+        district: result.address?.district || result.district || "",
+        municipality: result.address?.municipality || "",
+        settlement: result.address?.settlement || "",
+        area: result.address?.area || "",
+        street: result.address?.street || "",
+        streetNumber: result.address?.streetNumber || "",
+        block: result.address?.block || "",
+        entrance: result.address?.entrance || "",
+        floor: result.address?.floor || "",
+        apartment: result.address?.apartment || "",
+        postCode: result.address?.postCode || "",
+      },
+      molName: result.molName || "", // Use extracted manager name or empty string
+      invoiceSeriesPrefix: "INV",
+      rawLookupData: result.rawLookupData || result, // Send the full API response for caching
+    };
+
+    const response = await callApi(
+      "/organizations/add",
+      {
+        method: "POST",
+        body: JSON.stringify(organizationData),
+      },
+      true,
+    );
+
+    if (response) {
+      const newOrganization: StoredOrganization = {
+        ...result,
+        id: response.id, // Use the ID from the API response
+      };
+
+      setOrganizationsList((prev) => [...prev, newOrganization]);
+      setOpen(false); // Close the dialog after adding
+    }
+  };
+
+  const handleDeleteOrganization = async (id: number) => {
+    if (!id) return;
+    const deletedOrganization = await callApi(
+      `/organizations/delete`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({ organizationId: id }),
+      },
+      true,
+    );
+
+    if (!deletedOrganization) {
+      setAlertStatus({
+        status: "error",
+        statusHeader: t("organizations.deleteErrorHeader"),
+        statusContent: t("organizations.deleteErrorMessage"),
+      });
+      return;
+    }
+    setOrganizationsList((prev) => prev.filter((org) => org.id !== id));
+  };
+
+  const handleAddManualOrganization = () => {
+    // TODO: Implement manual organization addition
+    console.log("Manual organization data:", manualFormData);
+  };
   return (
     <>
       <div className="text-2xl">
@@ -37,10 +172,59 @@ export default function Organizations() {
           </div>
         </FadeIn>
         <FadeIn delay={0.02} className="pt-12">
-          {organizations.length === 0 && (
+          {organizations.length === 0 ? (
             <p className="text-base text-primary/50">
               {t("organizations.noOrganizations")}
             </p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {organizationsList.map((org) => (
+                <motion.div
+                  key={org.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex flex-col gap-2 items-start p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex gap-2 w-full justify-between items-start">
+                    <div className="flex flex-col gap-2 flex-1">
+                      <span className="font-semibold">{org.legalName}</span>
+                      <div className="flex gap-2 flex-wrap">
+                        <span className="font-mono text-xs bg-background px-2 py-1 rounded">
+                          {org.bulstat}
+                        </span>
+                        {org.district && (
+                          <span className="text-xs text-muted-foreground bg-background px-2 py-1 rounded">
+                            {org.district}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => {
+                          // TODO: Implement edit functionality
+                          console.log("Edit organization:", org.bulstat);
+                        }}
+                      >
+                        <Edit2 size={16} />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-destructive hover:text-destructive"
+                        onClick={() => handleDeleteOrganization(org.id)}
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           )}
         </FadeIn>
       </div>
@@ -75,57 +259,46 @@ export default function Organizations() {
                   {t("organizations.addOrganizationDescription")}
                 </DialogDescription>
               </div>,
-
-              // <form
-              //   key="form"
-              //   onSubmit={loginUser}
-              //   className="flex flex-col gap-3"
-              // >
-              //   <label htmlFor="login-email" className="text-sm font-medium">
-              //     {t("emailLabel")}
-              //   </label>
-              //   <div className="relative">
-              //     <Mail
-              //       size={16}
-              //       className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-              //     />
-              //     <input
-              //       id="login-email"
-              //       type="email"
-              //       required
-              //       value={state.email}
-              //       onChange={(e) => setState({ email: e.target.value })}
-              //       placeholder={t("emailPlaceholder")}
-              //       className="w-full rounded-lg border border-border bg-background/50 py-2.5 pl-9 pr-3 text-sm outline-none transition-all placeholder:text-muted-foreground focus:border-foreground/40 focus:ring-2 focus:ring-foreground/10"
-              //     />
-              //   </div>
-              //   <motion.button
-              //     type="submit"
-              //     whileHover={{ scale: 1.02 }}
-              //     whileTap={{ scale: 0.98 }}
-              //     className="btn-glow group mt-1 flex w-full items-center justify-center gap-2 rounded-lg bg-foreground py-2.5 text-sm font-medium text-background"
-              //   >
-              //     {t("continueWithEmail")}
-              //     <ArrowRight
-              //       size={16}
-              //       className="transition-transform group-hover:translate-x-0.5"
-              //     />
-              //   </motion.button>
-              // </form>,
-
-              // <div key="sep" className="flex items-center gap-3">
-              //   <div className="h-px flex-1 bg-border" />
-              //   <span className="text-xs uppercase tracking-wider text-muted-foreground">
-              //     {t("or")}
-              //   </span>
-              //   <div className="h-px flex-1 bg-border" />
-              // </div>,
+              <div
+                key="switch"
+                className="flex gap-3 justify-center items-center"
+              >
+                <Label htmlFor="search-switch">
+                  {t("organizations.searchSwitchLabel")}
+                </Label>
+                <Switch
+                  checked={searchMode}
+                  onCheckedChange={setSearchMode}
+                  id="search-switch"
+                />
+                <Label htmlFor="manual-add-switch">
+                  {t("organizations.manualAddSwitchLabel")}
+                </Label>
+              </div>,
+              <div key="input">
+                {searchMode ? (
+                  <SearchOrganizations
+                    onSelectResult={handleSearchResultSelect}
+                  />
+                ) : (
+                  <ManualAddOrganization
+                    translations={t}
+                    formData={manualFormData}
+                    setFormData={setManualFormData}
+                  />
+                )}
+              </div>,
 
               <motion.button
-                key="google"
+                key="add"
                 type="button"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={
+                  searchMode
+                    ? () => setOpen(false)
+                    : handleAddManualOrganization
+                }
                 className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-border bg-background/50 py-2.5 text-sm font-medium transition-colors hover:bg-muted lg:hover:cursor-pointer"
               >
                 {t("organizations.add")}

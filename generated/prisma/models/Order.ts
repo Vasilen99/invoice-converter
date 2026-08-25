@@ -27,99 +27,99 @@ export type AggregateOrder = {
 }
 
 export type OrderAvgAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  packageId: number | null
   amount: runtime.Decimal | null
+  accountId: number | null
+  id: number | null
+  packageId: number | null
 }
 
 export type OrderSumAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  packageId: number | null
   amount: runtime.Decimal | null
+  accountId: number | null
+  id: number | null
+  packageId: number | null
 }
 
 export type OrderMinAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  packageId: number | null
   amount: runtime.Decimal | null
   currency: string | null
-  provider: $Enums.PaymentProvider | null
   status: $Enums.OrderStatus | null
   createdAt: Date | null
+  accountId: number | null
+  provider: $Enums.PaymentProvider | null
+  id: number | null
+  packageId: number | null
 }
 
 export type OrderMaxAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  packageId: number | null
   amount: runtime.Decimal | null
   currency: string | null
-  provider: $Enums.PaymentProvider | null
   status: $Enums.OrderStatus | null
   createdAt: Date | null
+  accountId: number | null
+  provider: $Enums.PaymentProvider | null
+  id: number | null
+  packageId: number | null
 }
 
 export type OrderCountAggregateOutputType = {
-  id: number
-  accountId: number
-  packageId: number
   amount: number
   currency: number
-  provider: number
   status: number
   createdAt: number
+  accountId: number
+  provider: number
+  id: number
+  packageId: number
   _all: number
 }
 
 
 export type OrderAvgAggregateInputType = {
-  id?: true
-  accountId?: true
-  packageId?: true
   amount?: true
+  accountId?: true
+  id?: true
+  packageId?: true
 }
 
 export type OrderSumAggregateInputType = {
-  id?: true
-  accountId?: true
-  packageId?: true
   amount?: true
+  accountId?: true
+  id?: true
+  packageId?: true
 }
 
 export type OrderMinAggregateInputType = {
-  id?: true
-  accountId?: true
-  packageId?: true
   amount?: true
   currency?: true
-  provider?: true
   status?: true
   createdAt?: true
+  accountId?: true
+  provider?: true
+  id?: true
+  packageId?: true
 }
 
 export type OrderMaxAggregateInputType = {
-  id?: true
-  accountId?: true
-  packageId?: true
   amount?: true
   currency?: true
-  provider?: true
   status?: true
   createdAt?: true
+  accountId?: true
+  provider?: true
+  id?: true
+  packageId?: true
 }
 
 export type OrderCountAggregateInputType = {
-  id?: true
-  accountId?: true
-  packageId?: true
   amount?: true
   currency?: true
-  provider?: true
   status?: true
   createdAt?: true
+  accountId?: true
+  provider?: true
+  id?: true
+  packageId?: true
   _all?: true
 }
 
@@ -210,14 +210,14 @@ export type OrderGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 export type OrderGroupByOutputType = {
-  id: number
-  accountId: number
-  packageId: number
   amount: runtime.Decimal
   currency: string
-  provider: $Enums.PaymentProvider
   status: $Enums.OrderStatus
   createdAt: Date
+  accountId: number
+  provider: $Enums.PaymentProvider
+  id: number
+  packageId: number
   _count: OrderCountAggregateOutputType | null
   _avg: OrderAvgAggregateOutputType | null
   _sum: OrderSumAggregateOutputType | null
@@ -244,31 +244,31 @@ export type OrderWhereInput = {
   AND?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   OR?: Prisma.OrderWhereInput[]
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
-  id?: Prisma.IntFilter<"Order"> | number
-  accountId?: Prisma.IntFilter<"Order"> | number
-  packageId?: Prisma.IntFilter<"Order"> | number
   amount?: Prisma.DecimalFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Order"> | string
-  provider?: Prisma.EnumPaymentProviderFilter<"Order"> | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
+  accountId?: Prisma.IntFilter<"Order"> | number
+  provider?: Prisma.EnumPaymentProviderFilter<"Order"> | $Enums.PaymentProvider
+  id?: Prisma.IntFilter<"Order"> | number
+  packageId?: Prisma.IntFilter<"Order"> | number
+  creditTransaction?: Prisma.XOR<Prisma.CreditTransactionNullableScalarRelationFilter, Prisma.CreditTransactionWhereInput> | null
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
   package?: Prisma.XOR<Prisma.CreditPackageScalarRelationFilter, Prisma.CreditPackageWhereInput>
-  creditTransaction?: Prisma.XOR<Prisma.CreditTransactionNullableScalarRelationFilter, Prisma.CreditTransactionWhereInput> | null
 }
 
 export type OrderOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  packageId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  provider?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  packageId?: Prisma.SortOrder
+  creditTransaction?: Prisma.CreditTransactionOrderByWithRelationInput
   account?: Prisma.AccountOrderByWithRelationInput
   package?: Prisma.CreditPackageOrderByWithRelationInput
-  creditTransaction?: Prisma.CreditTransactionOrderByWithRelationInput
 }
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -276,27 +276,27 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   OR?: Prisma.OrderWhereInput[]
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
-  accountId?: Prisma.IntFilter<"Order"> | number
-  packageId?: Prisma.IntFilter<"Order"> | number
   amount?: Prisma.DecimalFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Order"> | string
-  provider?: Prisma.EnumPaymentProviderFilter<"Order"> | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
+  accountId?: Prisma.IntFilter<"Order"> | number
+  provider?: Prisma.EnumPaymentProviderFilter<"Order"> | $Enums.PaymentProvider
+  packageId?: Prisma.IntFilter<"Order"> | number
+  creditTransaction?: Prisma.XOR<Prisma.CreditTransactionNullableScalarRelationFilter, Prisma.CreditTransactionWhereInput> | null
   account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
   package?: Prisma.XOR<Prisma.CreditPackageScalarRelationFilter, Prisma.CreditPackageWhereInput>
-  creditTransaction?: Prisma.XOR<Prisma.CreditTransactionNullableScalarRelationFilter, Prisma.CreditTransactionWhereInput> | null
 }, "id">
 
 export type OrderOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  packageId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  provider?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  packageId?: Prisma.SortOrder
   _count?: Prisma.OrderCountOrderByAggregateInput
   _avg?: Prisma.OrderAvgOrderByAggregateInput
   _max?: Prisma.OrderMaxOrderByAggregateInput
@@ -308,90 +308,90 @@ export type OrderScalarWhereWithAggregatesInput = {
   AND?: Prisma.OrderScalarWhereWithAggregatesInput | Prisma.OrderScalarWhereWithAggregatesInput[]
   OR?: Prisma.OrderScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OrderScalarWhereWithAggregatesInput | Prisma.OrderScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Order"> | number
-  accountId?: Prisma.IntWithAggregatesFilter<"Order"> | number
-  packageId?: Prisma.IntWithAggregatesFilter<"Order"> | number
   amount?: Prisma.DecimalWithAggregatesFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringWithAggregatesFilter<"Order"> | string
-  provider?: Prisma.EnumPaymentProviderWithAggregatesFilter<"Order"> | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
+  accountId?: Prisma.IntWithAggregatesFilter<"Order"> | number
+  provider?: Prisma.EnumPaymentProviderWithAggregatesFilter<"Order"> | $Enums.PaymentProvider
+  id?: Prisma.IntWithAggregatesFilter<"Order"> | number
+  packageId?: Prisma.IntWithAggregatesFilter<"Order"> | number
 }
 
 export type OrderCreateInput = {
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
+  provider: $Enums.PaymentProvider
+  creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutOrderInput
   account: Prisma.AccountCreateNestedOneWithoutOrdersInput
   package: Prisma.CreditPackageCreateNestedOneWithoutOrdersInput
-  creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutOrderInput
 }
 
 export type OrderUncheckedCreateInput = {
-  id?: number
-  accountId: number
-  packageId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
+  accountId: number
+  provider: $Enums.PaymentProvider
+  id?: number
+  packageId: number
   creditTransaction?: Prisma.CreditTransactionUncheckedCreateNestedOneWithoutOrderInput
 }
 
 export type OrderUpdateInput = {
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+  creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutOrderNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutOrdersNestedInput
   package?: Prisma.CreditPackageUpdateOneRequiredWithoutOrdersNestedInput
-  creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
-  packageId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  packageId?: Prisma.IntFieldUpdateOperationsInput | number
   creditTransaction?: Prisma.CreditTransactionUncheckedUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderCreateManyInput = {
-  id?: number
-  accountId: number
-  packageId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
+  accountId: number
+  provider: $Enums.PaymentProvider
+  id?: number
+  packageId: number
 }
 
 export type OrderUpdateManyMutationInput = {
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
 }
 
 export type OrderUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
-  packageId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  packageId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type OrderListRelationFilter = {
@@ -405,50 +405,50 @@ export type OrderOrderByRelationAggregateInput = {
 }
 
 export type OrderCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  packageId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  provider?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  packageId?: Prisma.SortOrder
 }
 
 export type OrderAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  packageId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  packageId?: Prisma.SortOrder
 }
 
 export type OrderMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  packageId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  provider?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  packageId?: Prisma.SortOrder
 }
 
 export type OrderMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  packageId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   currency?: Prisma.SortOrder
-  provider?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  provider?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  packageId?: Prisma.SortOrder
 }
 
 export type OrderSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  packageId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  packageId?: Prisma.SortOrder
 }
 
 export type OrderNullableScalarRelationFilter = {
@@ -540,12 +540,12 @@ export type OrderUncheckedUpdateManyWithoutPackageNestedInput = {
   deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
 }
 
-export type EnumPaymentProviderFieldUpdateOperationsInput = {
-  set?: $Enums.PaymentProvider
-}
-
 export type EnumOrderStatusFieldUpdateOperationsInput = {
   set?: $Enums.OrderStatus
+}
+
+export type EnumPaymentProviderFieldUpdateOperationsInput = {
+  set?: $Enums.PaymentProvider
 }
 
 export type OrderCreateNestedOneWithoutCreditTransactionInput = {
@@ -567,21 +567,21 @@ export type OrderUpdateOneWithoutCreditTransactionNestedInput = {
 export type OrderCreateWithoutAccountInput = {
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
-  package: Prisma.CreditPackageCreateNestedOneWithoutOrdersInput
+  provider: $Enums.PaymentProvider
   creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutOrderInput
+  package: Prisma.CreditPackageCreateNestedOneWithoutOrdersInput
 }
 
 export type OrderUncheckedCreateWithoutAccountInput = {
-  id?: number
-  packageId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
+  provider: $Enums.PaymentProvider
+  id?: number
+  packageId: number
   creditTransaction?: Prisma.CreditTransactionUncheckedCreateNestedOneWithoutOrderInput
 }
 
@@ -615,34 +615,34 @@ export type OrderScalarWhereInput = {
   AND?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
   OR?: Prisma.OrderScalarWhereInput[]
   NOT?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
-  id?: Prisma.IntFilter<"Order"> | number
-  accountId?: Prisma.IntFilter<"Order"> | number
-  packageId?: Prisma.IntFilter<"Order"> | number
   amount?: Prisma.DecimalFilter<"Order"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFilter<"Order"> | string
-  provider?: Prisma.EnumPaymentProviderFilter<"Order"> | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
+  accountId?: Prisma.IntFilter<"Order"> | number
+  provider?: Prisma.EnumPaymentProviderFilter<"Order"> | $Enums.PaymentProvider
+  id?: Prisma.IntFilter<"Order"> | number
+  packageId?: Prisma.IntFilter<"Order"> | number
 }
 
 export type OrderCreateWithoutPackageInput = {
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
-  account: Prisma.AccountCreateNestedOneWithoutOrdersInput
+  provider: $Enums.PaymentProvider
   creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutOrderInput
+  account: Prisma.AccountCreateNestedOneWithoutOrdersInput
 }
 
 export type OrderUncheckedCreateWithoutPackageInput = {
-  id?: number
-  accountId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
+  accountId: number
+  provider: $Enums.PaymentProvider
+  id?: number
   creditTransaction?: Prisma.CreditTransactionUncheckedCreateNestedOneWithoutOrderInput
 }
 
@@ -675,22 +675,22 @@ export type OrderUpdateManyWithWhereWithoutPackageInput = {
 export type OrderCreateWithoutCreditTransactionInput = {
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
+  provider: $Enums.PaymentProvider
   account: Prisma.AccountCreateNestedOneWithoutOrdersInput
   package: Prisma.CreditPackageCreateNestedOneWithoutOrdersInput
 }
 
 export type OrderUncheckedCreateWithoutCreditTransactionInput = {
-  id?: number
-  accountId: number
-  packageId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
+  accountId: number
+  provider: $Enums.PaymentProvider
+  id?: number
+  packageId: number
 }
 
 export type OrderCreateOrConnectWithoutCreditTransactionInput = {
@@ -712,164 +712,164 @@ export type OrderUpdateToOneWithWhereWithoutCreditTransactionInput = {
 export type OrderUpdateWithoutCreditTransactionInput = {
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   account?: Prisma.AccountUpdateOneRequiredWithoutOrdersNestedInput
   package?: Prisma.CreditPackageUpdateOneRequiredWithoutOrdersNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutCreditTransactionInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
-  packageId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  packageId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type OrderCreateManyAccountInput = {
-  id?: number
-  packageId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
+  provider: $Enums.PaymentProvider
+  id?: number
+  packageId: number
 }
 
 export type OrderUpdateWithoutAccountInput = {
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  package?: Prisma.CreditPackageUpdateOneRequiredWithoutOrdersNestedInput
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutOrderNestedInput
+  package?: Prisma.CreditPackageUpdateOneRequiredWithoutOrdersNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutAccountInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  packageId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  packageId?: Prisma.IntFieldUpdateOperationsInput | number
   creditTransaction?: Prisma.CreditTransactionUncheckedUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutAccountInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  packageId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  packageId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type OrderCreateManyPackageInput = {
-  id?: number
-  accountId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency: string
-  provider: $Enums.PaymentProvider
   status?: $Enums.OrderStatus
   createdAt?: Date | string
+  accountId: number
+  provider: $Enums.PaymentProvider
+  id?: number
 }
 
 export type OrderUpdateWithoutPackageInput = {
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account?: Prisma.AccountUpdateOneRequiredWithoutOrdersNestedInput
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutOrderNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutOrdersNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutPackageInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   creditTransaction?: Prisma.CreditTransactionUncheckedUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutPackageInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: Prisma.StringFieldUpdateOperationsInput | string
-  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  provider?: Prisma.EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+  id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
 
 export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  accountId?: boolean
-  packageId?: boolean
   amount?: boolean
   currency?: boolean
-  provider?: boolean
   status?: boolean
   createdAt?: boolean
+  accountId?: boolean
+  provider?: boolean
+  id?: boolean
+  packageId?: boolean
+  creditTransaction?: boolean | Prisma.Order$creditTransactionArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   package?: boolean | Prisma.CreditPackageDefaultArgs<ExtArgs>
-  creditTransaction?: boolean | Prisma.Order$creditTransactionArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  accountId?: boolean
-  packageId?: boolean
   amount?: boolean
   currency?: boolean
-  provider?: boolean
   status?: boolean
   createdAt?: boolean
+  accountId?: boolean
+  provider?: boolean
+  id?: boolean
+  packageId?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   package?: boolean | Prisma.CreditPackageDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  accountId?: boolean
-  packageId?: boolean
   amount?: boolean
   currency?: boolean
-  provider?: boolean
   status?: boolean
   createdAt?: boolean
+  accountId?: boolean
+  provider?: boolean
+  id?: boolean
+  packageId?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   package?: boolean | Prisma.CreditPackageDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectScalar = {
-  id?: boolean
-  accountId?: boolean
-  packageId?: boolean
   amount?: boolean
   currency?: boolean
-  provider?: boolean
   status?: boolean
   createdAt?: boolean
+  accountId?: boolean
+  provider?: boolean
+  id?: boolean
+  packageId?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "accountId" | "packageId" | "amount" | "currency" | "provider" | "status" | "createdAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"amount" | "currency" | "status" | "createdAt" | "accountId" | "provider" | "id" | "packageId", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  creditTransaction?: boolean | Prisma.Order$creditTransactionArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   package?: boolean | Prisma.CreditPackageDefaultArgs<ExtArgs>
-  creditTransaction?: boolean | Prisma.Order$creditTransactionArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
@@ -883,19 +883,19 @@ export type OrderIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Order"
   objects: {
+    creditTransaction: Prisma.$CreditTransactionPayload<ExtArgs> | null
     account: Prisma.$AccountPayload<ExtArgs>
     package: Prisma.$CreditPackagePayload<ExtArgs>
-    creditTransaction: Prisma.$CreditTransactionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    accountId: number
-    packageId: number
     amount: runtime.Decimal
     currency: string
-    provider: $Enums.PaymentProvider
     status: $Enums.OrderStatus
     createdAt: Date
+    accountId: number
+    provider: $Enums.PaymentProvider
+    id: number
+    packageId: number
   }, ExtArgs["result"]["order"]>
   composites: {}
 }
@@ -979,8 +979,8 @@ export interface OrderDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * // Get first 10 Orders
    * const orders = await prisma.order.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const orderWithIdOnly = await prisma.order.findMany({ select: { id: true } })
+   * // Only select the `amount`
+   * const orderWithAmountOnly = await prisma.order.findMany({ select: { amount: true } })
    * 
    */
   findMany<T extends OrderFindManyArgs>(args?: Prisma.SelectSubset<T, OrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1024,9 +1024,9 @@ export interface OrderDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    * 
-   * // Create many Orders and only return the `id`
-   * const orderWithIdOnly = await prisma.order.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Orders and only return the `amount`
+   * const orderWithAmountOnly = await prisma.order.createManyAndReturn({
+   *   select: { amount: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1115,9 +1115,9 @@ export interface OrderDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    * 
-   * // Update zero or more Orders and only return the `id`
-   * const orderWithIdOnly = await prisma.order.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Orders and only return the `amount`
+   * const orderWithAmountOnly = await prisma.order.updateManyAndReturn({
+   *   select: { amount: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1290,9 +1290,9 @@ readonly fields: OrderFieldRefs;
  */
 export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  creditTransaction<T extends Prisma.Order$creditTransactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$creditTransactionArgs<ExtArgs>>): Prisma.Prisma__CreditTransactionClient<runtime.Types.Result.GetResult<Prisma.$CreditTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   account<T extends Prisma.AccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountDefaultArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   package<T extends Prisma.CreditPackageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CreditPackageDefaultArgs<ExtArgs>>): Prisma.Prisma__CreditPackageClient<runtime.Types.Result.GetResult<Prisma.$CreditPackagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  creditTransaction<T extends Prisma.Order$creditTransactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$creditTransactionArgs<ExtArgs>>): Prisma.Prisma__CreditTransactionClient<runtime.Types.Result.GetResult<Prisma.$CreditTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1322,14 +1322,14 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
  * Fields of the Order model
  */
 export interface OrderFieldRefs {
-  readonly id: Prisma.FieldRef<"Order", 'Int'>
-  readonly accountId: Prisma.FieldRef<"Order", 'Int'>
-  readonly packageId: Prisma.FieldRef<"Order", 'Int'>
   readonly amount: Prisma.FieldRef<"Order", 'Decimal'>
   readonly currency: Prisma.FieldRef<"Order", 'String'>
-  readonly provider: Prisma.FieldRef<"Order", 'PaymentProvider'>
   readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly accountId: Prisma.FieldRef<"Order", 'Int'>
+  readonly provider: Prisma.FieldRef<"Order", 'PaymentProvider'>
+  readonly id: Prisma.FieldRef<"Order", 'Int'>
+  readonly packageId: Prisma.FieldRef<"Order", 'Int'>
 }
     
 

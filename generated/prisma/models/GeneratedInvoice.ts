@@ -27,36 +27,32 @@ export type AggregateGeneratedInvoice = {
 }
 
 export type GeneratedInvoiceAvgAggregateOutputType = {
-  id: number | null
-  organizationId: number | null
-  sourceDocumentId: number | null
-  contragentId: number | null
   invoiceNumber: number | null
   exchangeRate: runtime.Decimal | null
   subtotal: runtime.Decimal | null
   vatAmount: runtime.Decimal | null
   totalAmount: runtime.Decimal | null
   creditsCost: number | null
+  id: number | null
+  organizationId: number | null
+  sourceDocumentId: number | null
+  contragentId: number | null
 }
 
 export type GeneratedInvoiceSumAggregateOutputType = {
-  id: number | null
-  organizationId: number | null
-  sourceDocumentId: number | null
-  contragentId: number | null
   invoiceNumber: number | null
   exchangeRate: runtime.Decimal | null
   subtotal: runtime.Decimal | null
   vatAmount: runtime.Decimal | null
   totalAmount: runtime.Decimal | null
   creditsCost: number | null
+  id: number | null
+  organizationId: number | null
+  sourceDocumentId: number | null
+  contragentId: number | null
 }
 
 export type GeneratedInvoiceMinAggregateOutputType = {
-  id: number | null
-  organizationId: number | null
-  sourceDocumentId: number | null
-  contragentId: number | null
   invoiceSeries: string | null
   invoiceNumber: number | null
   issueDate: Date | null
@@ -72,13 +68,13 @@ export type GeneratedInvoiceMinAggregateOutputType = {
   creditsCost: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  id: number | null
+  organizationId: number | null
+  sourceDocumentId: number | null
+  contragentId: number | null
 }
 
 export type GeneratedInvoiceMaxAggregateOutputType = {
-  id: number | null
-  organizationId: number | null
-  sourceDocumentId: number | null
-  contragentId: number | null
   invoiceSeries: string | null
   invoiceNumber: number | null
   issueDate: Date | null
@@ -94,13 +90,13 @@ export type GeneratedInvoiceMaxAggregateOutputType = {
   creditsCost: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  id: number | null
+  organizationId: number | null
+  sourceDocumentId: number | null
+  contragentId: number | null
 }
 
 export type GeneratedInvoiceCountAggregateOutputType = {
-  id: number
-  organizationId: number
-  sourceDocumentId: number
-  contragentId: number
   invoiceSeries: number
   invoiceNumber: number
   issueDate: number
@@ -116,41 +112,41 @@ export type GeneratedInvoiceCountAggregateOutputType = {
   creditsCost: number
   createdAt: number
   updatedAt: number
+  id: number
+  organizationId: number
+  sourceDocumentId: number
+  contragentId: number
   _all: number
 }
 
 
 export type GeneratedInvoiceAvgAggregateInputType = {
-  id?: true
-  organizationId?: true
-  sourceDocumentId?: true
-  contragentId?: true
   invoiceNumber?: true
   exchangeRate?: true
   subtotal?: true
   vatAmount?: true
   totalAmount?: true
   creditsCost?: true
+  id?: true
+  organizationId?: true
+  sourceDocumentId?: true
+  contragentId?: true
 }
 
 export type GeneratedInvoiceSumAggregateInputType = {
-  id?: true
-  organizationId?: true
-  sourceDocumentId?: true
-  contragentId?: true
   invoiceNumber?: true
   exchangeRate?: true
   subtotal?: true
   vatAmount?: true
   totalAmount?: true
   creditsCost?: true
+  id?: true
+  organizationId?: true
+  sourceDocumentId?: true
+  contragentId?: true
 }
 
 export type GeneratedInvoiceMinAggregateInputType = {
-  id?: true
-  organizationId?: true
-  sourceDocumentId?: true
-  contragentId?: true
   invoiceSeries?: true
   invoiceNumber?: true
   issueDate?: true
@@ -166,13 +162,13 @@ export type GeneratedInvoiceMinAggregateInputType = {
   creditsCost?: true
   createdAt?: true
   updatedAt?: true
+  id?: true
+  organizationId?: true
+  sourceDocumentId?: true
+  contragentId?: true
 }
 
 export type GeneratedInvoiceMaxAggregateInputType = {
-  id?: true
-  organizationId?: true
-  sourceDocumentId?: true
-  contragentId?: true
   invoiceSeries?: true
   invoiceNumber?: true
   issueDate?: true
@@ -188,13 +184,13 @@ export type GeneratedInvoiceMaxAggregateInputType = {
   creditsCost?: true
   createdAt?: true
   updatedAt?: true
+  id?: true
+  organizationId?: true
+  sourceDocumentId?: true
+  contragentId?: true
 }
 
 export type GeneratedInvoiceCountAggregateInputType = {
-  id?: true
-  organizationId?: true
-  sourceDocumentId?: true
-  contragentId?: true
   invoiceSeries?: true
   invoiceNumber?: true
   issueDate?: true
@@ -210,6 +206,10 @@ export type GeneratedInvoiceCountAggregateInputType = {
   creditsCost?: true
   createdAt?: true
   updatedAt?: true
+  id?: true
+  organizationId?: true
+  sourceDocumentId?: true
+  contragentId?: true
   _all?: true
 }
 
@@ -300,10 +300,6 @@ export type GeneratedInvoiceGroupByArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 export type GeneratedInvoiceGroupByOutputType = {
-  id: number
-  organizationId: number
-  sourceDocumentId: number | null
-  contragentId: number
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date
@@ -319,6 +315,10 @@ export type GeneratedInvoiceGroupByOutputType = {
   creditsCost: number
   createdAt: Date
   updatedAt: Date
+  id: number
+  organizationId: number
+  sourceDocumentId: number | null
+  contragentId: number
   _count: GeneratedInvoiceCountAggregateOutputType | null
   _avg: GeneratedInvoiceAvgAggregateOutputType | null
   _sum: GeneratedInvoiceSumAggregateOutputType | null
@@ -345,10 +345,6 @@ export type GeneratedInvoiceWhereInput = {
   AND?: Prisma.GeneratedInvoiceWhereInput | Prisma.GeneratedInvoiceWhereInput[]
   OR?: Prisma.GeneratedInvoiceWhereInput[]
   NOT?: Prisma.GeneratedInvoiceWhereInput | Prisma.GeneratedInvoiceWhereInput[]
-  id?: Prisma.IntFilter<"GeneratedInvoice"> | number
-  organizationId?: Prisma.IntFilter<"GeneratedInvoice"> | number
-  sourceDocumentId?: Prisma.IntNullableFilter<"GeneratedInvoice"> | number | null
-  contragentId?: Prisma.IntFilter<"GeneratedInvoice"> | number
   invoiceSeries?: Prisma.StringFilter<"GeneratedInvoice"> | string
   invoiceNumber?: Prisma.IntFilter<"GeneratedInvoice"> | number
   issueDate?: Prisma.DateTimeFilter<"GeneratedInvoice"> | Date | string
@@ -364,18 +360,18 @@ export type GeneratedInvoiceWhereInput = {
   creditsCost?: Prisma.IntFilter<"GeneratedInvoice"> | number
   createdAt?: Prisma.DateTimeFilter<"GeneratedInvoice"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GeneratedInvoice"> | Date | string
+  id?: Prisma.IntFilter<"GeneratedInvoice"> | number
+  organizationId?: Prisma.IntFilter<"GeneratedInvoice"> | number
+  sourceDocumentId?: Prisma.IntNullableFilter<"GeneratedInvoice"> | number | null
+  contragentId?: Prisma.IntFilter<"GeneratedInvoice"> | number
+  creditTransaction?: Prisma.XOR<Prisma.CreditTransactionNullableScalarRelationFilter, Prisma.CreditTransactionWhereInput> | null
+  contragent?: Prisma.XOR<Prisma.ContragentScalarRelationFilter, Prisma.ContragentWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   sourceDocument?: Prisma.XOR<Prisma.SourceDocumentNullableScalarRelationFilter, Prisma.SourceDocumentWhereInput> | null
-  contragent?: Prisma.XOR<Prisma.ContragentScalarRelationFilter, Prisma.ContragentWhereInput>
   lineItems?: Prisma.InvoiceLineItemListRelationFilter
-  creditTransaction?: Prisma.XOR<Prisma.CreditTransactionNullableScalarRelationFilter, Prisma.CreditTransactionWhereInput> | null
 }
 
 export type GeneratedInvoiceOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  sourceDocumentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  contragentId?: Prisma.SortOrder
   invoiceSeries?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
@@ -391,11 +387,15 @@ export type GeneratedInvoiceOrderByWithRelationInput = {
   creditsCost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  sourceDocumentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  contragentId?: Prisma.SortOrder
+  creditTransaction?: Prisma.CreditTransactionOrderByWithRelationInput
+  contragent?: Prisma.ContragentOrderByWithRelationInput
   organization?: Prisma.OrganizationOrderByWithRelationInput
   sourceDocument?: Prisma.SourceDocumentOrderByWithRelationInput
-  contragent?: Prisma.ContragentOrderByWithRelationInput
   lineItems?: Prisma.InvoiceLineItemOrderByRelationAggregateInput
-  creditTransaction?: Prisma.CreditTransactionOrderByWithRelationInput
 }
 
 export type GeneratedInvoiceWhereUniqueInput = Prisma.AtLeast<{
@@ -405,8 +405,6 @@ export type GeneratedInvoiceWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.GeneratedInvoiceWhereInput | Prisma.GeneratedInvoiceWhereInput[]
   OR?: Prisma.GeneratedInvoiceWhereInput[]
   NOT?: Prisma.GeneratedInvoiceWhereInput | Prisma.GeneratedInvoiceWhereInput[]
-  organizationId?: Prisma.IntFilter<"GeneratedInvoice"> | number
-  contragentId?: Prisma.IntFilter<"GeneratedInvoice"> | number
   invoiceSeries?: Prisma.StringFilter<"GeneratedInvoice"> | string
   invoiceNumber?: Prisma.IntFilter<"GeneratedInvoice"> | number
   issueDate?: Prisma.DateTimeFilter<"GeneratedInvoice"> | Date | string
@@ -422,18 +420,16 @@ export type GeneratedInvoiceWhereUniqueInput = Prisma.AtLeast<{
   creditsCost?: Prisma.IntFilter<"GeneratedInvoice"> | number
   createdAt?: Prisma.DateTimeFilter<"GeneratedInvoice"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GeneratedInvoice"> | Date | string
+  organizationId?: Prisma.IntFilter<"GeneratedInvoice"> | number
+  contragentId?: Prisma.IntFilter<"GeneratedInvoice"> | number
+  creditTransaction?: Prisma.XOR<Prisma.CreditTransactionNullableScalarRelationFilter, Prisma.CreditTransactionWhereInput> | null
+  contragent?: Prisma.XOR<Prisma.ContragentScalarRelationFilter, Prisma.ContragentWhereInput>
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   sourceDocument?: Prisma.XOR<Prisma.SourceDocumentNullableScalarRelationFilter, Prisma.SourceDocumentWhereInput> | null
-  contragent?: Prisma.XOR<Prisma.ContragentScalarRelationFilter, Prisma.ContragentWhereInput>
   lineItems?: Prisma.InvoiceLineItemListRelationFilter
-  creditTransaction?: Prisma.XOR<Prisma.CreditTransactionNullableScalarRelationFilter, Prisma.CreditTransactionWhereInput> | null
 }, "id" | "sourceDocumentId" | "organizationId_invoiceSeries_invoiceNumber">
 
 export type GeneratedInvoiceOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  sourceDocumentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  contragentId?: Prisma.SortOrder
   invoiceSeries?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
@@ -449,6 +445,10 @@ export type GeneratedInvoiceOrderByWithAggregationInput = {
   creditsCost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  sourceDocumentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  contragentId?: Prisma.SortOrder
   _count?: Prisma.GeneratedInvoiceCountOrderByAggregateInput
   _avg?: Prisma.GeneratedInvoiceAvgOrderByAggregateInput
   _max?: Prisma.GeneratedInvoiceMaxOrderByAggregateInput
@@ -460,10 +460,6 @@ export type GeneratedInvoiceScalarWhereWithAggregatesInput = {
   AND?: Prisma.GeneratedInvoiceScalarWhereWithAggregatesInput | Prisma.GeneratedInvoiceScalarWhereWithAggregatesInput[]
   OR?: Prisma.GeneratedInvoiceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.GeneratedInvoiceScalarWhereWithAggregatesInput | Prisma.GeneratedInvoiceScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"GeneratedInvoice"> | number
-  organizationId?: Prisma.IntWithAggregatesFilter<"GeneratedInvoice"> | number
-  sourceDocumentId?: Prisma.IntNullableWithAggregatesFilter<"GeneratedInvoice"> | number | null
-  contragentId?: Prisma.IntWithAggregatesFilter<"GeneratedInvoice"> | number
   invoiceSeries?: Prisma.StringWithAggregatesFilter<"GeneratedInvoice"> | string
   invoiceNumber?: Prisma.IntWithAggregatesFilter<"GeneratedInvoice"> | number
   issueDate?: Prisma.DateTimeWithAggregatesFilter<"GeneratedInvoice"> | Date | string
@@ -479,6 +475,10 @@ export type GeneratedInvoiceScalarWhereWithAggregatesInput = {
   creditsCost?: Prisma.IntWithAggregatesFilter<"GeneratedInvoice"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GeneratedInvoice"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GeneratedInvoice"> | Date | string
+  id?: Prisma.IntWithAggregatesFilter<"GeneratedInvoice"> | number
+  organizationId?: Prisma.IntWithAggregatesFilter<"GeneratedInvoice"> | number
+  sourceDocumentId?: Prisma.IntNullableWithAggregatesFilter<"GeneratedInvoice"> | number | null
+  contragentId?: Prisma.IntWithAggregatesFilter<"GeneratedInvoice"> | number
 }
 
 export type GeneratedInvoiceCreateInput = {
@@ -497,18 +497,14 @@ export type GeneratedInvoiceCreateInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutGeneratedInvoiceInput
+  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
   organization: Prisma.OrganizationCreateNestedOneWithoutGeneratedInvoicesInput
   sourceDocument?: Prisma.SourceDocumentCreateNestedOneWithoutGeneratedInvoiceInput
-  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
   lineItems?: Prisma.InvoiceLineItemCreateNestedManyWithoutInvoiceInput
-  creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutGeneratedInvoiceInput
 }
 
 export type GeneratedInvoiceUncheckedCreateInput = {
-  id?: number
-  organizationId: number
-  sourceDocumentId?: number | null
-  contragentId: number
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date | string
@@ -524,8 +520,12 @@ export type GeneratedInvoiceUncheckedCreateInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  lineItems?: Prisma.InvoiceLineItemUncheckedCreateNestedManyWithoutInvoiceInput
+  id?: number
+  organizationId: number
+  sourceDocumentId?: number | null
+  contragentId: number
   creditTransaction?: Prisma.CreditTransactionUncheckedCreateNestedOneWithoutGeneratedInvoiceInput
+  lineItems?: Prisma.InvoiceLineItemUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type GeneratedInvoiceUpdateInput = {
@@ -544,18 +544,14 @@ export type GeneratedInvoiceUpdateInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutGeneratedInvoiceNestedInput
+  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutGeneratedInvoicesNestedInput
   sourceDocument?: Prisma.SourceDocumentUpdateOneWithoutGeneratedInvoiceNestedInput
-  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
   lineItems?: Prisma.InvoiceLineItemUpdateManyWithoutInvoiceNestedInput
-  creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutGeneratedInvoiceNestedInput
 }
 
 export type GeneratedInvoiceUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceSeries?: Prisma.StringFieldUpdateOperationsInput | string
   invoiceNumber?: Prisma.IntFieldUpdateOperationsInput | number
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -571,15 +567,15 @@ export type GeneratedInvoiceUncheckedUpdateInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lineItems?: Prisma.InvoiceLineItemUncheckedUpdateManyWithoutInvoiceNestedInput
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   creditTransaction?: Prisma.CreditTransactionUncheckedUpdateOneWithoutGeneratedInvoiceNestedInput
+  lineItems?: Prisma.InvoiceLineItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type GeneratedInvoiceCreateManyInput = {
-  id?: number
-  organizationId: number
-  sourceDocumentId?: number | null
-  contragentId: number
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date | string
@@ -595,6 +591,10 @@ export type GeneratedInvoiceCreateManyInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  organizationId: number
+  sourceDocumentId?: number | null
+  contragentId: number
 }
 
 export type GeneratedInvoiceUpdateManyMutationInput = {
@@ -616,10 +616,6 @@ export type GeneratedInvoiceUpdateManyMutationInput = {
 }
 
 export type GeneratedInvoiceUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceSeries?: Prisma.StringFieldUpdateOperationsInput | string
   invoiceNumber?: Prisma.IntFieldUpdateOperationsInput | number
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -635,6 +631,10 @@ export type GeneratedInvoiceUncheckedUpdateManyInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type GeneratedInvoiceListRelationFilter = {
@@ -659,10 +659,6 @@ export type GeneratedInvoiceOrganizationIdInvoiceSeriesInvoiceNumberCompoundUniq
 }
 
 export type GeneratedInvoiceCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  sourceDocumentId?: Prisma.SortOrder
-  contragentId?: Prisma.SortOrder
   invoiceSeries?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
@@ -678,26 +674,26 @@ export type GeneratedInvoiceCountOrderByAggregateInput = {
   creditsCost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  sourceDocumentId?: Prisma.SortOrder
+  contragentId?: Prisma.SortOrder
 }
 
 export type GeneratedInvoiceAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  sourceDocumentId?: Prisma.SortOrder
-  contragentId?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
   exchangeRate?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   vatAmount?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   creditsCost?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  sourceDocumentId?: Prisma.SortOrder
+  contragentId?: Prisma.SortOrder
 }
 
 export type GeneratedInvoiceMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  sourceDocumentId?: Prisma.SortOrder
-  contragentId?: Prisma.SortOrder
   invoiceSeries?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
@@ -713,13 +709,13 @@ export type GeneratedInvoiceMaxOrderByAggregateInput = {
   creditsCost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  sourceDocumentId?: Prisma.SortOrder
+  contragentId?: Prisma.SortOrder
 }
 
 export type GeneratedInvoiceMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  organizationId?: Prisma.SortOrder
-  sourceDocumentId?: Prisma.SortOrder
-  contragentId?: Prisma.SortOrder
   invoiceSeries?: Prisma.SortOrder
   invoiceNumber?: Prisma.SortOrder
   issueDate?: Prisma.SortOrder
@@ -735,19 +731,23 @@ export type GeneratedInvoiceMinOrderByAggregateInput = {
   creditsCost?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type GeneratedInvoiceSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   sourceDocumentId?: Prisma.SortOrder
   contragentId?: Prisma.SortOrder
+}
+
+export type GeneratedInvoiceSumOrderByAggregateInput = {
   invoiceNumber?: Prisma.SortOrder
   exchangeRate?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   vatAmount?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   creditsCost?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
+  sourceDocumentId?: Prisma.SortOrder
+  contragentId?: Prisma.SortOrder
 }
 
 export type GeneratedInvoiceScalarRelationFilter = {
@@ -937,16 +937,13 @@ export type GeneratedInvoiceCreateWithoutOrganizationInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceDocument?: Prisma.SourceDocumentCreateNestedOneWithoutGeneratedInvoiceInput
-  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
-  lineItems?: Prisma.InvoiceLineItemCreateNestedManyWithoutInvoiceInput
   creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutGeneratedInvoiceInput
+  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
+  sourceDocument?: Prisma.SourceDocumentCreateNestedOneWithoutGeneratedInvoiceInput
+  lineItems?: Prisma.InvoiceLineItemCreateNestedManyWithoutInvoiceInput
 }
 
 export type GeneratedInvoiceUncheckedCreateWithoutOrganizationInput = {
-  id?: number
-  sourceDocumentId?: number | null
-  contragentId: number
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date | string
@@ -962,8 +959,11 @@ export type GeneratedInvoiceUncheckedCreateWithoutOrganizationInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  lineItems?: Prisma.InvoiceLineItemUncheckedCreateNestedManyWithoutInvoiceInput
+  id?: number
+  sourceDocumentId?: number | null
+  contragentId: number
   creditTransaction?: Prisma.CreditTransactionUncheckedCreateNestedOneWithoutGeneratedInvoiceInput
+  lineItems?: Prisma.InvoiceLineItemUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type GeneratedInvoiceCreateOrConnectWithoutOrganizationInput = {
@@ -996,10 +996,6 @@ export type GeneratedInvoiceScalarWhereInput = {
   AND?: Prisma.GeneratedInvoiceScalarWhereInput | Prisma.GeneratedInvoiceScalarWhereInput[]
   OR?: Prisma.GeneratedInvoiceScalarWhereInput[]
   NOT?: Prisma.GeneratedInvoiceScalarWhereInput | Prisma.GeneratedInvoiceScalarWhereInput[]
-  id?: Prisma.IntFilter<"GeneratedInvoice"> | number
-  organizationId?: Prisma.IntFilter<"GeneratedInvoice"> | number
-  sourceDocumentId?: Prisma.IntNullableFilter<"GeneratedInvoice"> | number | null
-  contragentId?: Prisma.IntFilter<"GeneratedInvoice"> | number
   invoiceSeries?: Prisma.StringFilter<"GeneratedInvoice"> | string
   invoiceNumber?: Prisma.IntFilter<"GeneratedInvoice"> | number
   issueDate?: Prisma.DateTimeFilter<"GeneratedInvoice"> | Date | string
@@ -1015,6 +1011,10 @@ export type GeneratedInvoiceScalarWhereInput = {
   creditsCost?: Prisma.IntFilter<"GeneratedInvoice"> | number
   createdAt?: Prisma.DateTimeFilter<"GeneratedInvoice"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GeneratedInvoice"> | Date | string
+  id?: Prisma.IntFilter<"GeneratedInvoice"> | number
+  organizationId?: Prisma.IntFilter<"GeneratedInvoice"> | number
+  sourceDocumentId?: Prisma.IntNullableFilter<"GeneratedInvoice"> | number | null
+  contragentId?: Prisma.IntFilter<"GeneratedInvoice"> | number
 }
 
 export type GeneratedInvoiceCreateWithoutContragentInput = {
@@ -1033,16 +1033,13 @@ export type GeneratedInvoiceCreateWithoutContragentInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutGeneratedInvoiceInput
   organization: Prisma.OrganizationCreateNestedOneWithoutGeneratedInvoicesInput
   sourceDocument?: Prisma.SourceDocumentCreateNestedOneWithoutGeneratedInvoiceInput
   lineItems?: Prisma.InvoiceLineItemCreateNestedManyWithoutInvoiceInput
-  creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutGeneratedInvoiceInput
 }
 
 export type GeneratedInvoiceUncheckedCreateWithoutContragentInput = {
-  id?: number
-  organizationId: number
-  sourceDocumentId?: number | null
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date | string
@@ -1058,8 +1055,11 @@ export type GeneratedInvoiceUncheckedCreateWithoutContragentInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  lineItems?: Prisma.InvoiceLineItemUncheckedCreateNestedManyWithoutInvoiceInput
+  id?: number
+  organizationId: number
+  sourceDocumentId?: number | null
   creditTransaction?: Prisma.CreditTransactionUncheckedCreateNestedOneWithoutGeneratedInvoiceInput
+  lineItems?: Prisma.InvoiceLineItemUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type GeneratedInvoiceCreateOrConnectWithoutContragentInput = {
@@ -1104,16 +1104,13 @@ export type GeneratedInvoiceCreateWithoutSourceDocumentInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  organization: Prisma.OrganizationCreateNestedOneWithoutGeneratedInvoicesInput
-  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
-  lineItems?: Prisma.InvoiceLineItemCreateNestedManyWithoutInvoiceInput
   creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutGeneratedInvoiceInput
+  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
+  organization: Prisma.OrganizationCreateNestedOneWithoutGeneratedInvoicesInput
+  lineItems?: Prisma.InvoiceLineItemCreateNestedManyWithoutInvoiceInput
 }
 
 export type GeneratedInvoiceUncheckedCreateWithoutSourceDocumentInput = {
-  id?: number
-  organizationId: number
-  contragentId: number
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date | string
@@ -1129,8 +1126,11 @@ export type GeneratedInvoiceUncheckedCreateWithoutSourceDocumentInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  lineItems?: Prisma.InvoiceLineItemUncheckedCreateNestedManyWithoutInvoiceInput
+  id?: number
+  organizationId: number
+  contragentId: number
   creditTransaction?: Prisma.CreditTransactionUncheckedCreateNestedOneWithoutGeneratedInvoiceInput
+  lineItems?: Prisma.InvoiceLineItemUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
 export type GeneratedInvoiceCreateOrConnectWithoutSourceDocumentInput = {
@@ -1165,16 +1165,13 @@ export type GeneratedInvoiceUpdateWithoutSourceDocumentInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organization?: Prisma.OrganizationUpdateOneRequiredWithoutGeneratedInvoicesNestedInput
-  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
-  lineItems?: Prisma.InvoiceLineItemUpdateManyWithoutInvoiceNestedInput
   creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutGeneratedInvoiceNestedInput
+  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutGeneratedInvoicesNestedInput
+  lineItems?: Prisma.InvoiceLineItemUpdateManyWithoutInvoiceNestedInput
 }
 
 export type GeneratedInvoiceUncheckedUpdateWithoutSourceDocumentInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceSeries?: Prisma.StringFieldUpdateOperationsInput | string
   invoiceNumber?: Prisma.IntFieldUpdateOperationsInput | number
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1190,8 +1187,11 @@ export type GeneratedInvoiceUncheckedUpdateWithoutSourceDocumentInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lineItems?: Prisma.InvoiceLineItemUncheckedUpdateManyWithoutInvoiceNestedInput
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   creditTransaction?: Prisma.CreditTransactionUncheckedUpdateOneWithoutGeneratedInvoiceNestedInput
+  lineItems?: Prisma.InvoiceLineItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type GeneratedInvoiceCreateWithoutLineItemsInput = {
@@ -1210,17 +1210,13 @@ export type GeneratedInvoiceCreateWithoutLineItemsInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutGeneratedInvoiceInput
+  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
   organization: Prisma.OrganizationCreateNestedOneWithoutGeneratedInvoicesInput
   sourceDocument?: Prisma.SourceDocumentCreateNestedOneWithoutGeneratedInvoiceInput
-  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
-  creditTransaction?: Prisma.CreditTransactionCreateNestedOneWithoutGeneratedInvoiceInput
 }
 
 export type GeneratedInvoiceUncheckedCreateWithoutLineItemsInput = {
-  id?: number
-  organizationId: number
-  sourceDocumentId?: number | null
-  contragentId: number
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date | string
@@ -1236,6 +1232,10 @@ export type GeneratedInvoiceUncheckedCreateWithoutLineItemsInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  organizationId: number
+  sourceDocumentId?: number | null
+  contragentId: number
   creditTransaction?: Prisma.CreditTransactionUncheckedCreateNestedOneWithoutGeneratedInvoiceInput
 }
 
@@ -1271,17 +1271,13 @@ export type GeneratedInvoiceUpdateWithoutLineItemsInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutGeneratedInvoiceNestedInput
+  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutGeneratedInvoicesNestedInput
   sourceDocument?: Prisma.SourceDocumentUpdateOneWithoutGeneratedInvoiceNestedInput
-  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
-  creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutGeneratedInvoiceNestedInput
 }
 
 export type GeneratedInvoiceUncheckedUpdateWithoutLineItemsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceSeries?: Prisma.StringFieldUpdateOperationsInput | string
   invoiceNumber?: Prisma.IntFieldUpdateOperationsInput | number
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1297,6 +1293,10 @@ export type GeneratedInvoiceUncheckedUpdateWithoutLineItemsInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   creditTransaction?: Prisma.CreditTransactionUncheckedUpdateOneWithoutGeneratedInvoiceNestedInput
 }
 
@@ -1316,17 +1316,13 @@ export type GeneratedInvoiceCreateWithoutCreditTransactionInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
   organization: Prisma.OrganizationCreateNestedOneWithoutGeneratedInvoicesInput
   sourceDocument?: Prisma.SourceDocumentCreateNestedOneWithoutGeneratedInvoiceInput
-  contragent: Prisma.ContragentCreateNestedOneWithoutInvoicesInput
   lineItems?: Prisma.InvoiceLineItemCreateNestedManyWithoutInvoiceInput
 }
 
 export type GeneratedInvoiceUncheckedCreateWithoutCreditTransactionInput = {
-  id?: number
-  organizationId: number
-  sourceDocumentId?: number | null
-  contragentId: number
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date | string
@@ -1342,6 +1338,10 @@ export type GeneratedInvoiceUncheckedCreateWithoutCreditTransactionInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  organizationId: number
+  sourceDocumentId?: number | null
+  contragentId: number
   lineItems?: Prisma.InvoiceLineItemUncheckedCreateNestedManyWithoutInvoiceInput
 }
 
@@ -1377,17 +1377,13 @@ export type GeneratedInvoiceUpdateWithoutCreditTransactionInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutGeneratedInvoicesNestedInput
   sourceDocument?: Prisma.SourceDocumentUpdateOneWithoutGeneratedInvoiceNestedInput
-  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
   lineItems?: Prisma.InvoiceLineItemUpdateManyWithoutInvoiceNestedInput
 }
 
 export type GeneratedInvoiceUncheckedUpdateWithoutCreditTransactionInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceSeries?: Prisma.StringFieldUpdateOperationsInput | string
   invoiceNumber?: Prisma.IntFieldUpdateOperationsInput | number
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1403,13 +1399,14 @@ export type GeneratedInvoiceUncheckedUpdateWithoutCreditTransactionInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   lineItems?: Prisma.InvoiceLineItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type GeneratedInvoiceCreateManyOrganizationInput = {
-  id?: number
-  sourceDocumentId?: number | null
-  contragentId: number
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date | string
@@ -1425,6 +1422,9 @@ export type GeneratedInvoiceCreateManyOrganizationInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  sourceDocumentId?: number | null
+  contragentId: number
 }
 
 export type GeneratedInvoiceUpdateWithoutOrganizationInput = {
@@ -1443,16 +1443,13 @@ export type GeneratedInvoiceUpdateWithoutOrganizationInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceDocument?: Prisma.SourceDocumentUpdateOneWithoutGeneratedInvoiceNestedInput
-  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
-  lineItems?: Prisma.InvoiceLineItemUpdateManyWithoutInvoiceNestedInput
   creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutGeneratedInvoiceNestedInput
+  contragent?: Prisma.ContragentUpdateOneRequiredWithoutInvoicesNestedInput
+  sourceDocument?: Prisma.SourceDocumentUpdateOneWithoutGeneratedInvoiceNestedInput
+  lineItems?: Prisma.InvoiceLineItemUpdateManyWithoutInvoiceNestedInput
 }
 
 export type GeneratedInvoiceUncheckedUpdateWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceSeries?: Prisma.StringFieldUpdateOperationsInput | string
   invoiceNumber?: Prisma.IntFieldUpdateOperationsInput | number
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1468,14 +1465,14 @@ export type GeneratedInvoiceUncheckedUpdateWithoutOrganizationInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lineItems?: Prisma.InvoiceLineItemUncheckedUpdateManyWithoutInvoiceNestedInput
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   creditTransaction?: Prisma.CreditTransactionUncheckedUpdateOneWithoutGeneratedInvoiceNestedInput
+  lineItems?: Prisma.InvoiceLineItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
   invoiceSeries?: Prisma.StringFieldUpdateOperationsInput | string
   invoiceNumber?: Prisma.IntFieldUpdateOperationsInput | number
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1491,12 +1488,12 @@ export type GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  contragentId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type GeneratedInvoiceCreateManyContragentInput = {
-  id?: number
-  organizationId: number
-  sourceDocumentId?: number | null
   invoiceSeries: string
   invoiceNumber: number
   issueDate: Date | string
@@ -1512,6 +1509,9 @@ export type GeneratedInvoiceCreateManyContragentInput = {
   creditsCost?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  id?: number
+  organizationId: number
+  sourceDocumentId?: number | null
 }
 
 export type GeneratedInvoiceUpdateWithoutContragentInput = {
@@ -1530,16 +1530,13 @@ export type GeneratedInvoiceUpdateWithoutContragentInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutGeneratedInvoiceNestedInput
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutGeneratedInvoicesNestedInput
   sourceDocument?: Prisma.SourceDocumentUpdateOneWithoutGeneratedInvoiceNestedInput
   lineItems?: Prisma.InvoiceLineItemUpdateManyWithoutInvoiceNestedInput
-  creditTransaction?: Prisma.CreditTransactionUpdateOneWithoutGeneratedInvoiceNestedInput
 }
 
 export type GeneratedInvoiceUncheckedUpdateWithoutContragentInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeries?: Prisma.StringFieldUpdateOperationsInput | string
   invoiceNumber?: Prisma.IntFieldUpdateOperationsInput | number
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1555,14 +1552,14 @@ export type GeneratedInvoiceUncheckedUpdateWithoutContragentInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lineItems?: Prisma.InvoiceLineItemUncheckedUpdateManyWithoutInvoiceNestedInput
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   creditTransaction?: Prisma.CreditTransactionUncheckedUpdateOneWithoutGeneratedInvoiceNestedInput
+  lineItems?: Prisma.InvoiceLineItemUncheckedUpdateManyWithoutInvoiceNestedInput
 }
 
 export type GeneratedInvoiceUncheckedUpdateManyWithoutContragentInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
-  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeries?: Prisma.StringFieldUpdateOperationsInput | string
   invoiceNumber?: Prisma.IntFieldUpdateOperationsInput | number
   issueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1578,6 +1575,9 @@ export type GeneratedInvoiceUncheckedUpdateManyWithoutContragentInput = {
   creditsCost?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationId?: Prisma.IntFieldUpdateOperationsInput | number
+  sourceDocumentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -1612,10 +1612,6 @@ export type GeneratedInvoiceCountOutputTypeCountLineItemsArgs<ExtArgs extends ru
 
 
 export type GeneratedInvoiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  organizationId?: boolean
-  sourceDocumentId?: boolean
-  contragentId?: boolean
   invoiceSeries?: boolean
   invoiceNumber?: boolean
   issueDate?: boolean
@@ -1631,19 +1627,19 @@ export type GeneratedInvoiceSelect<ExtArgs extends runtime.Types.Extensions.Inte
   creditsCost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  id?: boolean
+  organizationId?: boolean
+  sourceDocumentId?: boolean
+  contragentId?: boolean
+  creditTransaction?: boolean | Prisma.GeneratedInvoice$creditTransactionArgs<ExtArgs>
+  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   sourceDocument?: boolean | Prisma.GeneratedInvoice$sourceDocumentArgs<ExtArgs>
-  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
   lineItems?: boolean | Prisma.GeneratedInvoice$lineItemsArgs<ExtArgs>
-  creditTransaction?: boolean | Prisma.GeneratedInvoice$creditTransactionArgs<ExtArgs>
   _count?: boolean | Prisma.GeneratedInvoiceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["generatedInvoice"]>
 
 export type GeneratedInvoiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  organizationId?: boolean
-  sourceDocumentId?: boolean
-  contragentId?: boolean
   invoiceSeries?: boolean
   invoiceNumber?: boolean
   issueDate?: boolean
@@ -1659,16 +1655,16 @@ export type GeneratedInvoiceSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   creditsCost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  id?: boolean
+  organizationId?: boolean
+  sourceDocumentId?: boolean
+  contragentId?: boolean
+  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   sourceDocument?: boolean | Prisma.GeneratedInvoice$sourceDocumentArgs<ExtArgs>
-  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["generatedInvoice"]>
 
 export type GeneratedInvoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  organizationId?: boolean
-  sourceDocumentId?: boolean
-  contragentId?: boolean
   invoiceSeries?: boolean
   invoiceNumber?: boolean
   issueDate?: boolean
@@ -1684,16 +1680,16 @@ export type GeneratedInvoiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   creditsCost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  id?: boolean
+  organizationId?: boolean
+  sourceDocumentId?: boolean
+  contragentId?: boolean
+  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   sourceDocument?: boolean | Prisma.GeneratedInvoice$sourceDocumentArgs<ExtArgs>
-  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["generatedInvoice"]>
 
 export type GeneratedInvoiceSelectScalar = {
-  id?: boolean
-  organizationId?: boolean
-  sourceDocumentId?: boolean
-  contragentId?: boolean
   invoiceSeries?: boolean
   invoiceNumber?: boolean
   issueDate?: boolean
@@ -1709,42 +1705,42 @@ export type GeneratedInvoiceSelectScalar = {
   creditsCost?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  id?: boolean
+  organizationId?: boolean
+  sourceDocumentId?: boolean
+  contragentId?: boolean
 }
 
-export type GeneratedInvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "sourceDocumentId" | "contragentId" | "invoiceSeries" | "invoiceNumber" | "issueDate" | "taxEventDate" | "currency" | "originalCurrency" | "exchangeRate" | "subtotal" | "vatAmount" | "totalAmount" | "pdfFileUrl" | "status" | "creditsCost" | "createdAt" | "updatedAt", ExtArgs["result"]["generatedInvoice"]>
+export type GeneratedInvoiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"invoiceSeries" | "invoiceNumber" | "issueDate" | "taxEventDate" | "currency" | "originalCurrency" | "exchangeRate" | "subtotal" | "vatAmount" | "totalAmount" | "pdfFileUrl" | "status" | "creditsCost" | "createdAt" | "updatedAt" | "id" | "organizationId" | "sourceDocumentId" | "contragentId", ExtArgs["result"]["generatedInvoice"]>
 export type GeneratedInvoiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  creditTransaction?: boolean | Prisma.GeneratedInvoice$creditTransactionArgs<ExtArgs>
+  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   sourceDocument?: boolean | Prisma.GeneratedInvoice$sourceDocumentArgs<ExtArgs>
-  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
   lineItems?: boolean | Prisma.GeneratedInvoice$lineItemsArgs<ExtArgs>
-  creditTransaction?: boolean | Prisma.GeneratedInvoice$creditTransactionArgs<ExtArgs>
   _count?: boolean | Prisma.GeneratedInvoiceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GeneratedInvoiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   sourceDocument?: boolean | Prisma.GeneratedInvoice$sourceDocumentArgs<ExtArgs>
-  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
 }
 export type GeneratedInvoiceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   sourceDocument?: boolean | Prisma.GeneratedInvoice$sourceDocumentArgs<ExtArgs>
-  contragent?: boolean | Prisma.ContragentDefaultArgs<ExtArgs>
 }
 
 export type $GeneratedInvoicePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "GeneratedInvoice"
   objects: {
+    creditTransaction: Prisma.$CreditTransactionPayload<ExtArgs> | null
+    contragent: Prisma.$ContragentPayload<ExtArgs>
     organization: Prisma.$OrganizationPayload<ExtArgs>
     sourceDocument: Prisma.$SourceDocumentPayload<ExtArgs> | null
-    contragent: Prisma.$ContragentPayload<ExtArgs>
     lineItems: Prisma.$InvoiceLineItemPayload<ExtArgs>[]
-    creditTransaction: Prisma.$CreditTransactionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    organizationId: number
-    sourceDocumentId: number | null
-    contragentId: number
     invoiceSeries: string
     invoiceNumber: number
     issueDate: Date
@@ -1760,6 +1756,10 @@ export type $GeneratedInvoicePayload<ExtArgs extends runtime.Types.Extensions.In
     creditsCost: number
     createdAt: Date
     updatedAt: Date
+    id: number
+    organizationId: number
+    sourceDocumentId: number | null
+    contragentId: number
   }, ExtArgs["result"]["generatedInvoice"]>
   composites: {}
 }
@@ -1843,8 +1843,8 @@ export interface GeneratedInvoiceDelegate<ExtArgs extends runtime.Types.Extensio
    * // Get first 10 GeneratedInvoices
    * const generatedInvoices = await prisma.generatedInvoice.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const generatedInvoiceWithIdOnly = await prisma.generatedInvoice.findMany({ select: { id: true } })
+   * // Only select the `invoiceSeries`
+   * const generatedInvoiceWithInvoiceSeriesOnly = await prisma.generatedInvoice.findMany({ select: { invoiceSeries: true } })
    * 
    */
   findMany<T extends GeneratedInvoiceFindManyArgs>(args?: Prisma.SelectSubset<T, GeneratedInvoiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GeneratedInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1888,9 +1888,9 @@ export interface GeneratedInvoiceDelegate<ExtArgs extends runtime.Types.Extensio
    *   ]
    * })
    * 
-   * // Create many GeneratedInvoices and only return the `id`
-   * const generatedInvoiceWithIdOnly = await prisma.generatedInvoice.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many GeneratedInvoices and only return the `invoiceSeries`
+   * const generatedInvoiceWithInvoiceSeriesOnly = await prisma.generatedInvoice.createManyAndReturn({
+   *   select: { invoiceSeries: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1979,9 +1979,9 @@ export interface GeneratedInvoiceDelegate<ExtArgs extends runtime.Types.Extensio
    *   ]
    * })
    * 
-   * // Update zero or more GeneratedInvoices and only return the `id`
-   * const generatedInvoiceWithIdOnly = await prisma.generatedInvoice.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more GeneratedInvoices and only return the `invoiceSeries`
+   * const generatedInvoiceWithInvoiceSeriesOnly = await prisma.generatedInvoice.updateManyAndReturn({
+   *   select: { invoiceSeries: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -2154,11 +2154,11 @@ readonly fields: GeneratedInvoiceFieldRefs;
  */
 export interface Prisma__GeneratedInvoiceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  creditTransaction<T extends Prisma.GeneratedInvoice$creditTransactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GeneratedInvoice$creditTransactionArgs<ExtArgs>>): Prisma.Prisma__CreditTransactionClient<runtime.Types.Result.GetResult<Prisma.$CreditTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  contragent<T extends Prisma.ContragentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContragentDefaultArgs<ExtArgs>>): Prisma.Prisma__ContragentClient<runtime.Types.Result.GetResult<Prisma.$ContragentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   sourceDocument<T extends Prisma.GeneratedInvoice$sourceDocumentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GeneratedInvoice$sourceDocumentArgs<ExtArgs>>): Prisma.Prisma__SourceDocumentClient<runtime.Types.Result.GetResult<Prisma.$SourceDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  contragent<T extends Prisma.ContragentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ContragentDefaultArgs<ExtArgs>>): Prisma.Prisma__ContragentClient<runtime.Types.Result.GetResult<Prisma.$ContragentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   lineItems<T extends Prisma.GeneratedInvoice$lineItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GeneratedInvoice$lineItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoiceLineItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  creditTransaction<T extends Prisma.GeneratedInvoice$creditTransactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GeneratedInvoice$creditTransactionArgs<ExtArgs>>): Prisma.Prisma__CreditTransactionClient<runtime.Types.Result.GetResult<Prisma.$CreditTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2188,10 +2188,6 @@ export interface Prisma__GeneratedInvoiceClient<T, Null = never, ExtArgs extends
  * Fields of the GeneratedInvoice model
  */
 export interface GeneratedInvoiceFieldRefs {
-  readonly id: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
-  readonly organizationId: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
-  readonly sourceDocumentId: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
-  readonly contragentId: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
   readonly invoiceSeries: Prisma.FieldRef<"GeneratedInvoice", 'String'>
   readonly invoiceNumber: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
   readonly issueDate: Prisma.FieldRef<"GeneratedInvoice", 'DateTime'>
@@ -2207,6 +2203,10 @@ export interface GeneratedInvoiceFieldRefs {
   readonly creditsCost: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
   readonly createdAt: Prisma.FieldRef<"GeneratedInvoice", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"GeneratedInvoice", 'DateTime'>
+  readonly id: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
+  readonly organizationId: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
+  readonly sourceDocumentId: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
+  readonly contragentId: Prisma.FieldRef<"GeneratedInvoice", 'Int'>
 }
     
 
@@ -2608,6 +2608,25 @@ export type GeneratedInvoiceDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
+ * GeneratedInvoice.creditTransaction
+ */
+export type GeneratedInvoice$creditTransactionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CreditTransaction
+   */
+  select?: Prisma.CreditTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CreditTransaction
+   */
+  omit?: Prisma.CreditTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CreditTransactionInclude<ExtArgs> | null
+  where?: Prisma.CreditTransactionWhereInput
+}
+
+/**
  * GeneratedInvoice.sourceDocument
  */
 export type GeneratedInvoice$sourceDocumentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2648,25 +2667,6 @@ export type GeneratedInvoice$lineItemsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceLineItemScalarFieldEnum | Prisma.InvoiceLineItemScalarFieldEnum[]
-}
-
-/**
- * GeneratedInvoice.creditTransaction
- */
-export type GeneratedInvoice$creditTransactionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CreditTransaction
-   */
-  select?: Prisma.CreditTransactionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CreditTransaction
-   */
-  omit?: Prisma.CreditTransactionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CreditTransactionInclude<ExtArgs> | null
-  where?: Prisma.CreditTransactionWhereInput
 }
 
 /**

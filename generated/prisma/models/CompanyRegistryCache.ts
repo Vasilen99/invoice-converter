@@ -232,8 +232,8 @@ export type CompanyRegistryCacheWhereInput = {
   rawLookupData?: Prisma.JsonNullableFilter<"CompanyRegistryCache">
   lastFetchedAt?: Prisma.DateTimeFilter<"CompanyRegistryCache"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"CompanyRegistryCache"> | Date | string
-  organizations?: Prisma.OrganizationListRelationFilter
   contragents?: Prisma.ContragentListRelationFilter
+  organizations?: Prisma.OrganizationListRelationFilter
 }
 
 export type CompanyRegistryCacheOrderByWithRelationInput = {
@@ -245,8 +245,8 @@ export type CompanyRegistryCacheOrderByWithRelationInput = {
   rawLookupData?: Prisma.SortOrderInput | Prisma.SortOrder
   lastFetchedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  organizations?: Prisma.OrganizationOrderByRelationAggregateInput
   contragents?: Prisma.ContragentOrderByRelationAggregateInput
+  organizations?: Prisma.OrganizationOrderByRelationAggregateInput
 }
 
 export type CompanyRegistryCacheWhereUniqueInput = Prisma.AtLeast<{
@@ -261,8 +261,8 @@ export type CompanyRegistryCacheWhereUniqueInput = Prisma.AtLeast<{
   rawLookupData?: Prisma.JsonNullableFilter<"CompanyRegistryCache">
   lastFetchedAt?: Prisma.DateTimeFilter<"CompanyRegistryCache"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"CompanyRegistryCache"> | Date | string
-  organizations?: Prisma.OrganizationListRelationFilter
   contragents?: Prisma.ContragentListRelationFilter
+  organizations?: Prisma.OrganizationListRelationFilter
 }, "id" | "bulstat">
 
 export type CompanyRegistryCacheOrderByWithAggregationInput = {
@@ -303,8 +303,8 @@ export type CompanyRegistryCacheCreateInput = {
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastFetchedAt?: Date | string
   createdAt?: Date | string
-  organizations?: Prisma.OrganizationCreateNestedManyWithoutRegistryInput
   contragents?: Prisma.ContragentCreateNestedManyWithoutRegistryInput
+  organizations?: Prisma.OrganizationCreateNestedManyWithoutRegistryInput
 }
 
 export type CompanyRegistryCacheUncheckedCreateInput = {
@@ -316,8 +316,8 @@ export type CompanyRegistryCacheUncheckedCreateInput = {
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastFetchedAt?: Date | string
   createdAt?: Date | string
-  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutRegistryInput
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutRegistryInput
+  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutRegistryInput
 }
 
 export type CompanyRegistryCacheUpdateInput = {
@@ -328,8 +328,8 @@ export type CompanyRegistryCacheUpdateInput = {
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastFetchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizations?: Prisma.OrganizationUpdateManyWithoutRegistryNestedInput
   contragents?: Prisma.ContragentUpdateManyWithoutRegistryNestedInput
+  organizations?: Prisma.OrganizationUpdateManyWithoutRegistryNestedInput
 }
 
 export type CompanyRegistryCacheUncheckedUpdateInput = {
@@ -341,8 +341,8 @@ export type CompanyRegistryCacheUncheckedUpdateInput = {
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastFetchedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutRegistryNestedInput
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutRegistryNestedInput
+  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutRegistryNestedInput
 }
 
 export type CompanyRegistryCacheCreateManyInput = {
@@ -581,13 +581,13 @@ export type CompanyRegistryCacheUncheckedUpdateWithoutContragentsInput = {
  */
 
 export type CompanyRegistryCacheCountOutputType = {
-  organizations: number
   contragents: number
+  organizations: number
 }
 
 export type CompanyRegistryCacheCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  organizations?: boolean | CompanyRegistryCacheCountOutputTypeCountOrganizationsArgs
   contragents?: boolean | CompanyRegistryCacheCountOutputTypeCountContragentsArgs
+  organizations?: boolean | CompanyRegistryCacheCountOutputTypeCountOrganizationsArgs
 }
 
 /**
@@ -603,15 +603,15 @@ export type CompanyRegistryCacheCountOutputTypeDefaultArgs<ExtArgs extends runti
 /**
  * CompanyRegistryCacheCountOutputType without action
  */
-export type CompanyRegistryCacheCountOutputTypeCountOrganizationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.OrganizationWhereInput
+export type CompanyRegistryCacheCountOutputTypeCountContragentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContragentWhereInput
 }
 
 /**
  * CompanyRegistryCacheCountOutputType without action
  */
-export type CompanyRegistryCacheCountOutputTypeCountContragentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ContragentWhereInput
+export type CompanyRegistryCacheCountOutputTypeCountOrganizationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationWhereInput
 }
 
 
@@ -624,8 +624,8 @@ export type CompanyRegistryCacheSelect<ExtArgs extends runtime.Types.Extensions.
   rawLookupData?: boolean
   lastFetchedAt?: boolean
   createdAt?: boolean
-  organizations?: boolean | Prisma.CompanyRegistryCache$organizationsArgs<ExtArgs>
   contragents?: boolean | Prisma.CompanyRegistryCache$contragentsArgs<ExtArgs>
+  organizations?: boolean | Prisma.CompanyRegistryCache$organizationsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyRegistryCacheCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["companyRegistryCache"]>
 
@@ -664,8 +664,8 @@ export type CompanyRegistryCacheSelectScalar = {
 
 export type CompanyRegistryCacheOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "bulstat" | "legalName" | "vatNumber" | "address" | "rawLookupData" | "lastFetchedAt" | "createdAt", ExtArgs["result"]["companyRegistryCache"]>
 export type CompanyRegistryCacheInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  organizations?: boolean | Prisma.CompanyRegistryCache$organizationsArgs<ExtArgs>
   contragents?: boolean | Prisma.CompanyRegistryCache$contragentsArgs<ExtArgs>
+  organizations?: boolean | Prisma.CompanyRegistryCache$organizationsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyRegistryCacheCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CompanyRegistryCacheIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -674,8 +674,8 @@ export type CompanyRegistryCacheIncludeUpdateManyAndReturn<ExtArgs extends runti
 export type $CompanyRegistryCachePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CompanyRegistryCache"
   objects: {
-    organizations: Prisma.$OrganizationPayload<ExtArgs>[]
     contragents: Prisma.$ContragentPayload<ExtArgs>[]
+    organizations: Prisma.$OrganizationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1080,8 +1080,8 @@ readonly fields: CompanyRegistryCacheFieldRefs;
  */
 export interface Prisma__CompanyRegistryCacheClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  organizations<T extends Prisma.CompanyRegistryCache$organizationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyRegistryCache$organizationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contragents<T extends Prisma.CompanyRegistryCache$contragentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyRegistryCache$contragentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContragentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  organizations<T extends Prisma.CompanyRegistryCache$organizationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyRegistryCache$organizationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1512,30 +1512,6 @@ export type CompanyRegistryCacheDeleteManyArgs<ExtArgs extends runtime.Types.Ext
 }
 
 /**
- * CompanyRegistryCache.organizations
- */
-export type CompanyRegistryCache$organizationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Organization
-   */
-  select?: Prisma.OrganizationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Organization
-   */
-  omit?: Prisma.OrganizationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OrganizationInclude<ExtArgs> | null
-  where?: Prisma.OrganizationWhereInput
-  orderBy?: Prisma.OrganizationOrderByWithRelationInput | Prisma.OrganizationOrderByWithRelationInput[]
-  cursor?: Prisma.OrganizationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.OrganizationScalarFieldEnum | Prisma.OrganizationScalarFieldEnum[]
-}
-
-/**
  * CompanyRegistryCache.contragents
  */
 export type CompanyRegistryCache$contragentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1557,6 +1533,30 @@ export type CompanyRegistryCache$contragentsArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.ContragentScalarFieldEnum | Prisma.ContragentScalarFieldEnum[]
+}
+
+/**
+ * CompanyRegistryCache.organizations
+ */
+export type CompanyRegistryCache$organizationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Organization
+   */
+  select?: Prisma.OrganizationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Organization
+   */
+  omit?: Prisma.OrganizationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationInclude<ExtArgs> | null
+  where?: Prisma.OrganizationWhereInput
+  orderBy?: Prisma.OrganizationOrderByWithRelationInput | Prisma.OrganizationOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationScalarFieldEnum | Prisma.OrganizationScalarFieldEnum[]
 }
 
 /**

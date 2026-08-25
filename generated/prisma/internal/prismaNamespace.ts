@@ -1406,46 +1406,43 @@ export type AccountMemberScalarFieldEnum = (typeof AccountMemberScalarFieldEnum)
 
 
 export const OrganizationScalarFieldEnum = {
-  id: 'id',
-  accountId: 'accountId',
   legalName: 'legalName',
   bulstat: 'bulstat',
   vatNumber: 'vatNumber',
   address: 'address',
-  molName: 'molName',
-  source: 'source',
-  registryId: 'registryId',
   invoiceSeriesPrefix: 'invoiceSeriesPrefix',
   nextInvoiceSeq: 'nextInvoiceSeq',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  accountId: 'accountId',
+  molName: 'molName',
+  id: 'id',
+  registryId: 'registryId',
+  source: 'source'
 } as const
 
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
 
 
 export const ContragentScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
   bulstat: 'bulstat',
   vatNumber: 'vatNumber',
   name: 'name',
   address: 'address',
   email: 'email',
-  source: 'source',
-  registryId: 'registryId',
   rawLookupData: 'rawLookupData',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  id: 'id',
+  organizationId: 'organizationId',
+  registryId: 'registryId',
+  source: 'source'
 } as const
 
 export type ContragentScalarFieldEnum = (typeof ContragentScalarFieldEnum)[keyof typeof ContragentScalarFieldEnum]
 
 
 export const SourceDocumentScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  uploadedByUserId: 'uploadedByUserId',
   sourceType: 'sourceType',
   originalFileUrl: 'originalFileUrl',
   originalFilename: 'originalFilename',
@@ -1453,17 +1450,16 @@ export const SourceDocumentScalarFieldEnum = {
   status: 'status',
   parsedData: 'parsedData',
   errorMessage: 'errorMessage',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  id: 'id',
+  organizationId: 'organizationId',
+  uploadedByUserId: 'uploadedByUserId'
 } as const
 
 export type SourceDocumentScalarFieldEnum = (typeof SourceDocumentScalarFieldEnum)[keyof typeof SourceDocumentScalarFieldEnum]
 
 
 export const GeneratedInvoiceScalarFieldEnum = {
-  id: 'id',
-  organizationId: 'organizationId',
-  sourceDocumentId: 'sourceDocumentId',
-  contragentId: 'contragentId',
   invoiceSeries: 'invoiceSeries',
   invoiceNumber: 'invoiceNumber',
   issueDate: 'issueDate',
@@ -1478,64 +1474,68 @@ export const GeneratedInvoiceScalarFieldEnum = {
   status: 'status',
   creditsCost: 'creditsCost',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  id: 'id',
+  organizationId: 'organizationId',
+  sourceDocumentId: 'sourceDocumentId',
+  contragentId: 'contragentId'
 } as const
 
 export type GeneratedInvoiceScalarFieldEnum = (typeof GeneratedInvoiceScalarFieldEnum)[keyof typeof GeneratedInvoiceScalarFieldEnum]
 
 
 export const InvoiceLineItemScalarFieldEnum = {
-  id: 'id',
-  generatedInvoiceId: 'generatedInvoiceId',
   description: 'description',
   quantity: 'quantity',
   unitPrice: 'unitPrice',
   vatRate: 'vatRate',
-  lineTotal: 'lineTotal'
+  lineTotal: 'lineTotal',
+  id: 'id',
+  generatedInvoiceId: 'generatedInvoiceId'
 } as const
 
 export type InvoiceLineItemScalarFieldEnum = (typeof InvoiceLineItemScalarFieldEnum)[keyof typeof InvoiceLineItemScalarFieldEnum]
 
 
 export const CreditPackageScalarFieldEnum = {
-  id: 'id',
   name: 'name',
   creditsAmount: 'creditsAmount',
   priceAmount: 'priceAmount',
   currency: 'currency',
   isActive: 'isActive',
-  sortOrder: 'sortOrder'
+  sortOrder: 'sortOrder',
+  id: 'id'
 } as const
 
 export type CreditPackageScalarFieldEnum = (typeof CreditPackageScalarFieldEnum)[keyof typeof CreditPackageScalarFieldEnum]
 
 
 export const OrderScalarFieldEnum = {
-  id: 'id',
-  accountId: 'accountId',
-  packageId: 'packageId',
   amount: 'amount',
   currency: 'currency',
-  provider: 'provider',
   status: 'status',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  accountId: 'accountId',
+  provider: 'provider',
+  id: 'id',
+  packageId: 'packageId'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
 export const CreditTransactionScalarFieldEnum = {
-  id: 'id',
-  accountId: 'accountId',
-  organizationId: 'organizationId',
   type: 'type',
   amount: 'amount',
   balanceAfter: 'balanceAfter',
-  orderId: 'orderId',
-  generatedInvoiceId: 'generatedInvoiceId',
-  consumedByUserId: 'consumedByUserId',
   note: 'note',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  accountId: 'accountId',
+  consumedByUserId: 'consumedByUserId',
+  id: 'id',
+  organizationId: 'organizationId',
+  orderId: 'orderId',
+  generatedInvoiceId: 'generatedInvoiceId'
 } as const
 
 export type CreditTransactionScalarFieldEnum = (typeof CreditTransactionScalarFieldEnum)[keyof typeof CreditTransactionScalarFieldEnum]
@@ -1736,20 +1736,6 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'PaymentProvider'
- */
-export type EnumPaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentProvider'>
-    
-
-
-/**
- * Reference to a field of type 'PaymentProvider[]'
- */
-export type ListEnumPaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentProvider[]'>
-    
-
-
-/**
  * Reference to a field of type 'OrderStatus'
  */
 export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
@@ -1760,6 +1746,20 @@ export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'OrderStatus[]'
  */
 export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentProvider'
+ */
+export type EnumPaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentProvider'>
+    
+
+
+/**
+ * Reference to a field of type 'PaymentProvider[]'
+ */
+export type ListEnumPaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentProvider[]'>
     
 
 

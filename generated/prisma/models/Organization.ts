@@ -27,125 +27,125 @@ export type AggregateOrganization = {
 }
 
 export type OrganizationAvgAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  registryId: number | null
   nextInvoiceSeq: number | null
+  accountId: number | null
+  id: number | null
+  registryId: number | null
 }
 
 export type OrganizationSumAggregateOutputType = {
-  id: number | null
-  accountId: number | null
-  registryId: number | null
   nextInvoiceSeq: number | null
+  accountId: number | null
+  id: number | null
+  registryId: number | null
 }
 
 export type OrganizationMinAggregateOutputType = {
-  id: number | null
-  accountId: number | null
   legalName: string | null
   bulstat: string | null
   vatNumber: string | null
-  molName: string | null
-  source: $Enums.CompanyLookupSource | null
-  registryId: number | null
   invoiceSeriesPrefix: string | null
   nextInvoiceSeq: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  accountId: number | null
+  molName: string | null
+  id: number | null
+  registryId: number | null
+  source: $Enums.CompanyLookupSource | null
 }
 
 export type OrganizationMaxAggregateOutputType = {
-  id: number | null
-  accountId: number | null
   legalName: string | null
   bulstat: string | null
   vatNumber: string | null
-  molName: string | null
-  source: $Enums.CompanyLookupSource | null
-  registryId: number | null
   invoiceSeriesPrefix: string | null
   nextInvoiceSeq: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  accountId: number | null
+  molName: string | null
+  id: number | null
+  registryId: number | null
+  source: $Enums.CompanyLookupSource | null
 }
 
 export type OrganizationCountAggregateOutputType = {
-  id: number
-  accountId: number
   legalName: number
   bulstat: number
   vatNumber: number
   address: number
-  molName: number
-  source: number
-  registryId: number
   invoiceSeriesPrefix: number
   nextInvoiceSeq: number
   createdAt: number
   updatedAt: number
+  accountId: number
+  molName: number
+  id: number
+  registryId: number
+  source: number
   _all: number
 }
 
 
 export type OrganizationAvgAggregateInputType = {
-  id?: true
-  accountId?: true
-  registryId?: true
   nextInvoiceSeq?: true
+  accountId?: true
+  id?: true
+  registryId?: true
 }
 
 export type OrganizationSumAggregateInputType = {
-  id?: true
-  accountId?: true
-  registryId?: true
   nextInvoiceSeq?: true
+  accountId?: true
+  id?: true
+  registryId?: true
 }
 
 export type OrganizationMinAggregateInputType = {
-  id?: true
-  accountId?: true
   legalName?: true
   bulstat?: true
   vatNumber?: true
-  molName?: true
-  source?: true
-  registryId?: true
   invoiceSeriesPrefix?: true
   nextInvoiceSeq?: true
   createdAt?: true
   updatedAt?: true
+  accountId?: true
+  molName?: true
+  id?: true
+  registryId?: true
+  source?: true
 }
 
 export type OrganizationMaxAggregateInputType = {
-  id?: true
-  accountId?: true
   legalName?: true
   bulstat?: true
   vatNumber?: true
-  molName?: true
-  source?: true
-  registryId?: true
   invoiceSeriesPrefix?: true
   nextInvoiceSeq?: true
   createdAt?: true
   updatedAt?: true
+  accountId?: true
+  molName?: true
+  id?: true
+  registryId?: true
+  source?: true
 }
 
 export type OrganizationCountAggregateInputType = {
-  id?: true
-  accountId?: true
   legalName?: true
   bulstat?: true
   vatNumber?: true
   address?: true
-  molName?: true
-  source?: true
-  registryId?: true
   invoiceSeriesPrefix?: true
   nextInvoiceSeq?: true
   createdAt?: true
   updatedAt?: true
+  accountId?: true
+  molName?: true
+  id?: true
+  registryId?: true
+  source?: true
   _all?: true
 }
 
@@ -236,19 +236,19 @@ export type OrganizationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 export type OrganizationGroupByOutputType = {
-  id: number
-  accountId: number
   legalName: string
   bulstat: string | null
   vatNumber: string | null
   address: runtime.JsonValue | null
-  molName: string | null
-  source: $Enums.CompanyLookupSource
-  registryId: number | null
   invoiceSeriesPrefix: string
   nextInvoiceSeq: number
   createdAt: Date
   updatedAt: Date
+  accountId: number
+  molName: string | null
+  id: number
+  registryId: number | null
+  source: $Enums.CompanyLookupSource
   _count: OrganizationCountAggregateOutputType | null
   _avg: OrganizationAvgAggregateOutputType | null
   _sum: OrganizationSumAggregateOutputType | null
@@ -275,47 +275,47 @@ export type OrganizationWhereInput = {
   AND?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   OR?: Prisma.OrganizationWhereInput[]
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
-  id?: Prisma.IntFilter<"Organization"> | number
-  accountId?: Prisma.IntFilter<"Organization"> | number
   legalName?: Prisma.StringFilter<"Organization"> | string
   bulstat?: Prisma.StringNullableFilter<"Organization"> | string | null
   vatNumber?: Prisma.StringNullableFilter<"Organization"> | string | null
   address?: Prisma.JsonNullableFilter<"Organization">
-  molName?: Prisma.StringNullableFilter<"Organization"> | string | null
-  source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
-  registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
   invoiceSeriesPrefix?: Prisma.StringFilter<"Organization"> | string
   nextInvoiceSeq?: Prisma.IntFilter<"Organization"> | number
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
-  registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
-  account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
+  accountId?: Prisma.IntFilter<"Organization"> | number
+  molName?: Prisma.StringNullableFilter<"Organization"> | string | null
+  id?: Prisma.IntFilter<"Organization"> | number
+  registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
+  source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentListRelationFilter
-  sourceDocuments?: Prisma.SourceDocumentListRelationFilter
-  generatedInvoices?: Prisma.GeneratedInvoiceListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
+  generatedInvoices?: Prisma.GeneratedInvoiceListRelationFilter
+  account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
+  registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
+  sourceDocuments?: Prisma.SourceDocumentListRelationFilter
 }
 
 export type OrganizationOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
   legalName?: Prisma.SortOrder
   bulstat?: Prisma.SortOrderInput | Prisma.SortOrder
   vatNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  molName?: Prisma.SortOrderInput | Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   invoiceSeriesPrefix?: Prisma.SortOrder
   nextInvoiceSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  registry?: Prisma.CompanyRegistryCacheOrderByWithRelationInput
-  account?: Prisma.AccountOrderByWithRelationInput
+  accountId?: Prisma.SortOrder
+  molName?: Prisma.SortOrderInput | Prisma.SortOrder
+  id?: Prisma.SortOrder
+  registryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   contragents?: Prisma.ContragentOrderByRelationAggregateInput
-  sourceDocuments?: Prisma.SourceDocumentOrderByRelationAggregateInput
-  generatedInvoices?: Prisma.GeneratedInvoiceOrderByRelationAggregateInput
   creditTransactions?: Prisma.CreditTransactionOrderByRelationAggregateInput
+  generatedInvoices?: Prisma.GeneratedInvoiceOrderByRelationAggregateInput
+  account?: Prisma.AccountOrderByWithRelationInput
+  registry?: Prisma.CompanyRegistryCacheOrderByWithRelationInput
+  sourceDocuments?: Prisma.SourceDocumentOrderByRelationAggregateInput
 }
 
 export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -323,40 +323,40 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   OR?: Prisma.OrganizationWhereInput[]
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
-  accountId?: Prisma.IntFilter<"Organization"> | number
   legalName?: Prisma.StringFilter<"Organization"> | string
   bulstat?: Prisma.StringNullableFilter<"Organization"> | string | null
   vatNumber?: Prisma.StringNullableFilter<"Organization"> | string | null
   address?: Prisma.JsonNullableFilter<"Organization">
-  molName?: Prisma.StringNullableFilter<"Organization"> | string | null
-  source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
-  registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
   invoiceSeriesPrefix?: Prisma.StringFilter<"Organization"> | string
   nextInvoiceSeq?: Prisma.IntFilter<"Organization"> | number
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
-  registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
-  account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
+  accountId?: Prisma.IntFilter<"Organization"> | number
+  molName?: Prisma.StringNullableFilter<"Organization"> | string | null
+  registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
+  source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentListRelationFilter
-  sourceDocuments?: Prisma.SourceDocumentListRelationFilter
-  generatedInvoices?: Prisma.GeneratedInvoiceListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
+  generatedInvoices?: Prisma.GeneratedInvoiceListRelationFilter
+  account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
+  registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
+  sourceDocuments?: Prisma.SourceDocumentListRelationFilter
 }, "id">
 
 export type OrganizationOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
   legalName?: Prisma.SortOrder
   bulstat?: Prisma.SortOrderInput | Prisma.SortOrder
   vatNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
-  molName?: Prisma.SortOrderInput | Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   invoiceSeriesPrefix?: Prisma.SortOrder
   nextInvoiceSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  molName?: Prisma.SortOrderInput | Prisma.SortOrder
+  id?: Prisma.SortOrder
+  registryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   _count?: Prisma.OrganizationCountOrderByAggregateInput
   _avg?: Prisma.OrganizationAvgOrderByAggregateInput
   _max?: Prisma.OrganizationMaxOrderByAggregateInput
@@ -368,19 +368,19 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   AND?: Prisma.OrganizationScalarWhereWithAggregatesInput | Prisma.OrganizationScalarWhereWithAggregatesInput[]
   OR?: Prisma.OrganizationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OrganizationScalarWhereWithAggregatesInput | Prisma.OrganizationScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Organization"> | number
-  accountId?: Prisma.IntWithAggregatesFilter<"Organization"> | number
   legalName?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   bulstat?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   vatNumber?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   address?: Prisma.JsonNullableWithAggregatesFilter<"Organization">
-  molName?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
-  source?: Prisma.EnumCompanyLookupSourceWithAggregatesFilter<"Organization"> | $Enums.CompanyLookupSource
-  registryId?: Prisma.IntNullableWithAggregatesFilter<"Organization"> | number | null
   invoiceSeriesPrefix?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   nextInvoiceSeq?: Prisma.IntWithAggregatesFilter<"Organization"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Organization"> | Date | string
+  accountId?: Prisma.IntWithAggregatesFilter<"Organization"> | number
+  molName?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  id?: Prisma.IntWithAggregatesFilter<"Organization"> | number
+  registryId?: Prisma.IntNullableWithAggregatesFilter<"Organization"> | number | null
+  source?: Prisma.EnumCompanyLookupSourceWithAggregatesFilter<"Organization"> | $Enums.CompanyLookupSource
 }
 
 export type OrganizationCreateInput = {
@@ -388,38 +388,38 @@ export type OrganizationCreateInput = {
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
-  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  molName?: string | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
+  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateInput = {
-  id?: number
-  accountId: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  accountId: number
+  molName?: string | null
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUpdateInput = {
@@ -427,54 +427,54 @@ export type OrganizationUpdateInput = {
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
-  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyInput = {
-  id?: number
-  accountId: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  accountId: number
+  molName?: string | null
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
 }
 
 export type OrganizationUpdateManyMutationInput = {
@@ -482,28 +482,28 @@ export type OrganizationUpdateManyMutationInput = {
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
 }
 
 export type OrganizationUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
 }
 
 export type OrganizationListRelationFilter = {
@@ -517,63 +517,63 @@ export type OrganizationOrderByRelationAggregateInput = {
 }
 
 export type OrganizationCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
   legalName?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   address?: Prisma.SortOrder
-  molName?: Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrder
   invoiceSeriesPrefix?: Prisma.SortOrder
   nextInvoiceSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  molName?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  registryId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type OrganizationAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  registryId?: Prisma.SortOrder
   nextInvoiceSeq?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  registryId?: Prisma.SortOrder
 }
 
 export type OrganizationMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
   legalName?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
-  molName?: Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrder
   invoiceSeriesPrefix?: Prisma.SortOrder
   nextInvoiceSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  molName?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  registryId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type OrganizationMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
   legalName?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
-  molName?: Prisma.SortOrder
-  source?: Prisma.SortOrder
-  registryId?: Prisma.SortOrder
   invoiceSeriesPrefix?: Prisma.SortOrder
   nextInvoiceSeq?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  molName?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  registryId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type OrganizationSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  accountId?: Prisma.SortOrder
-  registryId?: Prisma.SortOrder
   nextInvoiceSeq?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  id?: Prisma.SortOrder
+  registryId?: Prisma.SortOrder
 }
 
 export type OrganizationScalarRelationFilter = {
@@ -745,36 +745,36 @@ export type OrganizationCreateWithoutAccountInput = {
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
+  molName?: string | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
+  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutAccountInput = {
-  id?: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  molName?: string | null
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutAccountInput = {
@@ -807,19 +807,19 @@ export type OrganizationScalarWhereInput = {
   AND?: Prisma.OrganizationScalarWhereInput | Prisma.OrganizationScalarWhereInput[]
   OR?: Prisma.OrganizationScalarWhereInput[]
   NOT?: Prisma.OrganizationScalarWhereInput | Prisma.OrganizationScalarWhereInput[]
-  id?: Prisma.IntFilter<"Organization"> | number
-  accountId?: Prisma.IntFilter<"Organization"> | number
   legalName?: Prisma.StringFilter<"Organization"> | string
   bulstat?: Prisma.StringNullableFilter<"Organization"> | string | null
   vatNumber?: Prisma.StringNullableFilter<"Organization"> | string | null
   address?: Prisma.JsonNullableFilter<"Organization">
-  molName?: Prisma.StringNullableFilter<"Organization"> | string | null
-  source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
-  registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
   invoiceSeriesPrefix?: Prisma.StringFilter<"Organization"> | string
   nextInvoiceSeq?: Prisma.IntFilter<"Organization"> | number
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
+  accountId?: Prisma.IntFilter<"Organization"> | number
+  molName?: Prisma.StringNullableFilter<"Organization"> | string | null
+  id?: Prisma.IntFilter<"Organization"> | number
+  registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
+  source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
 }
 
 export type OrganizationCreateWithoutRegistryInput = {
@@ -827,36 +827,36 @@ export type OrganizationCreateWithoutRegistryInput = {
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  molName?: string | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
+  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutRegistryInput = {
-  id?: number
-  accountId: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  accountId: number
+  molName?: string | null
+  id?: number
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutRegistryInput = {
@@ -890,36 +890,36 @@ export type OrganizationCreateWithoutContragentsInput = {
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
-  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
-  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
+  molName?: string | null
+  source?: $Enums.CompanyLookupSource
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
+  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutContragentsInput = {
-  id?: number
-  accountId: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  accountId: number
+  molName?: string | null
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutContragentsInput = {
@@ -943,36 +943,36 @@ export type OrganizationUpdateWithoutContragentsInput = {
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
-  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutContragentsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutSourceDocumentsInput = {
@@ -980,36 +980,36 @@ export type OrganizationCreateWithoutSourceDocumentsInput = {
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
-  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  molName?: string | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
+  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
 }
 
 export type OrganizationUncheckedCreateWithoutSourceDocumentsInput = {
-  id?: number
-  accountId: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  accountId: number
+  molName?: string | null
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutSourceDocumentsInput = {
@@ -1033,36 +1033,36 @@ export type OrganizationUpdateWithoutSourceDocumentsInput = {
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
-  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutSourceDocumentsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutGeneratedInvoicesInput = {
@@ -1070,36 +1070,36 @@ export type OrganizationCreateWithoutGeneratedInvoicesInput = {
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
-  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  molName?: string | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
+  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutGeneratedInvoicesInput = {
-  id?: number
-  accountId: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  accountId: number
+  molName?: string | null
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutGeneratedInvoicesInput = {
@@ -1123,36 +1123,36 @@ export type OrganizationUpdateWithoutGeneratedInvoicesInput = {
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
-  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutGeneratedInvoicesInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutCreditTransactionsInput = {
@@ -1160,36 +1160,36 @@ export type OrganizationCreateWithoutCreditTransactionsInput = {
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
-  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  molName?: string | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
+  account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
+  registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutOrganizationsInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationUncheckedCreateWithoutCreditTransactionsInput = {
-  id?: number
-  accountId: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  accountId: number
+  molName?: string | null
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationCreateOrConnectWithoutCreditTransactionsInput = {
@@ -1213,51 +1213,51 @@ export type OrganizationUpdateWithoutCreditTransactionsInput = {
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
-  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutCreditTransactionsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyAccountInput = {
-  id?: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
-  registryId?: number | null
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  molName?: string | null
+  id?: number
+  registryId?: number | null
+  source?: $Enums.CompanyLookupSource
 }
 
 export type OrganizationUpdateWithoutAccountInput = {
@@ -1265,66 +1265,66 @@ export type OrganizationUpdateWithoutAccountInput = {
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
+  registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutOrganizationsNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutAccountInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateManyWithoutAccountInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
-  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
 }
 
 export type OrganizationCreateManyRegistryInput = {
-  id?: number
-  accountId: number
   legalName: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: string | null
-  source?: $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: string
   nextInvoiceSeq?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  accountId: number
+  molName?: string | null
+  id?: number
+  source?: $Enums.CompanyLookupSource
 }
 
 export type OrganizationUpdateWithoutRegistryInput = {
@@ -1332,51 +1332,51 @@ export type OrganizationUpdateWithoutRegistryInput = {
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateWithoutRegistryInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
-  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
-  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
+  generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationUncheckedUpdateManyWithoutRegistryInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  accountId?: Prisma.IntFieldUpdateOperationsInput | number
   legalName?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   invoiceSeriesPrefix?: Prisma.StringFieldUpdateOperationsInput | string
   nextInvoiceSeq?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
 }
 
 
@@ -1386,16 +1386,16 @@ export type OrganizationUncheckedUpdateManyWithoutRegistryInput = {
 
 export type OrganizationCountOutputType = {
   contragents: number
-  sourceDocuments: number
-  generatedInvoices: number
   creditTransactions: number
+  generatedInvoices: number
+  sourceDocuments: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   contragents?: boolean | OrganizationCountOutputTypeCountContragentsArgs
-  sourceDocuments?: boolean | OrganizationCountOutputTypeCountSourceDocumentsArgs
-  generatedInvoices?: boolean | OrganizationCountOutputTypeCountGeneratedInvoicesArgs
   creditTransactions?: boolean | OrganizationCountOutputTypeCountCreditTransactionsArgs
+  generatedInvoices?: boolean | OrganizationCountOutputTypeCountGeneratedInvoicesArgs
+  sourceDocuments?: boolean | OrganizationCountOutputTypeCountSourceDocumentsArgs
 }
 
 /**
@@ -1418,8 +1418,8 @@ export type OrganizationCountOutputTypeCountContragentsArgs<ExtArgs extends runt
 /**
  * OrganizationCountOutputType without action
  */
-export type OrganizationCountOutputTypeCountSourceDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SourceDocumentWhereInput
+export type OrganizationCountOutputTypeCountCreditTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CreditTransactionWhereInput
 }
 
 /**
@@ -1432,129 +1432,129 @@ export type OrganizationCountOutputTypeCountGeneratedInvoicesArgs<ExtArgs extend
 /**
  * OrganizationCountOutputType without action
  */
-export type OrganizationCountOutputTypeCountCreditTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CreditTransactionWhereInput
+export type OrganizationCountOutputTypeCountSourceDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SourceDocumentWhereInput
 }
 
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  accountId?: boolean
   legalName?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   address?: boolean
-  molName?: boolean
-  source?: boolean
-  registryId?: boolean
   invoiceSeriesPrefix?: boolean
   nextInvoiceSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
-  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
+  accountId?: boolean
+  molName?: boolean
+  id?: boolean
+  registryId?: boolean
+  source?: boolean
   contragents?: boolean | Prisma.Organization$contragentsArgs<ExtArgs>
-  sourceDocuments?: boolean | Prisma.Organization$sourceDocumentsArgs<ExtArgs>
-  generatedInvoices?: boolean | Prisma.Organization$generatedInvoicesArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Organization$creditTransactionsArgs<ExtArgs>
+  generatedInvoices?: boolean | Prisma.Organization$generatedInvoicesArgs<ExtArgs>
+  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
+  sourceDocuments?: boolean | Prisma.Organization$sourceDocumentsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
 export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  accountId?: boolean
   legalName?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   address?: boolean
-  molName?: boolean
-  source?: boolean
-  registryId?: boolean
   invoiceSeriesPrefix?: boolean
   nextInvoiceSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
+  accountId?: boolean
+  molName?: boolean
+  id?: boolean
+  registryId?: boolean
+  source?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
 export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  accountId?: boolean
   legalName?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   address?: boolean
-  molName?: boolean
-  source?: boolean
-  registryId?: boolean
   invoiceSeriesPrefix?: boolean
   nextInvoiceSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
+  accountId?: boolean
+  molName?: boolean
+  id?: boolean
+  registryId?: boolean
+  source?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
 export type OrganizationSelectScalar = {
-  id?: boolean
-  accountId?: boolean
   legalName?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   address?: boolean
-  molName?: boolean
-  source?: boolean
-  registryId?: boolean
   invoiceSeriesPrefix?: boolean
   nextInvoiceSeq?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  accountId?: boolean
+  molName?: boolean
+  id?: boolean
+  registryId?: boolean
+  source?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "accountId" | "legalName" | "bulstat" | "vatNumber" | "address" | "molName" | "source" | "registryId" | "invoiceSeriesPrefix" | "nextInvoiceSeq" | "createdAt" | "updatedAt", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"legalName" | "bulstat" | "vatNumber" | "address" | "invoiceSeriesPrefix" | "nextInvoiceSeq" | "createdAt" | "updatedAt" | "accountId" | "molName" | "id" | "registryId" | "source", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
-  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   contragents?: boolean | Prisma.Organization$contragentsArgs<ExtArgs>
-  sourceDocuments?: boolean | Prisma.Organization$sourceDocumentsArgs<ExtArgs>
-  generatedInvoices?: boolean | Prisma.Organization$generatedInvoicesArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Organization$creditTransactionsArgs<ExtArgs>
+  generatedInvoices?: boolean | Prisma.Organization$generatedInvoicesArgs<ExtArgs>
+  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
+  sourceDocuments?: boolean | Prisma.Organization$sourceDocumentsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
 }
 export type OrganizationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
+  registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
 }
 
 export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Organization"
   objects: {
-    registry: Prisma.$CompanyRegistryCachePayload<ExtArgs> | null
-    account: Prisma.$AccountPayload<ExtArgs>
     contragents: Prisma.$ContragentPayload<ExtArgs>[]
-    sourceDocuments: Prisma.$SourceDocumentPayload<ExtArgs>[]
-    generatedInvoices: Prisma.$GeneratedInvoicePayload<ExtArgs>[]
     creditTransactions: Prisma.$CreditTransactionPayload<ExtArgs>[]
+    generatedInvoices: Prisma.$GeneratedInvoicePayload<ExtArgs>[]
+    account: Prisma.$AccountPayload<ExtArgs>
+    registry: Prisma.$CompanyRegistryCachePayload<ExtArgs> | null
+    sourceDocuments: Prisma.$SourceDocumentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    accountId: number
     legalName: string
     bulstat: string | null
     vatNumber: string | null
     address: runtime.JsonValue | null
-    molName: string | null
-    source: $Enums.CompanyLookupSource
-    registryId: number | null
     invoiceSeriesPrefix: string
     nextInvoiceSeq: number
     createdAt: Date
     updatedAt: Date
+    accountId: number
+    molName: string | null
+    id: number
+    registryId: number | null
+    source: $Enums.CompanyLookupSource
   }, ExtArgs["result"]["organization"]>
   composites: {}
 }
@@ -1638,8 +1638,8 @@ export interface OrganizationDelegate<ExtArgs extends runtime.Types.Extensions.I
    * // Get first 10 Organizations
    * const organizations = await prisma.organization.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const organizationWithIdOnly = await prisma.organization.findMany({ select: { id: true } })
+   * // Only select the `legalName`
+   * const organizationWithLegalNameOnly = await prisma.organization.findMany({ select: { legalName: true } })
    * 
    */
   findMany<T extends OrganizationFindManyArgs>(args?: Prisma.SelectSubset<T, OrganizationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1683,9 +1683,9 @@ export interface OrganizationDelegate<ExtArgs extends runtime.Types.Extensions.I
    *   ]
    * })
    * 
-   * // Create many Organizations and only return the `id`
-   * const organizationWithIdOnly = await prisma.organization.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Organizations and only return the `legalName`
+   * const organizationWithLegalNameOnly = await prisma.organization.createManyAndReturn({
+   *   select: { legalName: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1774,9 +1774,9 @@ export interface OrganizationDelegate<ExtArgs extends runtime.Types.Extensions.I
    *   ]
    * })
    * 
-   * // Update zero or more Organizations and only return the `id`
-   * const organizationWithIdOnly = await prisma.organization.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Organizations and only return the `legalName`
+   * const organizationWithLegalNameOnly = await prisma.organization.updateManyAndReturn({
+   *   select: { legalName: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1949,12 +1949,12 @@ readonly fields: OrganizationFieldRefs;
  */
 export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  registry<T extends Prisma.Organization$registryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$registryArgs<ExtArgs>>): Prisma.Prisma__CompanyRegistryCacheClient<runtime.Types.Result.GetResult<Prisma.$CompanyRegistryCachePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  account<T extends Prisma.AccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountDefaultArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   contragents<T extends Prisma.Organization$contragentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$contragentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContragentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  sourceDocuments<T extends Prisma.Organization$sourceDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$sourceDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SourceDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  generatedInvoices<T extends Prisma.Organization$generatedInvoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$generatedInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GeneratedInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   creditTransactions<T extends Prisma.Organization$creditTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$creditTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CreditTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  generatedInvoices<T extends Prisma.Organization$generatedInvoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$generatedInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GeneratedInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  account<T extends Prisma.AccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountDefaultArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  registry<T extends Prisma.Organization$registryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$registryArgs<ExtArgs>>): Prisma.Prisma__CompanyRegistryCacheClient<runtime.Types.Result.GetResult<Prisma.$CompanyRegistryCachePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  sourceDocuments<T extends Prisma.Organization$sourceDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$sourceDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SourceDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1984,19 +1984,19 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
  * Fields of the Organization model
  */
 export interface OrganizationFieldRefs {
-  readonly id: Prisma.FieldRef<"Organization", 'Int'>
-  readonly accountId: Prisma.FieldRef<"Organization", 'Int'>
   readonly legalName: Prisma.FieldRef<"Organization", 'String'>
   readonly bulstat: Prisma.FieldRef<"Organization", 'String'>
   readonly vatNumber: Prisma.FieldRef<"Organization", 'String'>
   readonly address: Prisma.FieldRef<"Organization", 'Json'>
-  readonly molName: Prisma.FieldRef<"Organization", 'String'>
-  readonly source: Prisma.FieldRef<"Organization", 'CompanyLookupSource'>
-  readonly registryId: Prisma.FieldRef<"Organization", 'Int'>
   readonly invoiceSeriesPrefix: Prisma.FieldRef<"Organization", 'String'>
   readonly nextInvoiceSeq: Prisma.FieldRef<"Organization", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Organization", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Organization", 'DateTime'>
+  readonly accountId: Prisma.FieldRef<"Organization", 'Int'>
+  readonly molName: Prisma.FieldRef<"Organization", 'String'>
+  readonly id: Prisma.FieldRef<"Organization", 'Int'>
+  readonly registryId: Prisma.FieldRef<"Organization", 'Int'>
+  readonly source: Prisma.FieldRef<"Organization", 'CompanyLookupSource'>
 }
     
 
@@ -2398,25 +2398,6 @@ export type OrganizationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
- * Organization.registry
- */
-export type Organization$registryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CompanyRegistryCache
-   */
-  select?: Prisma.CompanyRegistryCacheSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CompanyRegistryCache
-   */
-  omit?: Prisma.CompanyRegistryCacheOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CompanyRegistryCacheInclude<ExtArgs> | null
-  where?: Prisma.CompanyRegistryCacheWhereInput
-}
-
-/**
  * Organization.contragents
  */
 export type Organization$contragentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2441,27 +2422,27 @@ export type Organization$contragentsArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * Organization.sourceDocuments
+ * Organization.creditTransactions
  */
-export type Organization$sourceDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Organization$creditTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the SourceDocument
+   * Select specific fields to fetch from the CreditTransaction
    */
-  select?: Prisma.SourceDocumentSelect<ExtArgs> | null
+  select?: Prisma.CreditTransactionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the SourceDocument
+   * Omit specific fields from the CreditTransaction
    */
-  omit?: Prisma.SourceDocumentOmit<ExtArgs> | null
+  omit?: Prisma.CreditTransactionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.SourceDocumentInclude<ExtArgs> | null
-  where?: Prisma.SourceDocumentWhereInput
-  orderBy?: Prisma.SourceDocumentOrderByWithRelationInput | Prisma.SourceDocumentOrderByWithRelationInput[]
-  cursor?: Prisma.SourceDocumentWhereUniqueInput
+  include?: Prisma.CreditTransactionInclude<ExtArgs> | null
+  where?: Prisma.CreditTransactionWhereInput
+  orderBy?: Prisma.CreditTransactionOrderByWithRelationInput | Prisma.CreditTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.CreditTransactionWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.SourceDocumentScalarFieldEnum | Prisma.SourceDocumentScalarFieldEnum[]
+  distinct?: Prisma.CreditTransactionScalarFieldEnum | Prisma.CreditTransactionScalarFieldEnum[]
 }
 
 /**
@@ -2489,27 +2470,46 @@ export type Organization$generatedInvoicesArgs<ExtArgs extends runtime.Types.Ext
 }
 
 /**
- * Organization.creditTransactions
+ * Organization.registry
  */
-export type Organization$creditTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Organization$registryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the CreditTransaction
+   * Select specific fields to fetch from the CompanyRegistryCache
    */
-  select?: Prisma.CreditTransactionSelect<ExtArgs> | null
+  select?: Prisma.CompanyRegistryCacheSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the CreditTransaction
+   * Omit specific fields from the CompanyRegistryCache
    */
-  omit?: Prisma.CreditTransactionOmit<ExtArgs> | null
+  omit?: Prisma.CompanyRegistryCacheOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.CreditTransactionInclude<ExtArgs> | null
-  where?: Prisma.CreditTransactionWhereInput
-  orderBy?: Prisma.CreditTransactionOrderByWithRelationInput | Prisma.CreditTransactionOrderByWithRelationInput[]
-  cursor?: Prisma.CreditTransactionWhereUniqueInput
+  include?: Prisma.CompanyRegistryCacheInclude<ExtArgs> | null
+  where?: Prisma.CompanyRegistryCacheWhereInput
+}
+
+/**
+ * Organization.sourceDocuments
+ */
+export type Organization$sourceDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SourceDocument
+   */
+  select?: Prisma.SourceDocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SourceDocument
+   */
+  omit?: Prisma.SourceDocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SourceDocumentInclude<ExtArgs> | null
+  where?: Prisma.SourceDocumentWhereInput
+  orderBy?: Prisma.SourceDocumentOrderByWithRelationInput | Prisma.SourceDocumentOrderByWithRelationInput[]
+  cursor?: Prisma.SourceDocumentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.CreditTransactionScalarFieldEnum | Prisma.CreditTransactionScalarFieldEnum[]
+  distinct?: Prisma.SourceDocumentScalarFieldEnum | Prisma.SourceDocumentScalarFieldEnum[]
 }
 
 /**
