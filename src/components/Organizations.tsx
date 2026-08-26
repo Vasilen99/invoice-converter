@@ -141,7 +141,6 @@ export default function Organizations({
       },
       true,
     );
-    console.log(response, "RESPONSE AFTER ADD");
 
     if (response) {
       const newOrganization: StoredOrganization = {
@@ -155,7 +154,6 @@ export default function Organizations({
       };
 
       setOrganizationsList((prev) => [...prev, newOrganization]);
-      console.log(organizationsList, "UPDATED ORGANIZATIONS LIST");
       setOpen(false); // Close the dialog after adding
     }
   };

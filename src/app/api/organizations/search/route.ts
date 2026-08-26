@@ -104,7 +104,6 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    console.log(data, "Organization Data with new api");
 
     // Transform the response
     const company = data.company || data;
