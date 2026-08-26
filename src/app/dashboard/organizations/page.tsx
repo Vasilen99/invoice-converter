@@ -3,7 +3,13 @@ import { getOrganizations } from "./action";
 
 const Page = async () => {
   const response = await getOrganizations();
-  return <Organizations organizations={response.data} />;
+
+  return (
+    <Organizations
+      organizations={response.data}
+      hasAccount={response.hasAccount}
+    />
+  );
 };
 
 export default Page;

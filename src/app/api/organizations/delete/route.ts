@@ -10,8 +10,8 @@ export async function DELETE(request: NextRequest) {
         data: null,
         alert: {
           status: "error",
-          header: "errorMessagesCommon.userNotFoundHeader",
-          message: "errorMessagesCommon.userNotFoundMessage",
+          header: "errorMessagesCommon.unauthorizedErrorHeader",
+          message: "errorMessagesCommon.unauthorizedErrorMessage",
         },
       },
       { status: 401 },
@@ -39,8 +39,8 @@ export async function DELETE(request: NextRequest) {
           data: null,
           alert: {
             status: "error",
-            header: "organizationsAlerts.error.accountNotFoundHeader",
-            message: "organizationsAlerts.error.accountNotFoundMessage",
+            header: "organizations.accountNotFoundHeader",
+            message: "organizations.accountNotFoundMessage",
           },
         },
         { status: 400 },
@@ -50,6 +50,7 @@ export async function DELETE(request: NextRequest) {
     const deletedOrganization = await prisma.organization.delete({
       where: {
         id: organizationId,
+        accountId: userAccount.accountId,
       },
     });
 
@@ -58,22 +59,22 @@ export async function DELETE(request: NextRequest) {
         data: deletedOrganization,
         alert: {
           status: "success",
-          header: "organizationsAlerts.success.deleteSuccessHeader",
-          message: "organizationsAlerts.success.deleteSuccessMessage",
+          header: "organizations.deleteSuccessHeader",
+          message: "organizations.deleteSuccessMessage",
         },
       },
       { status: 200 },
     );
   } catch (err) {
-    console.log("There was a error with deleting the organization:", err);
+    console.error("Error deleting organization:", err);
 
     return NextResponse.json(
       {
         data: null,
         alert: {
           status: "error",
-          header: "errorMessagesCommon.deleteErrorHeader",
-          message: "organizationsAlerts.error.deleteServerErrorMessage",
+          header: "errorMessagesCommon.serverErrorHeader",
+          message: "errorMessagesCommon.serverErrorMessage",
         },
       },
       { status: 500 },

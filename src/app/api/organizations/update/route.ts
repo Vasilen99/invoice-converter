@@ -1,40 +1,51 @@
 import { prisma } from "../../../../../utility/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getUserServer } from "../../../../../utility/get-user-server";
-import { notFound } from "next/navigation";
 import {
-  enrichOrganizationDataFromRegistry,
   formatAddressForStorage,
-  formatRawLookupDataForStorage,
   isValidCompanyData,
+  formatRawLookupDataForStorage,
+  enrichOrganizationDataFromRegistry,
 } from "../../../../../utility/company-registry-helpers";
-export async function POST(request: NextRequest) {
+
+export async function PUT(request: NextRequest) {
   const user = await getUserServer();
   if (!user) {
-    return notFound();
+    return NextResponse.json(
+      {
+        data: null,
+        alert: {
+          status: "error",
+          header: "errorMessagesCommon.unauthorizedErrorHeader",
+          message: "errorMessagesCommon.unauthorizedErrorMessage",
+        },
+      },
+      { status: 401 },
+    );
   }
 
   try {
     const body = await request.json();
     let {
+      organizationId,
       bulstat,
       legalName,
       vatNumber,
       address,
       molName,
+      invoiceSeriesPrefix,
       rawLookupData,
-      isManualEntry = false,
     } = body;
 
     // Validate required fields
-    if (!bulstat || !legalName) {
+    if (!organizationId || !bulstat || !legalName) {
       return NextResponse.json(
         {
           data: null,
           alert: {
             status: "error",
             header: "organizations.missingFieldsHeader",
-            message: "organizations.missingRequiredFieldsMessage",
+            message: "organizations.missingFieldsMessage",
           },
         },
         { status: 400 },
@@ -46,6 +57,55 @@ export async function POST(request: NextRequest) {
     legalName = legalName.trim();
     if (vatNumber) vatNumber = vatNumber.trim();
     if (molName) molName = molName.trim();
+    if (invoiceSeriesPrefix) invoiceSeriesPrefix = invoiceSeriesPrefix.trim();
+
+    // Check user has access to this organization
+    const userAccount = await prisma.accountMember.findFirst({
+      where: {
+        user: {
+          auth_uid: user.sub,
+        },
+      },
+      select: {
+        accountId: true,
+      },
+    });
+
+    if (!userAccount) {
+      return NextResponse.json(
+        {
+          data: null,
+          alert: {
+            status: "error",
+            header: "organizations.accountNotFoundHeader",
+            message: "organizations.accountNotFoundMessage",
+          },
+        },
+        { status: 400 },
+      );
+    }
+
+    // Verify organization belongs to user's account
+    const organization = await prisma.organization.findFirst({
+      where: {
+        id: organizationId,
+        accountId: userAccount.accountId,
+      },
+    });
+
+    if (!organization) {
+      return NextResponse.json(
+        {
+          data: null,
+          alert: {
+            status: "error",
+            header: "organizations.organizationNotFoundHeader",
+            message: "organizations.organizationNotFoundMessage",
+          },
+        },
+        { status: 404 },
+      );
+    }
 
     // Enrich data from rawLookupData if available
     if (rawLookupData && isValidCompanyData(rawLookupData)) {
@@ -70,59 +130,9 @@ export async function POST(request: NextRequest) {
     // Format address for storage
     const formattedAddress = formatAddressForStorage(address);
 
-    const userAccount = await prisma.accountMember.findFirst({
-      where: {
-        user: {
-          auth_uid: user.sub,
-        },
-      },
-      select: {
-        accountId: true,
-        account: {
-          select: {
-            organizations: {
-              select: {
-                bulstat: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    let registryId = organization.registryId;
 
-    if (!userAccount) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "organizations.accountNotFoundHeader",
-            message: "organizations.accountNotFoundMessage",
-          },
-        },
-        { status: 400 },
-      );
-    }
-
-    if (
-      userAccount.account.organizations.some((org) => org.bulstat === bulstat)
-    ) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "info",
-            header: "organizations.alreadyAddedHeader",
-            message: "organizations.alreadyAddedMessage",
-          },
-        },
-        { status: 200 },
-      );
-    }
-
-    let registryId: number | null = null;
-
-    // Store raw lookup data in CompanyRegistryCache
+    // Update registry cache if we have raw lookup data
     if (rawLookupData && isValidCompanyData(rawLookupData) && bulstat) {
       try {
         const formattedRawLookupData =
@@ -148,65 +158,39 @@ export async function POST(request: NextRequest) {
         registryId = registry.id;
       } catch (registryErr) {
         console.error(
-          `[Registry Cache Error] Failed to upsert registry for BULSTAT ${bulstat}:`,
+          `[Registry Cache Error] Failed to update registry for BULSTAT ${bulstat}:`,
           registryErr,
         );
-        // Continue even if registry cache fails - it's not critical
-      }
-    } else if (isManualEntry && bulstat) {
-      // For manual entries, create or update the registry cache without rawLookupData
-      try {
-        const registry = await prisma.companyRegistryCache.upsert({
-          where: { bulstat },
-          update: {
-            legalName,
-            vatNumber: vatNumber || null,
-            address: formattedAddress,
-            lastFetchedAt: new Date(),
-          },
-          create: {
-            bulstat,
-            legalName,
-            vatNumber: vatNumber || null,
-            address: formattedAddress,
-          },
-        });
-        registryId = registry.id;
-      } catch (registryErr) {
-        console.error(
-          `[Registry Cache Error] Failed to create/update manual registry for BULSTAT ${bulstat}:`,
-          registryErr,
-        );
-        // Continue even if registry cache fails - it's not critical
       }
     }
 
-    // Create the organization
-    const newOrganization = await prisma.organization.create({
+    // Update the organization
+    const updatedOrganization = await prisma.organization.update({
+      where: {
+        id: organizationId,
+      },
       data: {
         bulstat,
         legalName,
         vatNumber: vatNumber || null,
         address: formattedAddress,
         molName: molName || null,
-        invoiceSeriesPrefix: "INV",
-        accountId: userAccount.accountId,
-        source: isManualEntry ? "MANUAL" : "NAP_API",
+        invoiceSeriesPrefix: invoiceSeriesPrefix || "INV",
         registryId,
       },
     });
 
     return NextResponse.json({
-      id: newOrganization.id,
-      data: newOrganization,
+      id: updatedOrganization.id,
+      data: updatedOrganization,
       alert: {
         status: "success",
-        header: "organizations.addSuccessHeader",
-        message: "organizations.addSuccessMessage",
+        header: "organizations.updateSuccessHeader",
+        message: "organizations.updateSuccessMessage",
       },
     });
   } catch (err) {
-    console.error("Error adding organization:", err);
+    console.error("Error updating organization:", err);
     return NextResponse.json(
       {
         data: null,

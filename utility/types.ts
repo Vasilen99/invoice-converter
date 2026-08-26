@@ -22,6 +22,23 @@ export type OrganizationLight = {
   legalName: string;
   bulstat: string | null;
   vatNumber: string | null;
+  molName: string | null;
+  invoiceSeriesPrefix: string;
+  address: {
+    country?: string;
+    region?: string;
+    district?: string;
+    municipality?: string;
+    settlement?: string;
+    area?: string;
+    street?: string;
+    streetNumber?: string;
+    block?: string;
+    entrance?: string;
+    floor?: string;
+    apartment?: string;
+    postCode?: string;
+  } | null;
 };
 export type Organization = {
   id: number;
@@ -89,6 +106,7 @@ export type Account = {
 
 export type AddressData = {
   country?: string;
+  countryCode?: string;
   region?: string;
   district?: string;
   municipality?: string;
@@ -169,54 +187,44 @@ export type CompanyData = {
   lastUpdated?: string;
 };
 
-export type CompanyBookSearchResult = {
-  uic: string;
-  name: string;
-  legalForm: string;
-  status: string;
-  district: string;
-  transliteration: string;
-  vatRegistered: boolean;
-  lastUpdated?: string;
-  contactPresence?: {
-    email: boolean;
-    phone: boolean;
-    website: boolean;
+export type SearchResult = {
+  // Core identification
+  bulstat: string;
+  legalName: string;
+  legalForm?: string;
+  status?: string;
+
+  // Address data (from seat, only essential fields)
+  address?: {
+    country?: string;
+    countryCode?: string;
+    district?: string;
+    municipality?: string;
+    settlement?: string;
+    area?: string;
+    street?: string;
+    streetNumber?: string;
+    block?: string;
+    entrance?: string;
+    floor?: string;
+    apartment?: string;
+    postCode?: string;
   };
-  activeFinancialYear?: number;
-  latestRevenue?: string;
-  address?: AddressData;
-  seat?: AddressData;
-  managers?: Person[];
-  // Full data fields (when with_data=true)
-  company?: CompanyData;
-  history?: Array<any>;
-  daughters?: Array<any>;
-  // Direct contact fields (when with_data=true)
-  email?: string;
-  phone?: string;
-  fax?: string;
-  website?: string;
-  contacts?: ContactInfo;
-  // Direct management fields (when with_data=true)
-  representatives?: Person[];
-  boardOfDirectors?: Person[];
-  correspondenceSeat?: AddressData;
-  // Business info (when with_data=true)
-  subjectOfActivity?: string;
-  nkids?: NKID[];
-  // Ownership (when with_data=true)
-  capital?: Capital;
-  partners?: Partner[];
-  // Registration (when with_data=true)
-  registerInfo?: RegisterInfo;
+
+  // Management
+  molName?: string;
+
+  // VAT info
+  vatNumber?: string | null;
+
+  // Additional metadata
+  transliteration?: string;
+  lastUpdated?: string;
+
+  // Full raw data from API for caching
+  rawLookupData?: CompanyData;
 };
 
 export type CompanyBookSearchResponse = {
-  results: CompanyBookSearchResult[];
-  total: string;
-  totalCount: number;
-  hasMoreTotal: boolean;
-  limit: number;
-  offset: number;
+  results: SearchResult[];
 };

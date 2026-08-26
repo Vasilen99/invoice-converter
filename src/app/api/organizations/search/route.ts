@@ -1,15 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { CompanyBookSearchResponse } from "../../../../../utility/types";
+import type { SearchResult, CompanyData } from "../../../../../utility/types";
+import { getCachedCompanyData } from "../../../../../utility/registry-cache";
+import {
+  extractManagerName,
+  extractVatNumber,
+  transformAddressFromCompanyData,
+} from "../../../../../utility/company-registry-helpers";
+
+/**
+ * Transforms raw CompanyData into SearchResult format
+ */
+function transformCompanyToSearchResult(company: CompanyData): SearchResult {
+  const vatNumber = extractVatNumber(company);
+  const molName = extractManagerName(company);
+  const address = transformAddressFromCompanyData(company);
+
+  return {
+    bulstat: company.uic,
+    legalName: company.companyName?.name || "",
+    legalForm: company.legalForm,
+    status: company.status,
+    address,
+    molName,
+    vatNumber,
+    transliteration: company.companyNameTransliteration?.name,
+    lastUpdated: company.lastUpdated,
+    rawLookupData: company,
+  };
+}
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("q");
-  const type = searchParams.get("type") || "legalName"; // "legalName" or "bulstat"
-  const withData = searchParams.get("withData") === "true"; // Optional: full data retrieval
 
-  if (!query || query.trim().length < 3) {
+  if (!query || query.trim().length < 9) {
     return NextResponse.json(
-      { error: "Query must be at least 3 characters long" },
+      {
+        error: "organizations.searchQueryTooShort",
+        results: [],
+      },
       { status: 400 },
     );
   }
@@ -17,29 +46,24 @@ export async function GET(request: NextRequest) {
   const apiKey = process.env.COMPANY_BOOK_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "API key not configured" },
+      { error: "errorMessagesCommon.serverErrorMessage", results: [] },
       { status: 500 },
     );
   }
 
   try {
-    const baseUrl = "https://api.companybook.bg/api/v2/companies/search";
-    const params = new URLSearchParams();
+    const cachedData = await getCachedCompanyData(query);
 
-    if (type === "bulstat") {
-      params.append("uic", query);
-    } else {
-      params.append("name", query);
+    if (cachedData) {
+      const searchResult = transformCompanyToSearchResult(cachedData);
+
+      return NextResponse.json({
+        results: [searchResult],
+      });
     }
 
-    params.append("limit", "20");
-    params.append("status", "true"); // Only active companies
-
-    if (withData) {
-      params.append("with_data", "true");
-    }
-
-    const url = `${baseUrl}?${params.toString()}`;
+    // Hit the individual company endpoint using UIC for full data
+    const url = `https://api.companybook.bg/api/companies/${query}?with_data=true`;
 
     const response = await fetch(url, {
       headers: {
@@ -52,20 +76,25 @@ export async function GET(request: NextRequest) {
       console.error(`CompanyBook API error ${response.status}:`, errorBody);
 
       if (response.status === 429) {
+        // Rate limited - try cache as fallback
+        const cachedData = await getCachedCompanyData(query);
+        if (cachedData) {
+          const searchResult = transformCompanyToSearchResult(cachedData);
+          return NextResponse.json({
+            results: [searchResult],
+          });
+        }
+
         return NextResponse.json(
-          { error: "Rate limit exceeded. Please try again later." },
+          { error: "organizations.rateLimitExceeded", results: [] },
           { status: 429 },
         );
       }
 
-      if (response.status === 403) {
+      if (response.status === 404) {
         return NextResponse.json(
-          {
-            error:
-              "Access denied - API key may not have permission for full data retrieval. Try with_data=false or check your API key.",
-            apiError: errorBody,
-          },
-          { status: 403 },
+          { error: "organizations.companyNotFound", results: [] },
+          { status: 404 },
         );
       }
 
@@ -74,149 +103,34 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data: CompanyBookSearchResponse = await response.json();
-
-    // If withData is requested, fetch full details for each company
-    let results = data.results;
-
-    if (withData) {
-      console.log("Fetching full details for", results.length, "companies");
-      results = await Promise.all(
-        data.results.map(async (company) => {
-          try {
-            // Fetch full company data from the detailed endpoint
-            const detailUrl = `https://api.companybook.bg/api/companies/${company.uic}`;
-            console.log("Fetching details from:", detailUrl);
-
-            const detailResponse = await fetch(detailUrl, {
-              headers: {
-                "X-API-Key": apiKey,
-              },
-            });
-
-            console.log(
-              `Detail response status for ${company.uic}:`,
-              detailResponse.status,
-            );
-
-            if (detailResponse.ok) {
-              const detailData = await detailResponse.json();
-              console.log(
-                "Full company details for",
-                company.uic,
-                ":",
-                JSON.stringify(detailData, null, 2),
-              );
-
-              // Merge search result with full details from company object
-              const mergedCompany = {
-                ...company,
-                ...(detailData.company || {}),
-                history: detailData.history,
-                daughters: detailData.daughters,
-              };
-
-              console.log(
-                "Merged company:",
-                JSON.stringify(mergedCompany, null, 2),
-              );
-              return mergedCompany;
-            } else {
-              const errorText = await detailResponse.text();
-              console.error(
-                `Failed to fetch details for ${company.uic}:`,
-                detailResponse.status,
-                errorText,
-              );
-            }
-          } catch (error) {
-            console.error(
-              `Error fetching details for company ${company.uic}:`,
-              error,
-            );
-          }
-
-          return company;
-        }),
-      );
-    } else {
-      console.log("withData is false, returning basic search results only");
-    }
+    const data = await response.json();
+    console.log(data, "Organization Data with new api");
 
     // Transform the response
-    const transformedResults = results.map((company) => {
-      console.log(
-        "Transformed company object:",
-        JSON.stringify(company, null, 2),
-      );
-
-      // Extract molName (manager name) from first manager if available
-      const molName = company.managers?.[0]?.name || "";
-
-      // Use seat address as primary, fallback to address field
-      const addressData = company.seat || company.address || {};
-
-      const result: any = {
-        // Basic info
-        bulstat: company.uic,
-        legalName: company.name,
-        legalForm: company.legalForm,
-        status: company.status,
-        district: company.district,
-        vatRegistered: company.vatRegistered,
-        transliteration: company.transliteration,
-        lastUpdated: company.lastUpdated,
-
-        // Contact presence flags
-        contactPresence: company.contactPresence,
-
-        // Financial info
-        activeFinancialYear: company.activeFinancialYear,
-        latestRevenue: company.latestRevenue,
-
-        // Management
-        molName,
-        address: addressData,
-
-        // Full data from API
-        rawLookupData: company,
-      };
-
-      // Add all additional fields if they exist (from full data fetch)
-      if (company.email) result.email = company.email;
-      if (company.phone) result.phone = company.phone;
-      if (company.fax) result.fax = company.fax;
-      if (company.website) result.website = company.website;
-      if (company.managers) result.managers = company.managers;
-      if (company.representatives)
-        result.representatives = company.representatives;
-      if (company.boardOfDirectors)
-        result.boardOfDirectors = company.boardOfDirectors;
-      if (company.correspondenceSeat)
-        result.correspondenceSeat = company.correspondenceSeat;
-      if (company.subjectOfActivity)
-        result.subjectOfActivity = company.subjectOfActivity;
-      if (company.nkids) result.nkids = company.nkids;
-      if (company.capital) result.capital = company.capital;
-      if (company.partners) result.partners = company.partners;
-      if (company.registerInfo) result.registerInfo = company.registerInfo;
-      if (company.contacts) result.contacts = company.contacts;
-      if (company.history) result.history = company.history;
-      if (company.daughters) result.daughters = company.daughters;
-
-      return result;
-    });
+    const company = data.company || data;
+    const searchResult = transformCompanyToSearchResult(company);
 
     return NextResponse.json({
-      results: transformedResults,
-      total: data.total,
-      totalCount: data.totalCount,
-      hasMoreTotal: data.hasMoreTotal,
+      results: [searchResult],
     });
   } catch (error) {
-    console.error("Search API error:", error);
+    console.error("[Search] Error during company search:", error);
+
+    // Last resort: try to get from cache
+    try {
+      const cachedData = await getCachedCompanyData(query);
+      if (cachedData) {
+        const searchResult = transformCompanyToSearchResult(cachedData);
+        return NextResponse.json({
+          results: [searchResult],
+        });
+      }
+    } catch (cacheError) {
+      console.error("[Search] Error accessing cache as fallback:", cacheError);
+    }
+
     return NextResponse.json(
-      { error: "Failed to search organizations" },
+      { error: "errorMessagesCommon.serverErrorMessage", results: [] },
       { status: 500 },
     );
   }

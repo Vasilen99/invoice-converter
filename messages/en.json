@@ -204,31 +204,54 @@
       "organizationName": "Organization name",
       "organizationNamePlaceholder": "ExampleOrganizationLTD",
       "addOrganization": "Add organization",
+      "editOrganization": "Edit organization",
       "addOrganizationDescription": "Add a new organization to manage its invoices.",
+      "editOrganizationDescription": "Edit organization details and settings.",
       "createdAt": "Created at",
       "lastUpdatedAt": "Last updated at",
       "saveChanges": "Save changes",
       "add": "Add",
+      "update": "Update",
+      "close": "Close",
       "saving": "Saving...",
       "noOrganizations": "You don't have any organizations yet. Add your first organization to get started.",
-      "searchPlaceholder": "Search organizations...",
+      "searchPlaceholder": "Search organizations by valid EIK ...",
       "searchSwitchLabel": "Search",
       "manualAddSwitchLabel": "Manual add",
-      "noResults": "No organizations found. Try a different search.",
+      "noResults": "No organizations found. Please check if the EIK is correct or try a different search.",
       "alreadyAddedHeader": "Organization already added",
-      "alreadyAddedMessage": "This organization already exists in your account."
+      "alreadyAddedMessage": "This organization already exists in your account.",
+      "confirmDeletionHeader": "Confirm deletion", 
+      "confirmDeletionDescription": "Are you sure you want to delete this organization? This action cannot be undone.",
+      "confirmDeletionMainAction": "Delete organization",
+      "missingFieldsHeader": "Missing required fields",
+      "missingFieldsMessage": "Please fill in all required fields marked with *",
+      "missingRequiredFieldsMessage": "BULSTAT and legal name are required",
+      "accountNotFoundHeader": "Account not found",
+      "accountNotFoundMessage": "The account associated with this organization was not found.",
+      "organizationNotFoundHeader": "Organization not found",
+      "organizationNotFoundMessage": "The organization you're trying to edit was not found.",
+      "addSuccessHeader": "Organization added",
+      "addSuccessMessage": "Organization has been added successfully.",
+      "updateSuccessHeader": "Organization updated",
+      "updateSuccessMessage": "Organization has been updated successfully.",
+      "deleteSuccessHeader": "Organization deleted",
+      "deleteSuccessMessage": "The organization was deleted successfully.",
+      "deleteErrorHeader": "Error deleting organization",
+      "deleteErrorMessage": "There was an error deleting the organization. Please try again later.",
+      "searchQueryTooShort": "Search query must be at least 9 characters long",
+      "rateLimitExceeded": "Rate limit exceeded. Please try again later.",
+      "companyNotFound": "Company not found with the provided EIK",
+      "noAccount": {
+        "title": "You don't have an active account",
+        "description": "You need to have an active account first to add organizations to your list. Click the button below to set up your account.",
+        "createAccountButton": "Create Account"
+      }
   },
   "organizationsAlerts": {
     "error": {
       "deleteErrorHeader": "Error deleting organization",
-      "deleteErrorMessage": "There was an error deleting the organization. Please try again later.",
-      "deleteServerErrorMessage": "There was a server error while deleting the organization. Please try again later.",
-      "accountNotFoundHeader": "Account not found",
-      "accountNotFoundMessage": "The account associated with this organization was not found."
-    },
-    "success": { 
-      "deleteSuccessHeader": "Organization deleted successfully",
-      "deleteSuccessMessage": "The organization was deleted successfully."
+      "deleteErrorMessage": "There was an error deleting the organization. Please try again later."
     }
   },
     "organizationForm": {
@@ -278,7 +301,14 @@
     "countryLabel": "Country",
     "regionLabel": "Region",
     "saveChanges": "Save changes",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "validation": {
+      "legalNameRequired": "Legal name is required",
+      "bulstatRequired": "Bulstat is required",
+      "vatNumberRequired": "VAT number is required",
+      "molNameRequired": "MOL name is required",
+      "countryRequired": "Country is required"
+    }
   },
   "errorMessagesAccount": {
     "saveError": "Error",
@@ -308,5 +338,9 @@
   },
   "redirectLogin": {
     "redirectHeader": "Redirecting to Google login..."
+  },
+  "confirmationDialog": {
+    "confirmCancel": "Cancel"
   }
+  
 }

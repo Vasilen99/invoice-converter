@@ -204,31 +204,54 @@
       "organizationName": "Име на организацията",
       "organizationNamePlaceholder": "ПримернаОрганизацияООД",
       "addOrganization": "Добави организация",
+      "editOrganization": "Редактирай организация",
       "addOrganizationDescription": "Добавете нова организация, за да управлявате фактурите й.",
+      "editOrganizationDescription": "Редактирайте детайлите и настройките на организацията.",
       "createdAt": "Създадена на",
       "lastUpdatedAt": "Последно обновена на",
       "saveChanges": "Запази промените",
       "saving": "Запазване...",
       "add": "Добави",
+      "update": "Обнови",
+      "close": "Затвори",
       "noOrganizations": "Все още нямате организации. Добавете първата си организация, за да започнете.",
-      "searchPlaceholder": "Търсене на организации...",
+      "searchPlaceholder": "Търсене на организации по валиден ЕИК...",
       "searchSwitchLabel": "Търсене",
       "manualAddSwitchLabel": "Ръчно добавяне",
-      "noResults": "Намерени са организации. Опитайте друго търсене.",
+      "noResults": "Няма намерени организации, моля проверете ЕИК дали е правилен или опитайте друго търсене.",
       "alreadyAddedHeader": "Организацията вече е добавена",
-      "alreadyAddedMessage": "Тази организация вече съществува във вашият акаунт."
+      "alreadyAddedMessage": "Тази организация вече съществува във вашият акаунт.",
+      "confirmDeletionHeader": "Потвърждение за изтриване", 
+      "confirmDeletionDescription": "Сигурни ли сте, че искате да изтриете тази организация? Това действие не може да бъде отменено.",
+      "confirmDeletionMainAction": "Изтрий организацията",
+      "missingFieldsHeader": "Липсват задължителни полета",
+      "missingFieldsMessage": "Моля, попълнете всички задължителни полета, маркирани с *",
+      "missingRequiredFieldsMessage": "Булстат и юридическо име са задължителни",
+      "accountNotFoundHeader": "Акаунтът не е намерен",
+      "accountNotFoundMessage": "Акаунтът, свързан с тази организация, не беше намерен.",
+      "organizationNotFoundHeader": "Организацията не е намерена",
+      "organizationNotFoundMessage": "Организацията, която се опитвате да редактирате, не беше намерена.",
+      "addSuccessHeader": "Организацията е добавена",
+      "addSuccessMessage": "Организацията беше добавена успешно.",
+      "updateSuccessHeader": "Организацията е обновена",
+      "updateSuccessMessage": "Организацията беше обновена успешно.",
+      "deleteSuccessHeader": "Организацията е изтрита",
+      "deleteSuccessMessage": "Организацията беше изтрита успешно.",
+      "deleteErrorHeader": "Грешка при изтриване на организацията",
+      "deleteErrorMessage": "Възникна грешка при изтриването на организацията. Моля, опитайте отново по-късно.",
+      "searchQueryTooShort": "Търсенето трябва да бъде поне 9 символа",
+      "rateLimitExceeded": "Превишен лимит на заявки. Моля, опитайте отново по-късно.",
+      "companyNotFound": "Фирмата не е намерена с предоставения ЕИК",
+      "noAccount": {
+        "title": "Нямате активен акаунт",
+        "description": "Трябва да имате активен акаунт, за да добавите организации към списъка си. Кликнете на бутона по-долу, за да настроите вашия акаунт.",
+        "createAccountButton": "Създай акаунт"
+      }
   },
   "organizationsAlerts": {
     "error": {
       "deleteErrorHeader": "Грешка при изтриване на организацията",
-      "deleteErrorMessage": "Възникна грешка при изтриването на организацията. Моля, опитайте отново по-късно.",
-      "deleteServerErrorMessage": "Възникна сървърна грешка при изтриването на организацията. Моля, опитайте отново по-късно.",
-      "accountNotFoundHeader": "Акаунтът не е намерен",
-      "accountNotFoundMessage": "Акаунтът, свързан с тази организация, не беше намерен."
-    },
-    "success": { 
-      "deleteSuccessHeader": "Организацията беше изтрита успешно",
-      "deleteSuccessMessage": "Организацията беше изтрита успешно."
+      "deleteErrorMessage": "Възникна грешка при изтриването на организацията. Моля, опитайте отново по-късно."
     }
   },
   "organizationForm": {
@@ -278,7 +301,14 @@
     "countryLabel": "Страна",
     "regionLabel": "Регион",
     "saveChanges": "Запази промените",
-    "saving": "Запазване..."
+    "saving": "Запазване...",
+    "validation": {
+      "legalNameRequired": "Юридическото име е задължително",
+      "bulstatRequired": "Булстатът е задължителен",
+      "vatNumberRequired": "ДДС номерът е задължителен",
+      "molNameRequired": "Име на МОЛ е задължително",
+      "countryRequired": "Страната е задължителна"
+    }
   },
   "errorMessagesAccount": {
     "saveError": "Проблем при запазването",
@@ -308,5 +338,8 @@
   },
   "redirectLogin": {
     "redirectHeader": "Пренасочваме ви към Google страницата за вход..."
+  },
+  "confirmationDialog": {
+    "confirmCancel": "Отказ"
   }
 }

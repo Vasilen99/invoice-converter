@@ -2,7 +2,7 @@
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { useOrganizationSearch } from "@/hooks/use-organization-search";
-import type { SearchResult } from "@/hooks/use-organization-search";
+import type { SearchResult } from "../../utility/types";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
@@ -21,7 +21,6 @@ export default function SearchOrganizations({
       setSearchQuery(""); // Clear search after selection
     }
   };
-
   return (
     <div className="w-full flex flex-col gap-3">
       <div className="relative">
@@ -46,7 +45,7 @@ export default function SearchOrganizations({
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -5 }}
-          className="flex flex-col gap-2 max-h-96 overflow-y-auto border border-border rounded-lg"
+          className="flex flex-col gap-2 max-h-96 overflow-y-auto no-scrollbar border border-border rounded-lg"
         >
           {results.map((result, index) => (
             <motion.button
@@ -55,16 +54,16 @@ export default function SearchOrganizations({
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05 }}
               onClick={() => handleResultClick(result)}
-              className="flex flex-col gap-1 items-start p-3 hover:bg-muted transition-colors text-left border-b border-border last:border-b-0"
+              className="flex flex-col gap-1 items-start p-3 hover:bg-muted hover:cursor-pointer transition-colors text-left border-b border-border last:border-b-0"
             >
               <span className="font-medium text-sm">{result.legalName}</span>
               <div className="flex gap-2 flex-wrap text-xs text-muted-foreground">
                 <span className="font-mono bg-background/50 px-2 py-1 rounded">
                   {result.bulstat}
                 </span>
-                {result.district && (
+                {result.address?.district && (
                   <span className="bg-background/50 px-2 py-1 rounded">
-                    {result.district}
+                    {result.address.district}
                   </span>
                 )}
               </div>
@@ -72,9 +71,8 @@ export default function SearchOrganizations({
           ))}
         </motion.div>
       )}
-
       {!isLoading &&
-        searchQuery.trim().length >= 3 &&
+        searchQuery.trim().length >= 8 &&
         results.length === 0 &&
         !error && (
           <p className="text-sm text-muted-foreground text-center py-4">

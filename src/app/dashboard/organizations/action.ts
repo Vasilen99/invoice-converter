@@ -1,11 +1,11 @@
 import { prisma } from "../../../../utility/prisma";
-import { NextResponse } from "next/server";
 import { getUserServer } from "../../../../utility/get-user-server";
 import { notFound } from "next/navigation";
 import type { OrganizationLight } from "../../../../utility/types";
 
 export async function getOrganizations(): Promise<{
   data: OrganizationLight[];
+  hasAccount?: boolean;
 }> {
   const user = await getUserServer();
   if (!user) {
@@ -18,11 +18,26 @@ export async function getOrganizations(): Promise<{
       },
       select: {
         id: true,
+        accountMembers: {
+          where: {
+            user: {
+              auth_uid: user.sub,
+            },
+          },
+          select: {
+            id: true,
+          },
+          take: 1,
+        },
       },
     });
 
     if (!userData) {
       return notFound();
+    }
+
+    if (!userData.accountMembers || !userData.accountMembers.length) {
+      return { data: [], hasAccount: false };
     }
 
     const organizations = await prisma.organization.findMany({
@@ -40,6 +55,9 @@ export async function getOrganizations(): Promise<{
         legalName: true,
         bulstat: true,
         vatNumber: true,
+        molName: true,
+        invoiceSeriesPrefix: true,
+        address: true,
       },
     });
 
@@ -47,7 +65,15 @@ export async function getOrganizations(): Promise<{
       return { data: [] };
     }
 
-    return { data: organizations };
+    // Map and cast the address field properly
+    const formattedOrganizations: OrganizationLight[] = organizations.map(
+      (org) => ({
+        ...org,
+        address: org.address as OrganizationLight["address"],
+      }),
+    );
+
+    return { data: formattedOrganizations, hasAccount: true };
   } catch (err) {
     console.error("Error fetching organizations:", err);
     return { data: [] };
