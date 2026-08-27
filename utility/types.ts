@@ -40,6 +40,33 @@ export type OrganizationLight = {
     postCode?: string;
   } | null;
 };
+
+export type ContragentLight = {
+  id: number;
+  name: string;
+  bulstat: string | null;
+  vatNumber: string | null;
+  molName: string | null;
+  email: string | null;
+  organizationId: number;
+  organizationName?: string; // For display purposes
+  address: {
+    country?: string;
+    region?: string;
+    district?: string;
+    municipality?: string;
+    settlement?: string;
+    area?: string;
+    street?: string;
+    streetNumber?: string;
+    block?: string;
+    entrance?: string;
+    floor?: string;
+    apartment?: string;
+    postCode?: string;
+  } | null;
+};
+
 export type Organization = {
   id: number;
   legalName: string;
@@ -90,6 +117,30 @@ export type OrganizationFormData = Omit<
   vatNumber?: string;
   molName?: string;
   registryId?: number | null;
+};
+
+export type ContragentFormData = {
+  name: string;
+  bulstat?: string;
+  vatNumber?: string;
+  molName?: string;
+  email?: string;
+  organizationId: number | null;
+  address: {
+    country?: string;
+    region?: string;
+    district?: string;
+    municipality?: string;
+    settlement?: string;
+    area?: string;
+    street?: string;
+    streetNumber?: string;
+    block?: string;
+    entrance?: string;
+    floor?: string;
+    apartment?: string;
+    postCode?: string;
+  };
 };
 
 export type Account = {

@@ -49,6 +49,7 @@ export type ContragentMinAggregateOutputType = {
   organizationId: number | null
   registryId: number | null
   source: $Enums.CompanyLookupSource | null
+  molName: string | null
 }
 
 export type ContragentMaxAggregateOutputType = {
@@ -62,6 +63,7 @@ export type ContragentMaxAggregateOutputType = {
   organizationId: number | null
   registryId: number | null
   source: $Enums.CompanyLookupSource | null
+  molName: string | null
 }
 
 export type ContragentCountAggregateOutputType = {
@@ -77,6 +79,7 @@ export type ContragentCountAggregateOutputType = {
   organizationId: number
   registryId: number
   source: number
+  molName: number
   _all: number
 }
 
@@ -104,6 +107,7 @@ export type ContragentMinAggregateInputType = {
   organizationId?: true
   registryId?: true
   source?: true
+  molName?: true
 }
 
 export type ContragentMaxAggregateInputType = {
@@ -117,6 +121,7 @@ export type ContragentMaxAggregateInputType = {
   organizationId?: true
   registryId?: true
   source?: true
+  molName?: true
 }
 
 export type ContragentCountAggregateInputType = {
@@ -132,6 +137,7 @@ export type ContragentCountAggregateInputType = {
   organizationId?: true
   registryId?: true
   source?: true
+  molName?: true
   _all?: true
 }
 
@@ -234,6 +240,7 @@ export type ContragentGroupByOutputType = {
   organizationId: number
   registryId: number | null
   source: $Enums.CompanyLookupSource
+  molName: string | null
   _count: ContragentCountAggregateOutputType | null
   _avg: ContragentAvgAggregateOutputType | null
   _sum: ContragentSumAggregateOutputType | null
@@ -272,6 +279,7 @@ export type ContragentWhereInput = {
   organizationId?: Prisma.IntFilter<"Contragent"> | number
   registryId?: Prisma.IntNullableFilter<"Contragent"> | number | null
   source?: Prisma.EnumCompanyLookupSourceFilter<"Contragent"> | $Enums.CompanyLookupSource
+  molName?: Prisma.StringNullableFilter<"Contragent"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
   invoices?: Prisma.GeneratedInvoiceListRelationFilter
@@ -290,6 +298,7 @@ export type ContragentOrderByWithRelationInput = {
   organizationId?: Prisma.SortOrder
   registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
+  molName?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   registry?: Prisma.CompanyRegistryCacheOrderByWithRelationInput
   invoices?: Prisma.GeneratedInvoiceOrderByRelationAggregateInput
@@ -312,6 +321,7 @@ export type ContragentWhereUniqueInput = Prisma.AtLeast<{
   organizationId?: Prisma.IntFilter<"Contragent"> | number
   registryId?: Prisma.IntNullableFilter<"Contragent"> | number | null
   source?: Prisma.EnumCompanyLookupSourceFilter<"Contragent"> | $Enums.CompanyLookupSource
+  molName?: Prisma.StringNullableFilter<"Contragent"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   registry?: Prisma.XOR<Prisma.CompanyRegistryCacheNullableScalarRelationFilter, Prisma.CompanyRegistryCacheWhereInput> | null
   invoices?: Prisma.GeneratedInvoiceListRelationFilter
@@ -330,6 +340,7 @@ export type ContragentOrderByWithAggregationInput = {
   organizationId?: Prisma.SortOrder
   registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
+  molName?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ContragentCountOrderByAggregateInput
   _avg?: Prisma.ContragentAvgOrderByAggregateInput
   _max?: Prisma.ContragentMaxOrderByAggregateInput
@@ -353,6 +364,7 @@ export type ContragentScalarWhereWithAggregatesInput = {
   organizationId?: Prisma.IntWithAggregatesFilter<"Contragent"> | number
   registryId?: Prisma.IntNullableWithAggregatesFilter<"Contragent"> | number | null
   source?: Prisma.EnumCompanyLookupSourceWithAggregatesFilter<"Contragent"> | $Enums.CompanyLookupSource
+  molName?: Prisma.StringNullableWithAggregatesFilter<"Contragent"> | string | null
 }
 
 export type ContragentCreateInput = {
@@ -365,6 +377,7 @@ export type ContragentCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutContragentsInput
   registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutContragentsInput
   invoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutContragentInput
@@ -383,6 +396,7 @@ export type ContragentUncheckedCreateInput = {
   organizationId: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
   invoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutContragentInput
 }
 
@@ -396,6 +410,7 @@ export type ContragentUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutContragentsNestedInput
   registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutContragentsNestedInput
   invoices?: Prisma.GeneratedInvoiceUpdateManyWithoutContragentNestedInput
@@ -414,6 +429,7 @@ export type ContragentUncheckedUpdateInput = {
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutContragentNestedInput
 }
 
@@ -430,6 +446,7 @@ export type ContragentCreateManyInput = {
   organizationId: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
 }
 
 export type ContragentUpdateManyMutationInput = {
@@ -442,6 +459,7 @@ export type ContragentUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ContragentUncheckedUpdateManyInput = {
@@ -457,6 +475,7 @@ export type ContragentUncheckedUpdateManyInput = {
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ContragentListRelationFilter = {
@@ -487,6 +506,7 @@ export type ContragentCountOrderByAggregateInput = {
   organizationId?: Prisma.SortOrder
   registryId?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  molName?: Prisma.SortOrder
 }
 
 export type ContragentAvgOrderByAggregateInput = {
@@ -506,6 +526,7 @@ export type ContragentMaxOrderByAggregateInput = {
   organizationId?: Prisma.SortOrder
   registryId?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  molName?: Prisma.SortOrder
 }
 
 export type ContragentMinOrderByAggregateInput = {
@@ -519,6 +540,7 @@ export type ContragentMinOrderByAggregateInput = {
   organizationId?: Prisma.SortOrder
   registryId?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  molName?: Prisma.SortOrder
 }
 
 export type ContragentSumOrderByAggregateInput = {
@@ -640,6 +662,7 @@ export type ContragentCreateWithoutRegistryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutContragentsInput
   invoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutContragentInput
 }
@@ -656,6 +679,7 @@ export type ContragentUncheckedCreateWithoutRegistryInput = {
   id?: number
   organizationId: number
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
   invoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutContragentInput
 }
 
@@ -701,6 +725,7 @@ export type ContragentScalarWhereInput = {
   organizationId?: Prisma.IntFilter<"Contragent"> | number
   registryId?: Prisma.IntNullableFilter<"Contragent"> | number | null
   source?: Prisma.EnumCompanyLookupSourceFilter<"Contragent"> | $Enums.CompanyLookupSource
+  molName?: Prisma.StringNullableFilter<"Contragent"> | string | null
 }
 
 export type ContragentCreateWithoutOrganizationInput = {
@@ -713,6 +738,7 @@ export type ContragentCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
   registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutContragentsInput
   invoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutContragentInput
 }
@@ -729,6 +755,7 @@ export type ContragentUncheckedCreateWithoutOrganizationInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
   invoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutContragentInput
 }
 
@@ -768,6 +795,7 @@ export type ContragentCreateWithoutInvoicesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutContragentsInput
   registry?: Prisma.CompanyRegistryCacheCreateNestedOneWithoutContragentsInput
 }
@@ -785,6 +813,7 @@ export type ContragentUncheckedCreateWithoutInvoicesInput = {
   organizationId: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
 }
 
 export type ContragentCreateOrConnectWithoutInvoicesInput = {
@@ -813,6 +842,7 @@ export type ContragentUpdateWithoutInvoicesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutContragentsNestedInput
   registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutContragentsNestedInput
 }
@@ -830,6 +860,7 @@ export type ContragentUncheckedUpdateWithoutInvoicesInput = {
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ContragentCreateManyRegistryInput = {
@@ -844,6 +875,7 @@ export type ContragentCreateManyRegistryInput = {
   id?: number
   organizationId: number
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
 }
 
 export type ContragentUpdateWithoutRegistryInput = {
@@ -856,6 +888,7 @@ export type ContragentUpdateWithoutRegistryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutContragentsNestedInput
   invoices?: Prisma.GeneratedInvoiceUpdateManyWithoutContragentNestedInput
 }
@@ -872,6 +905,7 @@ export type ContragentUncheckedUpdateWithoutRegistryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutContragentNestedInput
 }
 
@@ -887,6 +921,7 @@ export type ContragentUncheckedUpdateManyWithoutRegistryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   organizationId?: Prisma.IntFieldUpdateOperationsInput | number
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ContragentCreateManyOrganizationInput = {
@@ -901,6 +936,7 @@ export type ContragentCreateManyOrganizationInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  molName?: string | null
 }
 
 export type ContragentUpdateWithoutOrganizationInput = {
@@ -913,6 +949,7 @@ export type ContragentUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   registry?: Prisma.CompanyRegistryCacheUpdateOneWithoutContragentsNestedInput
   invoices?: Prisma.GeneratedInvoiceUpdateManyWithoutContragentNestedInput
 }
@@ -929,6 +966,7 @@ export type ContragentUncheckedUpdateWithoutOrganizationInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutContragentNestedInput
 }
 
@@ -944,6 +982,7 @@ export type ContragentUncheckedUpdateManyWithoutOrganizationInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -990,6 +1029,7 @@ export type ContragentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   organizationId?: boolean
   registryId?: boolean
   source?: boolean
+  molName?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
   invoices?: boolean | Prisma.Contragent$invoicesArgs<ExtArgs>
@@ -1009,6 +1049,7 @@ export type ContragentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   organizationId?: boolean
   registryId?: boolean
   source?: boolean
+  molName?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
 }, ExtArgs["result"]["contragent"]>
@@ -1026,6 +1067,7 @@ export type ContragentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   organizationId?: boolean
   registryId?: boolean
   source?: boolean
+  molName?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
 }, ExtArgs["result"]["contragent"]>
@@ -1043,9 +1085,10 @@ export type ContragentSelectScalar = {
   organizationId?: boolean
   registryId?: boolean
   source?: boolean
+  molName?: boolean
 }
 
-export type ContragentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"bulstat" | "vatNumber" | "name" | "address" | "email" | "rawLookupData" | "createdAt" | "updatedAt" | "id" | "organizationId" | "registryId" | "source", ExtArgs["result"]["contragent"]>
+export type ContragentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"bulstat" | "vatNumber" | "name" | "address" | "email" | "rawLookupData" | "createdAt" | "updatedAt" | "id" | "organizationId" | "registryId" | "source" | "molName", ExtArgs["result"]["contragent"]>
 export type ContragentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   registry?: boolean | Prisma.Contragent$registryArgs<ExtArgs>
@@ -1081,6 +1124,7 @@ export type $ContragentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     organizationId: number
     registryId: number | null
     source: $Enums.CompanyLookupSource
+    molName: string | null
   }, ExtArgs["result"]["contragent"]>
   composites: {}
 }
@@ -1519,6 +1563,7 @@ export interface ContragentFieldRefs {
   readonly organizationId: Prisma.FieldRef<"Contragent", 'Int'>
   readonly registryId: Prisma.FieldRef<"Contragent", 'Int'>
   readonly source: Prisma.FieldRef<"Contragent", 'CompanyLookupSource'>
+  readonly molName: Prisma.FieldRef<"Contragent", 'String'>
 }
     
 

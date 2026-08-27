@@ -92,6 +92,7 @@ model Contragent {
   organizationId Int
   registryId     Int?
   source         CompanyLookupSource   @default(MANUAL)
+  molName        String?
   organization   Organization          @relation(fields: [organizationId], references: [id])
   registry       CompanyRegistryCache? @relation(fields: [registryId], references: [id])
   invoices       GeneratedInvoice[]

@@ -162,7 +162,8 @@ export const ContragentScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
   registryId: 'registryId',
-  source: 'source'
+  source: 'source',
+  molName: 'molName'
 } as const
 
 export type ContragentScalarFieldEnum = (typeof ContragentScalarFieldEnum)[keyof typeof ContragentScalarFieldEnum]

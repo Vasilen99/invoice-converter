@@ -1,7 +1,207 @@
-import { ComingSoon } from "@/components";
+"use client";
+import { FadeIn } from "@/components/motion";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import type { ContragentLight } from "../../utility/types";
+import { Edit2, Trash2, FileText, Building2 } from "lucide-react";
+import { useGlobalStore } from "@/store/global";
+import { callApi } from "../../utility/hooks/apiFetch";
 
-const ContragentsPage = () => {
-  return <ComingSoon />;
-};
+const ConfirmationDialog = dynamic(
+  () => import("../components/ConfirmationDialog").then((mod) => mod.default),
+  {
+    ssr: false,
+  },
+);
 
-export default ContragentsPage;
+const ContragentsManager = dynamic(
+  () =>
+    import("../components/ContragentsSearch").then((mod) => ({
+      default: mod.ContragentsManager,
+    })),
+  {
+    ssr: false,
+  },
+);
+
+const NoAccountFallback = dynamic(
+  () => import("../components/NoAccountFallback"),
+  {
+    ssr: false,
+  },
+);
+
+interface StoredContragent extends ContragentLight {
+  // Extends ContragentLight which already has all needed fields
+}
+
+export default function ContragentsPage({
+  contragents,
+  organizations,
+  hasAccount,
+}: {
+  contragents: ContragentLight[];
+  organizations: { id: number; legalName: string }[];
+  hasAccount?: boolean;
+}) {
+  const t = useTranslations();
+  const { setAlertStatus } = useGlobalStore();
+  const [contragentsList, setContragentsList] =
+    useState<StoredContragent[]>(contragents);
+  const [open, setOpen] = useState<boolean>(false);
+  const [contragentToDelete, setContragentToDelete] = useState<number | null>(
+    null,
+  );
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [editingContragent, setEditingContragent] =
+    useState<ContragentLight | null>(null);
+
+  const handleDeleteContragent = async (id: number) => {
+    if (!id) return;
+    const deletedContragent = await callApi(
+      `/contragents/delete`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({ contragentId: id }),
+      },
+      true,
+    );
+
+    if (!deletedContragent) {
+      setAlertStatus({
+        status: "error",
+        statusHeader: t("contragents.deleteErrorHeader"),
+        statusContent: t("contragents.deleteErrorMessage"),
+      });
+      return;
+    }
+    setContragentsList((prev) => prev.filter((cont) => cont.id !== id));
+  };
+
+  const handleEditContragent = (cont: ContragentLight) => {
+    setEditingContragent(cont);
+
+    setOpen(true);
+  };
+
+  if (!hasAccount) {
+    return <NoAccountFallback />;
+  }
+
+  return (
+    <>
+      <div className="text-2xl">
+        <FadeIn delay={0.01}>
+          <div className="grid lg:grid-cols-2 lg:gap-0 grid-cols-1 gap-3 justify-between lg:items-start">
+            <span className="flex flex-col gap-2">
+              <h1 className="flex items-center gap-2 text-primary text-2xl font-bold">
+                {t("contragents.contragentsHeader")}
+              </h1>
+              <p className="text-base">
+                {t("contragents.contragentsSubheader")}
+              </p>
+            </span>
+            <Button
+              onClick={() => {
+                setEditingContragent(null);
+                setOpen((prev) => !prev);
+              }}
+              className="w-fit lg:ml-auto"
+            >
+              {t("organizations.addOrganization")}
+            </Button>
+          </div>
+        </FadeIn>
+        <FadeIn delay={0.02} className="py-12 overflow-auto no-scrollbar">
+          {contragentsList.length === 0 ? (
+            <p className="text-base text-primary/50">
+              {t("contragents.noContragents")}
+            </p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {contragentsList.map((cont) => (
+                <motion.div
+                  key={cont.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex flex-col gap-2 items-start p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex lg:flex-row flex-col gap-2 lg:w-full w-fit justify-between lg:items-start items-center">
+                    <div className="flex lg:flex-row flex-col gap-2 flex-1 lg:items-center items-start">
+                      <span className="font-semibold">{cont.name}</span>
+                      {cont.bulstat && (
+                        <span className="text-sm bg-foreground text-primary-foreground font-semibold px-2 py-1 rounded">
+                          {cont.bulstat}
+                        </span>
+                      )}
+                      {cont.organizationName && (
+                        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                          <Building2 size={14} />
+                          <span>{cont.organizationName}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex lg:gap-2 gap-4">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        disabled
+                        title={t("contragents.createInvoiceDisabled")}
+                      >
+                        <FileText size={16} />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        disabled={true}
+                        onClick={() => handleEditContragent(cont)}
+                      >
+                        <Edit2 size={16} />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-destructive hover:text-destructive"
+                        onClick={() => {
+                          setContragentToDelete(cont.id);
+                          setIsDeleteDialogOpen(true);
+                        }}
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </FadeIn>
+      </div>
+      <ContragentsManager
+        open={open}
+        setOpen={setOpen}
+        organizations={organizations}
+        contragents={contragentsList}
+        setContragents={setContragentsList}
+        editingContragent={editingContragent}
+        isEditMode={editingContragent !== null}
+      />
+      {isDeleteDialogOpen && contragentToDelete !== null && (
+        <ConfirmationDialog
+          title={t("contragents.confirmDeletionHeader")}
+          description={t("contragents.confirmDeletionDescription")}
+          onMainAction={() => handleDeleteContragent(contragentToDelete)}
+          isOpen={isDeleteDialogOpen}
+          onClose={() => setIsDeleteDialogOpen(false)}
+          mainActionButtonContent={t("contragents.confirmDeletionMainAction")}
+        />
+      )}
+    </>
+  );
+}
