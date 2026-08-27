@@ -132,37 +132,33 @@ export async function PUT(request: NextRequest) {
 
     let registryId = organization.registryId;
 
-    // Update registry cache if we have raw lookup data
-    if (rawLookupData && isValidCompanyData(rawLookupData) && bulstat) {
-      try {
-        const formattedRawLookupData =
-          formatRawLookupDataForStorage(rawLookupData);
+    let registry;
 
-        const registry = await prisma.companyRegistryCache.upsert({
-          where: { bulstat },
-          update: {
-            legalName,
-            vatNumber: vatNumber || null,
-            address: formattedAddress,
-            rawLookupData: formattedRawLookupData,
-            lastFetchedAt: new Date(),
-          },
-          create: {
-            bulstat,
-            legalName,
-            vatNumber: vatNumber || null,
-            address: formattedAddress,
-            rawLookupData: formattedRawLookupData,
-          },
-        });
-        registryId = registry.id;
-      } catch (registryErr) {
-        console.error(
-          `[Registry Cache Error] Failed to update registry for BULSTAT ${bulstat}:`,
-          registryErr,
-        );
-      }
+    // If we have an existing registryId, update that record directly
+    if (organization.registryId) {
+      registry = await prisma.companyRegistryCache.update({
+        where: { id: organization.registryId },
+        data: {
+          bulstat,
+          legalName,
+          vatNumber: vatNumber || null,
+          address: formattedAddress,
+          lastFetchedAt: new Date(),
+        },
+      });
+      console.log(registry);
+    } else {
+      // Only create new if no existing registry
+      registry = await prisma.companyRegistryCache.create({
+        data: {
+          bulstat,
+          legalName,
+          vatNumber: vatNumber || null,
+          address: formattedAddress,
+        },
+      });
     }
+    registryId = registry.id;
 
     // Update the organization
     const updatedOrganization = await prisma.organization.update({

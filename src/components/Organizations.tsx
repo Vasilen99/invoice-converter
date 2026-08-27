@@ -319,7 +319,7 @@ export default function Organizations({
           </div>
         </FadeIn>
         <FadeIn delay={0.02} className="py-12 overflow-auto no-scrollbar">
-          {organizations.length === 0 ? (
+          {organizationsList.length === 0 ? (
             <p className="text-base text-primary/50">
               {t("organizations.noOrganizations")}
             </p>
