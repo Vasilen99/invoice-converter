@@ -146,7 +146,6 @@ export async function PUT(request: NextRequest) {
           lastFetchedAt: new Date(),
         },
       });
-      console.log(registry);
     } else {
       // Only create new if no existing registry
       registry = await prisma.companyRegistryCache.create({
