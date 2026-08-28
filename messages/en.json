@@ -308,8 +308,8 @@
   },
   "contragentsAlerts": {
     "error": {
-      "organizationNotFoundHeader": "Organization is required",
-      "organizationNotFoundMessage": "Please select an organization to add the contragent to.",
+      "organizationRequiredHeader": "Organization is required",
+      "organizationRequiredMessage": "Please select an organization to add the contragent to.",
       "deleteErrorHeader": "Error deleting contragent",
       "deleteErrorMessage": "There was an error deleting the contragent. Please try again later."
     }
@@ -323,9 +323,9 @@
     "organizationForm": {
     "organizationMainInformation": "Organization Information",
     "organizationAddressInformation": "Address Information",
-    "legalName": "Legal name",
-    "legalNamePlaceholder": "ExampleOrganizationLTD",
-    "legalNameLabel": "Legal Name",
+    "name": "Name",
+    "namePlaceholder": "ExampleOrganizationLTD",
+    "nameLabel": "Name",
     "bulstat": "Bulstat",
     "countryPlaceholder": "Bulgaria",
     "bulstatPlaceholder": "123456789",
@@ -346,6 +346,8 @@
     "areaLabel": "Area",
     "molName": "MOL",
     "molNamePlaceholder": "MOL Name",
+    "emailPlaceholder": "email@example.com",
+    "emailLabel": "Email (optional)",
     "molNameLabel": "MOL Name",
     "registryId": "Registry ID",
     "streetNumberPlaceholder": "1",

@@ -19,10 +19,11 @@ export interface User {
 
 export type OrganizationLight = {
   id: number;
-  legalName: string;
+  name: string;
   bulstat: string | null;
   vatNumber: string | null;
   molName: string | null;
+  email: string | null;
   invoiceSeriesPrefix: string;
   address: {
     country?: string;
@@ -69,9 +70,10 @@ export type ContragentLight = {
 
 export type Organization = {
   id: number;
-  legalName: string;
+  name: string;
   bulstat: string;
   vatNumber: string;
+  email: string;
   address: {
     country: string;
     region: string;
@@ -116,6 +118,7 @@ export type OrganizationFormData = Omit<
   bulstat?: string;
   vatNumber?: string;
   molName?: string;
+  email?: string;
   registryId?: number | null;
 };
 
@@ -241,7 +244,7 @@ export type CompanyData = {
 export type SearchResult = {
   // Core identification
   bulstat: string;
-  legalName: string;
+  name: string;
   legalForm?: string;
   status?: string;
 
@@ -267,6 +270,9 @@ export type SearchResult = {
 
   // VAT info
   vatNumber?: string | null;
+
+  // Contact info
+  email?: string | null;
 
   // Additional metadata
   transliteration?: string;

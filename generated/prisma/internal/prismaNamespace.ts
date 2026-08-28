@@ -1382,7 +1382,7 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const CompanyRegistryCacheScalarFieldEnum = {
   id: 'id',
   bulstat: 'bulstat',
-  legalName: 'legalName',
+  name: 'name',
   vatNumber: 'vatNumber',
   address: 'address',
   rawLookupData: 'rawLookupData',
@@ -1406,7 +1406,7 @@ export type AccountMemberScalarFieldEnum = (typeof AccountMemberScalarFieldEnum)
 
 
 export const OrganizationScalarFieldEnum = {
-  legalName: 'legalName',
+  name: 'name',
   bulstat: 'bulstat',
   vatNumber: 'vatNumber',
   address: 'address',
@@ -1418,7 +1418,8 @@ export const OrganizationScalarFieldEnum = {
   molName: 'molName',
   id: 'id',
   registryId: 'registryId',
-  source: 'source'
+  source: 'source',
+  email: 'email'
 } as const
 
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]

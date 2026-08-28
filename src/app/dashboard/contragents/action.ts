@@ -52,7 +52,7 @@ export async function getContragents(): Promise<{
       },
       select: {
         id: true,
-        legalName: true,
+        name: true,
       },
     });
 
@@ -77,7 +77,7 @@ export async function getContragents(): Promise<{
         address: true,
         organization: {
           select: {
-            legalName: true,
+            name: true,
           },
         },
       },
@@ -91,7 +91,7 @@ export async function getContragents(): Promise<{
       molName: c.molName,
       email: c.email,
       organizationId: c.organizationId,
-      organizationName: c.organization.legalName,
+      organizationName: c.organization.name,
       address: c.address as ContragentLight["address"],
     }));
 
@@ -105,7 +105,7 @@ export async function getContragents(): Promise<{
 export async function getOrganizationsForContragents(): Promise<
   {
     id: number;
-    legalName: string;
+    name: string;
   }[]
 > {
   const user = await getUserServer();
@@ -139,10 +139,10 @@ export async function getOrganizationsForContragents(): Promise<
       },
       select: {
         id: true,
-        legalName: true,
+        name: true,
       },
       orderBy: {
-        legalName: "asc",
+        name: "asc",
       },
     });
 

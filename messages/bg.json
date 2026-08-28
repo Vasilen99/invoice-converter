@@ -353,6 +353,8 @@
     "blockLabel": "Блок",
     "registryIdPlaceholder": "123456789",
     "registryIdLabel": "Регистрационен номер",
+    "emailPlaceholder": "email@example.com",
+    "emailLabel": "Имейл (по желание)",
     "entrancePlaceholder": "Вход А",
     "entranceLabel": "Вход",
     "floorPlaceholder": "Етаж 1",

@@ -52,10 +52,11 @@ export async function getOrganizations(): Promise<{
       },
       select: {
         id: true,
-        legalName: true,
+        name: true,
         bulstat: true,
         vatNumber: true,
         molName: true,
+        email: true,
         invoiceSeriesPrefix: true,
         address: true,
       },

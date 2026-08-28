@@ -9,34 +9,17 @@ import type { ContragentLight } from "../../utility/types";
 import { Edit2, Trash2, FileText, Building2 } from "lucide-react";
 import { useGlobalStore } from "@/store/global";
 import { callApi } from "../../utility/hooks/apiFetch";
+import EntityManagerDialog from "@/components/EntityManagerDialog";
 
 const ConfirmationDialog = dynamic(
   () => import("../components/ConfirmationDialog").then((mod) => mod.default),
-  {
-    ssr: false,
-  },
-);
-
-const ContragentsManager = dynamic(
-  () =>
-    import("../components/ContragentsSearch").then((mod) => ({
-      default: mod.ContragentsManager,
-    })),
-  {
-    ssr: false,
-  },
+  { ssr: false },
 );
 
 const NoAccountFallback = dynamic(
   () => import("../components/NoAccountFallback"),
-  {
-    ssr: false,
-  },
+  { ssr: false },
 );
-
-interface StoredContragent extends ContragentLight {
-  // Extends ContragentLight which already has all needed fields
-}
 
 export default function ContragentsPage({
   contragents,
@@ -44,13 +27,13 @@ export default function ContragentsPage({
   hasAccount,
 }: {
   contragents: ContragentLight[];
-  organizations: { id: number; legalName: string }[];
+  organizations: { id: number; name: string }[];
   hasAccount?: boolean;
 }) {
   const t = useTranslations();
   const { setAlertStatus } = useGlobalStore();
   const [contragentsList, setContragentsList] =
-    useState<StoredContragent[]>(contragents);
+    useState<ContragentLight[]>(contragents);
   const [open, setOpen] = useState<boolean>(false);
   const [contragentToDelete, setContragentToDelete] = useState<number | null>(
     null,
@@ -61,16 +44,13 @@ export default function ContragentsPage({
 
   const handleDeleteContragent = async (id: number) => {
     if (!id) return;
-    const deletedContragent = await callApi(
+    const deleted = await callApi(
       `/contragents/delete`,
-      {
-        method: "DELETE",
-        body: JSON.stringify({ contragentId: id }),
-      },
+      { method: "DELETE", body: JSON.stringify({ contragentId: id }) },
       true,
     );
 
-    if (!deletedContragent) {
+    if (!deleted) {
       setAlertStatus({
         status: "error",
         statusHeader: t("contragents.deleteErrorHeader"),
@@ -83,7 +63,6 @@ export default function ContragentsPage({
 
   const handleEditContragent = (cont: ContragentLight) => {
     setEditingContragent(cont);
-
     setOpen(true);
   };
 
@@ -107,7 +86,7 @@ export default function ContragentsPage({
             <Button
               onClick={() => {
                 setEditingContragent(null);
-                setOpen((prev) => !prev);
+                setOpen(true);
               }}
               className="w-fit lg:ml-auto"
             >
@@ -124,7 +103,7 @@ export default function ContragentsPage({
             <div className="flex flex-col gap-3">
               {contragentsList.map((cont) => (
                 <motion.div
-                  key={cont.id}
+                  key={`${cont.id}-${cont.organizationId}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -146,6 +125,7 @@ export default function ContragentsPage({
                       )}
                     </div>
                     <div className="flex lg:gap-2 gap-4">
+                      {/* TODO: create invoice – disabled for now */}
                       <Button
                         variant="ghost"
                         size="icon"
@@ -159,7 +139,6 @@ export default function ContragentsPage({
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8"
-                        disabled={true}
                         onClick={() => handleEditContragent(cont)}
                       >
                         <Edit2 size={16} />
@@ -183,15 +162,21 @@ export default function ContragentsPage({
           )}
         </FadeIn>
       </div>
-      <ContragentsManager
+
+      <EntityManagerDialog
+        mode="contragent"
         open={open}
         setOpen={setOpen}
         organizations={organizations}
-        contragents={contragentsList}
-        setContragents={setContragentsList}
-        editingContragent={editingContragent}
-        isEditMode={editingContragent !== null}
+        editingItem={editingContragent}
+        onEntityAdded={(item) => setContragentsList((prev) => [...prev, item])}
+        onEntityUpdated={(updated) =>
+          setContragentsList((prev) =>
+            prev.map((cont) => (cont.id === updated.id ? updated : cont)),
+          )
+        }
       />
+
       {isDeleteDialogOpen && contragentToDelete !== null && (
         <ConfirmationDialog
           title={t("contragents.confirmDeletionHeader")}

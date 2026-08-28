@@ -56,7 +56,7 @@ export default function SearchOrganizations({
               onClick={() => handleResultClick(result)}
               className="flex flex-col gap-1 items-start p-3 hover:bg-muted hover:cursor-pointer transition-colors text-left border-b border-border last:border-b-0"
             >
-              <span className="font-medium text-sm">{result.legalName}</span>
+              <span className="font-medium text-sm">{result.name}</span>
               <div className="flex gap-2 flex-wrap text-xs text-muted-foreground">
                 <span className="font-mono bg-background/50 px-2 py-1 rounded">
                   {result.bulstat}

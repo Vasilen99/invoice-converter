@@ -4,6 +4,7 @@ import { getCachedCompanyData } from "../../../../../utility/registry-cache";
 import {
   extractManagerName,
   extractVatNumber,
+  extractEmail,
   transformAddressFromCompanyData,
 } from "../../../../../utility/company-registry-helpers";
 
@@ -13,16 +14,22 @@ import {
 function transformCompanyToSearchResult(company: CompanyData): SearchResult {
   const vatNumber = extractVatNumber(company);
   const molName = extractManagerName(company);
+  const email = extractEmail(company);
   const address = transformAddressFromCompanyData(company);
+
+  // Ensure name is always set - try multiple fallbacks
+  const name =
+    company.companyName?.name || company.companyNameTransliteration?.name || "";
 
   return {
     bulstat: company.uic,
-    legalName: company.companyName?.name || "",
+    name,
     legalForm: company.legalForm,
     status: company.status,
     address,
     molName,
     vatNumber,
+    email,
     transliteration: company.companyNameTransliteration?.name,
     lastUpdated: company.lastUpdated,
     rawLookupData: company,
@@ -104,7 +111,6 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-
     // Transform the response
     const company = data.company || data;
     const searchResult = transformCompanyToSearchResult(company);

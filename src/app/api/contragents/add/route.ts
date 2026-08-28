@@ -38,6 +38,10 @@ export async function POST(request: NextRequest) {
             status: "error",
             header: "contragents.missingFieldsHeader",
             message: "contragents.missingRequiredFieldsMessage",
+            details: {
+              name: `"${name}" (empty: ${!name})`,
+              organizationId: `${organizationId}`,
+            },
           },
         },
         { status: 400 },
@@ -56,7 +60,7 @@ export async function POST(request: NextRequest) {
       const enrichedData = enrichOrganizationDataFromRegistry(
         {
           bulstat,
-          legalName: name,
+          name: name,
           vatNumber,
           address,
           molName,
@@ -65,7 +69,7 @@ export async function POST(request: NextRequest) {
       );
 
       bulstat = enrichedData.bulstat;
-      name = enrichedData.legalName;
+      name = enrichedData.name;
       vatNumber = enrichedData.vatNumber || null;
       address = enrichedData.address;
       molName = enrichedData.molName;
@@ -152,59 +156,75 @@ export async function POST(request: NextRequest) {
 
     let registryId: number | null = null;
 
-    // Store raw lookup data in CompanyRegistryCache
+    // Store raw lookup data in CompanyRegistryCache - only create new records
     if (rawLookupData && isValidCompanyData(rawLookupData) && bulstat) {
       try {
         const formattedRawLookupData =
           formatRawLookupDataForStorage(rawLookupData);
 
-        const registry = await prisma.companyRegistryCache.upsert({
+        // Check if registry cache already exists for this bulstat
+        const existingRegistry = await prisma.companyRegistryCache.findUnique({
           where: { bulstat },
-          update: {
-            legalName: name,
-            vatNumber: vatNumber || null,
-            address: formattedAddress,
-            rawLookupData: formattedRawLookupData,
-            lastFetchedAt: new Date(),
-          },
-          create: {
-            bulstat,
-            legalName: name,
-            vatNumber: vatNumber || null,
-            address: formattedAddress,
-            rawLookupData: formattedRawLookupData,
-          },
         });
-        registryId = registry.id;
+
+        if (!existingRegistry) {
+          const registry = await prisma.companyRegistryCache.create({
+            data: {
+              bulstat,
+              name,
+              vatNumber: vatNumber || null,
+              address: formattedAddress,
+              rawLookupData: formattedRawLookupData,
+              lastFetchedAt: new Date(),
+              createdAt: new Date(),
+            },
+          });
+          registryId = registry.id;
+        } else {
+          // Update lastFetchedAt when we find existing registry
+          await prisma.companyRegistryCache.update({
+            where: { bulstat },
+            data: { lastFetchedAt: new Date() },
+          });
+          registryId = existingRegistry.id;
+        }
       } catch (registryErr) {
         console.error(
-          `[Registry Cache Error] Failed to upsert registry for BULSTAT ${bulstat}:`,
+          `[Registry Cache Error] Failed to create registry for BULSTAT ${bulstat}:`,
           registryErr,
         );
         // Continue even if registry cache fails - it's not critical
       }
     } else if (isManualEntry && bulstat) {
-      // For manual entries, create or update the registry cache without rawLookupData
+      // For manual entries, create registry cache only if it doesn't exist
       try {
-        const registry = await prisma.companyRegistryCache.upsert({
+        const existingRegistry = await prisma.companyRegistryCache.findUnique({
           where: { bulstat },
-          update: {
-            legalName: name,
-            vatNumber: vatNumber || null,
-            address: formattedAddress,
-            lastFetchedAt: new Date(),
-          },
-          create: {
-            bulstat,
-            legalName: name,
-            vatNumber: vatNumber || null,
-            address: formattedAddress,
-          },
         });
-        registryId = registry.id;
+
+        if (!existingRegistry) {
+          const registry = await prisma.companyRegistryCache.create({
+            data: {
+              bulstat,
+              name,
+              vatNumber: vatNumber || null,
+              address: formattedAddress,
+              lastFetchedAt: new Date(),
+              createdAt: new Date(),
+            },
+          });
+          registryId = registry.id;
+        } else {
+          // Update lastFetchedAt when we find existing registry
+          await prisma.companyRegistryCache.update({
+            where: { bulstat },
+            data: { lastFetchedAt: new Date() },
+          });
+          registryId = existingRegistry.id;
+        }
       } catch (registryErr) {
         console.error(
-          `[Registry Cache Error] Failed to create/update manual registry for BULSTAT ${bulstat}:`,
+          `[Registry Cache Error] Failed to create manual registry for BULSTAT ${bulstat}:`,
           registryErr,
         );
         // Continue even if registry cache fails - it's not critical

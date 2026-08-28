@@ -29,16 +29,17 @@ export async function PUT(request: NextRequest) {
     let {
       organizationId,
       bulstat,
-      legalName,
+      name,
       vatNumber,
       address,
       molName,
+      email,
       invoiceSeriesPrefix,
       rawLookupData,
     } = body;
 
     // Validate required fields
-    if (!organizationId || !bulstat || !legalName) {
+    if (!organizationId || !bulstat || !name) {
       return NextResponse.json(
         {
           data: null,
@@ -54,9 +55,10 @@ export async function PUT(request: NextRequest) {
 
     // Sanitize inputs
     bulstat = bulstat.trim();
-    legalName = legalName.trim();
+    name = name.trim();
     if (vatNumber) vatNumber = vatNumber.trim();
     if (molName) molName = molName.trim();
+    if (email) email = email.trim();
     if (invoiceSeriesPrefix) invoiceSeriesPrefix = invoiceSeriesPrefix.trim();
 
     // Check user has access to this organization
@@ -112,19 +114,21 @@ export async function PUT(request: NextRequest) {
       const enrichedData = enrichOrganizationDataFromRegistry(
         {
           bulstat,
-          legalName,
+          name,
           vatNumber,
           address,
           molName,
+          email,
         },
         rawLookupData,
       );
 
       bulstat = enrichedData.bulstat;
-      legalName = enrichedData.legalName;
+      name = enrichedData.name;
       vatNumber = enrichedData.vatNumber || null;
       address = enrichedData.address;
       molName = enrichedData.molName;
+      email = enrichedData.email || null;
     }
 
     // Format address for storage
@@ -132,32 +136,42 @@ export async function PUT(request: NextRequest) {
 
     let registryId = organization.registryId;
 
-    let registry;
+    // Only create new registry cache if organization doesn't already have one
+    if (bulstat && !organization.registryId) {
+      try {
+        // Check if registry cache already exists for this bulstat
+        const existingRegistry = await prisma.companyRegistryCache.findUnique({
+          where: { bulstat },
+        });
 
-    // If we have an existing registryId, update that record directly
-    if (organization.registryId) {
-      registry = await prisma.companyRegistryCache.update({
-        where: { id: organization.registryId },
-        data: {
-          bulstat,
-          legalName,
-          vatNumber: vatNumber || null,
-          address: formattedAddress,
-          lastFetchedAt: new Date(),
-        },
-      });
-    } else {
-      // Only create new if no existing registry
-      registry = await prisma.companyRegistryCache.create({
-        data: {
-          bulstat,
-          legalName,
-          vatNumber: vatNumber || null,
-          address: formattedAddress,
-        },
-      });
+        if (!existingRegistry) {
+          const registry = await prisma.companyRegistryCache.create({
+            data: {
+              bulstat,
+              name: name,
+              vatNumber: vatNumber || null,
+              address: formattedAddress,
+              lastFetchedAt: new Date(),
+              createdAt: new Date(),
+            },
+          });
+          registryId = registry.id;
+        } else {
+          // Update lastFetchedAt when we find existing registry
+          await prisma.companyRegistryCache.update({
+            where: { bulstat },
+            data: { lastFetchedAt: new Date() },
+          });
+          registryId = existingRegistry.id;
+        }
+      } catch (registryErr) {
+        console.error(
+          `[Registry Cache Error] Failed to create registry for BULSTAT ${bulstat}:`,
+          registryErr,
+        );
+        // Continue even if registry cache fails - it's not critical
+      }
     }
-    registryId = registry.id;
 
     // Update the organization
     const updatedOrganization = await prisma.organization.update({
@@ -166,10 +180,11 @@ export async function PUT(request: NextRequest) {
       },
       data: {
         bulstat,
-        legalName,
+        name: name,
         vatNumber: vatNumber || null,
         address: formattedAddress,
         molName: molName || null,
+        email: email || null,
         invoiceSeriesPrefix: invoiceSeriesPrefix || "INV",
         registryId,
       },

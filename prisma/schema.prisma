@@ -34,7 +34,7 @@ model User {
 model CompanyRegistryCache {
   id            Int            @id @default(autoincrement())
   bulstat       String         @unique
-  legalName     String
+  name          String
   vatNumber     String?
   address       Json?
   rawLookupData Json?
@@ -58,7 +58,7 @@ model AccountMember {
 }
 
 model Organization {
-  legalName           String
+  name                String
   bulstat             String?
   vatNumber           String?
   address             Json?
@@ -71,6 +71,7 @@ model Organization {
   id                  Int                   @id @default(autoincrement())
   registryId          Int?
   source              CompanyLookupSource   @default(MANUAL)
+  email               String?
   contragents         Contragent[]
   creditTransactions  CreditTransaction[]
   generatedInvoices   GeneratedInvoice[]

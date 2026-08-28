@@ -39,16 +39,24 @@ export function extractManagerName(company: CompanyData): string {
 }
 
 /**
+ * Extracts email from CompanyData contacts
+ */
+export function extractEmail(company: CompanyData): string | null {
+  return company.contacts?.email || null;
+}
+
+/**
  * Validates and enriches organization data with information from rawLookupData
  * This is useful when we have full company data available in the registry cache
  */
 export function enrichOrganizationDataFromRegistry(
   organizationData: {
     bulstat: string;
-    legalName: string;
+    name: string;
     vatNumber?: string | null;
     address?: Record<string, any>;
     molName?: string;
+    email?: string | null;
   },
   rawLookupData?: CompanyData | null,
 ) {
@@ -59,8 +67,7 @@ export function enrichOrganizationDataFromRegistry(
   // Only override fields that are empty in the incoming data
   const enrichedData = {
     bulstat: organizationData.bulstat,
-    legalName:
-      organizationData.legalName || rawLookupData.companyName?.name || "",
+    name: organizationData.name || rawLookupData.companyName?.name || "",
     vatNumber:
       organizationData.vatNumber ||
       extractVatNumber(rawLookupData) ||
@@ -72,6 +79,7 @@ export function enrichOrganizationDataFromRegistry(
       organizationData.molName ||
       extractManagerName(rawLookupData) ||
       undefined,
+    email: organizationData.email || extractEmail(rawLookupData) || undefined,
   };
 
   return enrichedData;

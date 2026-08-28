@@ -37,7 +37,7 @@ export type CompanyRegistryCacheSumAggregateOutputType = {
 export type CompanyRegistryCacheMinAggregateOutputType = {
   id: number | null
   bulstat: string | null
-  legalName: string | null
+  name: string | null
   vatNumber: string | null
   lastFetchedAt: Date | null
   createdAt: Date | null
@@ -46,7 +46,7 @@ export type CompanyRegistryCacheMinAggregateOutputType = {
 export type CompanyRegistryCacheMaxAggregateOutputType = {
   id: number | null
   bulstat: string | null
-  legalName: string | null
+  name: string | null
   vatNumber: string | null
   lastFetchedAt: Date | null
   createdAt: Date | null
@@ -55,7 +55,7 @@ export type CompanyRegistryCacheMaxAggregateOutputType = {
 export type CompanyRegistryCacheCountAggregateOutputType = {
   id: number
   bulstat: number
-  legalName: number
+  name: number
   vatNumber: number
   address: number
   rawLookupData: number
@@ -76,7 +76,7 @@ export type CompanyRegistryCacheSumAggregateInputType = {
 export type CompanyRegistryCacheMinAggregateInputType = {
   id?: true
   bulstat?: true
-  legalName?: true
+  name?: true
   vatNumber?: true
   lastFetchedAt?: true
   createdAt?: true
@@ -85,7 +85,7 @@ export type CompanyRegistryCacheMinAggregateInputType = {
 export type CompanyRegistryCacheMaxAggregateInputType = {
   id?: true
   bulstat?: true
-  legalName?: true
+  name?: true
   vatNumber?: true
   lastFetchedAt?: true
   createdAt?: true
@@ -94,7 +94,7 @@ export type CompanyRegistryCacheMaxAggregateInputType = {
 export type CompanyRegistryCacheCountAggregateInputType = {
   id?: true
   bulstat?: true
-  legalName?: true
+  name?: true
   vatNumber?: true
   address?: true
   rawLookupData?: true
@@ -192,7 +192,7 @@ export type CompanyRegistryCacheGroupByArgs<ExtArgs extends runtime.Types.Extens
 export type CompanyRegistryCacheGroupByOutputType = {
   id: number
   bulstat: string
-  legalName: string
+  name: string
   vatNumber: string | null
   address: runtime.JsonValue | null
   rawLookupData: runtime.JsonValue | null
@@ -226,7 +226,7 @@ export type CompanyRegistryCacheWhereInput = {
   NOT?: Prisma.CompanyRegistryCacheWhereInput | Prisma.CompanyRegistryCacheWhereInput[]
   id?: Prisma.IntFilter<"CompanyRegistryCache"> | number
   bulstat?: Prisma.StringFilter<"CompanyRegistryCache"> | string
-  legalName?: Prisma.StringFilter<"CompanyRegistryCache"> | string
+  name?: Prisma.StringFilter<"CompanyRegistryCache"> | string
   vatNumber?: Prisma.StringNullableFilter<"CompanyRegistryCache"> | string | null
   address?: Prisma.JsonNullableFilter<"CompanyRegistryCache">
   rawLookupData?: Prisma.JsonNullableFilter<"CompanyRegistryCache">
@@ -239,7 +239,7 @@ export type CompanyRegistryCacheWhereInput = {
 export type CompanyRegistryCacheOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   rawLookupData?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -255,7 +255,7 @@ export type CompanyRegistryCacheWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.CompanyRegistryCacheWhereInput | Prisma.CompanyRegistryCacheWhereInput[]
   OR?: Prisma.CompanyRegistryCacheWhereInput[]
   NOT?: Prisma.CompanyRegistryCacheWhereInput | Prisma.CompanyRegistryCacheWhereInput[]
-  legalName?: Prisma.StringFilter<"CompanyRegistryCache"> | string
+  name?: Prisma.StringFilter<"CompanyRegistryCache"> | string
   vatNumber?: Prisma.StringNullableFilter<"CompanyRegistryCache"> | string | null
   address?: Prisma.JsonNullableFilter<"CompanyRegistryCache">
   rawLookupData?: Prisma.JsonNullableFilter<"CompanyRegistryCache">
@@ -268,7 +268,7 @@ export type CompanyRegistryCacheWhereUniqueInput = Prisma.AtLeast<{
 export type CompanyRegistryCacheOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   rawLookupData?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -287,7 +287,7 @@ export type CompanyRegistryCacheScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CompanyRegistryCacheScalarWhereWithAggregatesInput | Prisma.CompanyRegistryCacheScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"CompanyRegistryCache"> | number
   bulstat?: Prisma.StringWithAggregatesFilter<"CompanyRegistryCache"> | string
-  legalName?: Prisma.StringWithAggregatesFilter<"CompanyRegistryCache"> | string
+  name?: Prisma.StringWithAggregatesFilter<"CompanyRegistryCache"> | string
   vatNumber?: Prisma.StringNullableWithAggregatesFilter<"CompanyRegistryCache"> | string | null
   address?: Prisma.JsonNullableWithAggregatesFilter<"CompanyRegistryCache">
   rawLookupData?: Prisma.JsonNullableWithAggregatesFilter<"CompanyRegistryCache">
@@ -297,7 +297,7 @@ export type CompanyRegistryCacheScalarWhereWithAggregatesInput = {
 
 export type CompanyRegistryCacheCreateInput = {
   bulstat: string
-  legalName: string
+  name: string
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -310,7 +310,7 @@ export type CompanyRegistryCacheCreateInput = {
 export type CompanyRegistryCacheUncheckedCreateInput = {
   id?: number
   bulstat: string
-  legalName: string
+  name: string
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -322,7 +322,7 @@ export type CompanyRegistryCacheUncheckedCreateInput = {
 
 export type CompanyRegistryCacheUpdateInput = {
   bulstat?: Prisma.StringFieldUpdateOperationsInput | string
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -335,7 +335,7 @@ export type CompanyRegistryCacheUpdateInput = {
 export type CompanyRegistryCacheUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.StringFieldUpdateOperationsInput | string
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -348,7 +348,7 @@ export type CompanyRegistryCacheUncheckedUpdateInput = {
 export type CompanyRegistryCacheCreateManyInput = {
   id?: number
   bulstat: string
-  legalName: string
+  name: string
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -358,7 +358,7 @@ export type CompanyRegistryCacheCreateManyInput = {
 
 export type CompanyRegistryCacheUpdateManyMutationInput = {
   bulstat?: Prisma.StringFieldUpdateOperationsInput | string
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -369,7 +369,7 @@ export type CompanyRegistryCacheUpdateManyMutationInput = {
 export type CompanyRegistryCacheUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.StringFieldUpdateOperationsInput | string
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -380,7 +380,7 @@ export type CompanyRegistryCacheUncheckedUpdateManyInput = {
 export type CompanyRegistryCacheCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   address?: Prisma.SortOrder
   rawLookupData?: Prisma.SortOrder
@@ -395,7 +395,7 @@ export type CompanyRegistryCacheAvgOrderByAggregateInput = {
 export type CompanyRegistryCacheMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   lastFetchedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -404,7 +404,7 @@ export type CompanyRegistryCacheMaxOrderByAggregateInput = {
 export type CompanyRegistryCacheMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   lastFetchedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -453,7 +453,7 @@ export type CompanyRegistryCacheUpdateOneWithoutContragentsNestedInput = {
 
 export type CompanyRegistryCacheCreateWithoutOrganizationsInput = {
   bulstat: string
-  legalName: string
+  name: string
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -465,7 +465,7 @@ export type CompanyRegistryCacheCreateWithoutOrganizationsInput = {
 export type CompanyRegistryCacheUncheckedCreateWithoutOrganizationsInput = {
   id?: number
   bulstat: string
-  legalName: string
+  name: string
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -492,7 +492,7 @@ export type CompanyRegistryCacheUpdateToOneWithWhereWithoutOrganizationsInput = 
 
 export type CompanyRegistryCacheUpdateWithoutOrganizationsInput = {
   bulstat?: Prisma.StringFieldUpdateOperationsInput | string
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -504,7 +504,7 @@ export type CompanyRegistryCacheUpdateWithoutOrganizationsInput = {
 export type CompanyRegistryCacheUncheckedUpdateWithoutOrganizationsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.StringFieldUpdateOperationsInput | string
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -515,7 +515,7 @@ export type CompanyRegistryCacheUncheckedUpdateWithoutOrganizationsInput = {
 
 export type CompanyRegistryCacheCreateWithoutContragentsInput = {
   bulstat: string
-  legalName: string
+  name: string
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -527,7 +527,7 @@ export type CompanyRegistryCacheCreateWithoutContragentsInput = {
 export type CompanyRegistryCacheUncheckedCreateWithoutContragentsInput = {
   id?: number
   bulstat: string
-  legalName: string
+  name: string
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -554,7 +554,7 @@ export type CompanyRegistryCacheUpdateToOneWithWhereWithoutContragentsInput = {
 
 export type CompanyRegistryCacheUpdateWithoutContragentsInput = {
   bulstat?: Prisma.StringFieldUpdateOperationsInput | string
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -566,7 +566,7 @@ export type CompanyRegistryCacheUpdateWithoutContragentsInput = {
 export type CompanyRegistryCacheUncheckedUpdateWithoutContragentsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   bulstat?: Prisma.StringFieldUpdateOperationsInput | string
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rawLookupData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -618,7 +618,7 @@ export type CompanyRegistryCacheCountOutputTypeCountOrganizationsArgs<ExtArgs ex
 export type CompanyRegistryCacheSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   bulstat?: boolean
-  legalName?: boolean
+  name?: boolean
   vatNumber?: boolean
   address?: boolean
   rawLookupData?: boolean
@@ -632,7 +632,7 @@ export type CompanyRegistryCacheSelect<ExtArgs extends runtime.Types.Extensions.
 export type CompanyRegistryCacheSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   bulstat?: boolean
-  legalName?: boolean
+  name?: boolean
   vatNumber?: boolean
   address?: boolean
   rawLookupData?: boolean
@@ -643,7 +643,7 @@ export type CompanyRegistryCacheSelectCreateManyAndReturn<ExtArgs extends runtim
 export type CompanyRegistryCacheSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   bulstat?: boolean
-  legalName?: boolean
+  name?: boolean
   vatNumber?: boolean
   address?: boolean
   rawLookupData?: boolean
@@ -654,7 +654,7 @@ export type CompanyRegistryCacheSelectUpdateManyAndReturn<ExtArgs extends runtim
 export type CompanyRegistryCacheSelectScalar = {
   id?: boolean
   bulstat?: boolean
-  legalName?: boolean
+  name?: boolean
   vatNumber?: boolean
   address?: boolean
   rawLookupData?: boolean
@@ -662,7 +662,7 @@ export type CompanyRegistryCacheSelectScalar = {
   createdAt?: boolean
 }
 
-export type CompanyRegistryCacheOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "bulstat" | "legalName" | "vatNumber" | "address" | "rawLookupData" | "lastFetchedAt" | "createdAt", ExtArgs["result"]["companyRegistryCache"]>
+export type CompanyRegistryCacheOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "bulstat" | "name" | "vatNumber" | "address" | "rawLookupData" | "lastFetchedAt" | "createdAt", ExtArgs["result"]["companyRegistryCache"]>
 export type CompanyRegistryCacheInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   contragents?: boolean | Prisma.CompanyRegistryCache$contragentsArgs<ExtArgs>
   organizations?: boolean | Prisma.CompanyRegistryCache$organizationsArgs<ExtArgs>
@@ -680,7 +680,7 @@ export type $CompanyRegistryCachePayload<ExtArgs extends runtime.Types.Extension
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     bulstat: string
-    legalName: string
+    name: string
     vatNumber: string | null
     address: runtime.JsonValue | null
     rawLookupData: runtime.JsonValue | null
@@ -1113,7 +1113,7 @@ export interface Prisma__CompanyRegistryCacheClient<T, Null = never, ExtArgs ext
 export interface CompanyRegistryCacheFieldRefs {
   readonly id: Prisma.FieldRef<"CompanyRegistryCache", 'Int'>
   readonly bulstat: Prisma.FieldRef<"CompanyRegistryCache", 'String'>
-  readonly legalName: Prisma.FieldRef<"CompanyRegistryCache", 'String'>
+  readonly name: Prisma.FieldRef<"CompanyRegistryCache", 'String'>
   readonly vatNumber: Prisma.FieldRef<"CompanyRegistryCache", 'String'>
   readonly address: Prisma.FieldRef<"CompanyRegistryCache", 'Json'>
   readonly rawLookupData: Prisma.FieldRef<"CompanyRegistryCache", 'Json'>

@@ -41,7 +41,7 @@ export type OrganizationSumAggregateOutputType = {
 }
 
 export type OrganizationMinAggregateOutputType = {
-  legalName: string | null
+  name: string | null
   bulstat: string | null
   vatNumber: string | null
   invoiceSeriesPrefix: string | null
@@ -53,10 +53,11 @@ export type OrganizationMinAggregateOutputType = {
   id: number | null
   registryId: number | null
   source: $Enums.CompanyLookupSource | null
+  email: string | null
 }
 
 export type OrganizationMaxAggregateOutputType = {
-  legalName: string | null
+  name: string | null
   bulstat: string | null
   vatNumber: string | null
   invoiceSeriesPrefix: string | null
@@ -68,10 +69,11 @@ export type OrganizationMaxAggregateOutputType = {
   id: number | null
   registryId: number | null
   source: $Enums.CompanyLookupSource | null
+  email: string | null
 }
 
 export type OrganizationCountAggregateOutputType = {
-  legalName: number
+  name: number
   bulstat: number
   vatNumber: number
   address: number
@@ -84,6 +86,7 @@ export type OrganizationCountAggregateOutputType = {
   id: number
   registryId: number
   source: number
+  email: number
   _all: number
 }
 
@@ -103,7 +106,7 @@ export type OrganizationSumAggregateInputType = {
 }
 
 export type OrganizationMinAggregateInputType = {
-  legalName?: true
+  name?: true
   bulstat?: true
   vatNumber?: true
   invoiceSeriesPrefix?: true
@@ -115,10 +118,11 @@ export type OrganizationMinAggregateInputType = {
   id?: true
   registryId?: true
   source?: true
+  email?: true
 }
 
 export type OrganizationMaxAggregateInputType = {
-  legalName?: true
+  name?: true
   bulstat?: true
   vatNumber?: true
   invoiceSeriesPrefix?: true
@@ -130,10 +134,11 @@ export type OrganizationMaxAggregateInputType = {
   id?: true
   registryId?: true
   source?: true
+  email?: true
 }
 
 export type OrganizationCountAggregateInputType = {
-  legalName?: true
+  name?: true
   bulstat?: true
   vatNumber?: true
   address?: true
@@ -146,6 +151,7 @@ export type OrganizationCountAggregateInputType = {
   id?: true
   registryId?: true
   source?: true
+  email?: true
   _all?: true
 }
 
@@ -236,7 +242,7 @@ export type OrganizationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 export type OrganizationGroupByOutputType = {
-  legalName: string
+  name: string
   bulstat: string | null
   vatNumber: string | null
   address: runtime.JsonValue | null
@@ -249,6 +255,7 @@ export type OrganizationGroupByOutputType = {
   id: number
   registryId: number | null
   source: $Enums.CompanyLookupSource
+  email: string | null
   _count: OrganizationCountAggregateOutputType | null
   _avg: OrganizationAvgAggregateOutputType | null
   _sum: OrganizationSumAggregateOutputType | null
@@ -275,7 +282,7 @@ export type OrganizationWhereInput = {
   AND?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   OR?: Prisma.OrganizationWhereInput[]
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
-  legalName?: Prisma.StringFilter<"Organization"> | string
+  name?: Prisma.StringFilter<"Organization"> | string
   bulstat?: Prisma.StringNullableFilter<"Organization"> | string | null
   vatNumber?: Prisma.StringNullableFilter<"Organization"> | string | null
   address?: Prisma.JsonNullableFilter<"Organization">
@@ -288,6 +295,7 @@ export type OrganizationWhereInput = {
   id?: Prisma.IntFilter<"Organization"> | number
   registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
   source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
+  email?: Prisma.StringNullableFilter<"Organization"> | string | null
   contragents?: Prisma.ContragentListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
   generatedInvoices?: Prisma.GeneratedInvoiceListRelationFilter
@@ -297,7 +305,7 @@ export type OrganizationWhereInput = {
 }
 
 export type OrganizationOrderByWithRelationInput = {
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   bulstat?: Prisma.SortOrderInput | Prisma.SortOrder
   vatNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -310,6 +318,7 @@ export type OrganizationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   contragents?: Prisma.ContragentOrderByRelationAggregateInput
   creditTransactions?: Prisma.CreditTransactionOrderByRelationAggregateInput
   generatedInvoices?: Prisma.GeneratedInvoiceOrderByRelationAggregateInput
@@ -323,7 +332,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   OR?: Prisma.OrganizationWhereInput[]
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
-  legalName?: Prisma.StringFilter<"Organization"> | string
+  name?: Prisma.StringFilter<"Organization"> | string
   bulstat?: Prisma.StringNullableFilter<"Organization"> | string | null
   vatNumber?: Prisma.StringNullableFilter<"Organization"> | string | null
   address?: Prisma.JsonNullableFilter<"Organization">
@@ -335,6 +344,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   molName?: Prisma.StringNullableFilter<"Organization"> | string | null
   registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
   source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
+  email?: Prisma.StringNullableFilter<"Organization"> | string | null
   contragents?: Prisma.ContragentListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
   generatedInvoices?: Prisma.GeneratedInvoiceListRelationFilter
@@ -344,7 +354,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
 }, "id">
 
 export type OrganizationOrderByWithAggregationInput = {
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   bulstat?: Prisma.SortOrderInput | Prisma.SortOrder
   vatNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -357,6 +367,7 @@ export type OrganizationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OrganizationCountOrderByAggregateInput
   _avg?: Prisma.OrganizationAvgOrderByAggregateInput
   _max?: Prisma.OrganizationMaxOrderByAggregateInput
@@ -368,7 +379,7 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   AND?: Prisma.OrganizationScalarWhereWithAggregatesInput | Prisma.OrganizationScalarWhereWithAggregatesInput[]
   OR?: Prisma.OrganizationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OrganizationScalarWhereWithAggregatesInput | Prisma.OrganizationScalarWhereWithAggregatesInput[]
-  legalName?: Prisma.StringWithAggregatesFilter<"Organization"> | string
+  name?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   bulstat?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   vatNumber?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   address?: Prisma.JsonNullableWithAggregatesFilter<"Organization">
@@ -381,10 +392,11 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Organization"> | number
   registryId?: Prisma.IntNullableWithAggregatesFilter<"Organization"> | number | null
   source?: Prisma.EnumCompanyLookupSourceWithAggregatesFilter<"Organization"> | $Enums.CompanyLookupSource
+  email?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
 }
 
 export type OrganizationCreateInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -394,6 +406,7 @@ export type OrganizationCreateInput = {
   updatedAt?: Date | string
   molName?: string | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
@@ -403,7 +416,7 @@ export type OrganizationCreateInput = {
 }
 
 export type OrganizationUncheckedCreateInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -416,6 +429,7 @@ export type OrganizationUncheckedCreateInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -423,7 +437,7 @@ export type OrganizationUncheckedCreateInput = {
 }
 
 export type OrganizationUpdateInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -433,6 +447,7 @@ export type OrganizationUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
@@ -442,7 +457,7 @@ export type OrganizationUpdateInput = {
 }
 
 export type OrganizationUncheckedUpdateInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -455,6 +470,7 @@ export type OrganizationUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -462,7 +478,7 @@ export type OrganizationUncheckedUpdateInput = {
 }
 
 export type OrganizationCreateManyInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -475,10 +491,11 @@ export type OrganizationCreateManyInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
 }
 
 export type OrganizationUpdateManyMutationInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -488,10 +505,11 @@ export type OrganizationUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrganizationUncheckedUpdateManyInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -504,6 +522,7 @@ export type OrganizationUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrganizationListRelationFilter = {
@@ -517,7 +536,7 @@ export type OrganizationOrderByRelationAggregateInput = {
 }
 
 export type OrganizationCountOrderByAggregateInput = {
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   address?: Prisma.SortOrder
@@ -530,6 +549,7 @@ export type OrganizationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   registryId?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  email?: Prisma.SortOrder
 }
 
 export type OrganizationAvgOrderByAggregateInput = {
@@ -540,7 +560,7 @@ export type OrganizationAvgOrderByAggregateInput = {
 }
 
 export type OrganizationMaxOrderByAggregateInput = {
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   invoiceSeriesPrefix?: Prisma.SortOrder
@@ -552,10 +572,11 @@ export type OrganizationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   registryId?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  email?: Prisma.SortOrder
 }
 
 export type OrganizationMinOrderByAggregateInput = {
-  legalName?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   bulstat?: Prisma.SortOrder
   vatNumber?: Prisma.SortOrder
   invoiceSeriesPrefix?: Prisma.SortOrder
@@ -567,6 +588,7 @@ export type OrganizationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   registryId?: Prisma.SortOrder
   source?: Prisma.SortOrder
+  email?: Prisma.SortOrder
 }
 
 export type OrganizationSumOrderByAggregateInput = {
@@ -741,7 +763,7 @@ export type OrganizationUpdateOneWithoutCreditTransactionsNestedInput = {
 }
 
 export type OrganizationCreateWithoutAccountInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -751,6 +773,7 @@ export type OrganizationCreateWithoutAccountInput = {
   updatedAt?: Date | string
   molName?: string | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
@@ -759,7 +782,7 @@ export type OrganizationCreateWithoutAccountInput = {
 }
 
 export type OrganizationUncheckedCreateWithoutAccountInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -771,6 +794,7 @@ export type OrganizationUncheckedCreateWithoutAccountInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -807,7 +831,7 @@ export type OrganizationScalarWhereInput = {
   AND?: Prisma.OrganizationScalarWhereInput | Prisma.OrganizationScalarWhereInput[]
   OR?: Prisma.OrganizationScalarWhereInput[]
   NOT?: Prisma.OrganizationScalarWhereInput | Prisma.OrganizationScalarWhereInput[]
-  legalName?: Prisma.StringFilter<"Organization"> | string
+  name?: Prisma.StringFilter<"Organization"> | string
   bulstat?: Prisma.StringNullableFilter<"Organization"> | string | null
   vatNumber?: Prisma.StringNullableFilter<"Organization"> | string | null
   address?: Prisma.JsonNullableFilter<"Organization">
@@ -820,10 +844,11 @@ export type OrganizationScalarWhereInput = {
   id?: Prisma.IntFilter<"Organization"> | number
   registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
   source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
+  email?: Prisma.StringNullableFilter<"Organization"> | string | null
 }
 
 export type OrganizationCreateWithoutRegistryInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -833,6 +858,7 @@ export type OrganizationCreateWithoutRegistryInput = {
   updatedAt?: Date | string
   molName?: string | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
@@ -841,7 +867,7 @@ export type OrganizationCreateWithoutRegistryInput = {
 }
 
 export type OrganizationUncheckedCreateWithoutRegistryInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -853,6 +879,7 @@ export type OrganizationUncheckedCreateWithoutRegistryInput = {
   molName?: string | null
   id?: number
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -886,7 +913,7 @@ export type OrganizationUpdateManyWithWhereWithoutRegistryInput = {
 }
 
 export type OrganizationCreateWithoutContragentsInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -896,6 +923,7 @@ export type OrganizationCreateWithoutContragentsInput = {
   updatedAt?: Date | string
   molName?: string | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
   account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
@@ -904,7 +932,7 @@ export type OrganizationCreateWithoutContragentsInput = {
 }
 
 export type OrganizationUncheckedCreateWithoutContragentsInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -917,6 +945,7 @@ export type OrganizationUncheckedCreateWithoutContragentsInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -939,7 +968,7 @@ export type OrganizationUpdateToOneWithWhereWithoutContragentsInput = {
 }
 
 export type OrganizationUpdateWithoutContragentsInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -949,6 +978,7 @@ export type OrganizationUpdateWithoutContragentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
@@ -957,7 +987,7 @@ export type OrganizationUpdateWithoutContragentsInput = {
 }
 
 export type OrganizationUncheckedUpdateWithoutContragentsInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -970,13 +1000,14 @@ export type OrganizationUncheckedUpdateWithoutContragentsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutSourceDocumentsInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -986,6 +1017,7 @@ export type OrganizationCreateWithoutSourceDocumentsInput = {
   updatedAt?: Date | string
   molName?: string | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
@@ -994,7 +1026,7 @@ export type OrganizationCreateWithoutSourceDocumentsInput = {
 }
 
 export type OrganizationUncheckedCreateWithoutSourceDocumentsInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1007,6 +1039,7 @@ export type OrganizationUncheckedCreateWithoutSourceDocumentsInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1029,7 +1062,7 @@ export type OrganizationUpdateToOneWithWhereWithoutSourceDocumentsInput = {
 }
 
 export type OrganizationUpdateWithoutSourceDocumentsInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1039,6 +1072,7 @@ export type OrganizationUpdateWithoutSourceDocumentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
@@ -1047,7 +1081,7 @@ export type OrganizationUpdateWithoutSourceDocumentsInput = {
 }
 
 export type OrganizationUncheckedUpdateWithoutSourceDocumentsInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1060,13 +1094,14 @@ export type OrganizationUncheckedUpdateWithoutSourceDocumentsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutGeneratedInvoicesInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1076,6 +1111,7 @@ export type OrganizationCreateWithoutGeneratedInvoicesInput = {
   updatedAt?: Date | string
   molName?: string | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
@@ -1084,7 +1120,7 @@ export type OrganizationCreateWithoutGeneratedInvoicesInput = {
 }
 
 export type OrganizationUncheckedCreateWithoutGeneratedInvoicesInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1097,6 +1133,7 @@ export type OrganizationUncheckedCreateWithoutGeneratedInvoicesInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1119,7 +1156,7 @@ export type OrganizationUpdateToOneWithWhereWithoutGeneratedInvoicesInput = {
 }
 
 export type OrganizationUpdateWithoutGeneratedInvoicesInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1129,6 +1166,7 @@ export type OrganizationUpdateWithoutGeneratedInvoicesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
@@ -1137,7 +1175,7 @@ export type OrganizationUpdateWithoutGeneratedInvoicesInput = {
 }
 
 export type OrganizationUncheckedUpdateWithoutGeneratedInvoicesInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1150,13 +1188,14 @@ export type OrganizationUncheckedUpdateWithoutGeneratedInvoicesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateWithoutCreditTransactionsInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1166,6 +1205,7 @@ export type OrganizationCreateWithoutCreditTransactionsInput = {
   updatedAt?: Date | string
   molName?: string | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
   account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
@@ -1174,7 +1214,7 @@ export type OrganizationCreateWithoutCreditTransactionsInput = {
 }
 
 export type OrganizationUncheckedCreateWithoutCreditTransactionsInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1187,6 +1227,7 @@ export type OrganizationUncheckedCreateWithoutCreditTransactionsInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1209,7 +1250,7 @@ export type OrganizationUpdateToOneWithWhereWithoutCreditTransactionsInput = {
 }
 
 export type OrganizationUpdateWithoutCreditTransactionsInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1219,6 +1260,7 @@ export type OrganizationUpdateWithoutCreditTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
@@ -1227,7 +1269,7 @@ export type OrganizationUpdateWithoutCreditTransactionsInput = {
 }
 
 export type OrganizationUncheckedUpdateWithoutCreditTransactionsInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1240,13 +1282,14 @@ export type OrganizationUncheckedUpdateWithoutCreditTransactionsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyAccountInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1258,10 +1301,11 @@ export type OrganizationCreateManyAccountInput = {
   id?: number
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
+  email?: string | null
 }
 
 export type OrganizationUpdateWithoutAccountInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1271,6 +1315,7 @@ export type OrganizationUpdateWithoutAccountInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
@@ -1279,7 +1324,7 @@ export type OrganizationUpdateWithoutAccountInput = {
 }
 
 export type OrganizationUncheckedUpdateWithoutAccountInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1291,6 +1336,7 @@ export type OrganizationUncheckedUpdateWithoutAccountInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1298,7 +1344,7 @@ export type OrganizationUncheckedUpdateWithoutAccountInput = {
 }
 
 export type OrganizationUncheckedUpdateManyWithoutAccountInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1310,10 +1356,11 @@ export type OrganizationUncheckedUpdateManyWithoutAccountInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrganizationCreateManyRegistryInput = {
-  legalName: string
+  name: string
   bulstat?: string | null
   vatNumber?: string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1325,10 +1372,11 @@ export type OrganizationCreateManyRegistryInput = {
   molName?: string | null
   id?: number
   source?: $Enums.CompanyLookupSource
+  email?: string | null
 }
 
 export type OrganizationUpdateWithoutRegistryInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1338,6 +1386,7 @@ export type OrganizationUpdateWithoutRegistryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
@@ -1346,7 +1395,7 @@ export type OrganizationUpdateWithoutRegistryInput = {
 }
 
 export type OrganizationUncheckedUpdateWithoutRegistryInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1358,6 +1407,7 @@ export type OrganizationUncheckedUpdateWithoutRegistryInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.IntFieldUpdateOperationsInput | number
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1365,7 +1415,7 @@ export type OrganizationUncheckedUpdateWithoutRegistryInput = {
 }
 
 export type OrganizationUncheckedUpdateManyWithoutRegistryInput = {
-  legalName?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   bulstat?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vatNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1377,6 +1427,7 @@ export type OrganizationUncheckedUpdateManyWithoutRegistryInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.IntFieldUpdateOperationsInput | number
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1438,7 +1489,7 @@ export type OrganizationCountOutputTypeCountSourceDocumentsArgs<ExtArgs extends 
 
 
 export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  legalName?: boolean
+  name?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   address?: boolean
@@ -1451,6 +1502,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   registryId?: boolean
   source?: boolean
+  email?: boolean
   contragents?: boolean | Prisma.Organization$contragentsArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Organization$creditTransactionsArgs<ExtArgs>
   generatedInvoices?: boolean | Prisma.Organization$generatedInvoicesArgs<ExtArgs>
@@ -1461,7 +1513,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
 }, ExtArgs["result"]["organization"]>
 
 export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  legalName?: boolean
+  name?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   address?: boolean
@@ -1474,12 +1526,13 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   registryId?: boolean
   source?: boolean
+  email?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
 export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  legalName?: boolean
+  name?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   address?: boolean
@@ -1492,12 +1545,13 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   registryId?: boolean
   source?: boolean
+  email?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
 
 export type OrganizationSelectScalar = {
-  legalName?: boolean
+  name?: boolean
   bulstat?: boolean
   vatNumber?: boolean
   address?: boolean
@@ -1510,9 +1564,10 @@ export type OrganizationSelectScalar = {
   id?: boolean
   registryId?: boolean
   source?: boolean
+  email?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"legalName" | "bulstat" | "vatNumber" | "address" | "invoiceSeriesPrefix" | "nextInvoiceSeq" | "createdAt" | "updatedAt" | "accountId" | "molName" | "id" | "registryId" | "source", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"name" | "bulstat" | "vatNumber" | "address" | "invoiceSeriesPrefix" | "nextInvoiceSeq" | "createdAt" | "updatedAt" | "accountId" | "molName" | "id" | "registryId" | "source" | "email", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   contragents?: boolean | Prisma.Organization$contragentsArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Organization$creditTransactionsArgs<ExtArgs>
@@ -1542,7 +1597,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     sourceDocuments: Prisma.$SourceDocumentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    legalName: string
+    name: string
     bulstat: string | null
     vatNumber: string | null
     address: runtime.JsonValue | null
@@ -1555,6 +1610,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: number
     registryId: number | null
     source: $Enums.CompanyLookupSource
+    email: string | null
   }, ExtArgs["result"]["organization"]>
   composites: {}
 }
@@ -1638,8 +1694,8 @@ export interface OrganizationDelegate<ExtArgs extends runtime.Types.Extensions.I
    * // Get first 10 Organizations
    * const organizations = await prisma.organization.findMany({ take: 10 })
    * 
-   * // Only select the `legalName`
-   * const organizationWithLegalNameOnly = await prisma.organization.findMany({ select: { legalName: true } })
+   * // Only select the `name`
+   * const organizationWithNameOnly = await prisma.organization.findMany({ select: { name: true } })
    * 
    */
   findMany<T extends OrganizationFindManyArgs>(args?: Prisma.SelectSubset<T, OrganizationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -1683,9 +1739,9 @@ export interface OrganizationDelegate<ExtArgs extends runtime.Types.Extensions.I
    *   ]
    * })
    * 
-   * // Create many Organizations and only return the `legalName`
-   * const organizationWithLegalNameOnly = await prisma.organization.createManyAndReturn({
-   *   select: { legalName: true },
+   * // Create many Organizations and only return the `name`
+   * const organizationWithNameOnly = await prisma.organization.createManyAndReturn({
+   *   select: { name: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -1774,9 +1830,9 @@ export interface OrganizationDelegate<ExtArgs extends runtime.Types.Extensions.I
    *   ]
    * })
    * 
-   * // Update zero or more Organizations and only return the `legalName`
-   * const organizationWithLegalNameOnly = await prisma.organization.updateManyAndReturn({
-   *   select: { legalName: true },
+   * // Update zero or more Organizations and only return the `name`
+   * const organizationWithNameOnly = await prisma.organization.updateManyAndReturn({
+   *   select: { name: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1984,7 +2040,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
  * Fields of the Organization model
  */
 export interface OrganizationFieldRefs {
-  readonly legalName: Prisma.FieldRef<"Organization", 'String'>
+  readonly name: Prisma.FieldRef<"Organization", 'String'>
   readonly bulstat: Prisma.FieldRef<"Organization", 'String'>
   readonly vatNumber: Prisma.FieldRef<"Organization", 'String'>
   readonly address: Prisma.FieldRef<"Organization", 'Json'>
@@ -1997,6 +2053,7 @@ export interface OrganizationFieldRefs {
   readonly id: Prisma.FieldRef<"Organization", 'Int'>
   readonly registryId: Prisma.FieldRef<"Organization", 'Int'>
   readonly source: Prisma.FieldRef<"Organization", 'CompanyLookupSource'>
+  readonly email: Prisma.FieldRef<"Organization", 'String'>
 }
     
 

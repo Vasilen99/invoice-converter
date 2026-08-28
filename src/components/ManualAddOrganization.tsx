@@ -70,10 +70,8 @@ export const validateOrganizationForm = (
 ): ValidationErrors => {
   const errors: ValidationErrors = {};
 
-  if (!data.legalName?.trim()) {
-    errors.legalName = translations(
-      "organizationForm.validation.legalNameRequired",
-    );
+  if (!data.name?.trim()) {
+    errors.name = translations("organizationForm.validation.legalNameRequired");
   }
 
   if (!data.bulstat?.trim() || data.bulstat.trim().length < 9) {
@@ -307,18 +305,16 @@ export default function ManualAddOrganization({
             <>
               {/* Organization fields */}
               <FormField
-                labelKey="organizationForm.legalNameLabel"
-                placeholderKey="organizationForm.legalNamePlaceholder"
-                value={(formData as OrganizationFormData).legalName}
-                fieldName="legalName"
+                labelKey="organizationForm.namePlaceholder"
+                placeholderKey="organizationForm.namePlaceholder"
+                value={(formData as OrganizationFormData).name}
+                fieldName="name"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 translations={translations}
                 isRequired
                 error={
-                  touchedFields.has("legalName")
-                    ? validationErrors.legalName
-                    : undefined
+                  touchedFields.has("name") ? validationErrors.name : undefined
                 }
               />
               <FormField
@@ -363,6 +359,21 @@ export default function ManualAddOrganization({
                 error={
                   touchedFields.has("molName")
                     ? validationErrors.molName
+                    : undefined
+                }
+              />
+              <FormField
+                labelKey="organizationForm.emailLabel"
+                placeholderKey="organizationForm.emailPlaceholder"
+                value={(formData as OrganizationFormData).email || ""}
+                fieldName="email"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                translations={translations}
+                isRequired={false}
+                error={
+                  touchedFields.has("email")
+                    ? validationErrors.email
                     : undefined
                 }
               />
