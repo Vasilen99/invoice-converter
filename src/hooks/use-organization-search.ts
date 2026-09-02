@@ -65,8 +65,6 @@ export function useOrganizationSearch() {
       }
 
       const data = await response.json();
-      console.log(data, "log");
-
       // Cache the results
       cacheRef.current[cacheKey] = data.results;
       setResults(data.results);

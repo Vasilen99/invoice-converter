@@ -13,9 +13,7 @@ import {
   SidebarGroupLabel,
   SidebarTrigger,
   SidebarInset,
-  useSidebar,
 } from "@/components/animate-ui/components/radix/sidebar";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
   Building2,
@@ -36,13 +34,13 @@ import {
   ReceiptText,
   Repeat,
   CircleDollarSign,
+  FileBox,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FadeIn } from "@/components/motion";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { useEffect, useState } from "react";
 import {
   accountLink,
   dashboardLink,
@@ -59,6 +57,11 @@ const NAVIGATION_CONFIG = [
         nameKey: "dashboard.overview",
         href: dashboardLink,
         icon: BarChart3,
+      },
+      {
+        nameKey: "dashboard.aiConvertor",
+        href: "/dashboard/ai-convertor",
+        icon: FileBox,
       },
       {
         nameKey: "dashboard.reports",
@@ -171,9 +174,7 @@ const NAVIGATION_CONFIG = [
 
 function DashboardSidebarContent() {
   const t = useTranslations();
-  const router = useRouter();
   const pathname = usePathname();
-  const { setOpenMobile } = useSidebar();
   const { logout, user } = useUserStore();
 
   const accountName =

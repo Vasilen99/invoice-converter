@@ -1,55 +1,104 @@
-'use client';
+"use client";
 
-import React, { useRef, useState } from 'react';
-import { Upload, X, Loader2, AlertCircle, Download, FileOutput, CheckCircle2, Sparkles, FileText, Wand2 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import PdfViewer from './PdfViewer';
-import BulgarianInvoice, { SELLER_DEFAULTS } from './BulgarianInvoice';
-import { BulgarianInvoiceData } from '../types';
+import React, { useRef, useState } from "react";
+import { AlertCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { BulgarianInvoiceData } from "../types";
+import { HeadingSection } from "./HeadingSection";
+import { callApi } from "../../utility/hooks/apiFetch";
+import dynamic from "next/dynamic";
 
-type Status = 'idle' | 'extracting' | 'extracted' | 'generated' | 'error';
-
-const AI_STEP_KEYS = ['step1', 'step2', 'step3', 'step4', 'step5'] as const;
-
-/* ── Small reusable helpers ── */
-const EditField: React.FC<{
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  className?: string;
-}> = ({ label, value, onChange, className = '' }) => (
-  <div className={`flex flex-col gap-1 ${className}`}>
-    <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{label}</label>
-    <input
-      type="text"
-      value={value ?? ''}
-      onChange={e => onChange(e.target.value)}
-      className="text-sm text-foreground bg-background border border-input rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring/40 focus:border-ring transition-all"
-    />
-  </div>
+const InvoicesLayoutSection = dynamic(
+  () =>
+    import("./InvoicesLayoutSection").then((mod) => mod.InvoicesLayoutSection),
+  {
+    ssr: false,
+  },
 );
 
-const EditSection: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-  <div className="flex flex-col gap-3">
-    <div className="flex items-center gap-2">
-      <span className="text-xs font-bold text-foreground/70 uppercase tracking-widest">{title}</span>
-      <div className="flex-1 h-px bg-border" />
-    </div>
-    {children}
-  </div>
+const UploadZone = dynamic(
+  () => import("./UploadZone").then((mod) => mod.UploadZone),
+  {
+    ssr: false,
+  },
 );
 
-const InvoiceUploader: React.FC = () => {
-  const t = useTranslations('uploader');
-  const inputRef   = useRef<HTMLInputElement>(null);
-  const invoiceRef = useRef<HTMLDivElement>(null);
-  const [file, setFile]             = useState<File | null>(null);
-  const [invoiceData, setInvoiceData] = useState<BulgarianInvoiceData | null>(null);
-  const [status, setStatus]         = useState<Status>('idle');
-  const [errorMsg, setErrorMsg]     = useState('');
+const MissingOrganizationsModal = dynamic(
+  () =>
+    import("./MissingOrganizationsModal").then(
+      (mod) => mod.MissingOrganizationsModal,
+    ),
+  {
+    ssr: false,
+  },
+);
+
+type InvoiceFile = {
+  file: File;
+  id: string;
+  status: "pending" | "extracting" | "extracted" | "error";
+  data?: BulgarianInvoiceData | null;
+  error?: string;
+};
+
+type MissingOrganizationFromCache = {
+  bulstat: string;
+  name: string;
+  vatNumber: string | null;
+  address: unknown;
+  rawLookupData: unknown;
+};
+
+type MissingContragentFromCache = MissingOrganizationFromCache & {
+  organizationId: number | null;
+  organizationBulstat: string;
+  organizationName: string | null;
+};
+
+type InvoicePartyPair = {
+  sellerEik: string;
+  buyerEik: string;
+};
+
+type InvoiceUploaderProps = {
+  account?: {
+    id: number;
+    creditBalance: number;
+    composer_name?: string;
+  } | null;
+};
+
+const AI_STEP_KEYS = ["step1", "step2", "step3", "step4", "step5"] as const;
+
+const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
+  const t = useTranslations("uploader");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [invoices, setInvoices] = useState<InvoiceFile[]>([]);
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(
+    null,
+  );
+  const [errorMsg, setErrorMsg] = useState("");
   const [downloading, setDownloading] = useState(false);
-  const [dragOver, setDragOver]     = useState(false);
-  const [aiStep, setAiStep]         = useState(0);
+  const [downloadingAll, setDownloadingAll] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [aiStep, setAiStep] = useState(0);
+  const [missingOrganizations, setMissingOrganizations] = useState<
+    MissingOrganizationFromCache[]
+  >([]);
+  const [missingContragents, setMissingContragents] = useState<
+    MissingContragentFromCache[]
+  >([]);
+  const [missingOrganizationsModalOpen, setMissingOrganizationsModalOpen] =
+    useState(false);
+  const [savingMissingOrganizations, setSavingMissingOrganizations] =
+    useState(false);
+  const [savingMissingContragents, setSavingMissingContragents] =
+    useState(false);
+  const [savingAllMissingEntities, setSavingAllMissingEntities] =
+    useState(false);
+  const accountComposerName = account?.composer_name || "";
+
+  const selectedInvoice = invoices.find((inv) => inv.id === selectedInvoiceId);
 
   const cycleAiStep = () => {
     let i = 0;
@@ -60,129 +109,424 @@ const InvoiceUploader: React.FC = () => {
     return id;
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.files?.[0];
-    if (!selected) return;
+  const normalizeEik = (value: string | undefined): string =>
+    (value ?? "").trim();
 
-    if (selected.type !== 'application/pdf') {
-      setErrorMsg(t('invalidPdf'));
-      setFile(null);
-      setInvoiceData(null);
+  const checkMissingEntities = async (
+    organizationEiks: string[],
+    invoicePairs: InvoicePartyPair[],
+  ) => {
+    const uniqueEiks = [
+      ...new Set(organizationEiks.map((eik) => normalizeEik(eik))),
+    ].filter(Boolean);
+
+    const uniqueInvoicePairs = Array.from(
+      new Map(
+        invoicePairs
+          .map((pair) => ({
+            sellerEik: normalizeEik(pair.sellerEik),
+            buyerEik: normalizeEik(pair.buyerEik),
+          }))
+          .filter((pair) => pair.sellerEik && pair.buyerEik)
+          .map((pair) => [`${pair.sellerEik}::${pair.buyerEik}`, pair]),
+      ).values(),
+    );
+
+    if (uniqueEiks.length === 0 && uniqueInvoicePairs.length === 0) {
       return;
     }
 
-    setErrorMsg('');
-    setFile(selected);
-    setInvoiceData(null);
-    setAiStep(0);
-    setStatus('extracting');
-    const stepTimer = cycleAiStep();
+    const result = await callApi(
+      "/organizations/missing-from-invoices",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          eiks: uniqueEiks,
+          invoicePairs: uniqueInvoicePairs,
+        }),
+      },
+      false,
+    );
 
+    const organizations = result?.missingOrganizations ?? [];
+    const contragents = result?.missingContragents ?? [];
+
+    if (organizations.length > 0 || contragents.length > 0) {
+      setMissingOrganizations(organizations);
+      setMissingContragents(contragents);
+      setMissingOrganizationsModalOpen(true);
+    }
+  };
+
+  const saveMissingOrganizations = async (): Promise<Map<string, number>> => {
+    const createdOrganizationsByBulstat = new Map<string, number>();
+
+    if (missingOrganizations.length === 0) {
+      return createdOrganizationsByBulstat;
+    }
+
+    for (const org of missingOrganizations) {
+      const createdOrganization = await callApi(
+        "/organizations/add",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            bulstat: org.bulstat,
+            name: org.name,
+            vatNumber: org.vatNumber,
+            address: org.address ?? {},
+            rawLookupData: org.rawLookupData,
+          }),
+        },
+        false,
+      );
+
+      if (createdOrganization?.bulstat && createdOrganization?.id) {
+        createdOrganizationsByBulstat.set(
+          normalizeEik(createdOrganization.bulstat),
+          createdOrganization.id,
+        );
+      }
+    }
+
+    setMissingOrganizations([]);
+    return createdOrganizationsByBulstat;
+  };
+
+  const saveMissingContragents = async (
+    createdOrganizationsByBulstat: Map<string, number> = new Map(),
+  ) => {
+    if (missingContragents.length === 0) {
+      return { unresolved: 0 };
+    }
+
+    const unresolvedContragents: MissingContragentFromCache[] = [];
+
+    for (const contragent of missingContragents) {
+      // First, try to use the existing organizationId if available
+      // If not, check if it was newly created from the save-all flow
+      // If still not found, mark as unresolved
+      const organizationId =
+        contragent.organizationId !== null
+          ? contragent.organizationId
+          : createdOrganizationsByBulstat.get(
+              normalizeEik(contragent.organizationBulstat),
+            ) || null;
+
+      if (!organizationId) {
+        console.warn(
+          `[Contragent Save] Failed to resolve organizationId for contragent ${contragent.bulstat} (seller organization: ${contragent.organizationBulstat}). ` +
+            `Backend returned organizationId: ${contragent.organizationId}, ` +
+            `CreatedMap size: ${createdOrganizationsByBulstat.size}, ` +
+            `CreatedMap keys: [${Array.from(createdOrganizationsByBulstat.keys()).join(", ")}], ` +
+            `This means the seller organization (${contragent.organizationBulstat}) is not in your account and was not created in this flow.`,
+        );
+        unresolvedContragents.push(contragent);
+        continue;
+      }
+
+      await callApi(
+        "/contragents/add",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            organizationId,
+            bulstat: contragent.bulstat,
+            name: contragent.name,
+            vatNumber: contragent.vatNumber,
+            address: contragent.address ?? {},
+            rawLookupData: contragent.rawLookupData,
+          }),
+        },
+        false,
+      );
+    }
+
+    setMissingContragents(unresolvedContragents);
+
+    if (unresolvedContragents.length > 0) {
+      setErrorMsg(
+        t("missingOrganizationsModal.unresolvedContragents", {
+          count: unresolvedContragents.length,
+        }),
+      );
+    }
+
+    return { unresolved: unresolvedContragents.length };
+  };
+
+  const handleSaveOrganizations = async () => {
+    if (missingOrganizations.length === 0) {
+      if (missingContragents.length === 0) {
+        setMissingOrganizationsModalOpen(false);
+      }
+      return;
+    }
+
+    setSavingMissingOrganizations(true);
+    try {
+      await saveMissingOrganizations();
+      if (missingContragents.length === 0) {
+        setMissingOrganizationsModalOpen(false);
+      }
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : t("extractFailed"));
+    } finally {
+      setSavingMissingOrganizations(false);
+    }
+  };
+
+  const handleSaveContragents = async () => {
+    if (missingContragents.length === 0) {
+      if (missingOrganizations.length === 0) {
+        setMissingOrganizationsModalOpen(false);
+      }
+      return;
+    }
+
+    setSavingMissingContragents(true);
+    try {
+      const result = await saveMissingContragents();
+      if (result.unresolved === 0 && missingOrganizations.length === 0) {
+        setMissingOrganizationsModalOpen(false);
+      }
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : t("extractFailed"));
+    } finally {
+      setSavingMissingContragents(false);
+    }
+  };
+
+  const handleSaveAllMissingOrganizations = async () => {
+    if (missingOrganizations.length === 0 && missingContragents.length === 0) {
+      setMissingOrganizationsModalOpen(false);
+      return;
+    }
+
+    setSavingAllMissingEntities(true);
+    try {
+      const createdOrganizationsByBulstat = await saveMissingOrganizations();
+      const { unresolved } = await saveMissingContragents(
+        createdOrganizationsByBulstat,
+      );
+
+      if (unresolved === 0) {
+        setMissingOrganizationsModalOpen(false);
+      }
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : t("extractFailed"));
+    } finally {
+      setSavingAllMissingEntities(false);
+    }
+  };
+
+  const processFile = async (
+    file: File,
+  ): Promise<BulgarianInvoiceData | null> => {
     try {
       const formData = new FormData();
-      formData.append('file', selected);
-      const res  = await fetch('/api/extract-invoice', { method: 'POST', body: formData });
-      const json = await res.json();
-      if (!res.ok || json.error) throw new Error(json.error ?? t('extractFailed'));
-      setInvoiceData({
-          ...json.data,
-          sellerName: SELLER_DEFAULTS.name,
-          sellerEik: SELLER_DEFAULTS.eik,
-          sellerVatNumber: SELLER_DEFAULTS.vatNumber,
-          sellerCity: SELLER_DEFAULTS.city,
-          sellerAddress: SELLER_DEFAULTS.address,
-          sellerMol: SELLER_DEFAULTS.mol,
-        });
-      setStatus('extracted');
+      formData.append("file", file);
+      const data = await callApi(
+        "/extract-invoice",
+        {
+          method: "POST",
+          body: formData,
+        },
+        true,
+      );
+      if (!data) {
+      }
+
+      return data;
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : t('extractFailed'));
-      setStatus('error');
-    } finally {
-      clearInterval(stepTimer);
+      throw err instanceof Error ? err : new Error(t("extractFailed"));
     }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files;
+    if (!selectedFiles || selectedFiles.length === 0) return;
+
+    const newInvoices: InvoiceFile[] = [];
+    const filePromises: Promise<void>[] = [];
+    const extractedOrganizationEiks = new Set<string>();
+    const extractedInvoicePairs = new Map<string, InvoicePartyPair>();
+
+    // Add all files to the list with pending status
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+
+      if (file.type !== "application/pdf") {
+        setErrorMsg(t("invalidPdf"));
+        continue;
+      }
+
+      const id = `${Date.now()}-${i}`;
+      newInvoices.push({
+        file,
+        id,
+        status: "pending",
+      });
+
+      filePromises.push(
+        (async () => {
+          try {
+            const stepTimer = cycleAiStep();
+            const data = await processFile(file);
+            clearInterval(stepTimer);
+
+            if (data) {
+              const sellerEik = normalizeEik(data.sellerEik);
+              const buyerEik = normalizeEik(data.buyerEik);
+              if (sellerEik) extractedOrganizationEiks.add(sellerEik);
+              if (sellerEik && buyerEik) {
+                extractedInvoicePairs.set(`${sellerEik}::${buyerEik}`, {
+                  sellerEik,
+                  buyerEik,
+                });
+              }
+            }
+
+            // Update with extracted data
+            setInvoices((prev) =>
+              prev.map((inv) =>
+                inv.id === id ? { ...inv, status: "extracted", data } : inv,
+              ),
+            );
+
+            // Auto-select first successfully extracted invoice
+            setSelectedInvoiceId((prev) => prev || id);
+          } catch (err: unknown) {
+            const error =
+              err instanceof Error ? err.message : t("extractFailed");
+            setInvoices((prev) =>
+              prev.map((inv) =>
+                inv.id === id ? { ...inv, status: "error", error } : inv,
+              ),
+            );
+            setErrorMsg(error);
+          }
+        })(),
+      );
+    }
+
+    setErrorMsg("");
+    setInvoices((prev) => [...prev, ...newInvoices]);
+    setAiStep(0);
+
+    await Promise.allSettled(filePromises);
+    await checkMissingEntities(
+      [...extractedOrganizationEiks],
+      Array.from(extractedInvoicePairs.values()),
+    );
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
-    const dropped = e.dataTransfer.files[0];
-    if (dropped) {
-      const fake = { target: { files: [dropped] } } as unknown as React.ChangeEvent<HTMLInputElement>;
+    const droppedFiles = e.dataTransfer.files;
+    if (droppedFiles) {
+      const fake = {
+        target: { files: droppedFiles },
+      } as unknown as React.ChangeEvent<HTMLInputElement>;
       handleFileChange(fake);
     }
   };
 
   const reset = () => {
-    setFile(null); setInvoiceData(null);
-    setStatus('idle'); setErrorMsg('');
-    if (inputRef.current) inputRef.current.value = '';
+    setInvoices([]);
+    setSelectedInvoiceId(null);
+    setErrorMsg("");
+    if (inputRef.current) inputRef.current.value = "";
   };
 
-  const handleDownload = async () => {
-    if (!invoiceData) return;
-    setDownloading(true);
-    try {
-      const res = await fetch('/api/generate-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(invoiceData),
-      });
-      if (!res.ok) throw new Error('PDF generation failed');
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `фактура-${invoiceData.invoiceNumber ?? 'generated'}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } finally {
-      setDownloading(false);
+  const removeInvoice = (id: string) => {
+    setInvoices((prev) => prev.filter((inv) => inv.id !== id));
+    if (selectedInvoiceId === id) {
+      const remaining = invoices.filter((inv) => inv.id !== id);
+      setSelectedInvoiceId(remaining.length > 0 ? remaining[0].id : null);
     }
+  };
+
+  const updateInvoiceData = (id: string, data: BulgarianInvoiceData) => {
+    setInvoices((prev) =>
+      prev.map((inv) => (inv.id === id ? { ...inv, data } : inv)),
+    );
+  };
+
+  const generateAndDownloadPdfs = async (
+    invoiceDataList: BulgarianInvoiceData[],
+    isBulk: boolean = false,
+  ) => {
+    const setLoading = isBulk ? setDownloadingAll : setDownloading;
+    setLoading(true);
+    try {
+      for (const invoiceData of invoiceDataList) {
+        // Ensure composer_name is always present in the data sent to the API
+        const dataToSend = {
+          ...invoiceData,
+          composer_name: invoiceData.composer_name || accountComposerName || "",
+        };
+
+        const res = await fetch("/api/generate-pdf", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dataToSend),
+        });
+
+        if (!res.ok) throw new Error("PDF generation failed");
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `фактура-${invoiceData.invoiceNumber ?? "generated"}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        // Add a small delay between downloads to avoid issues (only for bulk)
+        if (isBulk) {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        }
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDownload = async (invoiceData: BulgarianInvoiceData) => {
+    await generateAndDownloadPdfs([invoiceData], false);
+  };
+
+  const handleDownloadAll = async () => {
+    const validInvoices = invoices
+      .filter((inv) => inv.data)
+      .map((inv) => inv.data!);
+    await generateAndDownloadPdfs(validInvoices, true);
   };
 
   return (
     <div className="w-full">
-
+      <HeadingSection title={t("title")} subtitle={t("subtitle")} />
       {/* ── UPLOAD ZONE ── */}
-      {!file && (
-        <div
-          className={`relative group rounded-2xl p-12 flex flex-col items-center justify-center gap-5 cursor-pointer transition-all duration-300 overflow-hidden
-            border-2 ${dragOver ? 'border-ring bg-accent/30 animate-border-dance' : 'border-dashed border-border hover:border-ring/60'}
-          `}
-          onClick={() => inputRef.current?.click()}
-          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={handleDrop}
-        >
-          {/* Subtle background glow on hover */}
-          <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-foreground/5 via-transparent to-foreground/5" />
-
-          <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-300
-            bg-secondary
-            ${dragOver ? 'animate-pulse-glow scale-110' : 'group-hover:scale-105'}
-          `}>
-            <Upload className={`w-9 h-9 text-foreground/70 transition-transform duration-300 ${dragOver ? 'scale-110' : 'group-hover:-translate-y-1'}`} />
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm font-semibold text-foreground">
-              {dragOver ? t('dropHere') : t('clickOrDrag')}
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">{t('onlyPdf')}</p>
-          </div>
-
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); inputRef.current?.click(); }}
-            className="btn-glow px-8 py-2.5 rounded-xl text-sm font-bold text-primary-foreground
-              bg-primary hover:bg-primary/90"
-          >
-            {t('choosePdf')}
-          </button>
-
-          <input ref={inputRef} type="file" accept="application/pdf" className="hidden" onChange={handleFileChange} />
-        </div>
+      {invoices.length === 0 && (
+        <UploadZone
+          dragOver={dragOver}
+          inputRef={inputRef}
+          handleDrop={handleDrop}
+          t={t}
+          setDragOver={setDragOver}
+        />
       )}
+
+      {/* Hidden file input - always available */}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="application/pdf"
+        className="hidden"
+        onChange={handleFileChange}
+        multiple
+      />
 
       {/* ── ERROR ── */}
       {errorMsg && (
@@ -191,230 +535,60 @@ const InvoiceUploader: React.FC = () => {
             <AlertCircle className="w-4 h-4 text-destructive" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-destructive">{t('somethingWrong')}</p>
+            <p className="text-sm font-semibold text-destructive">
+              {t("somethingWrong")}
+            </p>
             <p className="text-xs text-destructive/80 mt-0.5">{errorMsg}</p>
           </div>
-          <button onClick={reset} className="text-xs text-destructive/70 hover:text-destructive underline">{t('close')}</button>
+          <button
+            onClick={reset}
+            className="text-xs text-destructive/70 hover:text-destructive underline"
+          >
+            {t("close")}
+          </button>
         </div>
       )}
 
-      {/* ── FILE LOADED ── */}
-      {file && (
-        <div className="flex flex-col gap-6 animate-fade-up">
-
-          {/* Top bar */}
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-secondary flex items-center justify-center">
-                <FileText className="w-4 h-4 text-foreground/70" />
-              </div>
-              <span className="text-sm font-medium text-foreground truncate max-w-xs">{file.name}</span>
-              <span className="text-xs text-muted-foreground">— {(file.size / 1024).toFixed(1)} KB</span>
-            </div>
-            <div className="flex items-center gap-3">
-              {status === 'generated' && invoiceData && (
-                <button
-                  onClick={handleDownload}
-                  disabled={downloading}
-                  className="btn-green-glow flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-primary-foreground
-                    bg-primary hover:bg-primary/90 disabled:opacity-50"
-                >
-                  {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-                  {downloading ? t('generating') : t('downloadPdf')}
-                </button>
-              )}
-              <button onClick={reset} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-lg hover:bg-accent">
-                <X className="w-3.5 h-3.5" /> {t('remove')}
-              </button>
-            </div>
-          </div>
-
-          {/* Two-column area */}
-          <div className="flex flex-col lg:flex-row gap-6 items-start">
-
-            {/* LEFT — Stripe PDF */}
-            <div className="w-full lg:w-1/2 shrink-0 flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-foreground/50 inline-block" />
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t('stripeInvoice')}</span>
-              </div>
-              <div className="rounded-2xl overflow-hidden shadow-xl shadow-foreground/5 border border-border">
-                <PdfViewer file={file} />
-              </div>
-            </div>
-
-            {/* RIGHT — Bulgarian invoice */}
-            <div className="w-full lg:w-1/2 flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-foreground/70 inline-block" />
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t('bulgarianInvoice')}</span>
-              </div>
-
-              {/* Extracting */}
-              {status === 'extracting' && (
-                <div className="animate-scale-in rounded-2xl overflow-hidden border border-border shadow-lg shadow-foreground/5">
-                  {/* Shimmer header */}
-                  <div className="animate-shimmer bg-gradient-to-r from-primary via-primary/70 to-primary p-4 text-primary-foreground text-center">
-                    <div className="flex items-center justify-center gap-2 font-bold text-sm tracking-wide">
-                      <Sparkles className="w-4 h-4 animate-pulse" />
-                      {t('aiReading')}
-                      <Sparkles className="w-4 h-4 animate-pulse" />
-                    </div>
-                  </div>
-                  <div className="bg-card p-8 flex flex-col items-center gap-6">
-                    {/* Spinning ring */}
-                    <div className="relative w-20 h-20">
-                      <div className="absolute inset-0 rounded-full border-4 border-secondary" />
-                      <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-foreground animate-spin" />
-                      <div className="absolute inset-2 rounded-full border-4 border-transparent border-t-muted-foreground animate-spin-slow" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <Wand2 className="w-6 h-6 text-foreground/60 animate-pulse" />
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm font-semibold text-foreground mb-1 animate-fade-in" key={aiStep}>
-                        {t(`aiSteps.${AI_STEP_KEYS[aiStep]}`)}
-                      </p>
-                      <div className="flex gap-1 justify-center mt-3">
-                        {AI_STEP_KEYS.map((_, i) => (
-                          <div key={i} className={`h-1 rounded-full transition-all duration-500 ${i === aiStep ? 'w-6 bg-foreground' : 'w-2 bg-muted'}`} />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Extracted — editable form before generate */}
-              {status === 'extracted' && invoiceData && (
-                <div className="animate-scale-in rounded-2xl overflow-hidden border border-border shadow-lg shadow-foreground/5">
-                  {/* Header */}
-                  <div className="bg-primary p-4 text-primary-foreground">
-                    <div className="flex items-center gap-2 font-bold text-sm">
-                      <CheckCircle2 className="w-5 h-5" />
-                      {t('dataExtracted')}
-                    </div>
-                  </div>
-
-                  <div className="bg-card p-6 flex flex-col gap-6 max-h-[70vh] overflow-y-auto">
-
-                    {/* Section: Фактура */}
-                    <EditSection title={t('sections.invoice')}>
-                      <div className="grid grid-cols-2 gap-3">
-                        <EditField label={t('fields.number')} value={invoiceData.invoiceNumber} onChange={v => setInvoiceData(d => d && ({ ...d, invoiceNumber: v }))} />
-                        <EditField label={t('fields.date')} value={invoiceData.invoiceDate} onChange={v => setInvoiceData(d => d && ({ ...d, invoiceDate: v }))} />
-                        <EditField label={t('fields.taxEventDate')} value={invoiceData.taxEventDate} onChange={v => setInvoiceData(d => d && ({ ...d, taxEventDate: v }))} />
-                        <EditField label={t('fields.location')} value={invoiceData.location} onChange={v => setInvoiceData(d => d && ({ ...d, location: v }))} />
-                        <EditField label={t('fields.currency')} value={invoiceData.currency} onChange={v => setInvoiceData(d => d && ({ ...d, currency: v }))} />
-                      </div>
-                    </EditSection>
-
-                    {/* Section: Доставчик */}
-                    <EditSection title={t('sections.seller')}>
-                      <div className="grid grid-cols-2 gap-3">
-                        <EditField label={t('fields.name')} value={invoiceData.sellerName} onChange={v => setInvoiceData(d => d && ({ ...d, sellerName: v }))} className="col-span-2" />
-                        <EditField label={t('fields.eik')} value={invoiceData.sellerEik} onChange={v => setInvoiceData(d => d && ({ ...d, sellerEik: v }))} />
-                        <EditField label={t('fields.vatNumber')} value={invoiceData.sellerVatNumber} onChange={v => setInvoiceData(d => d && ({ ...d, sellerVatNumber: v }))} />
-                        <EditField label={t('fields.city')} value={invoiceData.sellerCity} onChange={v => setInvoiceData(d => d && ({ ...d, sellerCity: v }))} />
-                        <EditField label={t('fields.address')} value={invoiceData.sellerAddress} onChange={v => setInvoiceData(d => d && ({ ...d, sellerAddress: v }))} />
-                        <EditField label={t('fields.mol')} value={invoiceData.sellerMol} onChange={v => setInvoiceData(d => d && ({ ...d, sellerMol: v }))} className="col-span-2" />
-                      </div>
-                    </EditSection>
-
-                    {/* Section: Получател */}
-                    <EditSection title={t('sections.buyer')}>
-                      <div className="grid grid-cols-2 gap-3">
-                        <EditField label={t('fields.name')} value={invoiceData.buyerName} onChange={v => setInvoiceData(d => d && ({ ...d, buyerName: v }))} className="col-span-2" />
-                        <EditField label={t('fields.eik')} value={invoiceData.buyerEik} onChange={v => setInvoiceData(d => d && ({ ...d, buyerEik: v }))} />
-                        <EditField label={t('fields.vatNumber')} value={invoiceData.buyerVatNumber} onChange={v => setInvoiceData(d => d && ({ ...d, buyerVatNumber: v }))} />
-                        <EditField label={t('fields.city')} value={invoiceData.buyerCity} onChange={v => setInvoiceData(d => d && ({ ...d, buyerCity: v }))} />
-                        <EditField label={t('fields.address')} value={invoiceData.buyerAddress} onChange={v => setInvoiceData(d => d && ({ ...d, buyerAddress: v }))} />
-                        <EditField label={t('fields.mol')} value={invoiceData.buyerMol} onChange={v => setInvoiceData(d => d && ({ ...d, buyerMol: v }))} className="col-span-2" />
-                      </div>
-                    </EditSection>
-
-                    {/* Section: Артикули */}
-                    <EditSection title={t('sections.items')}>
-                      <div className="flex flex-col gap-3">
-                        {invoiceData.lineItems.map((item, idx) => (
-                          <div key={idx} className="border border-border rounded-xl p-3 bg-muted/50 flex flex-col gap-2">
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('row', { number: idx + 1 })}</span>
-                              <button
-                                type="button"
-                                onClick={() => setInvoiceData(d => d && ({ ...d, lineItems: d.lineItems.filter((_, i) => i !== idx) }))}
-                                className="text-xs text-destructive/70 hover:text-destructive flex items-center gap-1"
-                              >
-                                <X className="w-3 h-3" /> {t('remove')}
-                              </button>
-                            </div>
-                            <EditField label={t('fields.description')} value={item.description} onChange={v => setInvoiceData(d => d && ({ ...d, lineItems: d.lineItems.map((li, i) => i === idx ? { ...li, description: v } : li) }))} />
-                            <div className="grid grid-cols-2 gap-2">
-                              <EditField label={t('fields.unit')} value={item.unit} onChange={v => setInvoiceData(d => d && ({ ...d, lineItems: d.lineItems.map((li, i) => i === idx ? { ...li, unit: v } : li) }))} />
-                              <EditField label={t('fields.quantity')} value={item.quantity} onChange={v => setInvoiceData(d => d && ({ ...d, lineItems: d.lineItems.map((li, i) => i === idx ? { ...li, quantity: v } : li) }))} />
-                              <EditField label={t('fields.unitPrice')} value={item.unitPrice} onChange={v => setInvoiceData(d => d && ({ ...d, lineItems: d.lineItems.map((li, i) => i === idx ? { ...li, unitPrice: v } : li) }))} />
-                              <EditField label={t('fields.vatPercent')} value={item.vatPercent} onChange={v => setInvoiceData(d => d && ({ ...d, lineItems: d.lineItems.map((li, i) => i === idx ? { ...li, vatPercent: v } : li) }))} />
-                              <EditField label={t('fields.value')} value={item.value} onChange={v => setInvoiceData(d => d && ({ ...d, lineItems: d.lineItems.map((li, i) => i === idx ? { ...li, value: v } : li) }))} className="col-span-2" />
-                            </div>
-                          </div>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => setInvoiceData(d => d && ({ ...d, lineItems: [...d.lineItems, { description: '', unit: 'бр.', quantity: '1', unitPrice: '0.00', vatPercent: '20', value: '0.00' }] }))}
-                          className="text-xs text-foreground/70 hover:text-foreground border border-dashed border-border rounded-xl py-2 px-4 hover:bg-accent transition-colors"
-                        >
-                          {t('addRow')}
-                        </button>
-                      </div>
-                    </EditSection>
-
-                    {/* Section: Суми */}
-                    <EditSection title={t('sections.totals')}>
-                      <div className="grid grid-cols-2 gap-3">
-                        <EditField label={t('fields.subtotal')} value={invoiceData.subtotal} onChange={v => setInvoiceData(d => d && ({ ...d, subtotal: v }))} />
-                        <EditField label={t('fields.vatAmount')} value={invoiceData.vatAmount} onChange={v => setInvoiceData(d => d && ({ ...d, vatAmount: v }))} />
-                        <EditField label={t('fields.total')} value={invoiceData.total} onChange={v => setInvoiceData(d => d && ({ ...d, total: v }))} className="col-span-2" />
-                        <EditField label={t('fields.totalInWords')} value={invoiceData.totalInWords} onChange={v => setInvoiceData(d => d && ({ ...d, totalInWords: v }))} className="col-span-2" />
-                      </div>
-                    </EditSection>
-
-                    <button
-                      onClick={() => setStatus('generated')}
-                      className="btn-glow w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold text-primary-foreground
-                        bg-primary hover:bg-primary/90"
-                    >
-                      <FileOutput className="w-5 h-5" />
-                      {t('generateInvoice')}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Generated invoice */}
-              {status === 'generated' && invoiceData && (
-                <div className="animate-scale-in flex flex-col gap-4">
-                  <div className="rounded-2xl overflow-x-auto shadow-xl shadow-foreground/5 border border-border">
-                    <div style={{ minWidth: 794 }}>
-                      <BulgarianInvoice ref={invoiceRef} data={invoiceData} />
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleDownload}
-                    disabled={downloading}
-                    className="btn-green-glow w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-sm font-bold text-primary-foreground
-                      bg-primary hover:bg-primary/90 disabled:opacity-50"
-                  >
-                    {downloading
-                      ? <><Loader2 className="w-5 h-5 animate-spin" /> {t('generatingPdf')}</>
-                      : <><Download className="w-5 h-5" /> {t('downloadBulgarianPdf')}</>
-                    }
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+      {/* ── FILES LOADED ── */}
+      {invoices.length > 0 && (
+        <InvoicesLayoutSection
+          invoices={invoices}
+          selectedInvoiceId={selectedInvoiceId}
+          selectedInvoice={selectedInvoice}
+          downloading={downloading}
+          downloadingAll={downloadingAll}
+          accountComposerName={accountComposerName}
+          aiStep={aiStep}
+          t={t}
+          setSelectedInvoiceId={setSelectedInvoiceId}
+          removeInvoice={removeInvoice}
+          updateInvoiceData={updateInvoiceData}
+          handleDownload={handleDownload}
+          handleDownloadAll={handleDownloadAll}
+          inputRef={inputRef}
+          reset={reset}
+        />
       )}
+
+      <MissingOrganizationsModal
+        open={missingOrganizationsModalOpen}
+        onClose={() => setMissingOrganizationsModalOpen(false)}
+        onSaveOrganizations={handleSaveOrganizations}
+        onSaveContragents={handleSaveContragents}
+        onSaveAll={handleSaveAllMissingOrganizations}
+        organizations={missingOrganizations.map((org) => ({
+          bulstat: org.bulstat,
+          name: org.name,
+        }))}
+        contragents={missingContragents.map((contragent) => ({
+          bulstat: contragent.bulstat,
+          name: contragent.name,
+        }))}
+        savingOrganizations={savingMissingOrganizations}
+        savingContragents={savingMissingContragents}
+        savingAll={savingAllMissingEntities}
+        t={t}
+      />
     </div>
   );
 };

@@ -1,27 +1,27 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { BulgarianInvoiceData } from '../../../types';
+import { NextRequest, NextResponse } from "next/server";
+import { BulgarianInvoiceData } from "../../../types";
 
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const BANK = {
-  name: 'Обединена Българска Банка (ОББ)',
-  bic: 'UBBSBGSF',
-  iban: 'BG91UBBS80021063728750',
-};
-
-const PREPARER = 'Николай Николаев Такиев';
-const BLUE = '#1a56a0';
-const LIGHT_BLUE_BG = '#e8f0fb';
-const BORDER = '#b0c4de';
+const BLUE = "#1a56a0";
+const LIGHT_BLUE_BG = "#e8f0fb";
+const BORDER = "#b0c4de";
 
 function v(val: string | undefined): string {
-  return val ?? '';
+  return val ?? "";
 }
 
 function buildHtml(data: BulgarianInvoiceData): string {
-  const rows = data.lineItems.map((item, i) => `
-    <tr style="background:${i % 2 === 0 ? '#fff' : LIGHT_BLUE_BG}">
+  const BANK = {
+    name: v(data.bank) || "",
+    bic: v(data.bic) || "",
+    iban: v(data.iban) || "",
+  };
+  const rows = data.lineItems
+    .map(
+      (item, i) => `
+    <tr style="background:${i % 2 === 0 ? "#fff" : LIGHT_BLUE_BG}">
       <td style="text-align:center">${i + 1}</td>
       <td>${v(item.description)}</td>
       <td style="text-align:center">${v(item.unit)}</td>
@@ -29,11 +29,17 @@ function buildHtml(data: BulgarianInvoiceData): string {
       <td style="text-align:right">${v(item.unitPrice)}</td>
       <td style="text-align:center">${v(item.vatPercent)}%</td>
       <td style="text-align:right">${v(item.value)}</td>
-    </tr>`).join('');
+    </tr>`,
+    )
+    .join("");
 
   const fillerCount = Math.max(0, 5 - data.lineItems.length);
-  const fillerRows = Array.from({ length: fillerCount }).map(() => `
-    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`).join('');
+  const fillerRows = Array.from({ length: fillerCount })
+    .map(
+      () => `
+    <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`,
+    )
+    .join("");
 
   return `<!DOCTYPE html>
 <html>
@@ -148,7 +154,7 @@ function buildHtml(data: BulgarianInvoiceData): string {
   <thead>
     <tr>
       <th class="center">No</th>
-      <th>Ime на стоката/услугата</th>
+      <th>Име на стоката/услугата</th>
       <th class="center">Мярка</th>
       <th class="center">К-во</th>
       <th class="right">Ед. цена</th>
@@ -202,7 +208,7 @@ function buildHtml(data: BulgarianInvoiceData): string {
     <div>Подпис: ................................................</div>
   </div>
   <div>
-    <div class="sig-name">Съставил: ${PREPARER}</div>
+    <div class="sig-name">Съставил: ${v(data.composer_name)}</div>
     <div class="sig-line">Подпис: ................................................</div>
   </div>
 </div>
@@ -221,31 +227,31 @@ export async function POST(req: NextRequest) {
     const html = buildHtml(data);
 
     let browser;
-    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
-      const puppeteer = (await import('puppeteer-core')).default;
-      const chromium = (await import('@sparticuz/chromium-min')).default;
+    if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
+      const puppeteer = (await import("puppeteer-core")).default;
+      const chromium = (await import("@sparticuz/chromium-min")).default;
       browser = await puppeteer.launch({
         args: chromium.args,
         executablePath: await chromium.executablePath(
-          'https://github.com/Sparticuz/chromium/releases/download/v148.0.0/chromium-v148.0.0-pack.x64.tar'
+          "https://github.com/Sparticuz/chromium/releases/download/v148.0.0/chromium-v148.0.0-pack.x64.tar",
         ),
         headless: true,
       });
     } else {
-      const puppeteer = (await import('puppeteer')).default;
+      const puppeteer = (await import("puppeteer")).default;
       browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
     }
 
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'load' });
+    await page.setContent(html, { waitUntil: "load" });
 
     const pdfBuffer = await page.pdf({
-      format: 'A4',
+      format: "A4",
       printBackground: true,
-      margin: { top: '0', right: '0', bottom: '0', left: '0' },
+      margin: { top: "0", right: "0", bottom: "0", left: "0" },
     });
 
     await browser.close();
@@ -253,12 +259,12 @@ export async function POST(req: NextRequest) {
     return new NextResponse(Buffer.from(pdfBuffer), {
       status: 200,
       headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="faktura-${v(data.invoiceNumber)}.pdf"; filename*=UTF-8''${encodeURIComponent('фактура-' + v(data.invoiceNumber) + '.pdf')}`,
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="faktura-${v(data.invoiceNumber)}.pdf"; filename*=UTF-8''${encodeURIComponent("фактура-" + v(data.invoiceNumber) + ".pdf")}`,
       },
     });
   } catch (err) {
-    console.error('PDF generation error:', err);
+    console.error("PDF generation error:", err);
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }

@@ -42,6 +42,7 @@ export type AccountMinAggregateOutputType = {
   creditBalance: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  composer_name: string | null
 }
 
 export type AccountMaxAggregateOutputType = {
@@ -50,6 +51,7 @@ export type AccountMaxAggregateOutputType = {
   creditBalance: number | null
   createdAt: Date | null
   updatedAt: Date | null
+  composer_name: string | null
 }
 
 export type AccountCountAggregateOutputType = {
@@ -58,6 +60,7 @@ export type AccountCountAggregateOutputType = {
   creditBalance: number
   createdAt: number
   updatedAt: number
+  composer_name: number
   _all: number
 }
 
@@ -78,6 +81,7 @@ export type AccountMinAggregateInputType = {
   creditBalance?: true
   createdAt?: true
   updatedAt?: true
+  composer_name?: true
 }
 
 export type AccountMaxAggregateInputType = {
@@ -86,6 +90,7 @@ export type AccountMaxAggregateInputType = {
   creditBalance?: true
   createdAt?: true
   updatedAt?: true
+  composer_name?: true
 }
 
 export type AccountCountAggregateInputType = {
@@ -94,6 +99,7 @@ export type AccountCountAggregateInputType = {
   creditBalance?: true
   createdAt?: true
   updatedAt?: true
+  composer_name?: true
   _all?: true
 }
 
@@ -189,6 +195,7 @@ export type AccountGroupByOutputType = {
   creditBalance: number
   createdAt: Date
   updatedAt: Date
+  composer_name: string | null
   _count: AccountCountAggregateOutputType | null
   _avg: AccountAvgAggregateOutputType | null
   _sum: AccountSumAggregateOutputType | null
@@ -220,6 +227,7 @@ export type AccountWhereInput = {
   creditBalance?: Prisma.IntFilter<"Account"> | number
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  composer_name?: Prisma.StringNullableFilter<"Account"> | string | null
   members?: Prisma.AccountMemberListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
   orders?: Prisma.OrderListRelationFilter
@@ -232,6 +240,7 @@ export type AccountOrderByWithRelationInput = {
   creditBalance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  composer_name?: Prisma.SortOrderInput | Prisma.SortOrder
   members?: Prisma.AccountMemberOrderByRelationAggregateInput
   creditTransactions?: Prisma.CreditTransactionOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
@@ -247,6 +256,7 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   creditBalance?: Prisma.IntFilter<"Account"> | number
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
+  composer_name?: Prisma.StringNullableFilter<"Account"> | string | null
   members?: Prisma.AccountMemberListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
   orders?: Prisma.OrderListRelationFilter
@@ -259,6 +269,7 @@ export type AccountOrderByWithAggregationInput = {
   creditBalance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  composer_name?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AccountCountOrderByAggregateInput
   _avg?: Prisma.AccountAvgOrderByAggregateInput
   _max?: Prisma.AccountMaxOrderByAggregateInput
@@ -275,6 +286,7 @@ export type AccountScalarWhereWithAggregatesInput = {
   creditBalance?: Prisma.IntWithAggregatesFilter<"Account"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Account"> | Date | string
+  composer_name?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
 }
 
 export type AccountCreateInput = {
@@ -282,6 +294,7 @@ export type AccountCreateInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   members?: Prisma.AccountMemberCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderCreateNestedManyWithoutAccountInput
@@ -294,6 +307,7 @@ export type AccountUncheckedCreateInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   members?: Prisma.AccountMemberUncheckedCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutAccountInput
@@ -305,6 +319,7 @@ export type AccountUpdateInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.AccountMemberUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUpdateManyWithoutAccountNestedInput
@@ -317,6 +332,7 @@ export type AccountUncheckedUpdateInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.AccountMemberUncheckedUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutAccountNestedInput
@@ -329,6 +345,7 @@ export type AccountCreateManyInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
 }
 
 export type AccountUpdateManyMutationInput = {
@@ -336,6 +353,7 @@ export type AccountUpdateManyMutationInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AccountUncheckedUpdateManyInput = {
@@ -344,6 +362,7 @@ export type AccountUncheckedUpdateManyInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AccountCountOrderByAggregateInput = {
@@ -352,6 +371,7 @@ export type AccountCountOrderByAggregateInput = {
   creditBalance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  composer_name?: Prisma.SortOrder
 }
 
 export type AccountAvgOrderByAggregateInput = {
@@ -365,6 +385,7 @@ export type AccountMaxOrderByAggregateInput = {
   creditBalance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  composer_name?: Prisma.SortOrder
 }
 
 export type AccountMinOrderByAggregateInput = {
@@ -373,6 +394,7 @@ export type AccountMinOrderByAggregateInput = {
   creditBalance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  composer_name?: Prisma.SortOrder
 }
 
 export type AccountSumOrderByAggregateInput = {
@@ -399,6 +421,10 @@ export type IntFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type AccountCreateNestedOneWithoutMembersInput = {
@@ -462,6 +488,7 @@ export type AccountCreateWithoutMembersInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderCreateNestedManyWithoutAccountInput
   organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
@@ -473,6 +500,7 @@ export type AccountUncheckedCreateWithoutMembersInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutAccountInput
   organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
@@ -499,6 +527,7 @@ export type AccountUpdateWithoutMembersInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUpdateManyWithoutAccountNestedInput
   organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
@@ -510,6 +539,7 @@ export type AccountUncheckedUpdateWithoutMembersInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutAccountNestedInput
   organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
@@ -520,6 +550,7 @@ export type AccountCreateWithoutOrganizationsInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   members?: Prisma.AccountMemberCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderCreateNestedManyWithoutAccountInput
@@ -531,6 +562,7 @@ export type AccountUncheckedCreateWithoutOrganizationsInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   members?: Prisma.AccountMemberUncheckedCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutAccountInput
@@ -557,6 +589,7 @@ export type AccountUpdateWithoutOrganizationsInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.AccountMemberUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUpdateManyWithoutAccountNestedInput
@@ -568,6 +601,7 @@ export type AccountUncheckedUpdateWithoutOrganizationsInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.AccountMemberUncheckedUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutAccountNestedInput
@@ -578,6 +612,7 @@ export type AccountCreateWithoutOrdersInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   members?: Prisma.AccountMemberCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutAccountInput
   organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
@@ -589,6 +624,7 @@ export type AccountUncheckedCreateWithoutOrdersInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   members?: Prisma.AccountMemberUncheckedCreateNestedManyWithoutAccountInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutAccountInput
   organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
@@ -615,6 +651,7 @@ export type AccountUpdateWithoutOrdersInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.AccountMemberUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutAccountNestedInput
   organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
@@ -626,6 +663,7 @@ export type AccountUncheckedUpdateWithoutOrdersInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.AccountMemberUncheckedUpdateManyWithoutAccountNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutAccountNestedInput
   organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
@@ -636,6 +674,7 @@ export type AccountCreateWithoutCreditTransactionsInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   members?: Prisma.AccountMemberCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderCreateNestedManyWithoutAccountInput
   organizations?: Prisma.OrganizationCreateNestedManyWithoutAccountInput
@@ -647,6 +686,7 @@ export type AccountUncheckedCreateWithoutCreditTransactionsInput = {
   creditBalance?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  composer_name?: string | null
   members?: Prisma.AccountMemberUncheckedCreateNestedManyWithoutAccountInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutAccountInput
   organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutAccountInput
@@ -673,6 +713,7 @@ export type AccountUpdateWithoutCreditTransactionsInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.AccountMemberUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUpdateManyWithoutAccountNestedInput
   organizations?: Prisma.OrganizationUpdateManyWithoutAccountNestedInput
@@ -684,6 +725,7 @@ export type AccountUncheckedUpdateWithoutCreditTransactionsInput = {
   creditBalance?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  composer_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   members?: Prisma.AccountMemberUncheckedUpdateManyWithoutAccountNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutAccountNestedInput
   organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutAccountNestedInput
@@ -753,6 +795,7 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   creditBalance?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  composer_name?: boolean
   members?: boolean | Prisma.Account$membersArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Account$creditTransactionsArgs<ExtArgs>
   orders?: boolean | Prisma.Account$ordersArgs<ExtArgs>
@@ -766,6 +809,7 @@ export type AccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   creditBalance?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  composer_name?: boolean
 }, ExtArgs["result"]["account"]>
 
 export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -774,6 +818,7 @@ export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   creditBalance?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  composer_name?: boolean
 }, ExtArgs["result"]["account"]>
 
 export type AccountSelectScalar = {
@@ -782,9 +827,10 @@ export type AccountSelectScalar = {
   creditBalance?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  composer_name?: boolean
 }
 
-export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "creditBalance" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
+export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "creditBalance" | "createdAt" | "updatedAt" | "composer_name", ExtArgs["result"]["account"]>
 export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Account$membersArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Account$creditTransactionsArgs<ExtArgs>
@@ -809,6 +855,7 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     creditBalance: number
     createdAt: Date
     updatedAt: Date
+    composer_name: string | null
   }, ExtArgs["result"]["account"]>
   composites: {}
 }
@@ -1241,6 +1288,7 @@ export interface AccountFieldRefs {
   readonly creditBalance: Prisma.FieldRef<"Account", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Account", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Account", 'DateTime'>
+  readonly composer_name: Prisma.FieldRef<"Account", 'String'>
 }
     
 

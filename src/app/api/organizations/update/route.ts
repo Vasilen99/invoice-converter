@@ -35,6 +35,9 @@ export async function PUT(request: NextRequest) {
       molName,
       email,
       invoiceSeriesPrefix,
+      bank,
+      iban,
+      bic,
       rawLookupData,
     } = body;
 
@@ -56,6 +59,9 @@ export async function PUT(request: NextRequest) {
     // Sanitize inputs
     bulstat = bulstat.trim();
     name = name.trim();
+    bank = bank ? bank.trim() : null;
+    iban = iban ? iban.trim() : null;
+    bic = bic ? bic.trim() : null;
     if (vatNumber) vatNumber = vatNumber.trim();
     if (molName) molName = molName.trim();
     if (email) email = email.trim();
@@ -184,6 +190,9 @@ export async function PUT(request: NextRequest) {
         vatNumber: vatNumber || null,
         address: formattedAddress,
         molName: molName || null,
+        bank: bank || null,
+        iban: iban || null,
+        bic: bic || null,
         email: email || null,
         invoiceSeriesPrefix: invoiceSeriesPrefix || "INV",
         registryId,

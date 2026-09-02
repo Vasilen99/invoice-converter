@@ -75,10 +75,6 @@
     "subtitle": "Качете първата си фактура и вижте магията сама.",
     "button": "Започнете безплатно"
   },
-  "converter": {
-    "title": "Конвертирайте вашата фактура",
-    "subtitle": "Качете PDF и оставете AI да свърши останалото."
-  },
   "footer": {
     "tagline": "Превърнете всяка чуждестранна фактура в напълно съответстваща българска за под 30 секунди. Без преписване, без грешки, без главоболия.",
     "cta": "Конвертирайте първата си фактура безплатно",
@@ -99,6 +95,8 @@
     "poweredBy": "Задвижено от GPT-4o · Създадено за УЕБ СЪРВИСИС БЪЛГАРИЯ ЕООД"
   },
   "uploader": {
+    "title": "Конвертирайте вашата фактура",
+    "subtitle": "Качете PDF и оставете AI да свърши останалото.",
     "dropHere": "Пуснете тук!",
     "clickOrDrag": "Кликнете за качване или плъзнете и пуснете",
     "onlyPdf": "Само PDF файлове · Поддържат се Stripe фактури",
@@ -108,6 +106,8 @@
     "somethingWrong": "Нещо се обърка",
     "close": "Затвори",
     "remove": "Премахни",
+    "removeAll": "Премахни всички",
+    "addMore": "Добави още",
     "downloadPdf": "Изтегли PDF",
     "generating": "Генериране…",
     "stripeInvoice": "Stripe Фактура",
@@ -117,8 +117,12 @@
     "generateInvoice": "Генерирай Българска Фактура",
     "generatingPdf": "Генериране на PDF…",
     "downloadBulgarianPdf": "Изтегли Българска Фактура (PDF)",
+    "extractAllInvoices": "Изтегли всички фактури",
     "addRow": "+ Добави ред",
     "row": "Ред {number}",
+    "invoices": "Фактури",
+    "invoicesCount": "{count}",
+    "selectInvoiceToEdit": "Изберете фактура от списъка, за да редактирате",
     "aiSteps": {
       "step1": "Четене на структурата на фактурата…",
       "step2": "Идентифициране на купувач и продавач…",
@@ -131,7 +135,9 @@
       "seller": "Доставчик (Продавач)",
       "buyer": "Получател (Купувач)",
       "items": "Артикули",
-      "totals": "Суми"
+      "totals": "Суми",
+      "payment": "Платежни данни",
+      "composer": "Съставил"
     },
     "fields": {
       "number": "Номер",
@@ -154,7 +160,25 @@
       "subtotal": "Данъчна основа",
       "vatAmount": "ДДС сума",
       "total": "Общо за плащане",
-      "totalInWords": "Сума с думи"
+      "totalInWords": "Сума с думи",
+      "bank": "Банка",
+      "iban": "IBAN",
+      "bic": "BIC",
+      "composerName": "Съставил"
+    },
+    "missingOrganizationsModal": {
+      "title": "Открихме организации, които липсват във вашия акаунт",
+      "description": "Тези ЕИК-и бяха намерени в качените фактури и съществуват в нашия кеш. Желаете ли да ги добавите?",
+      "newOrganizations": "Нови организации",
+      "newContragents": "Нови контрагенти",
+      "noNewOrganizations": "Няма нови организации.",
+      "noNewContragents": "Няма нови контрагенти.",
+      "saveOrganizations": "Запази организации",
+      "saveContragents": "Запази контрагенти",
+      "unresolvedContragents": "{count} контрагент(а) не бяха запазени, защото организацията им все още липсва.",
+      "cancel": "Отказ",
+      "saveAll": "Запази всички",
+      "saving": "Запазване..."
     }
   },
   "dashboardNaming": "Табло",
@@ -163,6 +187,7 @@
     "overview": "Преглед",
     "reports": "Отчети",
     "documents": "Документи",
+    "aiConvertor": "AI Конвертор",
     "uploadDocument": "Качване на документ",
     "invoices": "Фактури",
     "contragents": "Контрагенти",
@@ -193,6 +218,8 @@
     "accountNamePlaceholder": "ПримерноИмеООД",
     "creditBalance": "Кредитен баланс",
     "addCredits": "Добави кредити",
+    "composerName": "Съставил",
+    "composerNamePlaceholder": "Примерно име на съставил",
     "createdAt": "Създаден на",
     "lastUpdatedAt": "Последно обновен на",
     "saveChanges": "Запази промените",
@@ -365,6 +392,12 @@
     "postCodeLabel": "Пощенски код",
     "countryLabel": "Страна",
     "regionLabel": "Регион",
+    "bankLabel": "Име на банка",
+    "bankPlaceholder": "Име на банка",
+    "ibanLabel": "IBAN",
+    "ibanPlaceholder": "BG80BNBG96611020345698",
+    "bicLabel": "BIC/SWIFT",
+    "bicPlaceholder": "BNBGBGSD",
     "saveChanges": "Запази промените",
     "saving": "Запазване...",
     "validation": {

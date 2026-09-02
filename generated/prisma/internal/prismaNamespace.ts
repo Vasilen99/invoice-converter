@@ -1360,7 +1360,8 @@ export const AccountScalarFieldEnum = {
   name: 'name',
   creditBalance: 'creditBalance',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  composer_name: 'composer_name'
 } as const
 
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
@@ -1419,7 +1420,11 @@ export const OrganizationScalarFieldEnum = {
   id: 'id',
   registryId: 'registryId',
   source: 'source',
-  email: 'email'
+  email: 'email',
+  bank: 'bank',
+  iban: 'iban',
+  bic: 'bic',
+  current_inv_number: 'current_inv_number'
 } as const
 
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
@@ -1675,6 +1680,20 @@ export type ListEnumCompanyLookupSourceFieldRefInput<$PrismaModel> = FieldRefInp
 
 
 /**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
  * Reference to a field of type 'SourceType'
  */
 export type EnumSourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceType'>
@@ -1699,20 +1718,6 @@ export type EnumSourceDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputT
  * Reference to a field of type 'SourceDocumentStatus[]'
  */
 export type ListEnumSourceDocumentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceDocumentStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal'
- */
-export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal[]'
- */
-export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 

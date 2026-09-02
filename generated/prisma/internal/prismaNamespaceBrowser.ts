@@ -86,7 +86,8 @@ export const AccountScalarFieldEnum = {
   name: 'name',
   creditBalance: 'creditBalance',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  composer_name: 'composer_name'
 } as const
 
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
@@ -145,7 +146,11 @@ export const OrganizationScalarFieldEnum = {
   id: 'id',
   registryId: 'registryId',
   source: 'source',
-  email: 'email'
+  email: 'email',
+  bank: 'bank',
+  iban: 'iban',
+  bic: 'bic',
+  current_inv_number: 'current_inv_number'
 } as const
 
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]

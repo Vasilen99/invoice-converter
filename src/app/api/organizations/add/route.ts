@@ -23,6 +23,9 @@ export async function POST(request: NextRequest) {
       address,
       molName,
       email,
+      bank,
+      iban,
+      bic,
       rawLookupData,
       isManualEntry = false,
     } = body;
@@ -45,6 +48,9 @@ export async function POST(request: NextRequest) {
     // Sanitize inputs
     bulstat = bulstat.trim();
     name = name.trim();
+    bank = bank ? bank.trim() : null;
+    iban = iban ? iban.trim() : null;
+    bic = bic ? bic.trim() : null;
     if (vatNumber) vatNumber = vatNumber.trim();
     if (molName) molName = molName.trim();
     if (email) email = email.trim();
@@ -209,6 +215,9 @@ export async function POST(request: NextRequest) {
         vatNumber: vatNumber || null,
         address: formattedAddress,
         molName: molName || null,
+        bank: bank || null,
+        iban: iban || null,
+        bic: bic || null,
         email: email || null,
         invoiceSeriesPrefix: "INV",
         accountId: userAccount.accountId,

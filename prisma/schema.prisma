@@ -13,6 +13,7 @@ model Account {
   creditBalance      Int                 @default(0)
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
+  composer_name      String?
   members            AccountMember[]
   creditTransactions CreditTransaction[]
   orders             Order[]
@@ -72,6 +73,10 @@ model Organization {
   registryId          Int?
   source              CompanyLookupSource   @default(MANUAL)
   email               String?
+  bank                String?
+  iban                String?
+  bic                 String?
+  current_inv_number  Decimal?              @db.Decimal
   contragents         Contragent[]
   creditTransactions  CreditTransaction[]
   generatedInvoices   GeneratedInvoice[]

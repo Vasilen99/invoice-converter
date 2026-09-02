@@ -25,6 +25,9 @@ export type OrganizationLight = {
   molName: string | null;
   email: string | null;
   invoiceSeriesPrefix: string;
+  bank?: string | null;
+  iban?: string | null;
+  bic?: string | null;
   address: {
     country?: string;
     region?: string;
@@ -119,6 +122,9 @@ export type OrganizationFormData = Omit<
   vatNumber?: string;
   molName?: string;
   email?: string;
+  bic?: string;
+  iban?: string;
+  bank?: string;
   registryId?: number | null;
 };
 

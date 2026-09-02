@@ -387,6 +387,36 @@ export default function ManualAddOrganization({
                 translations={translations}
                 maxLength={10}
               />
+              <FormField
+                labelKey="organizationForm.bankLabel"
+                placeholderKey="organizationForm.bankPlaceholder"
+                value={(formData as OrganizationFormData).bank || ""}
+                fieldName="bank"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                translations={translations}
+                isRequired={false}
+              />
+              <FormField
+                labelKey="organizationForm.ibanLabel"
+                placeholderKey="organizationForm.ibanPlaceholder"
+                value={(formData as OrganizationFormData).iban || ""}
+                fieldName="iban"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                translations={translations}
+                isRequired={false}
+              />
+              <FormField
+                labelKey="organizationForm.bicLabel"
+                placeholderKey="organizationForm.bicPlaceholder"
+                value={(formData as OrganizationFormData).bic || ""}
+                fieldName="bic"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                translations={translations}
+                isRequired={false}
+              />
             </>
           )}
         </div>

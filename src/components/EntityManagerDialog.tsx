@@ -87,6 +87,9 @@ const defaultOrganizationForm = (): OrganizationFormData => ({
   molName: "",
   email: "",
   invoiceSeriesPrefix: "INV",
+  bank: "",
+  bic: "",
+  iban: "",
   address: { ...defaultAddress },
 });
 
@@ -166,6 +169,9 @@ export function EntityManagerDialog(props: EntityManagerDialogProps) {
       molName: o.molName ?? "",
       email: o.email ?? "",
       invoiceSeriesPrefix: o.invoiceSeriesPrefix ?? "INV",
+      bank: o.bank ?? "",
+      iban: o.iban ?? "",
+      bic: o.bic ?? "",
       address: {
         country: o.address?.country ?? "",
         region: "",
@@ -405,6 +411,9 @@ export function EntityManagerDialog(props: EntityManagerDialogProps) {
           molName: orgForm.molName ?? null,
           email: orgForm.email ?? null,
           invoiceSeriesPrefix: orgForm.invoiceSeriesPrefix,
+          bank: orgForm.bank ?? null,
+          iban: orgForm.iban ?? null,
+          bic: orgForm.bic ?? null,
           address: orgForm.address,
         };
 
@@ -511,6 +520,9 @@ export function EntityManagerDialog(props: EntityManagerDialogProps) {
           molName: orgForm.molName ?? null,
           email: orgForm.email ?? null,
           invoiceSeriesPrefix: orgForm.invoiceSeriesPrefix,
+          bank: orgForm.bank ?? null,
+          iban: orgForm.iban ?? null,
+          bic: orgForm.bic ?? null,
           address: orgForm.address,
         };
 

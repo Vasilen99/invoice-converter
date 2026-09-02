@@ -10,7 +10,7 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
           <Dashboard />
         </div>
         <main className="flex-5/6">
-          <section className="bg-background h-full w-full pt-12 px-4">
+          <section className="bg-background h-full w-full py-12 px-4">
             {children}
           </section>
         </main>

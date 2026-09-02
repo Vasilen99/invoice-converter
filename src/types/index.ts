@@ -60,4 +60,10 @@ export interface BulgarianInvoiceData {
   total: string;
   totalInWords: string;
   currency: string;
+  // Composer name (optional)
+  composer_name?: string;
+  // Optional bank details
+  bank?: string;
+  iban?: string;
+  bic?: string;
 }

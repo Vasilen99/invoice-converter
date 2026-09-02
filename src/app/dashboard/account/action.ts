@@ -37,6 +37,7 @@ export async function getAccountData(): Promise<AccountData | null> {
             creditBalance: true,
             createdAt: true,
             updatedAt: true,
+            composer_name: true,
           },
         },
       },

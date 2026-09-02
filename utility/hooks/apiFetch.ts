@@ -19,10 +19,16 @@ export const callApi = async (
 
   if (!isLoading) setIsLoading(true);
   try {
+    // Don't set Content-Type if body is FormData - let the browser set it automatically
+    const headers: Record<string, string> = {};
+    if (!(options?.body instanceof FormData)) {
+      headers["Content-Type"] = "application/json";
+    }
+
     const response = await fetch(`${server}/api${url}`, {
       method: options?.method || "GET",
       headers: {
-        "Content-Type": "application/json",
+        ...headers,
         ...(options?.headers || {}),
       },
       body: options?.body ? options.body : null,

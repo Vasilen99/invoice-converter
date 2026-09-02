@@ -11,12 +11,14 @@ import { globalStore } from "@/store/global";
 import { useUserStore } from "@/store/user";
 import { creditsLink } from "../../utility/links";
 import { useRouter } from "next/navigation";
+import { HeadingSection } from "@/components/HeadingSection";
 interface AccountData {
   id: number;
   name: string;
   creditBalance: number;
   createdAt: string | Date;
   updatedAt: string | Date;
+  composer_name?: string | null;
 }
 
 interface AccountDashboardPageProps {
@@ -29,6 +31,9 @@ export default function AccountDashboardPage({
   const t = useTranslations();
   const router = useRouter();
   const [accName, setAccName] = useState<string>("");
+  const [composerName, setComposerName] = useState<string>(
+    initialData?.composer_name || "",
+  );
   const [accountData, setAccountData] = useState<AccountData | null>(
     initialData || null,
   );
@@ -37,6 +42,7 @@ export default function AccountDashboardPage({
   useEffect(() => {
     if (initialData) {
       setAccName(initialData.name || "");
+      setComposerName(initialData.composer_name || "");
       setAccountData(initialData);
     }
   }, [initialData]);
@@ -46,13 +52,13 @@ export default function AccountDashboardPage({
   };
 
   const handleSaveChanges = async () => {
-    // if (!accName.trim()) {
-    //   setAlertStatus({
-    //     status: "error",
-    //     statusHeader: `${t("errorMessagesAccount.accountNameRequired")}`,
-    //   });
-    //   return;
-    // }
+    if (!accName.trim()) {
+      setAlertStatus({
+        status: "error",
+        statusHeader: `${t("errorMessagesAccount.accountNameRequired")}`,
+      });
+      return;
+    }
 
     try {
       const accountData = await callApi(
@@ -62,7 +68,10 @@ export default function AccountDashboardPage({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ accountName: accName.trim() }),
+          body: JSON.stringify({
+            accountName: accName.trim(),
+            composerName: composerName.trim(),
+          }),
         },
         true,
       );
@@ -89,13 +98,11 @@ export default function AccountDashboardPage({
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <FadeIn delay={0.01}>
-        <h1 className="flex items-center gap-2 text-primary text-2xl font-bold">
-          {t("account.accountHeader")}
-        </h1>
-        <p className="text-base">{t("account.accountSubheader")}</p>
-      </FadeIn>
+    <section className="flex flex-col">
+      <HeadingSection
+        title={t("account.accountHeader")}
+        subtitle={t("account.accountSubheader")}
+      />
       <FadeIn delay={0.02}>
         <div className="flex flex-col w-fit gap-6">
           <div className="grid grid-cols-1 gap-8">
@@ -107,6 +114,16 @@ export default function AccountDashboardPage({
                 value={accName}
                 onChange={handleAccountNameChange}
                 placeholder={t("account.accountNamePlaceholder")}
+              />
+            </div>
+            <div className="flex flex-col gap-2 items-start">
+              <Label className="text-base text-muted-foreground">
+                {t("account.composerName")}
+              </Label>
+              <Input
+                value={composerName}
+                onChange={(e) => setComposerName(e.target.value)}
+                placeholder={t("account.composerNamePlaceholder")}
               />
             </div>
             <div className="flex flex-col gap-2 items-start">
@@ -157,6 +174,6 @@ export default function AccountDashboardPage({
           </Button>
         </div>
       </FadeIn>
-    </div>
+    </section>
   );
 }

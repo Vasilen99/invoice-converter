@@ -31,6 +31,7 @@ export type OrganizationAvgAggregateOutputType = {
   accountId: number | null
   id: number | null
   registryId: number | null
+  current_inv_number: runtime.Decimal | null
 }
 
 export type OrganizationSumAggregateOutputType = {
@@ -38,6 +39,7 @@ export type OrganizationSumAggregateOutputType = {
   accountId: number | null
   id: number | null
   registryId: number | null
+  current_inv_number: runtime.Decimal | null
 }
 
 export type OrganizationMinAggregateOutputType = {
@@ -54,6 +56,10 @@ export type OrganizationMinAggregateOutputType = {
   registryId: number | null
   source: $Enums.CompanyLookupSource | null
   email: string | null
+  bank: string | null
+  iban: string | null
+  bic: string | null
+  current_inv_number: runtime.Decimal | null
 }
 
 export type OrganizationMaxAggregateOutputType = {
@@ -70,6 +76,10 @@ export type OrganizationMaxAggregateOutputType = {
   registryId: number | null
   source: $Enums.CompanyLookupSource | null
   email: string | null
+  bank: string | null
+  iban: string | null
+  bic: string | null
+  current_inv_number: runtime.Decimal | null
 }
 
 export type OrganizationCountAggregateOutputType = {
@@ -87,6 +97,10 @@ export type OrganizationCountAggregateOutputType = {
   registryId: number
   source: number
   email: number
+  bank: number
+  iban: number
+  bic: number
+  current_inv_number: number
   _all: number
 }
 
@@ -96,6 +110,7 @@ export type OrganizationAvgAggregateInputType = {
   accountId?: true
   id?: true
   registryId?: true
+  current_inv_number?: true
 }
 
 export type OrganizationSumAggregateInputType = {
@@ -103,6 +118,7 @@ export type OrganizationSumAggregateInputType = {
   accountId?: true
   id?: true
   registryId?: true
+  current_inv_number?: true
 }
 
 export type OrganizationMinAggregateInputType = {
@@ -119,6 +135,10 @@ export type OrganizationMinAggregateInputType = {
   registryId?: true
   source?: true
   email?: true
+  bank?: true
+  iban?: true
+  bic?: true
+  current_inv_number?: true
 }
 
 export type OrganizationMaxAggregateInputType = {
@@ -135,6 +155,10 @@ export type OrganizationMaxAggregateInputType = {
   registryId?: true
   source?: true
   email?: true
+  bank?: true
+  iban?: true
+  bic?: true
+  current_inv_number?: true
 }
 
 export type OrganizationCountAggregateInputType = {
@@ -152,6 +176,10 @@ export type OrganizationCountAggregateInputType = {
   registryId?: true
   source?: true
   email?: true
+  bank?: true
+  iban?: true
+  bic?: true
+  current_inv_number?: true
   _all?: true
 }
 
@@ -256,6 +284,10 @@ export type OrganizationGroupByOutputType = {
   registryId: number | null
   source: $Enums.CompanyLookupSource
   email: string | null
+  bank: string | null
+  iban: string | null
+  bic: string | null
+  current_inv_number: runtime.Decimal | null
   _count: OrganizationCountAggregateOutputType | null
   _avg: OrganizationAvgAggregateOutputType | null
   _sum: OrganizationSumAggregateOutputType | null
@@ -296,6 +328,10 @@ export type OrganizationWhereInput = {
   registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
   source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
   email?: Prisma.StringNullableFilter<"Organization"> | string | null
+  bank?: Prisma.StringNullableFilter<"Organization"> | string | null
+  iban?: Prisma.StringNullableFilter<"Organization"> | string | null
+  bic?: Prisma.StringNullableFilter<"Organization"> | string | null
+  current_inv_number?: Prisma.DecimalNullableFilter<"Organization"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
   generatedInvoices?: Prisma.GeneratedInvoiceListRelationFilter
@@ -319,6 +355,10 @@ export type OrganizationOrderByWithRelationInput = {
   registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
+  bank?: Prisma.SortOrderInput | Prisma.SortOrder
+  iban?: Prisma.SortOrderInput | Prisma.SortOrder
+  bic?: Prisma.SortOrderInput | Prisma.SortOrder
+  current_inv_number?: Prisma.SortOrderInput | Prisma.SortOrder
   contragents?: Prisma.ContragentOrderByRelationAggregateInput
   creditTransactions?: Prisma.CreditTransactionOrderByRelationAggregateInput
   generatedInvoices?: Prisma.GeneratedInvoiceOrderByRelationAggregateInput
@@ -345,6 +385,10 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
   source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
   email?: Prisma.StringNullableFilter<"Organization"> | string | null
+  bank?: Prisma.StringNullableFilter<"Organization"> | string | null
+  iban?: Prisma.StringNullableFilter<"Organization"> | string | null
+  bic?: Prisma.StringNullableFilter<"Organization"> | string | null
+  current_inv_number?: Prisma.DecimalNullableFilter<"Organization"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentListRelationFilter
   creditTransactions?: Prisma.CreditTransactionListRelationFilter
   generatedInvoices?: Prisma.GeneratedInvoiceListRelationFilter
@@ -368,6 +412,10 @@ export type OrganizationOrderByWithAggregationInput = {
   registryId?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
+  bank?: Prisma.SortOrderInput | Prisma.SortOrder
+  iban?: Prisma.SortOrderInput | Prisma.SortOrder
+  bic?: Prisma.SortOrderInput | Prisma.SortOrder
+  current_inv_number?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OrganizationCountOrderByAggregateInput
   _avg?: Prisma.OrganizationAvgOrderByAggregateInput
   _max?: Prisma.OrganizationMaxOrderByAggregateInput
@@ -393,6 +441,10 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   registryId?: Prisma.IntNullableWithAggregatesFilter<"Organization"> | number | null
   source?: Prisma.EnumCompanyLookupSourceWithAggregatesFilter<"Organization"> | $Enums.CompanyLookupSource
   email?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  bank?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  iban?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  bic?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
+  current_inv_number?: Prisma.DecimalNullableWithAggregatesFilter<"Organization"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OrganizationCreateInput = {
@@ -407,6 +459,10 @@ export type OrganizationCreateInput = {
   molName?: string | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
@@ -430,6 +486,10 @@ export type OrganizationUncheckedCreateInput = {
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -448,6 +508,10 @@ export type OrganizationUpdateInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
@@ -471,6 +535,10 @@ export type OrganizationUncheckedUpdateInput = {
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -492,6 +560,10 @@ export type OrganizationCreateManyInput = {
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OrganizationUpdateManyMutationInput = {
@@ -506,6 +578,10 @@ export type OrganizationUpdateManyMutationInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OrganizationUncheckedUpdateManyInput = {
@@ -523,6 +599,10 @@ export type OrganizationUncheckedUpdateManyInput = {
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OrganizationListRelationFilter = {
@@ -550,6 +630,10 @@ export type OrganizationCountOrderByAggregateInput = {
   registryId?: Prisma.SortOrder
   source?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  bank?: Prisma.SortOrder
+  iban?: Prisma.SortOrder
+  bic?: Prisma.SortOrder
+  current_inv_number?: Prisma.SortOrder
 }
 
 export type OrganizationAvgOrderByAggregateInput = {
@@ -557,6 +641,7 @@ export type OrganizationAvgOrderByAggregateInput = {
   accountId?: Prisma.SortOrder
   id?: Prisma.SortOrder
   registryId?: Prisma.SortOrder
+  current_inv_number?: Prisma.SortOrder
 }
 
 export type OrganizationMaxOrderByAggregateInput = {
@@ -573,6 +658,10 @@ export type OrganizationMaxOrderByAggregateInput = {
   registryId?: Prisma.SortOrder
   source?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  bank?: Prisma.SortOrder
+  iban?: Prisma.SortOrder
+  bic?: Prisma.SortOrder
+  current_inv_number?: Prisma.SortOrder
 }
 
 export type OrganizationMinOrderByAggregateInput = {
@@ -589,6 +678,10 @@ export type OrganizationMinOrderByAggregateInput = {
   registryId?: Prisma.SortOrder
   source?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  bank?: Prisma.SortOrder
+  iban?: Prisma.SortOrder
+  bic?: Prisma.SortOrder
+  current_inv_number?: Prisma.SortOrder
 }
 
 export type OrganizationSumOrderByAggregateInput = {
@@ -596,6 +689,7 @@ export type OrganizationSumOrderByAggregateInput = {
   accountId?: Prisma.SortOrder
   id?: Prisma.SortOrder
   registryId?: Prisma.SortOrder
+  current_inv_number?: Prisma.SortOrder
 }
 
 export type OrganizationScalarRelationFilter = {
@@ -696,6 +790,14 @@ export type EnumCompanyLookupSourceFieldUpdateOperationsInput = {
   set?: $Enums.CompanyLookupSource
 }
 
+export type NullableDecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -774,6 +876,10 @@ export type OrganizationCreateWithoutAccountInput = {
   molName?: string | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
@@ -795,6 +901,10 @@ export type OrganizationUncheckedCreateWithoutAccountInput = {
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -845,6 +955,10 @@ export type OrganizationScalarWhereInput = {
   registryId?: Prisma.IntNullableFilter<"Organization"> | number | null
   source?: Prisma.EnumCompanyLookupSourceFilter<"Organization"> | $Enums.CompanyLookupSource
   email?: Prisma.StringNullableFilter<"Organization"> | string | null
+  bank?: Prisma.StringNullableFilter<"Organization"> | string | null
+  iban?: Prisma.StringNullableFilter<"Organization"> | string | null
+  bic?: Prisma.StringNullableFilter<"Organization"> | string | null
+  current_inv_number?: Prisma.DecimalNullableFilter<"Organization"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OrganizationCreateWithoutRegistryInput = {
@@ -859,6 +973,10 @@ export type OrganizationCreateWithoutRegistryInput = {
   molName?: string | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
@@ -880,6 +998,10 @@ export type OrganizationUncheckedCreateWithoutRegistryInput = {
   id?: number
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -924,6 +1046,10 @@ export type OrganizationCreateWithoutContragentsInput = {
   molName?: string | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
   account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
@@ -946,6 +1072,10 @@ export type OrganizationUncheckedCreateWithoutContragentsInput = {
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -979,6 +1109,10 @@ export type OrganizationUpdateWithoutContragentsInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
@@ -1001,6 +1135,10 @@ export type OrganizationUncheckedUpdateWithoutContragentsInput = {
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1018,6 +1156,10 @@ export type OrganizationCreateWithoutSourceDocumentsInput = {
   molName?: string | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
@@ -1040,6 +1182,10 @@ export type OrganizationUncheckedCreateWithoutSourceDocumentsInput = {
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1073,6 +1219,10 @@ export type OrganizationUpdateWithoutSourceDocumentsInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
@@ -1095,6 +1245,10 @@ export type OrganizationUncheckedUpdateWithoutSourceDocumentsInput = {
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1112,6 +1266,10 @@ export type OrganizationCreateWithoutGeneratedInvoicesInput = {
   molName?: string | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionCreateNestedManyWithoutOrganizationInput
   account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
@@ -1134,6 +1292,10 @@ export type OrganizationUncheckedCreateWithoutGeneratedInvoicesInput = {
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   creditTransactions?: Prisma.CreditTransactionUncheckedCreateNestedManyWithoutOrganizationInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1167,6 +1329,10 @@ export type OrganizationUpdateWithoutGeneratedInvoicesInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
@@ -1189,6 +1355,10 @@ export type OrganizationUncheckedUpdateWithoutGeneratedInvoicesInput = {
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1206,6 +1376,10 @@ export type OrganizationCreateWithoutCreditTransactionsInput = {
   molName?: string | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceCreateNestedManyWithoutOrganizationInput
   account: Prisma.AccountCreateNestedOneWithoutOrganizationsInput
@@ -1228,6 +1402,10 @@ export type OrganizationUncheckedCreateWithoutCreditTransactionsInput = {
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedCreateNestedManyWithoutOrganizationInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedCreateNestedManyWithoutOrganizationInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutOrganizationInput
@@ -1261,6 +1439,10 @@ export type OrganizationUpdateWithoutCreditTransactionsInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
   account?: Prisma.AccountUpdateOneRequiredWithoutOrganizationsNestedInput
@@ -1283,6 +1465,10 @@ export type OrganizationUncheckedUpdateWithoutCreditTransactionsInput = {
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
   sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1302,6 +1488,10 @@ export type OrganizationCreateManyAccountInput = {
   registryId?: number | null
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OrganizationUpdateWithoutAccountInput = {
@@ -1316,6 +1506,10 @@ export type OrganizationUpdateWithoutAccountInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
@@ -1337,6 +1531,10 @@ export type OrganizationUncheckedUpdateWithoutAccountInput = {
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1357,6 +1555,10 @@ export type OrganizationUncheckedUpdateManyWithoutAccountInput = {
   registryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OrganizationCreateManyRegistryInput = {
@@ -1373,6 +1575,10 @@ export type OrganizationCreateManyRegistryInput = {
   id?: number
   source?: $Enums.CompanyLookupSource
   email?: string | null
+  bank?: string | null
+  iban?: string | null
+  bic?: string | null
+  current_inv_number?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 export type OrganizationUpdateWithoutRegistryInput = {
@@ -1387,6 +1593,10 @@ export type OrganizationUpdateWithoutRegistryInput = {
   molName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUpdateManyWithoutOrganizationNestedInput
@@ -1408,6 +1618,10 @@ export type OrganizationUncheckedUpdateWithoutRegistryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   contragents?: Prisma.ContragentUncheckedUpdateManyWithoutOrganizationNestedInput
   creditTransactions?: Prisma.CreditTransactionUncheckedUpdateManyWithoutOrganizationNestedInput
   generatedInvoices?: Prisma.GeneratedInvoiceUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -1428,6 +1642,10 @@ export type OrganizationUncheckedUpdateManyWithoutRegistryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   source?: Prisma.EnumCompanyLookupSourceFieldUpdateOperationsInput | $Enums.CompanyLookupSource
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  iban?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  current_inv_number?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
 
@@ -1503,6 +1721,10 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   registryId?: boolean
   source?: boolean
   email?: boolean
+  bank?: boolean
+  iban?: boolean
+  bic?: boolean
+  current_inv_number?: boolean
   contragents?: boolean | Prisma.Organization$contragentsArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Organization$creditTransactionsArgs<ExtArgs>
   generatedInvoices?: boolean | Prisma.Organization$generatedInvoicesArgs<ExtArgs>
@@ -1527,6 +1749,10 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   registryId?: boolean
   source?: boolean
   email?: boolean
+  bank?: boolean
+  iban?: boolean
+  bic?: boolean
+  current_inv_number?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
@@ -1546,6 +1772,10 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   registryId?: boolean
   source?: boolean
   email?: boolean
+  bank?: boolean
+  iban?: boolean
+  bic?: boolean
+  current_inv_number?: boolean
   account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
   registry?: boolean | Prisma.Organization$registryArgs<ExtArgs>
 }, ExtArgs["result"]["organization"]>
@@ -1565,9 +1795,13 @@ export type OrganizationSelectScalar = {
   registryId?: boolean
   source?: boolean
   email?: boolean
+  bank?: boolean
+  iban?: boolean
+  bic?: boolean
+  current_inv_number?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"name" | "bulstat" | "vatNumber" | "address" | "invoiceSeriesPrefix" | "nextInvoiceSeq" | "createdAt" | "updatedAt" | "accountId" | "molName" | "id" | "registryId" | "source" | "email", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"name" | "bulstat" | "vatNumber" | "address" | "invoiceSeriesPrefix" | "nextInvoiceSeq" | "createdAt" | "updatedAt" | "accountId" | "molName" | "id" | "registryId" | "source" | "email" | "bank" | "iban" | "bic" | "current_inv_number", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   contragents?: boolean | Prisma.Organization$contragentsArgs<ExtArgs>
   creditTransactions?: boolean | Prisma.Organization$creditTransactionsArgs<ExtArgs>
@@ -1611,6 +1845,10 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     registryId: number | null
     source: $Enums.CompanyLookupSource
     email: string | null
+    bank: string | null
+    iban: string | null
+    bic: string | null
+    current_inv_number: runtime.Decimal | null
   }, ExtArgs["result"]["organization"]>
   composites: {}
 }
@@ -2054,6 +2292,10 @@ export interface OrganizationFieldRefs {
   readonly registryId: Prisma.FieldRef<"Organization", 'Int'>
   readonly source: Prisma.FieldRef<"Organization", 'CompanyLookupSource'>
   readonly email: Prisma.FieldRef<"Organization", 'String'>
+  readonly bank: Prisma.FieldRef<"Organization", 'String'>
+  readonly iban: Prisma.FieldRef<"Organization", 'String'>
+  readonly bic: Prisma.FieldRef<"Organization", 'String'>
+  readonly current_inv_number: Prisma.FieldRef<"Organization", 'Decimal'>
 }
     
 

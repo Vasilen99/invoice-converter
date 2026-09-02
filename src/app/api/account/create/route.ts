@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { accountName } = body;
+    const { accountName, composerName } = body;
 
     if (!accountName || typeof accountName !== "string" || accountName === "") {
       return NextResponse.json(
@@ -66,13 +66,14 @@ export async function POST(req: NextRequest) {
       // Update existing account
       account = await prisma.account.update({
         where: { id: existingAccountMember.account.id },
-        data: { name: accountName },
+        data: { name: accountName, composer_name: composerName },
       });
     } else {
       // Create new account and add user as owner
       account = await prisma.account.create({
         data: {
           name: accountName,
+          composer_name: composerName,
           creditBalance: 0,
           members: {
             create: {

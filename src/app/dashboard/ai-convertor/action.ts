@@ -1,8 +1,8 @@
-import { prisma } from "../../../../../utility/prisma";
+import { prisma } from "../../../../utility/prisma";
 import { NextResponse } from "next/server";
-import { getUserServer } from "../../../../../utility/get-user-server";
+import { getUserServer } from "../../../../utility/get-user-server";
 
-export async function GET() {
+export async function getAccountData() {
   try {
     const userClaims = await getUserServer();
 
@@ -32,10 +32,7 @@ export async function GET() {
         account: {
           select: {
             id: true,
-            name: true,
             creditBalance: true,
-            createdAt: true,
-            updatedAt: true,
             composer_name: true,
           },
         },

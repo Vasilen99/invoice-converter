@@ -10,6 +10,7 @@ import { Edit2, Trash2, FileText, Building2 } from "lucide-react";
 import { useGlobalStore } from "@/store/global";
 import { callApi } from "../../utility/hooks/apiFetch";
 import EntityManagerDialog from "@/components/EntityManagerDialog";
+import { HeadingSection } from "@/components/HeadingSection";
 
 const ConfirmationDialog = dynamic(
   () => import("../components/ConfirmationDialog").then((mod) => mod.default),
@@ -75,14 +76,10 @@ export default function ContragentsPage({
       <div className="text-2xl">
         <FadeIn delay={0.01}>
           <div className="grid lg:grid-cols-2 lg:gap-0 grid-cols-1 gap-3 justify-between lg:items-start">
-            <span className="flex flex-col gap-2">
-              <h1 className="flex items-center gap-2 text-primary text-2xl font-bold">
-                {t("contragents.contragentsHeader")}
-              </h1>
-              <p className="text-base">
-                {t("contragents.contragentsSubheader")}
-              </p>
-            </span>
+            <HeadingSection
+              title={t("contragents.contragentsHeader")}
+              subtitle={t("contragents.contragentsSubheader")}
+            />
             <Button
               onClick={() => {
                 setEditingContragent(null);
@@ -94,7 +91,7 @@ export default function ContragentsPage({
             </Button>
           </div>
         </FadeIn>
-        <FadeIn delay={0.02} className="py-12 overflow-auto no-scrollbar">
+        <FadeIn delay={0.02} className="pb-12 overflow-auto no-scrollbar">
           {contragentsList.length === 0 ? (
             <p className="text-base text-primary/50">
               {t("contragents.noContragents")}

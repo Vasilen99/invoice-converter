@@ -75,10 +75,6 @@
     "subtitle": "Upload your first invoice and see the magic yourself.",
     "button": "Start for free"
   },
-  "converter": {
-    "title": "Convert your invoice",
-    "subtitle": "Upload a PDF and let AI do the rest."
-  },
   "footer": {
     "tagline": "Turn any foreign invoice into a fully compliant Bulgarian one in under 30 seconds. No retyping, no errors, no headaches.",
     "cta": "Convert your first invoice free",
@@ -99,6 +95,8 @@
     "poweredBy": "Powered by GPT-4o · Built for WEB SERVICES BULGARIA LTD"
   },
   "uploader": {
+    "title": "Convert your invoice",
+    "subtitle": "Upload a PDF and let AI do the rest.",
     "dropHere": "Drop it here!",
     "clickOrDrag": "Click to upload or drag and drop",
     "onlyPdf": "PDF files only · Stripe invoices supported",
@@ -108,6 +106,8 @@
     "somethingWrong": "Something went wrong",
     "close": "Close",
     "remove": "Remove",
+    "removeAll": "Remove All",
+    "addMore": "Add More",
     "downloadPdf": "Download PDF",
     "generating": "Generating…",
     "stripeInvoice": "Stripe Invoice",
@@ -117,8 +117,12 @@
     "generateInvoice": "Generate Bulgarian Invoice",
     "generatingPdf": "Generating PDF…",
     "downloadBulgarianPdf": "Download Bulgarian Invoice (PDF)",
+    "extractAllInvoices": "Extract All Invoices",
     "addRow": "+ Add row",
     "row": "Row {number}",
+    "invoices": "Invoices",
+    "invoicesCount": "{count}",
+    "selectInvoiceToEdit": "Select an invoice from the list to edit",
     "aiSteps": {
       "step1": "Reading invoice structure…",
       "step2": "Identifying buyer and seller…",
@@ -131,7 +135,9 @@
       "seller": "Supplier (Seller)",
       "buyer": "Recipient (Buyer)",
       "items": "Line items",
-      "totals": "Totals"
+      "totals": "Totals",
+      "payment": "Payment details",
+      "composer": "Composer"
     },
     "fields": {
       "number": "Number",
@@ -154,7 +160,25 @@
       "subtotal": "Tax base",
       "vatAmount": "VAT amount",
       "total": "Total due",
-      "totalInWords": "Amount in words"
+      "totalInWords": "Amount in words",
+      "bank": "Bank",
+      "iban": "IBAN",
+      "bic": "BIC",
+      "composerName": "Composer name"
+    },
+    "missingOrganizationsModal": {
+      "title": "Found organizations you don't have yet",
+      "description": "These EIKs were found in uploaded invoices and exist in our company cache. Add them to your account?",
+      "newOrganizations": "New organizations",
+      "newContragents": "New contragents",
+      "noNewOrganizations": "No new organizations found.",
+      "noNewContragents": "No new contragents found.",
+      "saveOrganizations": "Save organizations",
+      "saveContragents": "Save contragents",
+      "unresolvedContragents": "{count} contragent(s) were not saved because their organization is still missing.",
+      "cancel": "Cancel",
+      "saveAll": "Save all",
+      "saving": "Saving..."
     }
   },
   "dashboardNaming": "Dashboard",
@@ -162,6 +186,7 @@
     "general": "General",
     "overview": "Overview",
     "reports": "Reports",
+    "aiConvertor": "AI Convertor",
     "documents": "Documents",
     "uploadDocument": "Upload document",
     "invoices": "Invoices",
@@ -193,6 +218,8 @@
     "accountNamePlaceholder": "ExampleLTD",
     "creditBalance": "Credit balance",
     "createdAt": "Created at",
+    "composerName": "Composer Name",
+    "composerNamePlaceholder": "Example Composer Name",
     "lastUpdatedAt": "Last updated at",
     "addCredits": "Add credits",
     "saveChanges": "Save changes",
@@ -368,6 +395,12 @@
     "postCodeLabel": "Post Code",
     "countryLabel": "Country",
     "regionLabel": "Region",
+    "bankLabel": "Bank Name",
+    "bankPlaceholder": "Bank Name",
+    "ibanLabel": "IBAN",
+    "ibanPlaceholder": "BG80BNBG96611020345698",
+    "bicLabel": "BIC/SWIFT",
+    "bicPlaceholder": "BNBGBGSD",
     "saveChanges": "Save changes",
     "saving": "Saving...",
     "validation": {

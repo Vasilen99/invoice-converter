@@ -10,6 +10,7 @@ import type { OrganizationLight } from "../../utility/types";
 import { Edit2, Trash2 } from "lucide-react";
 import { useGlobalStore } from "@/store/global";
 import EntityManagerDialog from "./EntityManagerDialog";
+import { HeadingSection } from "./HeadingSection";
 
 const ConfirmationDialog = dynamic(() => import("./ConfirmationDialog"), {
   ssr: false,
@@ -76,14 +77,10 @@ export default function Organizations({
       <div className="text-2xl">
         <FadeIn delay={0.01}>
           <div className="grid lg:grid-cols-2 lg:gap-0 grid-cols-1 gap-3 justify-between lg:items-start">
-            <span className="flex flex-col gap-2">
-              <h1 className="flex items-center gap-2 text-primary text-2xl font-bold">
-                {t("organizations.organizationsHeader")}
-              </h1>
-              <p className="text-base">
-                {t("organizations.organizationsSubheader")}
-              </p>
-            </span>
+            <HeadingSection
+              title={t("organizations.organizationsHeader")}
+              subtitle={t("organizations.organizationsSubheader")}
+            />
             <Button
               onClick={() => {
                 setEditingOrganization(null);
@@ -95,7 +92,7 @@ export default function Organizations({
             </Button>
           </div>
         </FadeIn>
-        <FadeIn delay={0.02} className="py-12 overflow-auto no-scrollbar">
+        <FadeIn delay={0.02} className="pb-12 overflow-auto no-scrollbar">
           {organizationsList.length === 0 ? (
             <p className="text-base text-primary/50">
               {t("organizations.noOrganizations")}
