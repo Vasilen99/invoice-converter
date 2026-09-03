@@ -8,6 +8,12 @@ import { HeadingSection } from "./HeadingSection";
 import { callApi } from "../../utility/hooks/apiFetch";
 import dynamic from "next/dynamic";
 
+const SuccessGenerationModal = dynamic(
+  () => import("./SuccessModal").then((mod) => mod.SuccessGenerationModal),
+  {
+    ssr: false,
+  },
+);
 const InvoicesLayoutSection = dynamic(
   () =>
     import("./InvoicesLayoutSection").then((mod) => mod.InvoicesLayoutSection),
@@ -23,20 +29,10 @@ const UploadZone = dynamic(
   },
 );
 
-const MissingOrganizationsModal = dynamic(
-  () =>
-    import("./MissingOrganizationsModal").then(
-      (mod) => mod.MissingOrganizationsModal,
-    ),
-  {
-    ssr: false,
-  },
-);
-
 type InvoiceFile = {
   file: File;
   id: string;
-  status: "pending" | "extracting" | "extracted" | "error";
+  status: "extracting" | "extracted" | "error";
   data?: BulgarianInvoiceData | null;
   error?: string;
 };
@@ -64,7 +60,7 @@ type InvoiceUploaderProps = {
   account?: {
     id: number;
     creditBalance: number;
-    composer_name?: string;
+    composer_name?: string | null;
   } | null;
 };
 
@@ -88,16 +84,8 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   const [missingContragents, setMissingContragents] = useState<
     MissingContragentFromCache[]
   >([]);
-  const [missingOrganizationsModalOpen, setMissingOrganizationsModalOpen] =
-    useState(false);
-  const [savingMissingOrganizations, setSavingMissingOrganizations] =
-    useState(false);
-  const [savingMissingContragents, setSavingMissingContragents] =
-    useState(false);
-  const [savingAllMissingEntities, setSavingAllMissingEntities] =
-    useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
   const accountComposerName = account?.composer_name || "";
-
   const selectedInvoice = invoices.find((inv) => inv.id === selectedInvoiceId);
 
   const cycleAiStep = () => {
@@ -151,11 +139,24 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     const organizations = result?.missingOrganizations ?? [];
     const contragents = result?.missingContragents ?? [];
 
-    if (organizations.length > 0 || contragents.length > 0) {
-      setMissingOrganizations(organizations);
-      setMissingContragents(contragents);
-      setMissingOrganizationsModalOpen(true);
-    }
+    setMissingOrganizations((prev) => {
+      const deduped = new Map<string, MissingOrganizationFromCache>();
+      for (const org of [...prev, ...organizations]) {
+        deduped.set(normalizeEik(org.bulstat), org);
+      }
+
+      return Array.from(deduped.values());
+    });
+
+    setMissingContragents((prev) => {
+      const deduped = new Map<string, MissingContragentFromCache>();
+      for (const contragent of [...prev, ...contragents]) {
+        const key = `${normalizeEik(contragent.bulstat)}::${normalizeEik(contragent.organizationBulstat)}`;
+        deduped.set(key, contragent);
+      }
+
+      return Array.from(deduped.values());
+    });
   };
 
   const saveMissingOrganizations = async (): Promise<Map<string, number>> => {
@@ -246,7 +247,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
     if (unresolvedContragents.length > 0) {
       setErrorMsg(
-        t("missingOrganizationsModal.unresolvedContragents", {
+        t("successGenerationModal.unresolvedContragents", {
           count: unresolvedContragents.length,
         }),
       );
@@ -255,69 +256,23 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     return { unresolved: unresolvedContragents.length };
   };
 
-  const handleSaveOrganizations = async () => {
-    if (missingOrganizations.length === 0) {
-      if (missingContragents.length === 0) {
-        setMissingOrganizationsModalOpen(false);
-      }
-      return;
-    }
-
-    setSavingMissingOrganizations(true);
-    try {
-      await saveMissingOrganizations();
-      if (missingContragents.length === 0) {
-        setMissingOrganizationsModalOpen(false);
-      }
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : t("extractFailed"));
-    } finally {
-      setSavingMissingOrganizations(false);
-    }
-  };
-
-  const handleSaveContragents = async () => {
-    if (missingContragents.length === 0) {
-      if (missingOrganizations.length === 0) {
-        setMissingOrganizationsModalOpen(false);
-      }
-      return;
-    }
-
-    setSavingMissingContragents(true);
-    try {
-      const result = await saveMissingContragents();
-      if (result.unresolved === 0 && missingOrganizations.length === 0) {
-        setMissingOrganizationsModalOpen(false);
-      }
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : t("extractFailed"));
-    } finally {
-      setSavingMissingContragents(false);
-    }
-  };
-
-  const handleSaveAllMissingOrganizations = async () => {
+  const syncMissingEntitiesAfterGeneration = async () => {
     if (missingOrganizations.length === 0 && missingContragents.length === 0) {
-      setMissingOrganizationsModalOpen(false);
       return;
     }
 
-    setSavingAllMissingEntities(true);
-    try {
-      const createdOrganizationsByBulstat = await saveMissingOrganizations();
-      const { unresolved } = await saveMissingContragents(
-        createdOrganizationsByBulstat,
-      );
+    const createdOrganizationsByBulstat = await saveMissingOrganizations();
+    await saveMissingContragents(createdOrganizationsByBulstat);
+  };
 
-      if (unresolved === 0) {
-        setMissingOrganizationsModalOpen(false);
-      }
+  const handleGenerationSuccess = async () => {
+    try {
+      await syncMissingEntitiesAfterGeneration();
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : t("extractFailed"));
-    } finally {
-      setSavingAllMissingEntities(false);
     }
+
+    setSuccessModalOpen(true);
   };
 
   const processFile = async (
@@ -334,9 +289,6 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         },
         true,
       );
-      if (!data) {
-      }
-
       return data;
     } catch (err: unknown) {
       throw err instanceof Error ? err : new Error(t("extractFailed"));
@@ -365,15 +317,14 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
       newInvoices.push({
         file,
         id,
-        status: "pending",
+        status: "extracting",
       });
 
       filePromises.push(
         (async () => {
+          const stepTimer = cycleAiStep();
           try {
-            const stepTimer = cycleAiStep();
             const data = await processFile(file);
-            clearInterval(stepTimer);
 
             if (data) {
               const sellerEik = normalizeEik(data.sellerEik);
@@ -405,6 +356,8 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
               ),
             );
             setErrorMsg(error);
+          } finally {
+            clearInterval(stepTimer);
           }
         })(),
       );
@@ -455,13 +408,13 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   };
 
   const generateAndDownloadPdfs = async (
-    invoiceDataList: BulgarianInvoiceData[],
+    invoiceDataList: { data: BulgarianInvoiceData; filename: string }[],
     isBulk: boolean = false,
   ) => {
     const setLoading = isBulk ? setDownloadingAll : setDownloading;
     setLoading(true);
     try {
-      for (const invoiceData of invoiceDataList) {
+      for (const { data: invoiceData, filename } of invoiceDataList) {
         // Ensure composer_name is always present in the data sent to the API
         const dataToSend = {
           ...invoiceData,
@@ -483,24 +436,50 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         a.click();
         URL.revokeObjectURL(url);
 
+        // Record the invoice in the database (fire-and-forget, non-blocking)
+        callApi(
+          "/record-invoice",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              invoiceData: dataToSend,
+              originalFilename: filename,
+            }),
+          },
+          true,
+        ).catch((err) =>
+          console.warn("[record-invoice] Failed to save record:", err),
+        );
+
         // Add a small delay between downloads to avoid issues (only for bulk)
         if (isBulk) {
           await new Promise((resolve) => setTimeout(resolve, 200));
         }
       }
+
+      await handleGenerationSuccess();
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err.message : t("extractFailed");
+      setErrorMsg(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDownload = async (invoiceData: BulgarianInvoiceData) => {
-    await generateAndDownloadPdfs([invoiceData], false);
+  const handleDownload = async (
+    invoiceData: BulgarianInvoiceData,
+    originalFilename?: string,
+  ) => {
+    await generateAndDownloadPdfs(
+      [{ data: invoiceData, filename: originalFilename ?? "invoice.pdf" }],
+      false,
+    );
   };
 
   const handleDownloadAll = async () => {
     const validInvoices = invoices
       .filter((inv) => inv.data)
-      .map((inv) => inv.data!);
+      .map((inv) => ({ data: inv.data!, filename: inv.file.name }));
     await generateAndDownloadPdfs(validInvoices, true);
   };
 
@@ -570,23 +549,9 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         />
       )}
 
-      <MissingOrganizationsModal
-        open={missingOrganizationsModalOpen}
-        onClose={() => setMissingOrganizationsModalOpen(false)}
-        onSaveOrganizations={handleSaveOrganizations}
-        onSaveContragents={handleSaveContragents}
-        onSaveAll={handleSaveAllMissingOrganizations}
-        organizations={missingOrganizations.map((org) => ({
-          bulstat: org.bulstat,
-          name: org.name,
-        }))}
-        contragents={missingContragents.map((contragent) => ({
-          bulstat: contragent.bulstat,
-          name: contragent.name,
-        }))}
-        savingOrganizations={savingMissingOrganizations}
-        savingContragents={savingMissingContragents}
-        savingAll={savingAllMissingEntities}
+      <SuccessGenerationModal
+        open={successModalOpen}
+        onClose={() => setSuccessModalOpen(false)}
         t={t}
       />
     </div>

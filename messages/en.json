@@ -166,19 +166,10 @@
       "bic": "BIC",
       "composerName": "Composer name"
     },
-    "missingOrganizationsModal": {
-      "title": "Found organizations you don't have yet",
-      "description": "These EIKs were found in uploaded invoices and exist in our company cache. Add them to your account?",
-      "newOrganizations": "New organizations",
-      "newContragents": "New contragents",
-      "noNewOrganizations": "No new organizations found.",
-      "noNewContragents": "No new contragents found.",
-      "saveOrganizations": "Save organizations",
-      "saveContragents": "Save contragents",
-      "unresolvedContragents": "{count} contragent(s) were not saved because their organization is still missing.",
-      "cancel": "Cancel",
-      "saveAll": "Save all",
-      "saving": "Saving..."
+    "successGenerationModal": {
+      "title": "Successfully generated!",
+      "description": "Your invoices were generated successfully. The new contragent and organization data was added automatically to improve your experience and the platform's functionality going forward.",
+      "close": "Close"
     }
   },
   "dashboardNaming": "Dashboard",

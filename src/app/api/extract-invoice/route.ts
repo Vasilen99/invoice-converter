@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-
+import { prisma } from "../../../../utility/prisma";
+import { getUserServer } from "../../../../utility/get-user-server";
 const PROMPT = `You are an invoice data extraction specialist. Extract all available data from this Stripe invoice PDF and return it as a valid JSON object with the following structure (use empty string "" for missing fields):
 {
   "invoiceNumber": string,
@@ -39,8 +40,32 @@ Notes:
 - For totalInWords write the total amount in Bulgarian words (e.g. "Деветстотин и шестдесет евро")
 - Return ONLY the JSON object, no extra text.`;
 
+const DEFAULT_INVOICE_NUMBER = "0000000000";
+
+function normalizeBulstat(value: string | undefined | null): string {
+  return (value ?? "").trim();
+}
+
+function formatInvoiceNumber(value: unknown): string {
+  if (value === null || value === undefined) {
+    return DEFAULT_INVOICE_NUMBER;
+  }
+
+  const digitsOnly = String(value).replace(/\D/g, "");
+  if (!digitsOnly) {
+    return DEFAULT_INVOICE_NUMBER;
+  }
+
+  return digitsOnly.padStart(10, "0");
+}
+
 export async function POST(req: NextRequest) {
   try {
+    const user = await getUserServer();
+    if (!user?.sub) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { default: OpenAI } = await import("openai");
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -91,6 +116,43 @@ export async function POST(req: NextRequest) {
     }
 
     const extracted = JSON.parse(jsonMatch[0]);
+
+    // The invoiceNumber default always comes from DB state, not the scanned PDF.
+    // If organization is missing or has no current_inv_number, fallback to 0000000000.
+    let invoiceNumberFromDb = DEFAULT_INVOICE_NUMBER;
+    const sellerEik = normalizeBulstat(extracted?.sellerEik);
+
+    if (sellerEik) {
+      const accountMember = await prisma.accountMember.findFirst({
+        where: {
+          user: {
+            auth_uid: user.sub,
+          },
+        },
+        select: {
+          accountId: true,
+        },
+      });
+
+      if (accountMember?.accountId) {
+        const organization = await prisma.organization.findFirst({
+          where: {
+            accountId: accountMember.accountId,
+            bulstat: sellerEik,
+          },
+          select: {
+            current_inv_number: true,
+          },
+        });
+
+        invoiceNumberFromDb = formatInvoiceNumber(
+          organization?.current_inv_number,
+        );
+      }
+    }
+
+    extracted.invoiceNumber = invoiceNumberFromDb;
+
     return NextResponse.json({ data: extracted });
   } catch (error) {
     console.error("Error extracting invoice data:", error);

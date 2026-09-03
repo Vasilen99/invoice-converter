@@ -5,6 +5,7 @@ import {
   extractVatNumber,
   transformAddressFromCompanyData,
 } from "../../../../../utility/company-registry-helpers";
+import { notFound } from "next/navigation";
 
 type MissingOrgFromCache = {
   bulstat: string;
@@ -155,17 +156,7 @@ export async function POST(request: NextRequest) {
     const user = await getUserServer();
 
     if (!user?.sub) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "errorMessagesCommon.unauthorizedErrorHeader",
-            message: "errorMessagesCommon.unauthorizedErrorMessage",
-          },
-        },
-        { status: 401 },
-      );
+      return notFound();
     }
 
     const body = await request.json();
@@ -203,7 +194,9 @@ export async function POST(request: NextRequest) {
             const buyerEik = normalizeBulstat(pair?.buyerEik);
             return { sellerEik, buyerEik };
           })
-          .filter((pair) => pair.buyerEik.length > 0)
+          .filter(
+            (pair) => pair.sellerEik.length > 0 && pair.buyerEik.length > 0,
+          )
           .map((pair) => [`${pair.sellerEik}::${pair.buyerEik}`, pair]),
       ).values(),
     );
@@ -323,16 +316,9 @@ export async function POST(request: NextRequest) {
       }
     >();
 
-    // Track seller EIKs that are missing (not in user account)
-    const missingSellerEiksThatNeedCreation = new Set<string>();
-
     for (const pair of normalizedInvoicePairs) {
       const organizationBulstat = pair.sellerEik;
       const contragentBulstat = pair.buyerEik;
-
-      if (!contragentBulstat) {
-        continue;
-      }
 
       const organization = organizationByBulstat.get(organizationBulstat);
 
@@ -342,39 +328,12 @@ export async function POST(request: NextRequest) {
 
       const key = `${organizationBulstat}::${contragentBulstat}`;
 
-      // If seller org doesn't exist in user's account
-      if (!organization) {
-        missingSellerEiksThatNeedCreation.add(organizationBulstat);
-      }
-
       contragentCandidates.set(key, {
         organizationId: organization?.id ?? null,
         organizationBulstat,
         organizationName: organization?.name ?? null,
         bulstat: contragentBulstat,
       });
-    }
-
-    // If there are seller organizations missing for contragents, fetch and add them
-    if (missingSellerEiksThatNeedCreation.size > 0) {
-      const additionalMissingSellerEiks = Array.from(
-        missingSellerEiksThatNeedCreation,
-      ).filter(
-        (bulstat) =>
-          !validMissingOrganizations.some((org) => org.bulstat === bulstat),
-      );
-
-      if (additionalMissingSellerEiks.length > 0) {
-        const {
-          companies: additionalOrganizations,
-          notFoundBulstats: additionalNotFound,
-        } = await getCompaniesFromCacheOrExternal(
-          additionalMissingSellerEiks as string[],
-        );
-
-        validMissingOrganizations.push(...additionalOrganizations);
-        notFoundBulstats.push(...additionalNotFound);
-      }
     }
 
     const missingContragentBulstats = [

@@ -305,7 +305,7 @@ export default function ManualAddOrganization({
             <>
               {/* Organization fields */}
               <FormField
-                labelKey="organizationForm.namePlaceholder"
+                labelKey="organizationForm.nameLabel"
                 placeholderKey="organizationForm.namePlaceholder"
                 value={(formData as OrganizationFormData).name}
                 fieldName="name"

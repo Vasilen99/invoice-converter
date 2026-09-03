@@ -166,19 +166,10 @@
       "bic": "BIC",
       "composerName": "Съставил"
     },
-    "missingOrganizationsModal": {
-      "title": "Открихме организации, които липсват във вашия акаунт",
-      "description": "Тези ЕИК-и бяха намерени в качените фактури и съществуват в нашия кеш. Желаете ли да ги добавите?",
-      "newOrganizations": "Нови организации",
-      "newContragents": "Нови контрагенти",
-      "noNewOrganizations": "Няма нови организации.",
-      "noNewContragents": "Няма нови контрагенти.",
-      "saveOrganizations": "Запази организации",
-      "saveContragents": "Запази контрагенти",
-      "unresolvedContragents": "{count} контрагент(а) не бяха запазени, защото организацията им все още липсва.",
-      "cancel": "Отказ",
-      "saveAll": "Запази всички",
-      "saving": "Запазване..."
+    "successGenerationModal": {
+      "title": "Успешно генериране !",
+      "description": "Вашите фактури бяха успешно генерирани, новите данни за контрагенти и организации бяха автоматично, добавени с цел подобряване на клиентското изживяване и функционалноста на платформата за напред.",
+      "close": "Затвори"
     }
   },
   "dashboardNaming": "Табло",
@@ -351,6 +342,8 @@
     "legalNamePlaceholder": "ПримернаОрганизацияООД",
     "legalNameLabel": "Юридическо Име",
     "bulstat": "Булстат",
+    "namePlaceholder": "ПримернаОрганизацияООД",
+    "nameLabel": "Име на организацията",
     "countryPlaceholder": "България",
     "bulstatPlaceholder": "123456789",
     "bulstatLabel": "Булстат",

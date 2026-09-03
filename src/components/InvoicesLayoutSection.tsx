@@ -18,7 +18,7 @@ import { BulgarianInvoiceData } from "../types";
 type InvoiceFile = {
   file: File;
   id: string;
-  status: "pending" | "extracting" | "extracted" | "error";
+  status: "extracting" | "extracted" | "error";
   data?: BulgarianInvoiceData | null;
   error?: string;
 };
@@ -71,7 +71,10 @@ interface InvoicesLayoutSectionProps {
   setSelectedInvoiceId: (id: string | null) => void;
   removeInvoice: (id: string) => void;
   updateInvoiceData: (id: string, data: BulgarianInvoiceData) => void;
-  handleDownload: (invoiceData: BulgarianInvoiceData) => Promise<void>;
+  handleDownload: (
+    invoiceData: BulgarianInvoiceData,
+    originalFilename?: string,
+  ) => Promise<void>;
   handleDownloadAll: () => Promise<void>;
   inputRef: React.RefObject<HTMLInputElement | null>;
   reset: () => void;
@@ -178,7 +181,7 @@ export const InvoicesLayoutSection = ({
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    {inv.status === "pending" && (
+                    {inv.status === "extracting" && (
                       <Loader2 className="w-4 h-4 animate-spin text-primary" />
                     )}
                     {inv.status === "extracted" && (
@@ -668,7 +671,7 @@ export const InvoicesLayoutSection = ({
                   </div>
                 </EditSection>
 
-                {/* Section: Composer */}
+                {/* Section: Payment */}
                 <EditSection title={t("sections.payment")}>
                   <div className="grid grid-cols-2 gap-3">
                     <EditField
@@ -727,7 +730,10 @@ export const InvoicesLayoutSection = ({
                 <button
                   onClick={() => {
                     if (selectedInvoice.data) {
-                      handleDownload(selectedInvoice.data);
+                      handleDownload(
+                        selectedInvoice.data,
+                        selectedInvoice.file.name,
+                      );
                     }
                   }}
                   className="btn-glow w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold text-primary-foreground hover:cursor-pointer

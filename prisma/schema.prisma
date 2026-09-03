@@ -99,7 +99,7 @@ model Contragent {
   registryId     Int?
   source         CompanyLookupSource   @default(MANUAL)
   molName        String?
-  organization   Organization          @relation(fields: [organizationId], references: [id])
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   registry       CompanyRegistryCache? @relation(fields: [registryId], references: [id])
   invoices       GeneratedInvoice[]
 
@@ -120,7 +120,7 @@ model SourceDocument {
   organizationId   Int
   uploadedByUserId Int
   generatedInvoice GeneratedInvoice?
-  organization     Organization         @relation(fields: [organizationId], references: [id])
+  organization     Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
 
 model GeneratedInvoice {
@@ -144,8 +144,8 @@ model GeneratedInvoice {
   sourceDocumentId  Int?               @unique
   contragentId      Int
   creditTransaction CreditTransaction?
-  contragent        Contragent         @relation(fields: [contragentId], references: [id])
-  organization      Organization       @relation(fields: [organizationId], references: [id])
+  contragent        Contragent         @relation(fields: [contragentId], references: [id], onDelete: Cascade)
+  organization      Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   sourceDocument    SourceDocument?    @relation(fields: [sourceDocumentId], references: [id])
   lineItems         InvoiceLineItem[]
 
@@ -160,7 +160,7 @@ model InvoiceLineItem {
   lineTotal          Decimal          @db.Decimal(14, 2)
   id                 Int              @id @default(autoincrement())
   generatedInvoiceId Int
-  invoice            GeneratedInvoice @relation(fields: [generatedInvoiceId], references: [id])
+  invoice            GeneratedInvoice @relation(fields: [generatedInvoiceId], references: [id], onDelete: Cascade)
 }
 
 model CreditPackage {
