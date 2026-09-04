@@ -134,7 +134,7 @@ export default function AccountDashboardPage({
                 {accountData?.creditBalance ?? 0}
               </Label>
               <Button
-                onClick={() => router.push(`/${creditsLink}`)}
+                onClick={() => router.push(`${creditsLink}`)}
                 className="flex gap-3"
               >
                 {t("account.addCredits")}{" "}

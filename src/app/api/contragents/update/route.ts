@@ -91,17 +91,7 @@ export async function PUT(request: NextRequest) {
     });
 
     if (!contragent) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "contragents.contragentNotFoundHeader",
-            message: "contragents.contragentNotFoundMessage",
-          },
-        },
-        { status: 404 },
-      );
+      return notFound();
     }
 
     // Enrich data from rawLookupData if available

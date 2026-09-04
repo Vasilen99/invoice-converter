@@ -170,6 +170,26 @@
       "title": "Successfully generated!",
       "description": "Your invoices were generated successfully. The new contragent and organization data was added automatically to improve your experience and the platform's functionality going forward.",
       "close": "Close"
+    },
+    "alerts": {
+      "requiredEikHeader": "EIK/BULSTAT is required",
+      "requiredEikMessage": "Both seller and buyer EIK/BULSTAT are required before generating an invoice. Please update invoice: {filename}",
+      "invalidInvoicePayloadHeader": "Invalid invoice data",
+      "invalidInvoicePayloadMessage": "Invoice data is missing or invalid. Please re-extract and try again.",
+      "accountRequiredHeader": "Account is required",
+      "accountRequiredMessage": "An active account is required before saving documents.",
+      "documentUploadFailedHeader": "Document upload failed",
+      "documentUploadFailedMessage": "We couldn't upload one of the documents. The invoice can still be generated, but document history may be incomplete.",
+      "sourceDocumentSaveFailedHeader": "Source document was not saved",
+      "sourceDocumentSaveFailedMessage": "The original document couldn't be saved in the background.",
+      "generatedDocumentSaveFailedHeader": "Generated document was not saved",
+      "generatedDocumentSaveFailedMessage": "The generated PDF couldn't be saved in the background.",
+      "recordInvoiceFailedHeader": "Invoice record was not saved",
+      "recordInvoiceFailedMessage": "The invoice PDF was generated, but saving the invoice record failed.",
+      "organizationCreateFailedHeader": "Organization could not be created",
+      "organizationCreateFailedMessage": "The seller organization could not be created from external registry or form data.",
+      "contragentCreateFailedHeader": "Contragent could not be created",
+      "contragentCreateFailedMessage": "The buyer contragent could not be created from external registry or form data."
     }
   },
   "dashboardNaming": "Dashboard",

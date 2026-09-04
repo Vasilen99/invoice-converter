@@ -1,7 +1,6 @@
 "use client";
 import { globalStore } from "@/store/global";
 import { server } from "../constants";
-import { useTranslations } from "next-intl";
 
 // Store translation function for use in async contexts
 let tFunction: ((key: string) => string) | null = null;
@@ -34,8 +33,6 @@ export const callApi = async (
       body: options?.body ? options.body : null,
     });
 
-    const result = await response.json();
-
     if (response.status === 404) {
       return (window.location.href = "/404");
     }
@@ -43,19 +40,17 @@ export const callApi = async (
       return (window.location.href = "/404");
     }
 
-    if ((showAlert || !response.ok) && result.alert && tFunction) {
+    const contentType = response.headers.get("content-type") || "";
+    const result = contentType.includes("application/json")
+      ? await response.json()
+      : null;
+
+    if ((showAlert || !response.ok) && result?.alert && tFunction) {
       setAlertStatus({
         status: result.alert.status,
         statusHeader: tFunction(result.alert.header),
         statusContent: tFunction(result.alert.message),
       });
-      // if (!response.ok) {
-      //   console.error("Status code:", response.status);
-      //   console.error(
-      //     "Error message:",
-      //     `${result.alert.header}: ${result.alert.message}`,
-      //   );
-      // }
     }
     return result.data;
   } catch (err) {
@@ -65,7 +60,6 @@ export const callApi = async (
         statusHeader: tFunction("errorMessagesCommon.serverErrorHeader"),
         statusContent: tFunction("errorMessagesCommon.serverErrorMessage"),
       });
-      console.error("API server error:", err.message);
     }
   } finally {
     setIsLoading(false);

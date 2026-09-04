@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../../utility/prisma";
 import { getUserServer } from "../../../../../utility/get-user-server";
+import { notFound } from "next/navigation";
 
 /**
  * POST /api/organizations/current-inv-numbers
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
   try {
     const user = await getUserServer();
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return notFound();
     }
 
     const body = (await request.json()) as {
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!accountMember) {
-      return NextResponse.json({ error: "Account not found" }, { status: 404 });
+      return notFound();
     }
 
     // Normalize EIKs
@@ -99,7 +100,14 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("[current-inv-numbers] Error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch current invoice numbers" },
+      {
+        data: null,
+        alert: {
+          status: "error",
+          header: "errorMessagesCommon.serverErrorHeader",
+          message: "errorMessagesCommon.serverErrorMessage",
+        },
+      },
       { status: 500 },
     );
   }

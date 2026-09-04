@@ -72,7 +72,6 @@ export function useOrganizationSearch() {
       setIsLoading(false);
     } catch (err) {
       if (err instanceof Error && err.name !== "AbortError") {
-        console.error("Search error:", err);
         setError("Failed to search organizations");
         setResults([]);
       }

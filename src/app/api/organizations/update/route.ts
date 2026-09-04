@@ -7,6 +7,7 @@ import {
   formatRawLookupDataForStorage,
   enrichOrganizationDataFromRegistry,
 } from "../../../../../utility/company-registry-helpers";
+import { notFound } from "next/navigation";
 
 export async function PUT(request: NextRequest) {
   const user = await getUserServer();
@@ -102,17 +103,7 @@ export async function PUT(request: NextRequest) {
     });
 
     if (!organization) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "organizations.organizationNotFoundHeader",
-            message: "organizations.organizationNotFoundMessage",
-          },
-        },
-        { status: 404 },
-      );
+      return notFound();
     }
 
     // Enrich data from rawLookupData if available

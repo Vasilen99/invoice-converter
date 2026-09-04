@@ -1,18 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../../utility/prisma";
 import { getUserServer } from "../../../../../utility/get-user-server";
-import {
-  extractVatNumber,
-  transformAddressFromCompanyData,
-} from "../../../../../utility/company-registry-helpers";
 import { notFound } from "next/navigation";
 
-type MissingOrgFromCache = {
+type MissingOrganizationByEik = {
   bulstat: string;
-  name: string;
-  vatNumber: string | null;
-  address: unknown;
-  rawLookupData: unknown;
 };
 
 type InvoicePairInput = {
@@ -20,7 +12,8 @@ type InvoicePairInput = {
   buyerEik?: string;
 };
 
-type MissingContragentFromCache = MissingOrgFromCache & {
+type MissingContragentRelationByEik = {
+  bulstat: string;
   organizationId: number | null;
   organizationBulstat: string;
   organizationName: string | null;
@@ -30,76 +23,9 @@ function normalizeBulstat(value: string | undefined | null): string {
   return (value ?? "").trim();
 }
 
-/**
- * Fetches company data from CompanyBook external API
- */
-async function fetchFromExternalApi(
-  bulstat: string,
-): Promise<MissingOrgFromCache | null> {
-  const apiKey = process.env.COMPANY_BOOK_API_KEY;
-  if (!apiKey) {
-    console.warn("[Missing Orgs] COMPANY_BOOK_API_KEY not configured");
-    return null;
-  }
-
-  try {
-    const url = `https://api.companybook.bg/api/companies/${bulstat}?with_data=true`;
-    const response = await fetch(url, {
-      headers: {
-        "X-API-Key": apiKey,
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null; // Company not found in external API
-      }
-      console.error(
-        `CompanyBook API error ${response.status} for bulstat ${bulstat}`,
-      );
-      return null;
-    }
-
-    const data = await response.json();
-    const company = data.company || data;
-
-    // Transform external API response to our format
-    const vatNumber = extractVatNumber(company);
-    const address = transformAddressFromCompanyData(company);
-    const name =
-      company.companyName?.name ||
-      company.companyNameTransliteration?.name ||
-      "";
-
-    if (!name) {
-      return null; // Invalid company data
-    }
-
-    return {
-      bulstat: company.uic || bulstat,
-      name,
-      vatNumber,
-      address,
-      rawLookupData: company,
-    };
-  } catch (error) {
-    console.error(
-      `[Missing Orgs] Error fetching from external API for bulstat ${bulstat}:`,
-      error,
-    );
-    return null;
-  }
-}
-
-async function getCompaniesFromCacheOrExternal(bulstats: string[]): Promise<{
-  companies: MissingOrgFromCache[];
-  notFoundBulstats: string[];
-}> {
+async function getCachedBulstats(bulstats: string[]): Promise<Set<string>> {
   if (bulstats.length === 0) {
-    return {
-      companies: [],
-      notFoundBulstats: [],
-    };
+    return new Set();
   }
 
   const cacheEntries = await prisma.companyRegistryCache.findMany({
@@ -108,47 +34,10 @@ async function getCompaniesFromCacheOrExternal(bulstats: string[]): Promise<{
         in: bulstats,
       },
     },
-    select: {
-      bulstat: true,
-      name: true,
-      vatNumber: true,
-      address: true,
-      rawLookupData: true,
-    },
+    select: { bulstat: true },
   });
 
-  const cacheCompanies: MissingOrgFromCache[] = cacheEntries.map((entry) => ({
-    bulstat: entry.bulstat,
-    name: entry.name,
-    vatNumber: entry.vatNumber,
-    address: entry.address,
-    rawLookupData: entry.rawLookupData,
-  }));
-
-  const foundInCacheBulstats = new Set(
-    cacheCompanies.map((org) => org.bulstat),
-  );
-
-  const notFoundInCacheBulstats = bulstats.filter(
-    (bulstat) => !foundInCacheBulstats.has(bulstat),
-  );
-
-  const externalApiResults: MissingOrgFromCache[] = [];
-  for (const bulstat of notFoundInCacheBulstats) {
-    const externalResult = await fetchFromExternalApi(bulstat);
-    if (externalResult) {
-      externalApiResults.push(externalResult);
-    }
-  }
-
-  const notFoundBulstats = notFoundInCacheBulstats.filter(
-    (bulstat) => !externalApiResults.some((org) => org.bulstat === bulstat),
-  );
-
-  return {
-    companies: [...cacheCompanies, ...externalApiResults],
-    notFoundBulstats,
-  };
+  return new Set(cacheEntries.map((entry) => normalizeBulstat(entry.bulstat)));
 }
 
 export async function POST(request: NextRequest) {
@@ -218,8 +107,8 @@ export async function POST(request: NextRequest) {
         data: {
           missingOrganizations: [],
           missingContragents: [],
-          notFoundBulstats: [],
-          notFoundContragentBulstats: [],
+          missingOrganizationBulstats: [],
+          missingContragentBulstats: [],
         },
       });
     }
@@ -303,8 +192,15 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const { companies: validMissingOrganizations, notFoundBulstats } =
-      await getCompaniesFromCacheOrExternal(missingBulstats);
+    const cachedMissingOrganizationBulstats =
+      await getCachedBulstats(missingBulstats);
+
+    const missingOrganizationBulstats = missingBulstats.filter(
+      (bulstat) => !cachedMissingOrganizationBulstats.has(bulstat),
+    );
+
+    const missingOrganizations: MissingOrganizationByEik[] =
+      missingOrganizationBulstats.map((bulstat) => ({ bulstat }));
 
     const contragentCandidates = new Map<
       string,
@@ -336,48 +232,29 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const missingContragentBulstats = [
+    const contragentBulstats = [
       ...new Set(
         Array.from(contragentCandidates.values()).map((item) => item.bulstat),
       ),
     ];
 
-    const {
-      companies: contragentLookupResults,
-      notFoundBulstats: notFoundContragentBulstats,
-    } = await getCompaniesFromCacheOrExternal(missingContragentBulstats);
+    const cachedContragentBulstats =
+      await getCachedBulstats(contragentBulstats);
 
-    const contragentLookupByBulstat = new Map(
-      contragentLookupResults.map((company) => [company.bulstat, company]),
-    );
-
-    const missingContragents: MissingContragentFromCache[] = Array.from(
+    const missingContragents: MissingContragentRelationByEik[] = Array.from(
       contragentCandidates.values(),
-    )
-      .map((candidate) => {
-        const companyData = contragentLookupByBulstat.get(candidate.bulstat);
-        if (!companyData) {
-          return null;
-        }
+    ).filter((candidate) => !cachedContragentBulstats.has(candidate.bulstat));
 
-        return {
-          ...companyData,
-          organizationId: candidate.organizationId,
-          organizationBulstat: candidate.organizationBulstat,
-          organizationName: candidate.organizationName,
-        };
-      })
-      .filter(
-        (candidate): candidate is MissingContragentFromCache =>
-          candidate !== null,
-      );
+    const missingContragentBulstats = [
+      ...new Set(missingContragents.map((item) => item.bulstat)),
+    ];
 
     return NextResponse.json({
       data: {
-        missingOrganizations: validMissingOrganizations,
+        missingOrganizations,
         missingContragents,
-        notFoundBulstats,
-        notFoundContragentBulstats,
+        missingOrganizationBulstats,
+        missingContragentBulstats,
       },
     });
   } catch (error) {

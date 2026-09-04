@@ -30,9 +30,19 @@ export async function createClient() {
 
 // Admin client with service role for admin operations
 export function createAdminClient() {
+  const serviceRoleKey =
+    process.env.NEXT_PUBLIC_SUPABASE_SECRET_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!serviceRoleKey) {
+    throw new Error(
+      "Service role key not found. Please ensure NEXT_PUBLIC_SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY is set in your .env.local",
+    );
+  }
+
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY!, // Make sure this is in your .env
+    serviceRoleKey,
     {
       auth: {
         autoRefreshToken: false,

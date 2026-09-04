@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl";
 import { BulgarianInvoiceData } from "../types";
 import { HeadingSection } from "./HeadingSection";
 import { callApi } from "../../utility/hooks/apiFetch";
+import { useGlobalStore } from "@/store/global";
 import dynamic from "next/dynamic";
-
 const SuccessGenerationModal = dynamic(
   () => import("./SuccessModal").then((mod) => mod.SuccessGenerationModal),
   {
@@ -35,17 +35,15 @@ type InvoiceFile = {
   status: "extracting" | "extracted" | "error";
   data?: BulgarianInvoiceData | null;
   error?: string;
+  sourceDocumentUrl?: string | null;
 };
 
-type MissingOrganizationFromCache = {
+type MissingOrganizationByEik = {
   bulstat: string;
-  name: string;
-  vatNumber: string | null;
-  address: unknown;
-  rawLookupData: unknown;
 };
 
-type MissingContragentFromCache = MissingOrganizationFromCache & {
+type MissingContragentByEik = {
+  bulstat: string;
   organizationId: number | null;
   organizationBulstat: string;
   organizationName: string | null;
@@ -79,14 +77,28 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   const [dragOver, setDragOver] = useState(false);
   const [aiStep, setAiStep] = useState(0);
   const [missingOrganizations, setMissingOrganizations] = useState<
-    MissingOrganizationFromCache[]
+    MissingOrganizationByEik[]
   >([]);
   const [missingContragents, setMissingContragents] = useState<
-    MissingContragentFromCache[]
+    MissingContragentByEik[]
   >([]);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const { setAlertStatus } = useGlobalStore();
   const accountComposerName = account?.composer_name || "";
   const selectedInvoice = invoices.find((inv) => inv.id === selectedInvoiceId);
+
+  const notifyAlert = (
+    status: "error" | "success" | "warning" | "info",
+    headerKey: string,
+    messageKey: string,
+    values?: Record<string, string | number>,
+  ) => {
+    setAlertStatus({
+      status,
+      statusHeader: t(headerKey),
+      statusContent: t(messageKey, values),
+    });
+  };
 
   const cycleAiStep = () => {
     let i = 0;
@@ -99,6 +111,25 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
   const normalizeEik = (value: string | undefined): string =>
     (value ?? "").trim();
+
+  const parseInvoiceSequence = (value: unknown): number => {
+    if (value === null || value === undefined) {
+      return 0;
+    }
+
+    const digits = String(value).replace(/\D/g, "");
+    if (!digits) {
+      return 0;
+    }
+
+    const parsed = parseInt(digits, 10);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+
+  const formatInvoiceSequence = (sequence: number): string => {
+    const safeSequence = Number.isFinite(sequence) ? Math.max(0, sequence) : 0;
+    return String(safeSequence).padStart(10, "0");
+  };
 
   const checkMissingEntities = async (
     organizationEiks: string[],
@@ -140,7 +171,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     const contragents = result?.missingContragents ?? [];
 
     setMissingOrganizations((prev) => {
-      const deduped = new Map<string, MissingOrganizationFromCache>();
+      const deduped = new Map<string, MissingOrganizationByEik>();
       for (const org of [...prev, ...organizations]) {
         deduped.set(normalizeEik(org.bulstat), org);
       }
@@ -149,7 +180,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     });
 
     setMissingContragents((prev) => {
-      const deduped = new Map<string, MissingContragentFromCache>();
+      const deduped = new Map<string, MissingContragentByEik>();
       for (const contragent of [...prev, ...contragents]) {
         const key = `${normalizeEik(contragent.bulstat)}::${normalizeEik(contragent.organizationBulstat)}`;
         deduped.set(key, contragent);
@@ -159,124 +190,88 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     });
   };
 
-  const saveMissingOrganizations = async (): Promise<Map<string, number>> => {
-    const createdOrganizationsByBulstat = new Map<string, number>();
+  const handleGenerationSuccess = async (generatedSellerEiks: Set<string>) => {
+    // Only remove organizations that were just generated
+    setMissingOrganizations((prev) =>
+      prev.filter((org) => !generatedSellerEiks.has(normalizeEik(org.bulstat))),
+    );
 
-    if (missingOrganizations.length === 0) {
-      return createdOrganizationsByBulstat;
-    }
-
-    for (const org of missingOrganizations) {
-      const createdOrganization = await callApi(
-        "/organizations/add",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            bulstat: org.bulstat,
-            name: org.name,
-            vatNumber: org.vatNumber,
-            address: org.address ?? {},
-            rawLookupData: org.rawLookupData,
-          }),
-        },
-        false,
-      );
-
-      if (createdOrganization?.bulstat && createdOrganization?.id) {
-        createdOrganizationsByBulstat.set(
-          normalizeEik(createdOrganization.bulstat),
-          createdOrganization.id,
-        );
-      }
-    }
-
-    setMissingOrganizations([]);
-    return createdOrganizationsByBulstat;
-  };
-
-  const saveMissingContragents = async (
-    createdOrganizationsByBulstat: Map<string, number> = new Map(),
-  ) => {
-    if (missingContragents.length === 0) {
-      return { unresolved: 0 };
-    }
-
-    const unresolvedContragents: MissingContragentFromCache[] = [];
-
-    for (const contragent of missingContragents) {
-      // First, try to use the existing organizationId if available
-      // If not, check if it was newly created from the save-all flow
-      // If still not found, mark as unresolved
-      const organizationId =
-        contragent.organizationId !== null
-          ? contragent.organizationId
-          : createdOrganizationsByBulstat.get(
-              normalizeEik(contragent.organizationBulstat),
-            ) || null;
-
-      if (!organizationId) {
-        console.warn(
-          `[Contragent Save] Failed to resolve organizationId for contragent ${contragent.bulstat} (seller organization: ${contragent.organizationBulstat}). ` +
-            `Backend returned organizationId: ${contragent.organizationId}, ` +
-            `CreatedMap size: ${createdOrganizationsByBulstat.size}, ` +
-            `CreatedMap keys: [${Array.from(createdOrganizationsByBulstat.keys()).join(", ")}], ` +
-            `This means the seller organization (${contragent.organizationBulstat}) is not in your account and was not created in this flow.`,
-        );
-        unresolvedContragents.push(contragent);
-        continue;
-      }
-
-      await callApi(
-        "/contragents/add",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            organizationId,
-            bulstat: contragent.bulstat,
-            name: contragent.name,
-            vatNumber: contragent.vatNumber,
-            address: contragent.address ?? {},
-            rawLookupData: contragent.rawLookupData,
-          }),
-        },
-        false,
-      );
-    }
-
-    setMissingContragents(unresolvedContragents);
-
-    if (unresolvedContragents.length > 0) {
-      setErrorMsg(
-        t("successGenerationModal.unresolvedContragents", {
-          count: unresolvedContragents.length,
-        }),
-      );
-    }
-
-    return { unresolved: unresolvedContragents.length };
-  };
-
-  const syncMissingEntitiesAfterGeneration = async () => {
-    if (missingOrganizations.length === 0 && missingContragents.length === 0) {
-      return;
-    }
-
-    const createdOrganizationsByBulstat = await saveMissingOrganizations();
-    await saveMissingContragents(createdOrganizationsByBulstat);
-  };
-
-  const handleGenerationSuccess = async () => {
-    try {
-      await syncMissingEntitiesAfterGeneration();
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : t("extractFailed"));
-    }
+    // Only remove contragents that were just generated
+    // A contragent is "generated" if its seller org was generated
+    setMissingContragents((prev) =>
+      prev.filter(
+        (contragent) =>
+          !generatedSellerEiks.has(
+            normalizeEik(contragent.organizationBulstat),
+          ),
+      ),
+    );
 
     setSuccessModalOpen(true);
   };
 
+  const saveDocument = async (
+    file: File,
+    bulstat?: string,
+    vatNumber?: string,
+    documentType: "source" | "generated" = "source",
+  ): Promise<string | null> => {
+    try {
+      if (!account?.id) {
+        notifyAlert(
+          "warning",
+          "alerts.accountRequiredHeader",
+          "alerts.accountRequiredMessage",
+        );
+        return null;
+      }
+
+      const accountId = account.id;
+      const vatNumberWithoutPrefix = vatNumber
+        ?.replace(/^BG/, "")
+        .replace(/^EU/, "")
+        .trim();
+      const finalBulstat = bulstat || vatNumberWithoutPrefix || "unknown";
+
+      // Prepare form data for API request
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Call the unified upload endpoint
+      const response = await fetch(
+        `/api/upload-document?accountId=${accountId}&bulstat=${encodeURIComponent(finalBulstat)}&documentType=${documentType}`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      if (!response.ok) {
+        notifyAlert(
+          "warning",
+          "alerts.documentUploadFailedHeader",
+          "alerts.documentUploadFailedMessage",
+        );
+        return null;
+      }
+
+      const { publicUrl } = await response.json();
+      return publicUrl;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "";
+      notifyAlert(
+        "warning",
+        "alerts.documentUploadFailedHeader",
+        "alerts.documentUploadFailedMessage",
+        message ? { message } : undefined,
+      );
+      return null;
+    }
+  };
+
   const processFile = async (
     file: File,
+    invoiceId: string,
   ): Promise<BulgarianInvoiceData | null> => {
     try {
       const formData = new FormData();
@@ -289,6 +284,31 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         },
         true,
       );
+
+      // Save source document to Supabase (non-blocking, fire-and-forget)
+      if (data) {
+        saveDocument(file, data.sellerEik, data.sellerVatNumber, "source")
+          .then((sourceDocUrl: string | null) => {
+            if (sourceDocUrl) {
+              // Update invoice with the source document URL after upload completes
+              setInvoices((prev) =>
+                prev.map((inv) =>
+                  inv.id === invoiceId
+                    ? { ...inv, sourceDocumentUrl: sourceDocUrl }
+                    : inv,
+                ),
+              );
+            }
+          })
+          .catch(() => {
+            notifyAlert(
+              "warning",
+              "alerts.sourceDocumentSaveFailedHeader",
+              "alerts.sourceDocumentSaveFailedMessage",
+            );
+          });
+      }
+
       return data;
     } catch (err: unknown) {
       throw err instanceof Error ? err : new Error(t("extractFailed"));
@@ -324,7 +344,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         (async () => {
           const stepTimer = cycleAiStep();
           try {
-            const data = await processFile(file);
+            const data = await processFile(file, id);
 
             if (data) {
               const sellerEik = normalizeEik(data.sellerEik);
@@ -340,9 +360,59 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
             // Update with extracted data
             setInvoices((prev) =>
-              prev.map((inv) =>
-                inv.id === id ? { ...inv, status: "extracted", data } : inv,
-              ),
+              prev.map((inv) => {
+                if (inv.id !== id) {
+                  return inv;
+                }
+
+                if (!data) {
+                  return {
+                    ...inv,
+                    status: "extracted",
+                    data,
+                    sourceDocumentUrl: null,
+                  };
+                }
+
+                const sellerEik = normalizeEik(data.sellerEik);
+                const dbCurrentSequence = parseInvoiceSequence(
+                  data.invoiceNumber,
+                );
+
+                let nextInvoiceSequence = dbCurrentSequence;
+                if (sellerEik) {
+                  const maxExistingSequence = prev.reduce((max, current) => {
+                    if (current.id === id || !current.data) {
+                      return max;
+                    }
+
+                    return normalizeEik(current.data.sellerEik) === sellerEik
+                      ? Math.max(
+                          max,
+                          parseInvoiceSequence(current.data.invoiceNumber),
+                        )
+                      : max;
+                  }, 0);
+
+                  nextInvoiceSequence = Math.max(
+                    dbCurrentSequence,
+                    maxExistingSequence,
+                  );
+                }
+
+                const preparedData = {
+                  ...data,
+                  invoiceNumber: formatInvoiceSequence(nextInvoiceSequence + 1),
+                };
+
+                return {
+                  ...inv,
+                  status: "extracted",
+                  data: preparedData,
+                  sourceDocumentUrl:
+                    (preparedData as any)?.sourceDocumentUrl || null,
+                };
+              }),
             );
 
             // Auto-select first successfully extracted invoice
@@ -408,18 +478,49 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   };
 
   const generateAndDownloadPdfs = async (
-    invoiceDataList: { data: BulgarianInvoiceData; filename: string }[],
+    invoiceDataList: {
+      data: BulgarianInvoiceData;
+      filename: string;
+      sourceDocumentUrl?: string | null;
+    }[],
     isBulk: boolean = false,
   ) => {
     const setLoading = isBulk ? setDownloadingAll : setDownloading;
     setLoading(true);
     try {
-      for (const { data: invoiceData, filename } of invoiceDataList) {
+      const invalidInvoice = invoiceDataList.find(({ data }) => {
+        const sellerEik = normalizeEik(data.sellerEik);
+        const buyerEik = normalizeEik(data.buyerEik);
+        return !sellerEik || !buyerEik;
+      });
+
+      if (invalidInvoice) {
+        notifyAlert(
+          "error",
+          "alerts.requiredEikHeader",
+          "alerts.requiredEikMessage",
+          { filename: invalidInvoice.filename },
+        );
+        return;
+      }
+
+      // Collect all seller/buyer EIKs from invoices being generated
+      // so we can remove only those from missingOrganizations/Contragents
+      const generatedSellerEiks = new Set<string>();
+
+      for (const {
+        data: invoiceData,
+        filename,
+        sourceDocumentUrl,
+      } of invoiceDataList) {
         // Ensure composer_name is always present in the data sent to the API
         const dataToSend = {
           ...invoiceData,
+          invoiceNumber: invoiceData.invoiceNumber || formatInvoiceSequence(1),
           composer_name: invoiceData.composer_name || accountComposerName || "",
         };
+
+        const finalInvoiceNumber = String(dataToSend.invoiceNumber);
 
         const res = await fetch("/api/generate-pdf", {
           method: "POST",
@@ -432,9 +533,28 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `фактура-${invoiceData.invoiceNumber ?? "generated"}.pdf`;
+        a.download = `фактура-${finalInvoiceNumber ?? "generated"}-${dataToSend.sellerEik}.pdf`;
         a.click();
         URL.revokeObjectURL(url);
+
+        // Save generated document to Supabase (non-blocking, fire-and-forget)
+        const generatedFileName = `фактура-${finalInvoiceNumber ?? "generated"}-${dataToSend.sellerEik}.pdf`;
+        const generatedFile = new File([blob], generatedFileName, {
+          type: "application/pdf",
+        });
+
+        saveDocument(
+          generatedFile,
+          invoiceData.sellerEik,
+          invoiceData.sellerVatNumber,
+          "generated",
+        ).catch(() => {
+          notifyAlert(
+            "warning",
+            "alerts.generatedDocumentSaveFailedHeader",
+            "alerts.generatedDocumentSaveFailedMessage",
+          );
+        });
 
         // Record the invoice in the database (fire-and-forget, non-blocking)
         callApi(
@@ -444,12 +564,21 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
             body: JSON.stringify({
               invoiceData: dataToSend,
               originalFilename: filename,
+              sourceDocumentUrl: sourceDocumentUrl || null,
             }),
           },
           true,
-        ).catch((err) =>
-          console.warn("[record-invoice] Failed to save record:", err),
-        );
+        ).catch(() => {
+          notifyAlert(
+            "warning",
+            "alerts.recordInvoiceFailedHeader",
+            "alerts.recordInvoiceFailedMessage",
+          );
+        });
+
+        // Track which sellers/buyers were generated in this batch
+        const sellerEik = normalizeEik(invoiceData.sellerEik);
+        if (sellerEik) generatedSellerEiks.add(sellerEik);
 
         // Add a small delay between downloads to avoid issues (only for bulk)
         if (isBulk) {
@@ -457,7 +586,8 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         }
       }
 
-      await handleGenerationSuccess();
+      // Only remove organizations/contragents that were just generated
+      handleGenerationSuccess(generatedSellerEiks);
     } catch (err: unknown) {
       const error = err instanceof Error ? err.message : t("extractFailed");
       setErrorMsg(error);
@@ -479,7 +609,11 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   const handleDownloadAll = async () => {
     const validInvoices = invoices
       .filter((inv) => inv.data)
-      .map((inv) => ({ data: inv.data!, filename: inv.file.name }));
+      .map((inv) => ({
+        data: inv.data!,
+        filename: inv.file.name,
+        sourceDocumentUrl: inv.sourceDocumentUrl || null,
+      }));
     await generateAndDownloadPdfs(validInvoices, true);
   };
 

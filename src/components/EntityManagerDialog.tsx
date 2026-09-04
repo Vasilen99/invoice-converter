@@ -237,10 +237,6 @@ export function EntityManagerDialog(props: EntityManagerDialogProps) {
 
         // Validate result has required fields
         if (!result.name || !result.bulstat) {
-          console.error("Search result missing required fields:", {
-            name: result.name,
-            bulstat: result.bulstat,
-          });
           setAlertStatus({
             status: "error",
             statusHeader: t("errorMessagesCommon.serverErrorHeader"),

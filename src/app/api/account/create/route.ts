@@ -1,6 +1,7 @@
 import { prisma } from "../../../../../utility/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getUserServer } from "../../../../../utility/get-user-server";
+import { notFound } from "next/navigation";
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,6 +10,7 @@ export async function POST(req: NextRequest) {
     if (!userClaims?.sub) {
       return NextResponse.json(
         {
+          data: null,
           alert: {
             status: "error",
             header: "errorMessagesCommon.unauthorizedErrorHeader",
@@ -25,6 +27,7 @@ export async function POST(req: NextRequest) {
     if (!accountName || typeof accountName !== "string" || accountName === "") {
       return NextResponse.json(
         {
+          data: null,
           alert: {
             status: "error",
             header: "errorMessagesAccount.accountNameRequired",
@@ -41,16 +44,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        {
-          alert: {
-            status: "error",
-            header: "errorMessagesCommon.userNotFoundHeader",
-            message: "errroMessagesCommon.userNotFoundMessage",
-          },
-        },
-        { status: 404, headers: { "content-type": "application/json" } },
-      );
+      return notFound();
     }
 
     // Check if user already has an account
@@ -105,10 +99,11 @@ export async function POST(req: NextRequest) {
     console.error("Error in account creation/update:", error);
     return NextResponse.json(
       {
+        data: null,
         alert: {
           status: "error",
-          header: "Server Error",
-          message: "Failed to process account request",
+          header: "errorMessagesCommon.serverErrorHeader",
+          message: "errorMessagesCommon.serverErrorMessage",
         },
       },
       { status: 500, headers: { "content-type": "application/json" } },

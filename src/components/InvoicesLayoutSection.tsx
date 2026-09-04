@@ -30,10 +30,12 @@ const EditField: React.FC<{
   value: string;
   onChange: (v: string) => void;
   className?: string;
-}> = ({ label, value, onChange, className = "" }) => (
+  required?: boolean;
+}> = ({ label, value, onChange, className = "", required = false }) => (
   <div className={`flex flex-col gap-1 ${className}`}>
     <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
       {label}
+      {required ? " *" : ""}
     </label>
     <input
       type="text"
@@ -368,6 +370,7 @@ export const InvoicesLayoutSection = ({
                     <EditField
                       label={t("fields.eik")}
                       value={selectedInvoice.data.sellerEik}
+                      required
                       onChange={(v) =>
                         updateInvoiceData(selectedInvoiceId!, {
                           ...selectedInvoice.data!,
@@ -436,6 +439,7 @@ export const InvoicesLayoutSection = ({
                     <EditField
                       label={t("fields.eik")}
                       value={selectedInvoice.data.buyerEik}
+                      required
                       onChange={(v) =>
                         updateInvoiceData(selectedInvoiceId!, {
                           ...selectedInvoice.data!,

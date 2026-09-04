@@ -99,10 +99,7 @@ export async function GET(request: NextRequest) {
       }
 
       if (response.status === 404) {
-        return NextResponse.json(
-          { error: "organizations.companyNotFound", results: [] },
-          { status: 404 },
-        );
+        return NextResponse.json({ results: [] }, { status: 200 });
       }
 
       throw new Error(

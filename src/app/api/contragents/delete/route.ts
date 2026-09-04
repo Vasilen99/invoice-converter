@@ -54,17 +54,7 @@ export async function DELETE(request: NextRequest) {
     });
 
     if (!contragent) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "contragents.contragentNotFoundHeader",
-            message: "contragents.contragentNotFoundMessage",
-          },
-        },
-        { status: 404 },
-      );
+      return notFound();
     }
 
     const deletedContragent = await prisma.contragent.delete({
