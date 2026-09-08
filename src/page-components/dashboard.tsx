@@ -45,6 +45,8 @@ import {
   accountLink,
   dashboardLink,
   organizationsLink,
+  aiConvertorLink,
+  contragentsLink,
 } from "../../utility/links";
 import { useUserStore } from "@/store/user";
 import { PLATFORM_NAME } from "../../utility/constants";
@@ -53,121 +55,121 @@ const NAVIGATION_CONFIG = [
   {
     labelKey: "dashboard.general",
     items: [
-      {
-        nameKey: "dashboard.overview",
-        href: dashboardLink,
-        icon: BarChart3,
-      },
+      // {
+      //   nameKey: "dashboard.overview",
+      //   href: dashboardLink,
+      //   icon: BarChart3,
+      // },
       {
         nameKey: "dashboard.aiConvertor",
-        href: "/dashboard/ai-convertor",
+        href: aiConvertorLink,
         icon: FileBox,
       },
-      {
-        nameKey: "dashboard.reports",
-        href: "/dashboard/reports",
-        icon: BarChart3,
-      },
+      // {
+      //   nameKey: "dashboard.reports",
+      //   href: "/dashboard/reports",
+      //   icon: BarChart3,
+      // },
       {
         nameKey: "dashboard.organizations",
         href: organizationsLink,
         icon: Users,
       },
-    ],
-  },
-  {
-    labelKey: "dashboard.documents",
-    items: [
-      {
-        nameKey: "dashboard.uploadDocument",
-        href: "/dashboard/upload",
-        icon: Upload,
-      },
-      {
-        nameKey: "dashboard.invoices",
-        href: "/dashboard/invoices",
-        icon: FileText,
-      },
       {
         nameKey: "dashboard.contragents",
-        href: "/dashboard/contragents",
+        href: contragentsLink,
         icon: FileUser,
       },
-      {
-        nameKey: "dashboard.creditNotes",
-        href: "/dashboard/credit-notes",
-        icon: ReceiptText,
-      },
-      {
-        nameKey: "dashboard.recurringInvoices",
-        href: "/dashboard/reccuring-invoices",
-        icon: Repeat,
-      },
     ],
   },
-  {
-    labelKey: "dashboard.team",
-    items: [
-      {
-        nameKey: "dashboard.members",
-        href: "/dashboard/members",
-        icon: Users,
-      },
-      {
-        nameKey: "dashboard.rolesAndPermissions",
-        href: "/dashboard/roles-and-permissions",
-        icon: ShieldLock,
-      },
-    ],
-  },
-  {
-    labelKey: "dashboard.billing",
-    items: [
-      {
-        nameKey: "dashboard.creditsAndPackages",
-        href: "/dashboard/credits",
-        icon: CircleDollarSign,
-      },
-      {
-        nameKey: "dashboard.orderHistory",
-        href: "/billing",
-        icon: Clock,
-      },
-      {
-        nameKey: "dashboard.usageByMember",
-        href: "/dashboard/usage-by-member",
-        icon: ChartPie,
-      },
-    ],
-  },
+  // {
+  //   labelKey: "dashboard.documents",
+  //   items: [
+  // {
+  //   nameKey: "dashboard.uploadDocument",
+  //   href: "/dashboard/upload",
+  //   icon: Upload,
+  // },
+  // {
+  //   nameKey: "dashboard.invoices",
+  //   href: "/dashboard/invoices",
+  //   icon: FileText,
+  // },
+  // {
+  //   nameKey: "dashboard.creditNotes",
+  //   href: "/dashboard/credit-notes",
+  //   icon: ReceiptText,
+  // },
+  // {
+  //   nameKey: "dashboard.recurringInvoices",
+  //   href: "/dashboard/reccuring-invoices",
+  //   icon: Repeat,
+  // },
+  //   ],
+  // },
+  // {
+  //   labelKey: "dashboard.team",
+  //   items: [
+  //     {
+  //       nameKey: "dashboard.members",
+  //       href: "/dashboard/members",
+  //       icon: Users,
+  //     },
+  //     {
+  //       nameKey: "dashboard.rolesAndPermissions",
+  //       href: "/dashboard/roles-and-permissions",
+  //       icon: ShieldLock,
+  //     },
+  //   ],
+  // },
+  // {
+  //   labelKey: "dashboard.billing",
+  //   items: [
+  //     {
+  //       nameKey: "dashboard.creditsAndPackages",
+  //       href: "/dashboard/credits",
+  //       icon: CircleDollarSign,
+  //     },
+  //     {
+  //       nameKey: "dashboard.orderHistory",
+  //       href: "/billing",
+  //       icon: Clock,
+  //     },
+  //     {
+  //       nameKey: "dashboard.usageByMember",
+  //       href: "/dashboard/usage-by-member",
+  //       icon: ChartPie,
+  //     },
+  //   ],
+  // },
   {
     labelKey: "dashboard.settings",
     items: [
-      {
-        nameKey: "dashboard.organizationProfile",
-        href: "/dashboard/organization-profile",
-        icon: Building,
-      },
+      // {
+      //   nameKey: "dashboard.organizationProfile",
+      //   href: "/dashboard/organization-profile",
+      //   icon: Building,
+      // },
       {
         nameKey: "dashboard.myAccount",
         href: accountLink,
         icon: User,
       },
-      {
-        nameKey: "dashboard.integrations",
-        href: "/dashboard/integrations",
-        icon: Cable,
-      },
-      {
-        nameKey: "dashboard.notifications",
-        href: "/dashboard/notifications",
-        icon: Bell,
-      },
-      {
-        nameKey: "dashboard.localizations",
-        href: "/dashboard/localizations",
-        icon: Globe,
-      },
+      // {
+      //   nameKey: "dashboard.integrations",
+      //   href: "/dashboard/integrations",
+      //   icon: Cable,
+      // },
+      // {
+      //   nameKey: "dashboard.notifications",
+      //   href: "/dashboard/notifications",
+      //   icon: Bell,
+      // },
+      // {
+      //   nameKey: "dashboard.localizations",
+      //   href: "/dashboard/localizations",
+      //   icon: Globe,
+      // },
     ],
   },
 ];
