@@ -1,6 +1,6 @@
 import { prisma } from "../../../../utility/prisma";
 import { getUserServer } from "../../../../utility/get-user-server";
-
+import { notFound } from "next/navigation";
 export type AccountData = {
   id: number;
   name: string;
@@ -14,7 +14,7 @@ export async function getAccountData(): Promise<AccountData | null> {
     const userClaims = await getUserServer();
 
     if (!userClaims?.sub) {
-      return null;
+      return notFound();
     }
 
     // Get user from database
@@ -23,7 +23,7 @@ export async function getAccountData(): Promise<AccountData | null> {
     });
 
     if (!user) {
-      return null;
+      return notFound();
     }
 
     // Get user's account (first account they're a member of)

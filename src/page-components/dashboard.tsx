@@ -19,7 +19,7 @@ import {
   Building2,
   // BarChart3,
   // Upload,
-  // FileText,
+  FileText,
   User,
   // Clock,
   LogOut,
@@ -43,10 +43,11 @@ import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import {
   accountLink,
-  dashboardLink,
+  // dashboardLink,
   organizationsLink,
   aiConvertorLink,
   contragentsLink,
+  createInvoiceLink,
 } from "../../utility/links";
 import { useUserStore } from "@/store/user";
 import { PLATFORM_NAME } from "../../utility/constants";
@@ -79,6 +80,11 @@ const NAVIGATION_CONFIG = [
         nameKey: "dashboard.contragents",
         href: contragentsLink,
         icon: FileUser,
+      },
+      {
+        nameKey: "dashboard.createInvoice",
+        href: createInvoiceLink,
+        icon: FileText,
       },
     ],
   },

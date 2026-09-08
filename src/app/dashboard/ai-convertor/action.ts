@@ -1,12 +1,12 @@
 import { prisma } from "../../../../utility/prisma";
 import { getUserServer } from "../../../../utility/get-user-server";
-
+import { notFound } from "next/navigation";
 export async function getAccountData() {
   try {
     const userClaims = await getUserServer();
 
     if (!userClaims?.sub) {
-      return null;
+      return notFound();
     }
 
     const accountMember = await prisma.accountMember.findFirst({

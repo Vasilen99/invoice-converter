@@ -188,6 +188,7 @@ export async function POST(request: NextRequest) {
       originalFilename?: string;
       sourceDocumentUrl?: string | null;
       generatedPdfUrl?: string | null;
+      skipSourceDocumentCreation?: boolean;
     };
 
     const {
@@ -195,6 +196,7 @@ export async function POST(request: NextRequest) {
       originalFilename = "invoice.pdf",
       sourceDocumentUrl = null,
       generatedPdfUrl = null,
+      skipSourceDocumentCreation = false,
     } = body;
 
     if (!invoiceData) {
@@ -474,20 +476,25 @@ export async function POST(request: NextRequest) {
     // Upsert everything in a transaction
     // ------------------------------------------------------------------
     const result = await prisma.$transaction(async (tx) => {
-      // 1. SourceDocument — represents the original uploaded PDF
-      const sourceDoc = await tx.sourceDocument.create({
-        data: {
-          sourceType: "OTHER",
-          originalFileUrl: sourceDocumentUrl || "",
-          originalFilename: originalFilename,
-          mimeType: "application/pdf",
-          status: "CONVERTED",
-          parsedData: invoiceData as object,
-          organizationId: organization.id,
-          uploadedByUserId: dbUser.id,
-        },
-        select: { id: true },
-      });
+      // 1. SourceDocument — represents the original uploaded PDF (skip if requested)
+      let sourceDocId: number | null = null;
+      
+      if (!skipSourceDocumentCreation) {
+        const sourceDoc = await tx.sourceDocument.create({
+          data: {
+            sourceType: "OTHER",
+            originalFileUrl: sourceDocumentUrl || "",
+            originalFilename: originalFilename,
+            mimeType: "application/pdf",
+            status: "CONVERTED",
+            parsedData: invoiceData as object,
+            organizationId: organization.id,
+            uploadedByUserId: dbUser.id,
+          },
+          select: { id: true },
+        });
+        sourceDocId = sourceDoc.id;
+      }
 
       // 2. GeneratedInvoice (upsert – if same series/number exists, update it)
       const existingInvoice = await tx.generatedInvoice.findUnique({
@@ -516,8 +523,8 @@ export async function POST(request: NextRequest) {
             totalAmount,
             status: "ISSUED",
             pdfFileUrl: generatedPdfUrl || undefined,
-            // Link source doc only if not already linked
-            sourceDocumentId: existingInvoice.sourceDocumentId ?? sourceDoc.id,
+            // Link source doc only if not already linked and we created one
+            sourceDocumentId: existingInvoice.sourceDocumentId ?? sourceDocId ?? undefined,
           },
           select: { id: true },
         });
@@ -538,7 +545,7 @@ export async function POST(request: NextRequest) {
             creditsCost: 1, // default
             organizationId: organization.id,
             contragentId: contragent.id,
-            sourceDocumentId: sourceDoc.id,
+            sourceDocumentId: sourceDocId ?? undefined,
           },
           select: { id: true },
         });
@@ -577,7 +584,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      return { sourceDocumentId: sourceDoc.id, generatedInvoiceId };
+      return { sourceDocumentId: sourceDocId, generatedInvoiceId };
     });
 
     return NextResponse.json({ data: result }, { status: 200 });

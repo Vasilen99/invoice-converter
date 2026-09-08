@@ -4,6 +4,7 @@ const organizationsLink = `${dashboardLink}/organizations`;
 const accountLink = `${dashboardLink}/account`;
 const aiConvertorLink = `${dashboardLink}/ai-convertor`;
 const contragentsLink = `${dashboardLink}/contragents`;
+const createInvoiceLink = `${dashboardLink}/create-invoice`;
 export {
   accountLink,
   dashboardLink,
@@ -11,4 +12,5 @@ export {
   organizationsLink,
   aiConvertorLink,
   contragentsLink,
+  createInvoiceLink,
 };

@@ -198,6 +198,7 @@
     "overview": "Преглед",
     "reports": "Отчети",
     "documents": "Документи",
+    "createInvoice": "Създай фактура",
     "aiConvertor": "AI Конвертор",
     "uploadDocument": "Качване на документ",
     "invoices": "Фактури",
@@ -235,6 +236,64 @@
     "lastUpdatedAt": "Последно обновен на",
     "saveChanges": "Запази промените",
     "saving": "Запазване..."
+  },
+  "createInvoice": {
+    "header": "Създай фактура",
+    "subheader": "Създайте нова фактура, като попълните необходимите данни.",
+    "noProfileConfigured": "Нямате конфигуриран профил в платформата, трябва да конфигурирате вашият акаунт в платформата, за да имате достъп до всички функции.",
+    "steps": {
+      "step1": "Изберете организация и контрагент",
+      "step2": "Изберете стоки/услуги",
+      "step3": "Преглед и потвърждение"
+    },
+    "step2": {
+      "previouslyAddedItems": "Предишно добавени артикули",
+      "addNewItem": "Добави нов артикул",
+      "invoiceLineItems": "Редове по фактурата",
+      "noItemsFound": "Няма намерени артикули за избраните организация и контрагент.",
+      "addTheSelectedOnes": "Добави избраните артикули",
+      "VAT": "ДДС",
+      "unitPrice": "Ед. цена",
+      "quantity": "Количество",
+      "unit": "Мярка",
+      "description": "Описание",
+      "value": "Стойност"
+    },
+    "step3": {
+      "invoiceNumber": "Номер на фактура",
+      "currency": "Валута",
+      "invoiceDate": "Дата на фактура",
+      "taxEventDate": "Дата на данъчно събитие",
+      "location": "Локация",
+      "manualEntry": "Ръчно въвеждане",
+      "enterLocation": "Въведете локация",
+      "bankDetails": "Банкови детайли",
+      "bank": "Банка",
+      "iban": "IBAN",
+      "bic": "BIC",
+      "taxBase": "Данъчна основа",
+      "vatAmount": "ДДС",
+      "total": "Общо",
+      "previewInvoiceBeforeSaving": "Преглед на фактурата преди финално записване:",
+      "previewInvoice": "Преглед на фактурата",
+      "selectLocation": "Изберете локация или въведете ръчно",
+      "selectBankDetails": "Изберете банкови детайли или въведете ръчно"
+    },
+    "contragents": "Контрагенти",
+    "organizations": "Организации",
+    "selectOrganization": "Изберете организация",
+    "selectContragent": "Изберете контрагент",
+    "continiue": "Напред",
+    "back": "Назад",
+    "preview": "Преглед на фактурата",
+    "previewTitle": "Преглед на фактурата",
+    "generatePdf": "Генерирай PDF",
+    "downloadInvoice": "Изтегли фактура",
+    "previewDescription": "Преглед на фактурата преди финално записване:",
+    "errors": {
+      "serverErrorHeaderFetchContragents": "Възникна сървърна грешка.",
+      "serverErrorDescriptionFetchContragents": "Не успяхме да извлечем информация за контрагентите, моля опитайте отново по-късно."
+    }
   },
   "organizations": {
       "organizationsHeader": "Организации",
