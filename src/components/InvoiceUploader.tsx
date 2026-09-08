@@ -537,26 +537,29 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         a.click();
         URL.revokeObjectURL(url);
 
-        // Save generated document to Supabase (non-blocking, fire-and-forget)
+        // Save generated document to Supabase and get the public URL
         const generatedFileName = `фактура-${finalInvoiceNumber ?? "generated"}-${dataToSend.sellerEik}.pdf`;
         const generatedFile = new File([blob], generatedFileName, {
           type: "application/pdf",
         });
 
-        saveDocument(
-          generatedFile,
-          invoiceData.sellerEik,
-          invoiceData.sellerVatNumber,
-          "generated",
-        ).catch(() => {
+        let generatedPdfUrl: string | null = null;
+        try {
+          generatedPdfUrl = await saveDocument(
+            generatedFile,
+            invoiceData.sellerEik,
+            invoiceData.sellerVatNumber,
+            "generated",
+          );
+        } catch (err) {
           notifyAlert(
             "warning",
             "alerts.generatedDocumentSaveFailedHeader",
             "alerts.generatedDocumentSaveFailedMessage",
           );
-        });
+        }
 
-        // Record the invoice in the database (fire-and-forget, non-blocking)
+        // Record the invoice in the database with the generated PDF URL
         callApi(
           "/record-invoice",
           {
@@ -565,6 +568,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
               invoiceData: dataToSend,
               originalFilename: filename,
               sourceDocumentUrl: sourceDocumentUrl || null,
+              generatedPdfUrl: generatedPdfUrl || null,
             }),
           },
           true,
@@ -599,9 +603,16 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   const handleDownload = async (
     invoiceData: BulgarianInvoiceData,
     originalFilename?: string,
+    sourceDocumentUrl?: string | null,
   ) => {
     await generateAndDownloadPdfs(
-      [{ data: invoiceData, filename: originalFilename ?? "invoice.pdf" }],
+      [
+        {
+          data: invoiceData,
+          filename: originalFilename ?? "invoice.pdf",
+          sourceDocumentUrl: sourceDocumentUrl || null,
+        },
+      ],
       false,
     );
   };

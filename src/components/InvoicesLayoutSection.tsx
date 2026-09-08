@@ -21,6 +21,7 @@ type InvoiceFile = {
   status: "extracting" | "extracted" | "error";
   data?: BulgarianInvoiceData | null;
   error?: string;
+  sourceDocumentUrl?: string | null;
 };
 
 const AI_STEP_KEYS = ["step1", "step2", "step3", "step4", "step5"] as const;
@@ -76,6 +77,7 @@ interface InvoicesLayoutSectionProps {
   handleDownload: (
     invoiceData: BulgarianInvoiceData,
     originalFilename?: string,
+    sourceDocumentUrl?: string | null,
   ) => Promise<void>;
   handleDownloadAll: () => Promise<void>;
   inputRef: React.RefObject<HTMLInputElement | null>;
@@ -737,6 +739,7 @@ export const InvoicesLayoutSection = ({
                       handleDownload(
                         selectedInvoice.data,
                         selectedInvoice.file.name,
+                        selectedInvoice.sourceDocumentUrl || null,
                       );
                     }
                   }}

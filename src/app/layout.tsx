@@ -7,10 +7,6 @@ import { getLocale } from "next-intl/server";
 import AppProvider from "@/components/AppProvider";
 import dynamic from "next/dynamic";
 
-const Footer = dynamic(() =>
-  import("@/components/landing-page/footer").then((mod) => mod.Footer),
-);
-
 const Alert = dynamic(() =>
   import("@/components/Alert").then((mod) => mod.AlertDemo),
 );
@@ -38,7 +34,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = async ({
         <NextIntlClientProvider>
           <AppProvider>
             {children}
-            <Footer />
             <Alert />
           </AppProvider>
         </NextIntlClientProvider>

@@ -8,7 +8,7 @@ import { Features } from "@/components/landing-page/features";
 import { Solution } from "@/components/landing-page/solution";
 import { Problem } from "@/components/landing-page/problem";
 import { Header } from "@/components/landing-page/header";
-
+import { Footer } from "@/components/landing-page/footer";
 /* ─────────────────────────── Hero ─────────────────────────── */
 
 const PROVIDERS = [
@@ -123,6 +123,7 @@ const HomePage = () => {
           <FinalCta />
         </div>
       </main>
+      <Footer />
     </>
   );
 };

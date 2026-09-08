@@ -68,12 +68,13 @@ function buildHtml(data: BulgarianInvoiceData): string {
   .two-col > div { flex: 1; }
   .meta-table td { border: 1px solid ${BORDER}; }
   .items-table { table-layout: fixed; margin-bottom: 12px; }
-  .items-table col.no { width: 26px; }
-  .items-table col.unit { width: 44px; }
-  .items-table col.qty { width: 44px; }
-  .items-table col.price { width: 68px; }
-  .items-table col.vat { width: 54px; }
-  .items-table col.val { width: 68px; }
+  .items-table col.no { width: 30px; }
+  .items-table col.desc { width: 210px; }
+  .items-table col.unit { width: 45px; }
+  .items-table col.qty { width: 45px; }
+  .items-table col.price { width: 55px; }
+  .items-table col.vat { width: 60px; }
+  .items-table col.val { width: 65px; }
   .items-table thead th { background: ${BLUE}; color: #fff; border-color: ${BORDER}; line-height: 1.4; }
   .items-table thead th.right { text-align: right; }
   .items-table thead th.center { text-align: center; }

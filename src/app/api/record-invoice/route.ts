@@ -187,12 +187,14 @@ export async function POST(request: NextRequest) {
       invoiceData: BulgarianInvoiceData;
       originalFilename?: string;
       sourceDocumentUrl?: string | null;
+      generatedPdfUrl?: string | null;
     };
 
     const {
       invoiceData,
       originalFilename = "invoice.pdf",
       sourceDocumentUrl = null,
+      generatedPdfUrl = null,
     } = body;
 
     if (!invoiceData) {
@@ -513,6 +515,7 @@ export async function POST(request: NextRequest) {
             vatAmount,
             totalAmount,
             status: "ISSUED",
+            pdfFileUrl: generatedPdfUrl || undefined,
             // Link source doc only if not already linked
             sourceDocumentId: existingInvoice.sourceDocumentId ?? sourceDoc.id,
           },
@@ -531,6 +534,7 @@ export async function POST(request: NextRequest) {
             vatAmount,
             totalAmount,
             status: "ISSUED",
+            pdfFileUrl: generatedPdfUrl || undefined,
             creditsCost: 1, // default
             organizationId: organization.id,
             contragentId: contragent.id,
