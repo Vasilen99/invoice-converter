@@ -21,6 +21,7 @@ export const getAccountData = async () => {
       },
       select: {
         id: true,
+        composer_name: true,
         organizations: {
           select: {
             id: true,

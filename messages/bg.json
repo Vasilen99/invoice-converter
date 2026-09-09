@@ -292,7 +292,13 @@
     "previewDescription": "Преглед на фактурата преди финално записване:",
     "errors": {
       "serverErrorHeaderFetchContragents": "Възникна сървърна грешка.",
-      "serverErrorDescriptionFetchContragents": "Не успяхме да извлечем информация за контрагентите, моля опитайте отново по-късно."
+      "serverErrorDescriptionFetchContragents": "Не успяхме да извлечем информация за контрагентите, моля опитайте отново по-късно.",
+      "pdfGenerationErrorHeader": "Грешка при генериране на PDF",
+      "pdfGenerationErrorMessage": "Възникна грешка при генерирането на PDF. Моля, опитайте отново по-късно."
+    },
+    "alerts": {
+      "successCreationHeader": "Успешно !",
+      "successCreationMessage": "Фактурата беше създадена успешно."
     }
   },
   "organizations": {

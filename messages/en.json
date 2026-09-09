@@ -290,7 +290,17 @@
     "previewTitle": "Invoice preview",
     "generatePdf": "Generate PDF",
     "downloadInvoice": "Download invoice",
-    "previewDescription": "Review the invoice before final submission:"
+    "previewDescription": "Review the invoice before final submission:",
+      "errors": {
+      "serverErrorHeaderFetchContragents": "Server error occurred.",
+      "serverErrorDescriptionFetchContragents": "Failed to fetch contragent information, please try again later.",
+      "pdfGenerationErrorHeader": "Error generating PDF",
+      "pdfGenerationErrorMessage": "An error occurred while generating the PDF. Please try again later."
+    },
+    "alerts": {
+      "successCreationHeader": "Success !",
+      "successCreationMessage": "The invoice was created successfully."
+    }
   },
     "organizations": {
       "organizationsHeader": "Organizations",

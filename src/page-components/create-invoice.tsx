@@ -2,17 +2,8 @@
 import { HeadingSection } from "@/components/HeadingSection";
 import { useTranslations } from "next-intl";
 import StepsIndicator from "@/components/StepsIndicator";
-import {
-  SelectValue,
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectContent,
-} from "@/components/ui/select";
 import { useEffect, useMemo, useState } from "react";
 import { callApi } from "../../utility/hooks/apiFetch";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { InvoicePreviewModal } from "@/components/InvoicePreviewModal";
 import { BulgarianInvoiceData } from "@/types";
@@ -20,7 +11,7 @@ import { StepOneContent } from "./invoice-steps/StepOneContent";
 import { StepTwoContent } from "./invoice-steps/StepTwoContent";
 import { StepThreeContent } from "./invoice-steps/StepThreeContent";
 import { uploadPdfToSupabase } from "../../utility/pdf-upload";
-
+import { useGlobalStore } from "@/store/global";
 type OrganizationOrContragent = {
   id: number;
   name: string;
@@ -80,6 +71,7 @@ type CreateInvoicePrefillData = {
 
 type AccountProps = {
   id: number;
+  composer_name: string | null;
   organizations: OrganizationOrContragent[];
 } | null;
 type CreateInvoiceMainProps = {
@@ -88,6 +80,7 @@ type CreateInvoiceMainProps = {
 
 export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
   const t = useTranslations("createInvoice");
+  const { setAlertStatus } = useGlobalStore();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [selectedOrganization, setSelectedOrganization] =
     useState<OrganizationOrContragent | null>(null);
@@ -121,8 +114,6 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isLoadingPrefill, setIsLoadingPrefill] = useState<boolean>(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState<boolean>(false);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
-  const [generatedPdfUrl, setGeneratedPdfUrl] = useState<string | null>(null);
 
   const accountId = data?.id || null;
 
@@ -177,10 +168,8 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
       !invoiceNumber.trim() ||
       !invoiceDate ||
       !taxEventDate ||
-      !location.trim() ||
       !bank.trim() ||
-      !iban.trim() ||
-      !bic.trim()
+      !iban.trim()
     );
   }, [
     currentStep,
@@ -319,47 +308,11 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
       total: totals.total.toFixed(2),
       totalInWords: "",
       currency,
+      composer_name: data?.composer_name || "",
       bank: bank.trim(),
       iban: iban.trim(),
       bic: bic.trim(),
     };
-  };
-
-  const handleGeneratePdf = async () => {
-    const invoiceData = buildInvoiceData();
-    if (!invoiceData) {
-      return;
-    }
-
-    setIsGeneratingPdf(true);
-    try {
-      const response = await fetch("/api/generate-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(invoiceData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to generate PDF");
-      }
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      setGeneratedPdfUrl(url);
-
-      // Trigger download
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `faktura-${invoiceData.invoiceNumber}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      alert("Грешка при генериране на PDF");
-    } finally {
-      setIsGeneratingPdf(false);
-    }
   };
 
   const submitInvoice = async () => {
@@ -388,8 +341,23 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
             accountId || undefined,
             invoiceData.sellerEik,
           );
+
+          // Trigger download for user
+          const url = URL.createObjectURL(pdfBlob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `faktura-${invoiceData.invoiceNumber}.pdf`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
         }
       } catch (pdfError) {
+        setAlertStatus({
+          status: "error",
+          statusHeader: t("alerts.pdfGenerationErrorHeader"),
+          statusContent: t("alerts.pdfGenerationErrorMessage"),
+        });
         console.warn(
           "PDF generation or upload failed, continuing without PDF:",
           pdfError,
@@ -416,7 +384,11 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
       setSelectedOrganization(null);
       resetStepTwoAndThree();
       setIsPreviewModalOpen(false);
-      setGeneratedPdfUrl(null);
+      setAlertStatus({
+        status: "success",
+        statusHeader: t("alerts.successCreationHeader"),
+        statusContent: t("alerts.successCreationMessage"),
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -582,10 +554,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
     <section>
       <HeadingSection title={t("header")} subtitle={t("subheader")} />
       {!data ? (
-        <span>
-          Нямате конфигуриран профил в платформата, трябва да конфигурирате
-          вашият акаунт в платформата, за да имате достъп до всички функции.
-        </span>
+        <span>{t("noProfileConfigured")}</span>
       ) : (
         <>
           <StepsIndicator currentStep={currentStep} />
@@ -623,8 +592,6 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
             isOpen={isPreviewModalOpen}
             onClose={() => setIsPreviewModalOpen(false)}
             invoiceData={buildInvoiceData()}
-            isGeneratingPdf={isGeneratingPdf}
-            onDownloadPdf={handleGeneratePdf}
           />
         </>
       )}

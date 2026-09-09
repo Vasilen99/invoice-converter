@@ -4,22 +4,6 @@ import React from "react";
 import { BulgarianInvoiceData } from "../types";
 import { formatDateToBG } from "../../utility/date-formatter";
 
-export const SELLER_DEFAULTS = {
-  name: "УЕБ СЪРВИСИС БЪЛГАРИЯ ЕООД",
-  eik: "207880021",
-  vatNumber: "BG207880021",
-  city: "с. Гривица, България",
-  address: "ул. Марица № 8",
-  mol: "Василен Красиславов Минков",
-};
-
-const BANK = {
-  name: "Обединена Българска Банка (ОББ)",
-  bic: "UBBSBGSF",
-  iban: "BG91UBBS80021063728750",
-};
-
-const PREPARER = "Николай Николаев Такиев";
 const BLUE = "#1a56a0";
 const LIGHT_BLUE_BG = "#e8f0fb";
 const BORDER = "#b0c4de";
@@ -432,11 +416,11 @@ const BulgarianInvoice = React.forwardRef<HTMLDivElement, Props>(
                     </tr>
                   </thead>
                   <tbody>
-                    <InfoRow label="Банка:" value={BANK.name} />
-                    <InfoRow label="BIC:" value={BANK.bic} />
+                    <InfoRow label="Банка:" value={data.bank || ""} />
+                    <InfoRow label="BIC:" value={data.bic || ""} />
                     <InfoRow
                       label="IBAN:"
-                      value={`${BANK.iban} (${data.currency})`}
+                      value={`${data.iban || ""} (${data.currency})`}
                     />
                   </tbody>
                 </table>
@@ -561,7 +545,7 @@ const BulgarianInvoice = React.forwardRef<HTMLDivElement, Props>(
                 }}
               >
                 <div style={{ fontWeight: 600, marginBottom: 4 }}>
-                  Съставил: {PREPARER}
+                  Съставил: {data.composer_name || ""}
                 </div>
                 <div style={{ marginTop: 14 }}>
                   Подпис: ................................................

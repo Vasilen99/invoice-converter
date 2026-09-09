@@ -10,16 +10,12 @@ interface InvoicePreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   invoiceData: BulgarianInvoiceData | null;
-  onDownloadPdf?: () => void;
-  isGeneratingPdf?: boolean;
 }
 
 export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
   isOpen,
   onClose,
   invoiceData,
-  onDownloadPdf,
-  isGeneratingPdf = false,
 }) => {
   if (!isOpen || !invoiceData) return null;
 
@@ -33,7 +29,7 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
           </h2>
           <button
             onClick={onClose}
-            className="text-white hover:bg-blue-800 rounded-lg p-1 transition"
+            className="text-white hover:bg-blue-800 rounded-lg p-1 transition hover:cursor-pointer"
             aria-label="Close preview"
           >
             <X size={24} />
@@ -45,21 +41,6 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
           <div className="bg-white rounded-lg shadow-sm p-8">
             <BulgarianInvoice data={invoiceData} />
           </div>
-        </div>
-
-        {/* Footer Actions */}
-        <div className="border-t px-6 py-4 flex items-center justify-end gap-3">
-          <Button onClick={onClose}>Затвори</Button>
-          {onDownloadPdf && (
-            <Button
-              onClick={onDownloadPdf}
-              disabled={isGeneratingPdf}
-              className="gap-2"
-            >
-              <Download size={16} />
-              {isGeneratingPdf ? "Генериране..." : "Генерирай PDF"}
-            </Button>
-          )}
         </div>
       </div>
     </div>

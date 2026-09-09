@@ -478,7 +478,7 @@ export async function POST(request: NextRequest) {
     const result = await prisma.$transaction(async (tx) => {
       // 1. SourceDocument — represents the original uploaded PDF (skip if requested)
       let sourceDocId: number | null = null;
-      
+
       if (!skipSourceDocumentCreation) {
         const sourceDoc = await tx.sourceDocument.create({
           data: {
@@ -524,7 +524,8 @@ export async function POST(request: NextRequest) {
             status: "ISSUED",
             pdfFileUrl: generatedPdfUrl || undefined,
             // Link source doc only if not already linked and we created one
-            sourceDocumentId: existingInvoice.sourceDocumentId ?? sourceDocId ?? undefined,
+            sourceDocumentId:
+              existingInvoice.sourceDocumentId ?? sourceDocId ?? undefined,
           },
           select: { id: true },
         });
