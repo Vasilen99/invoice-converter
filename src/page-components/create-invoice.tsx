@@ -5,78 +5,57 @@ import StepsIndicator from "@/components/StepsIndicator";
 import { useEffect, useMemo, useState } from "react";
 import { callApi } from "../../utility/hooks/apiFetch";
 import { Button } from "@/components/ui/button";
-import { InvoicePreviewModal } from "@/components/InvoicePreviewModal";
 import { BulgarianInvoiceData } from "@/types";
 import { StepOneContent } from "./invoice-steps/StepOneContent";
-import { StepTwoContent } from "./invoice-steps/StepTwoContent";
-import { StepThreeContent } from "./invoice-steps/StepThreeContent";
 import { uploadPdfToSupabase } from "../../utility/pdf-upload";
 import { useGlobalStore } from "@/store/global";
-type OrganizationOrContragent = {
-  id: number;
-  name: string;
-};
+import dynamic from "next/dynamic";
+import type {
+  CreateInvoiceMainProps,
+  OrganizationOrContragent,
+  LineItemTemplate,
+  InvoiceLineItemDraft,
+  BankDetailsOption,
+  OrganizationDetails,
+  SelectedPartyDetails,
+  CreateInvoicePrefillData,
+} from "../../utility/types";
+const InvoicePreviewModal = dynamic(
+  () =>
+    import("@/components/InvoicePreviewModal").then(
+      (mod) => mod.InvoicePreviewModal,
+    ),
+  {
+    ssr: false,
+  },
+);
 
-type InvoiceLineItemDraft = {
-  id: string;
-  description: string;
-  unit: string;
-  quantity: string;
-  unitPrice: string;
-  vatPercent: string;
-};
+const NoAccountFallback = dynamic(
+  () => import("@/components/NoAccountFallback").then((mod) => mod.default),
+  {
+    ssr: false,
+  },
+);
 
-type BankDetailsOption = {
-  bank: string;
-  iban: string;
-  bic: string;
-};
+const StepTwoContent = dynamic(
+  () =>
+    import("@/page-components/invoice-steps/StepTwoContent").then(
+      (mod) => mod.StepTwoContent,
+    ),
+  {
+    ssr: false,
+  },
+);
 
-type AddressData = {
-  settlement?: string;
-  street?: string;
-} | null;
-
-type SelectedPartyDetails = {
-  id: number;
-  name: string;
-  bulstat: string | null;
-  vatNumber: string | null;
-  molName: string | null;
-  address: AddressData;
-};
-
-type OrganizationDetails = SelectedPartyDetails & {
-  bank: string | null;
-  iban: string | null;
-  bic: string | null;
-};
-
-type LineItemTemplate = {
-  description: string;
-  unit: string;
-  quantity: string;
-  unitPrice: string;
-  vatPercent: string;
-};
-
-type CreateInvoicePrefillData = {
-  invoiceNumberSuggestion: string;
-  organization: OrganizationDetails;
-  contragent: SelectedPartyDetails;
-  lineItemTemplates: LineItemTemplate[];
-  locationOptions: string[];
-  bankOptions: BankDetailsOption[];
-};
-
-type AccountProps = {
-  id: number;
-  composer_name: string | null;
-  organizations: OrganizationOrContragent[];
-} | null;
-type CreateInvoiceMainProps = {
-  data: AccountProps | null;
-};
+const StepThreeContent = dynamic(
+  () =>
+    import("@/page-components/invoice-steps/StepThreeContent").then(
+      (mod) => mod.StepThreeContent,
+    ),
+  {
+    ssr: false,
+  },
+);
 
 export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
   const t = useTranslations("createInvoice");
@@ -554,7 +533,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
     <section>
       <HeadingSection title={t("header")} subtitle={t("subheader")} />
       {!data ? (
-        <span>{t("noProfileConfigured")}</span>
+        <NoAccountFallback />
       ) : (
         <>
           <StepsIndicator currentStep={currentStep} />

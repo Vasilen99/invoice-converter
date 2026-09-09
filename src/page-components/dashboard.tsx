@@ -48,6 +48,7 @@ import {
   aiConvertorLink,
   contragentsLink,
   createInvoiceLink,
+  generatedInvoicesLink,
 } from "../../utility/links";
 import { useUserStore } from "@/store/user";
 import { PLATFORM_NAME } from "../../utility/constants";
@@ -88,31 +89,36 @@ const NAVIGATION_CONFIG = [
       },
     ],
   },
-  // {
-  //   labelKey: "dashboard.documents",
-  //   items: [
-  // {
-  //   nameKey: "dashboard.uploadDocument",
-  //   href: "/dashboard/upload",
-  //   icon: Upload,
-  // },
-  // {
-  //   nameKey: "dashboard.invoices",
-  //   href: "/dashboard/invoices",
-  //   icon: FileText,
-  // },
-  // {
-  //   nameKey: "dashboard.creditNotes",
-  //   href: "/dashboard/credit-notes",
-  //   icon: ReceiptText,
-  // },
-  // {
-  //   nameKey: "dashboard.recurringInvoices",
-  //   href: "/dashboard/reccuring-invoices",
-  //   icon: Repeat,
-  // },
-  //   ],
-  // },
+  {
+    labelKey: "dashboard.documents",
+    items: [
+      // {
+      //   nameKey: "dashboard.uploadDocument",
+      //   href: "/dashboard/upload",
+      //   icon: Upload,
+      // },
+      {
+        nameKey: "dashboard.generatedInvoices",
+        href: generatedInvoicesLink,
+        icon: FileText,
+      },
+      // {
+      //   nameKey: "dashboard.invoices",
+      //   href: "/dashboard/invoices",
+      //   icon: FileText,
+      // },
+      // {
+      //   nameKey: "dashboard.creditNotes",
+      //   href: "/dashboard/credit-notes",
+      //   icon: ReceiptText,
+      // },
+      // {
+      //   nameKey: "dashboard.recurringInvoices",
+      //   href: "/dashboard/reccuring-invoices",
+      //   icon: Repeat,
+      // },
+    ],
+  },
   // {
   //   labelKey: "dashboard.team",
   //   items: [

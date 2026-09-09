@@ -38,6 +38,7 @@ interface StepTwoContentProps {
     value: string,
   ) => void;
   onRemoveLineItem: (id: string) => void;
+  layout?: "horizontal" | "vertical";
 }
 
 export const StepTwoContent: React.FC<StepTwoContentProps> = ({
@@ -49,6 +50,7 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
   onAddManualLineItem,
   onUpdateLineItem,
   onRemoveLineItem,
+  layout = "horizontal",
 }) => {
   const t = useTranslations("createInvoice.step2");
   return (
@@ -103,7 +105,9 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
         {lineItemsWithTotals.map((item) => (
           <div
             key={item.id}
-            className="grid lg:grid-cols-12 items-center gap-2 border rounded-md p-3"
+            className={`grid items-center gap-2 border rounded-md p-3 ${
+              layout === "vertical" ? "lg:grid-rows-3" : "lg:grid-cols-12"
+            }`}
           >
             <div className="lg:col-span-4 flex lg:flex-col flex-row gap-2">
               <Label>{t("description")}</Label>

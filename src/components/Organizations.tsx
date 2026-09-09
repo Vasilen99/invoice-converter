@@ -20,13 +20,14 @@ const NoAccountFallback = dynamic(() => import("./NoAccountFallback"), {
   ssr: false,
 });
 
+export type OrganizationsProps = {
+  organizations: OrganizationLight[];
+  hasAccount?: boolean;
+};
 export default function Organizations({
   organizations,
   hasAccount,
-}: {
-  organizations: OrganizationLight[];
-  hasAccount?: boolean;
-}) {
+}: OrganizationsProps) {
   const t = useTranslations();
   const { setAlertStatus } = useGlobalStore();
   const [organizationsList, setOrganizationsList] =
