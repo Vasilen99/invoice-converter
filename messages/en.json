@@ -198,6 +198,7 @@
     "overview": "Overview",
     "reports": "Reports",
     "aiConvertor": "AI Convertor",
+    "aiAssistant": "AI Assistant",
     "documents": "Documents",
     "createInvoice": "Create Invoice",
     "uploadDocument": "Upload document",
@@ -596,6 +597,32 @@
   },
   "redirectLogin": {
     "redirectHeader": "Redirecting to Google login..."
+  },
+  "aiChat": {
+    "title": "AI Invoice Assistant",
+    "subtitle": "Create and refine Bulgarian invoices using natural language. Running in local session mode for now.",
+    "messagesTitle": "Conversation",
+    "newInvoice": "New invoice",
+    "you": "You",
+    "assistant": "Assistant",
+    "welcome": "Hello! Describe the invoice you want and I’ll build a draft. Then ask for precise updates field by field.",
+    "generating": "Generating invoice draft...",
+    "inputLabel": "Message",
+    "placeholder": "Example: Create invoice INV-2026-001 for ABC Corp with consulting service - 1200 BGN",
+    "inputHint": "Press Enter to send · Shift+Enter for a new line",
+    "send": "Send",
+    "previewTitle": "Invoice preview",
+    "saveDraft": "Save draft",
+    "downloadPdf": "Download PDF",
+    "emptyPreview": "Invoice preview will appear here after your first request.",
+    "invoiceNumber": "Invoice number",
+    "buyer": "Buyer",
+    "total": "Total",
+    "changedFields": "Last updated fields",
+    "savedLocally": "Draft saved in this browser session.",
+    "newDraftCreated": "Started a fresh draft session.",
+    "downloadReady": "PDF generated and downloaded.",
+    "downloadFailed": "Could not generate PDF for this draft."
   },
   "confirmationDialog": {
     "confirmCancel": "Cancel"

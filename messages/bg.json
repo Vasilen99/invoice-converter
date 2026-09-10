@@ -200,6 +200,7 @@
     "documents": "Документи",
     "createInvoice": "Създай фактура",
     "aiConvertor": "AI Конвертор",
+    "aiAssistant": "AI Асистент",
     "uploadDocument": "Качване на документ",
     "invoices": "Фактури",
     "contragents": "Контрагенти",
@@ -594,6 +595,32 @@
   },
   "redirectLogin": {
     "redirectHeader": "Пренасочваме ви към Google страницата за вход..."
+  },
+  "aiChat": {
+    "title": "AI асистент за фактури",
+    "subtitle": "Създавайте и коригирайте български фактури с естествен език. Временно работи в локален режим.",
+    "messagesTitle": "Разговор",
+    "newInvoice": "Нова фактура",
+    "you": "Вие",
+    "assistant": "Асистент",
+    "welcome": "Здравейте! Опишете фактурата и ще създам чернова. След това може да искате точни промени по полета.",
+    "generating": "Генериране на чернова...",
+    "inputLabel": "Съобщение",
+    "placeholder": "Пример: Създай фактура INV-2026-001 за ABC Corp с консултантска услуга - 1200 BGN",
+    "inputHint": "Enter за изпращане · Shift+Enter за нов ред",
+    "send": "Изпрати",
+    "previewTitle": "Преглед на фактура",
+    "saveDraft": "Запази чернова",
+    "downloadPdf": "Изтегли PDF",
+    "emptyPreview": "Прегледът ще се появи тук след първата ви заявка.",
+    "invoiceNumber": "Номер на фактура",
+    "buyer": "Получател",
+    "total": "Общо",
+    "changedFields": "Последно променени полета",
+    "savedLocally": "Черновата е запазена в тази браузър сесия.",
+    "newDraftCreated": "Стартирана е нова чернова.",
+    "downloadReady": "PDF файлът е генериран и изтеглен.",
+    "downloadFailed": "Неуспешно генериране на PDF за тази чернова."
   },
   "confirmationDialog": {
     "confirmCancel": "Отказ"

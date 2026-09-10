@@ -35,6 +35,7 @@ import {
   // Repeat,
   // CircleDollarSign,
   FileBox,
+  MessageSquare,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
@@ -46,6 +47,7 @@ import {
   // dashboardLink,
   organizationsLink,
   aiConvertorLink,
+  aiAssistantLink,
   contragentsLink,
   createInvoiceLink,
   generatedInvoicesLink,
@@ -66,6 +68,11 @@ const NAVIGATION_CONFIG = [
         nameKey: "dashboard.aiConvertor",
         href: aiConvertorLink,
         icon: FileBox,
+      },
+      {
+        nameKey: "dashboard.aiAssistant",
+        href: aiAssistantLink,
+        icon: MessageSquare,
       },
       // {
       //   nameKey: "dashboard.reports",
