@@ -1,22 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import {
-  SelectValue,
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectContent,
-} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
-type BankDetailsOption = {
-  bank: string;
-  iban: string;
-  bic: string;
-};
 
 interface StepThreeContentProps {
   invoiceNumber: string;
@@ -27,14 +14,8 @@ interface StepThreeContentProps {
   onInvoiceDateChange: (value: string) => void;
   taxEventDate: string;
   onTaxEventDateChange: (value: string) => void;
-  locationOptions: string[];
-  selectedLocationOption: string;
-  onLocationOptionChange: (value: string) => void;
   location: string;
   onLocationChange: (value: string) => void;
-  bankOptions: BankDetailsOption[];
-  selectedBankOption: string;
-  onBankOptionChange: (value: string) => void;
   bank: string;
   onBankChange: (value: string) => void;
   iban: string;
@@ -56,14 +37,8 @@ export const StepThreeContent = ({
   onInvoiceDateChange,
   taxEventDate,
   onTaxEventDateChange,
-  locationOptions,
-  selectedLocationOption,
-  onLocationOptionChange,
   location,
   onLocationChange,
-  bankOptions,
-  selectedBankOption,
-  onBankOptionChange,
   bank,
   onBankChange,
   iban,
@@ -114,99 +89,29 @@ export const StepThreeContent = ({
       <div className="grid lg:grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <Label>{t("location")}</Label>
-          <Select
-            value={selectedLocationOption}
-            onValueChange={(value) => {
-              onLocationOptionChange(value);
-              if (value !== "manual") {
-                onLocationChange(value);
-              }
-            }}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={t("selectLocation")} />
-            </SelectTrigger>
-            <SelectContent>
-              {locationOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-              <SelectItem value="manual">{t("manualEntry")}</SelectItem>
-            </SelectContent>
-          </Select>
           <Input
             value={location}
-            onChange={(event) => {
-              onLocationOptionChange("manual");
-              onLocationChange(event.target.value);
-            }}
+            onChange={(event) => onLocationChange(event.target.value)}
             placeholder={t("enterLocation")}
           />
         </div>
 
         <div className="flex flex-col gap-2">
           <Label>{t("bankDetails")}</Label>
-          <Select
-            value={selectedBankOption}
-            onValueChange={(value) => {
-              onBankOptionChange(value);
-              if (value === "manual") {
-                return;
-              }
-
-              const selected = bankOptions[Number(value)];
-              if (!selected) {
-                return;
-              }
-
-              onBankChange(selected.bank);
-              onIbanChange(selected.iban);
-              onBicChange(selected.bic);
-            }}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={t("selectBankDetails")} />
-            </SelectTrigger>
-            <SelectContent>
-              {bankOptions.map((option, index) => (
-                <SelectItem
-                  key={`${option.bank}-${option.iban}-${index}`}
-                  value={String(index)}
-                >
-                  {(option.bank || "-") +
-                    " / " +
-                    (option.iban || "-") +
-                    " / " +
-                    (option.bic || "-")}
-                </SelectItem>
-              ))}
-              <SelectItem value="manual">{t("manualEntry")}</SelectItem>
-            </SelectContent>
-          </Select>
           <div className="grid gap-2">
             <Input
               value={bank}
-              onChange={(event) => {
-                onBankOptionChange("manual");
-                onBankChange(event.target.value);
-              }}
+              onChange={(event) => onBankChange(event.target.value)}
               placeholder={t("bank")}
             />
             <Input
               value={iban}
-              onChange={(event) => {
-                onBankOptionChange("manual");
-                onIbanChange(event.target.value);
-              }}
+              onChange={(event) => onIbanChange(event.target.value)}
               placeholder="IBAN"
             />
             <Input
               value={bic}
-              onChange={(event) => {
-                onBankOptionChange("manual");
-                onBicChange(event.target.value);
-              }}
+              onChange={(event) => onBicChange(event.target.value)}
               placeholder={t("bic")}
             />
           </div>

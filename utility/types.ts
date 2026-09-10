@@ -251,8 +251,6 @@ export type SearchResult = {
   // Core identification
   bulstat: string;
   name: string;
-  legalForm?: string;
-  status?: string;
 
   // Address data (from seat, only essential fields)
   address?: {
@@ -279,10 +277,6 @@ export type SearchResult = {
 
   // Contact info
   email?: string | null;
-
-  // Additional metadata
-  transliteration?: string;
-  lastUpdated?: string;
 
   // Full raw data from API for caching
   rawLookupData?: CompanyData;
@@ -343,7 +337,6 @@ export type TemplateResponse = {
   bank: string;
   iban: string;
   bic: string;
-  bankOptions: BankDetailsOption[];
   lineItems: Array<{
     description: string;
     unit: string;
@@ -396,7 +389,6 @@ export type CreateInvoicePrefillData = {
   contragent: SelectedPartyDetails;
   lineItemTemplates: LineItemTemplate[];
   locationOptions: string[];
-  bankOptions: BankDetailsOption[];
 };
 
 export type AccountProps = {

@@ -6,6 +6,10 @@ import {
   generateNextInvoiceNumber,
   parseJsonAddress,
 } from "../../../../utility/helpers";
+import {
+  formatDateForInput,
+  getTodayForInput,
+} from "../../../../../utility/date-formatter";
 
 type ParsedInvoiceData = {
   location?: string;
@@ -20,10 +24,10 @@ function buildInvoiceDisplayNumber(series: string, sequence: number): string {
 
 function toDateInputValue(date: Date | null | undefined): string {
   if (!date) {
-    return new Date().toISOString().slice(0, 10);
+    return getTodayForInput();
   }
 
-  return date.toISOString().slice(0, 10);
+  return formatDateForInput(date);
 }
 
 function pickFirstFilled(...values: Array<string | null | undefined>): string {
@@ -162,10 +166,8 @@ export async function GET(request: NextRequest) {
       invoice.organization.current_inv_number?.toString() ?? null,
     );
 
-    const location = pickFirstFilled(
-      parsedData?.location,
-      organizationAddress?.settlement,
-    );
+    // TO DO: We shall add a location field into GeneratedInvoice model and use it here, for now we will use the empty string address settlement as a fallback ;
+    const location = "";
 
     const bank = pickFirstFilled(parsedData?.bank, invoice.organization.bank);
     const iban = pickFirstFilled(parsedData?.iban, invoice.organization.iban);
@@ -177,40 +179,6 @@ export async function GET(request: NextRequest) {
     ].filter((value, index, source) => {
       if (!value) return false;
       return source.indexOf(value) === index;
-    });
-
-    const bankOptionsMap = new Map<
-      string,
-      { bank: string; iban: string; bic: string }
-    >();
-    const upsertBankOption = (candidate: {
-      bank?: string | null;
-      iban?: string | null;
-      bic?: string | null;
-    }) => {
-      const normalized = {
-        bank: candidate.bank?.trim() || "",
-        iban: candidate.iban?.trim() || "",
-        bic: candidate.bic?.trim() || "",
-      };
-
-      if (!normalized.bank && !normalized.iban && !normalized.bic) {
-        return;
-      }
-
-      const key = `${normalized.bank}|${normalized.iban}|${normalized.bic}`;
-      bankOptionsMap.set(key, normalized);
-    };
-
-    upsertBankOption({
-      bank: parsedData?.bank,
-      iban: parsedData?.iban,
-      bic: parsedData?.bic,
-    });
-    upsertBankOption({
-      bank: invoice.organization.bank,
-      iban: invoice.organization.iban,
-      bic: invoice.organization.bic,
     });
 
     return NextResponse.json(
@@ -229,7 +197,6 @@ export async function GET(request: NextRequest) {
           bank,
           iban,
           bic,
-          bankOptions: Array.from(bankOptionsMap.values()),
           lineItems: invoice.lineItems.map((lineItem) => ({
             description: lineItem.description,
             unit: "бр.",

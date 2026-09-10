@@ -17,13 +17,17 @@ import type {
   GeneratedInvoicesProps,
   OrganizationWithGeneratedInvoices,
   InvoiceLineItemDraft,
-  BankDetailsOption,
   OrganizationDetails,
   SelectedPartyDetails,
   GeneratedInvoiceSummary,
   TemplateResponse,
 } from "../../utility/types";
 import { Input } from "@/components/ui/input";
+import {
+  formatDateLabel,
+  getTodayForInput,
+  toIsoDateOrNull,
+} from "../../utility/date-formatter";
 
 const NoAccountFallback = dynamic(
   () => import("@/components/NoAccountFallback"),
@@ -31,19 +35,6 @@ const NoAccountFallback = dynamic(
     ssr: false,
   },
 );
-
-function formatDateLabel(dateValue: string): string {
-  const parsedDate = new Date(dateValue);
-  if (Number.isNaN(parsedDate.getTime())) {
-    return dateValue;
-  }
-
-  return new Intl.DateTimeFormat("bg-BG", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(parsedDate);
-}
 
 export default function GeneratedInvoices({
   organizations,
@@ -76,15 +67,13 @@ export default function GeneratedInvoices({
   >([]);
   const [selectedTemplates, setSelectedTemplates] = useState<string[]>([]);
   const [lineItems, setLineItems] = useState<InvoiceLineItemDraft[]>([]);
-  const [locationOptions, setLocationOptions] = useState<string[]>([]);
-  const [bankOptions, setBankOptions] = useState<BankDetailsOption[]>([]);
-  const [selectedLocationOption, setSelectedLocationOption] =
-    useState<string>("manual");
-  const [selectedBankOption, setSelectedBankOption] =
-    useState<string>("manual");
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
-  const [invoiceDate, setInvoiceDate] = useState<string>("");
-  const [taxEventDate, setTaxEventDate] = useState<string>("");
+  const [invoiceDate, setInvoiceDate] = useState<string>(() =>
+    getTodayForInput(),
+  );
+  const [taxEventDate, setTaxEventDate] = useState<string>(() =>
+    getTodayForInput(),
+  );
   const [location, setLocation] = useState<string>("");
   const [currency, setCurrency] = useState<string>("EUR");
   const [bank, setBank] = useState<string>("");
@@ -160,6 +149,8 @@ export default function GeneratedInvoices({
       !invoiceNumber.trim() ||
       !invoiceDate ||
       !taxEventDate ||
+      !toIsoDateOrNull(invoiceDate) ||
+      !toIsoDateOrNull(taxEventDate) ||
       !bank.trim() ||
       !iban.trim() ||
       isSubmitting,
@@ -307,25 +298,23 @@ export default function GeneratedInvoices({
     setSelectedSourceInvoiceNumber(
       templateData.sourceInvoice.sourceInvoiceNumber,
     );
+    const today = getTodayForInput();
     setInvoiceNumber(templateData.invoiceNumberSuggestion || "");
-    setInvoiceDate(templateData.invoiceDate || "");
-    setTaxEventDate(templateData.taxEventDate || "");
+    setInvoiceDate(templateData.invoiceDate || today);
+    setTaxEventDate(templateData.taxEventDate || today);
     setCurrency(templateData.currency || "EUR");
     setLocation(templateData.location || "");
-    setLocationOptions(templateData.locationOptions || []);
-    setSelectedLocationOption(
-      templateData.locationOptions?.includes(templateData.location)
-        ? templateData.location
-        : "manual",
-    );
-    setBank(templateData.bank || "");
-    setIban(templateData.iban || "");
-    setBic(templateData.bic || "");
-    setBankOptions(templateData.bankOptions || []);
-    setSelectedBankOption("manual");
     setSelectedOrganizationDetails(templateData.organization || null);
     setSelectedContragentDetails(templateData.contragent || null);
     setResolvedComposerName(templateData.composerName ?? composerName ?? "");
+
+    // Set bank details from organization
+    const org = templateData.organization;
+    if (org) {
+      setBank(org.bank ?? "");
+      setIban(org.iban ?? "");
+      setBic(org.bic ?? "");
+    }
 
     const initialLineItems = (templateData.lineItems || []).map(
       (item, index) => ({
@@ -369,6 +358,8 @@ export default function GeneratedInvoices({
 
     setIsSubmitting(true);
 
+    const normalizedInvoiceDateISO = toIsoDateOrNull(invoiceDate);
+
     try {
       let pdfFileUrl: string | null = null;
 
@@ -392,7 +383,7 @@ export default function GeneratedInvoices({
           const downloadUrl = URL.createObjectURL(pdfBlob);
           const link = document.createElement("a");
           link.href = downloadUrl;
-          link.download = `faktura-${invoiceData.invoiceNumber}.pdf`;
+          link.download = `faktura-${invoiceData.invoiceNumber}-${invoiceData.sellerEik}.pdf`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -430,7 +421,9 @@ export default function GeneratedInvoices({
             const nextInvoice: GeneratedInvoiceSummary = {
               id: recordResult?.generatedInvoiceId ?? Date.now(),
               displayNumber: invoiceData.invoiceNumber,
-              issueDate: new Date(invoiceData.invoiceDate).toISOString(),
+              issueDate: new Date(
+                normalizedInvoiceDateISO ?? new Date().toISOString(),
+              ).toISOString(),
               totalAmount: totals.total.toFixed(2),
               currency: invoiceData.currency,
               status: "ISSUED",
@@ -676,14 +669,8 @@ export default function GeneratedInvoices({
                   onInvoiceDateChange={setInvoiceDate}
                   taxEventDate={taxEventDate}
                   onTaxEventDateChange={setTaxEventDate}
-                  locationOptions={locationOptions}
-                  selectedLocationOption={selectedLocationOption}
-                  onLocationOptionChange={setSelectedLocationOption}
                   location={location}
                   onLocationChange={setLocation}
-                  bankOptions={bankOptions}
-                  selectedBankOption={selectedBankOption}
-                  onBankOptionChange={setSelectedBankOption}
                   bank={bank}
                   onBankChange={setBank}
                   iban={iban}

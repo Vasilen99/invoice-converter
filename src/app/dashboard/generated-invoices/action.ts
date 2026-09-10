@@ -87,6 +87,9 @@ export async function getOrganizationsWithGeneratedInvoices(): Promise<{
     const organizations = await prisma.organization.findMany({
       where: {
         accountId: account.id,
+        generatedInvoices: {
+          some: {},
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -99,9 +102,6 @@ export async function getOrganizationsWithGeneratedInvoices(): Promise<{
         molName: true,
         email: true,
         invoiceSeriesPrefix: true,
-        bank: true,
-        iban: true,
-        bic: true,
         address: true,
         generatedInvoices: {
           orderBy: {
@@ -140,9 +140,6 @@ export async function getOrganizationsWithGeneratedInvoices(): Promise<{
         molName: organization.molName,
         email: organization.email,
         invoiceSeriesPrefix: organization.invoiceSeriesPrefix,
-        bank: organization.bank,
-        iban: organization.iban,
-        bic: organization.bic,
         address: organization.address as OrganizationLight["address"],
         generatedInvoices: organization.generatedInvoices.map((invoice) => ({
           id: invoice.id,

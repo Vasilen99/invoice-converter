@@ -58,9 +58,6 @@ export async function getOrganizations(): Promise<{
         molName: true,
         email: true,
         invoiceSeriesPrefix: true,
-        bank: true,
-        iban: true,
-        bic: true,
         address: true,
       },
     });

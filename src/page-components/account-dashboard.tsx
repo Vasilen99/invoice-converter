@@ -12,6 +12,7 @@ import { useUserStore } from "@/store/user";
 import { creditsLink } from "../../utility/links";
 import { useRouter } from "next/navigation";
 import { HeadingSection } from "@/components/HeadingSection";
+import { formatDateLabel } from "../../utility/date-formatter";
 interface AccountData {
   id: number;
   name: string;
@@ -89,14 +90,6 @@ export default function AccountDashboardPage({
     }
   };
 
-  const formatDate = (dateString: string | Date) => {
-    return new Intl.DateTimeFormat("en-GB", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    }).format(new Date(dateString));
-  };
-
   return (
     <section className="flex flex-col">
       <HeadingSection
@@ -150,7 +143,7 @@ export default function AccountDashboardPage({
               </Label>
               <Label className="text-base text-muted-foreground">
                 {accountData?.createdAt
-                  ? formatDate(accountData.createdAt)
+                  ? formatDateLabel(accountData.createdAt)
                   : "-"}
               </Label>
             </div>
@@ -160,7 +153,7 @@ export default function AccountDashboardPage({
               </Label>
               <Label className="text-base text-muted-foreground">
                 {accountData?.updatedAt
-                  ? formatDate(accountData.updatedAt)
+                  ? formatDateLabel(accountData.updatedAt)
                   : "-"}
               </Label>
             </div>

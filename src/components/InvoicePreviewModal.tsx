@@ -3,8 +3,7 @@
 import React from "react";
 import BulgarianInvoice from "./BulgarianInvoice";
 import { BulgarianInvoiceData } from "../types";
-import { Button } from "./ui/button";
-import { Download, X } from "lucide-react";
+import { X } from "lucide-react";
 
 interface InvoicePreviewModalProps {
   isOpen: boolean;

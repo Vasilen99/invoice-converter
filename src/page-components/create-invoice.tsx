@@ -10,12 +10,15 @@ import { StepOneContent } from "./invoice-steps/StepOneContent";
 import { uploadPdfToSupabase } from "../../utility/pdf-upload";
 import { useGlobalStore } from "@/store/global";
 import dynamic from "next/dynamic";
+import {
+  getTodayForInput,
+  toIsoDateOrNull,
+} from "../../utility/date-formatter";
 import type {
   CreateInvoiceMainProps,
   OrganizationOrContragent,
   LineItemTemplate,
   InvoiceLineItemDraft,
-  BankDetailsOption,
   OrganizationDetails,
   SelectedPartyDetails,
   CreateInvoicePrefillData,
@@ -73,14 +76,13 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
   >([]);
   const [selectedTemplates, setSelectedTemplates] = useState<string[]>([]);
   const [lineItems, setLineItems] = useState<InvoiceLineItemDraft[]>([]);
-  const [locationOptions, setLocationOptions] = useState<string[]>([]);
-  const [bankOptions, setBankOptions] = useState<BankDetailsOption[]>([]);
-  const [selectedLocationOption, setSelectedLocationOption] =
-    useState<string>("");
-  const [selectedBankOption, setSelectedBankOption] = useState<string>("");
   const [invoiceNumber, setInvoiceNumber] = useState<string>("");
-  const [invoiceDate, setInvoiceDate] = useState<string>("");
-  const [taxEventDate, setTaxEventDate] = useState<string>("");
+  const [invoiceDate, setInvoiceDate] = useState<string>(() =>
+    getTodayForInput(),
+  );
+  const [taxEventDate, setTaxEventDate] = useState<string>(() =>
+    getTodayForInput(),
+  );
   const [location, setLocation] = useState<string>("");
   const [currency, setCurrency] = useState<string>("EUR");
   const [bank, setBank] = useState<string>("");
@@ -147,6 +149,8 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
       !invoiceNumber.trim() ||
       !invoiceDate ||
       !taxEventDate ||
+      !toIsoDateOrNull(invoiceDate) ||
+      !toIsoDateOrNull(taxEventDate) ||
       !bank.trim() ||
       !iban.trim()
     );
@@ -168,10 +172,6 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
     setLineItems([]);
     setSelectedTemplates([]);
     setLineItemTemplates([]);
-    setLocationOptions([]);
-    setBankOptions([]);
-    setSelectedLocationOption("");
-    setSelectedBankOption("");
     setInvoiceNumber("");
     setLocation("");
     setBank("");
@@ -180,7 +180,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
     setSelectedOrganizationDetails(null);
     setSelectedContragentDetails(null);
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayForInput();
     setInvoiceDate(today);
     setTaxEventDate(today);
   };
@@ -325,7 +325,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
           const url = URL.createObjectURL(pdfBlob);
           const link = document.createElement("a");
           link.href = url;
-          link.download = `faktura-${invoiceData.invoiceNumber}.pdf`;
+          link.download = `faktura-${invoiceData.invoiceNumber}-${invoiceData.sellerEik}.pdf`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -426,29 +426,21 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
       }
 
       setLineItemTemplates(prefillData.lineItemTemplates ?? []);
-      setLocationOptions(prefillData.locationOptions ?? []);
-      setBankOptions(prefillData.bankOptions ?? []);
       setInvoiceNumber(prefillData.invoiceNumberSuggestion ?? "");
       setSelectedOrganizationDetails(prefillData.organization ?? null);
       setSelectedContragentDetails(prefillData.contragent ?? null);
 
-      const today = new Date().toISOString().slice(0, 10);
+      // Set bank details from organization
+      const org = prefillData.organization;
+      if (org) {
+        setBank(org.bank ?? "");
+        setIban(org.iban ?? "");
+        setBic(org.bic ?? "");
+      }
+
+      const today = getTodayForInput();
       setInvoiceDate(today);
       setTaxEventDate(today);
-
-      if ((prefillData.locationOptions ?? []).length === 1) {
-        const defaultLocation = prefillData.locationOptions[0];
-        setLocation(defaultLocation);
-        setSelectedLocationOption(defaultLocation);
-      }
-
-      if ((prefillData.bankOptions ?? []).length === 1) {
-        const defaultBank = prefillData.bankOptions[0];
-        setBank(defaultBank.bank);
-        setIban(defaultBank.iban);
-        setBic(defaultBank.bic);
-        setSelectedBankOption("0");
-      }
 
       setIsLoadingPrefill(false);
     };
@@ -508,14 +500,8 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
       onInvoiceDateChange={setInvoiceDate}
       taxEventDate={taxEventDate}
       onTaxEventDateChange={setTaxEventDate}
-      locationOptions={locationOptions}
-      selectedLocationOption={selectedLocationOption}
-      onLocationOptionChange={setSelectedLocationOption}
       location={location}
       onLocationChange={setLocation}
-      bankOptions={bankOptions}
-      selectedBankOption={selectedBankOption}
-      onBankOptionChange={setSelectedBankOption}
       bank={bank}
       onBankChange={setBank}
       iban={iban}

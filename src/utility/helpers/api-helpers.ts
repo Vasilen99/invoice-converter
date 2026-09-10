@@ -175,34 +175,13 @@ function processParsedLineItems(
 }
 
 /**
- * Processes bank information from parsed data
- * Adds to the bank info map if it contains any valid data
- * @param bankData - Bank data object
- * @param bankMap - Map to store/update bank info
- */
-function processParsedBankInfo(
-  bankData: { bank?: string; iban?: string; bic?: string },
-  bankMap: Map<string, BankInfo>,
-): void {
-  const bank = safeStringValue(bankData.bank);
-  const iban = safeStringValue(bankData.iban);
-  const bic = safeStringValue(bankData.bic);
-
-  if (bank || iban || bic) {
-    const key = createBankKey(bank, iban, bic);
-    bankMap.set(key, { bank, iban, bic });
-  }
-}
-
-/**
  * Aggregates prefill data from a collection of invoices
  * Performs single-pass iteration to collect:
  * - Line item templates
  * - Location options
- * - Bank options
  *
  * @param invoices - Array of generated invoices with related data
- * @returns Object containing aggregated templates, locations, and banks
+ * @returns Object containing aggregated templates and locations
  */
 export function aggregateInvoicePrefillData(
   invoices: Array<{
@@ -219,11 +198,9 @@ export function aggregateInvoicePrefillData(
 ): {
   lineItemTemplates: LineItemTemplate[];
   locationOptions: string[];
-  bankOptions: BankInfo[];
 } {
   const lineItemTemplateMap = new Map<string, LineItemTemplate>();
   const locationSet = new Set<string>();
-  const bankMap = new Map<string, BankInfo>();
 
   // Single pass through all invoices
   for (const invoice of invoices) {
@@ -245,15 +222,11 @@ export function aggregateInvoicePrefillData(
     if (location) {
       locationSet.add(location);
     }
-
-    // Process bank info
-    processParsedBankInfo(parsedData, bankMap);
   }
 
   return {
     lineItemTemplates: Array.from(lineItemTemplateMap.values()),
     locationOptions: Array.from(locationSet),
-    bankOptions: Array.from(bankMap.values()),
   };
 }
 
@@ -327,7 +300,6 @@ export type PrefillData = {
   };
   lineItemTemplates: LineItemTemplate[];
   locationOptions: string[];
-  bankOptions: BankInfo[];
 };
 
 /**
@@ -362,24 +334,8 @@ export function buildPrefillResponse(
   aggregatedData: {
     lineItemTemplates: LineItemTemplate[];
     locationOptions: string[];
-    bankOptions: BankInfo[];
   },
 ): PrefillData {
-  // Create bank options map from aggregated data and add organization bank info
-  const bankMap = new Map(
-    aggregatedData.bankOptions.map((bank) => [
-      createBankKey(bank.bank, bank.iban, bank.bic),
-      bank,
-    ]),
-  );
-
-  addOrganizationBankInfo(
-    organization.bank,
-    organization.iban,
-    organization.bic,
-    bankMap,
-  );
-
   return {
     invoiceNumberSuggestion: generateNextInvoiceNumber(
       organization.invoiceSeriesPrefix,
@@ -395,6 +351,5 @@ export function buildPrefillResponse(
     },
     lineItemTemplates: aggregatedData.lineItemTemplates,
     locationOptions: aggregatedData.locationOptions,
-    bankOptions: Array.from(bankMap.values()),
   };
 }
