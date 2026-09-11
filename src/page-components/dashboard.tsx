@@ -19,7 +19,7 @@ import {
   Building2,
   // BarChart3,
   // Upload,
-  // FileText,
+  FileText,
   User,
   // Clock,
   LogOut,
@@ -43,10 +43,12 @@ import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import {
   accountLink,
-  dashboardLink,
+  // dashboardLink,
   organizationsLink,
   aiConvertorLink,
   contragentsLink,
+  createInvoiceLink,
+  generatedInvoicesLink,
 } from "../../utility/links";
 import { useUserStore } from "@/store/user";
 import { PLATFORM_NAME } from "../../utility/constants";
@@ -80,33 +82,43 @@ const NAVIGATION_CONFIG = [
         href: contragentsLink,
         icon: FileUser,
       },
+      {
+        nameKey: "dashboard.createInvoice",
+        href: createInvoiceLink,
+        icon: FileText,
+      },
     ],
   },
-  // {
-  //   labelKey: "dashboard.documents",
-  //   items: [
-  // {
-  //   nameKey: "dashboard.uploadDocument",
-  //   href: "/dashboard/upload",
-  //   icon: Upload,
-  // },
-  // {
-  //   nameKey: "dashboard.invoices",
-  //   href: "/dashboard/invoices",
-  //   icon: FileText,
-  // },
-  // {
-  //   nameKey: "dashboard.creditNotes",
-  //   href: "/dashboard/credit-notes",
-  //   icon: ReceiptText,
-  // },
-  // {
-  //   nameKey: "dashboard.recurringInvoices",
-  //   href: "/dashboard/reccuring-invoices",
-  //   icon: Repeat,
-  // },
-  //   ],
-  // },
+  {
+    labelKey: "dashboard.documents",
+    items: [
+      // {
+      //   nameKey: "dashboard.uploadDocument",
+      //   href: "/dashboard/upload",
+      //   icon: Upload,
+      // },
+      {
+        nameKey: "dashboard.generatedInvoices",
+        href: generatedInvoicesLink,
+        icon: FileText,
+      },
+      // {
+      //   nameKey: "dashboard.invoices",
+      //   href: "/dashboard/invoices",
+      //   icon: FileText,
+      // },
+      // {
+      //   nameKey: "dashboard.creditNotes",
+      //   href: "/dashboard/credit-notes",
+      //   icon: ReceiptText,
+      // },
+      // {
+      //   nameKey: "dashboard.recurringInvoices",
+      //   href: "/dashboard/reccuring-invoices",
+      //   icon: Repeat,
+      // },
+    ],
+  },
   // {
   //   labelKey: "dashboard.team",
   //   items: [

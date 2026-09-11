@@ -28,7 +28,7 @@ const PROMPT = `You are an invoice data extraction specialist. Extract all avail
 }
 
 Notes:
-- invoiceDate and taxEventDate should be in DD.MM.YYYY format
+- invoiceDate and taxEventDate should be in DD-MM-YYYY format
 - for taxEventDate, look for "Дата на данъчно събитие" / "Tax Event Date" / "Падеж" / "Due Date" / "Дата на падеж"
 - SELLER (sellerName, sellerEik, etc.) is the company/entity that ISSUED the invoice (the "From" or "Billed by" section)
 - BUYER (buyerName, buyerEik, etc.) is the company/entity that RECEIVES the invoice (the "Bill to" or "Customer" section)

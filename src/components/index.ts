@@ -3,4 +3,5 @@ export { default as InvoiceUploader } from "./InvoiceUploader";
 export { default as PdfViewer } from "./PdfViewer";
 export { default as InvoiceDataDisplay } from "./InvoiceDataDisplay";
 export { default as BulgarianInvoice } from "./BulgarianInvoice";
+export { InvoicePreviewModal } from "./InvoicePreviewModal";
 export { default as ComingSoon } from "./ComingSoon";
