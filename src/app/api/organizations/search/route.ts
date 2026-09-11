@@ -24,14 +24,10 @@ function transformCompanyToSearchResult(company: CompanyData): SearchResult {
   return {
     bulstat: company.uic,
     name,
-    legalForm: company.legalForm,
-    status: company.status,
     address,
     molName,
     vatNumber,
     email,
-    transliteration: company.companyNameTransliteration?.name,
-    lastUpdated: company.lastUpdated,
     rawLookupData: company,
   };
 }

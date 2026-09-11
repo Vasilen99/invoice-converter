@@ -251,8 +251,6 @@ export type SearchResult = {
   // Core identification
   bulstat: string;
   name: string;
-  legalForm?: string;
-  status?: string;
 
   // Address data (from seat, only essential fields)
   address?: {
@@ -280,14 +278,125 @@ export type SearchResult = {
   // Contact info
   email?: string | null;
 
-  // Additional metadata
-  transliteration?: string;
-  lastUpdated?: string;
-
   // Full raw data from API for caching
   rawLookupData?: CompanyData;
 };
 
 export type CompanyBookSearchResponse = {
   results: SearchResult[];
+};
+
+export type GeneratedInvoiceSummary = {
+  id: number;
+  displayNumber: string;
+  issueDate: string;
+  totalAmount: string;
+  currency: string;
+  status: "DRAFT" | "ISSUED" | "VOID" | "CREDIT_NOTE";
+  contragentName: string;
+  lineItemsCount: number;
+  createdAt: string;
+};
+
+export type OrganizationWithGeneratedInvoices = OrganizationLight & {
+  generatedInvoices: GeneratedInvoiceSummary[];
+};
+
+export type BankDetailsOption = {
+  bank: string;
+  iban: string;
+  bic: string;
+};
+
+export type SelectedPartyDetails = {
+  id: number;
+  name: string;
+  bulstat: string | null;
+  vatNumber: string | null;
+  molName: string | null;
+  address: AddressData;
+};
+
+export type OrganizationDetails = SelectedPartyDetails & {
+  bank: string | null;
+  iban: string | null;
+  bic: string | null;
+};
+
+export type TemplateResponse = {
+  sourceInvoice: {
+    id: number;
+    sourceInvoiceNumber: string;
+  };
+  invoiceNumberSuggestion: string;
+  invoiceDate: string;
+  taxEventDate: string;
+  currency: string;
+  location: string;
+  locationOptions: string[];
+  bank: string;
+  iban: string;
+  bic: string;
+  lineItems: Array<{
+    description: string;
+    unit: string;
+    quantity: string;
+    unitPrice: string;
+    vatPercent: string;
+  }>;
+  organization: OrganizationDetails;
+  contragent: SelectedPartyDetails;
+  composerName: string | null;
+};
+
+export type GeneratedInvoicesProps = {
+  organizations: OrganizationWithGeneratedInvoices[];
+  hasAccount: boolean;
+  accountId: number | null;
+  composerName: string | null;
+};
+
+export type OrganizationOrContragent = {
+  id: number;
+  name: string;
+};
+
+export type InvoiceLineItemDraft = {
+  id: string;
+  description: string;
+  unit: string;
+  quantity: string;
+  unitPrice: string;
+  vatPercent: string;
+};
+
+export type CreateInvoiceAddressData = {
+  settlement?: string;
+  street?: string;
+} | null;
+
+export type LineItemTemplate = {
+  description: string;
+  unit: string;
+  quantity: string;
+  unitPrice: string;
+  vatPercent: string;
+};
+
+export type CreateInvoicePrefillData = {
+  invoiceNumberSuggestion: string;
+  organization: OrganizationDetails;
+  contragent: SelectedPartyDetails;
+  lineItemTemplates: LineItemTemplate[];
+  locationOptions: string[];
+};
+
+export type AccountProps = {
+  id: number;
+  composer_name: string | null;
+  organizations: OrganizationOrContragent[];
+} | null;
+
+export type CreateInvoiceMainProps = {
+  data: AccountProps | null;
 };

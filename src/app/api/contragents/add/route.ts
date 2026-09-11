@@ -5,9 +5,9 @@ import { notFound } from "next/navigation";
 import {
   enrichOrganizationDataFromRegistry,
   formatAddressForStorage,
-  formatRawLookupDataForStorage,
   isValidCompanyData,
 } from "../../../../../utility/company-registry-helpers";
+import { raw } from "@prisma/client/runtime/client";
 
 export async function POST(request: NextRequest) {
   const user = await getUserServer();
@@ -159,9 +159,6 @@ export async function POST(request: NextRequest) {
     // Store raw lookup data in CompanyRegistryCache - only create new records
     if (rawLookupData && isValidCompanyData(rawLookupData) && bulstat) {
       try {
-        const formattedRawLookupData =
-          formatRawLookupDataForStorage(rawLookupData);
-
         // Check if registry cache already exists for this bulstat
         const existingRegistry = await prisma.companyRegistryCache.findUnique({
           where: { bulstat },
@@ -174,7 +171,7 @@ export async function POST(request: NextRequest) {
               name,
               vatNumber: vatNumber || null,
               address: formattedAddress,
-              rawLookupData: formattedRawLookupData,
+              rawLookupData: rawLookupData ? rawLookupData : {},
               lastFetchedAt: new Date(),
               createdAt: new Date(),
             },
@@ -241,6 +238,7 @@ export async function POST(request: NextRequest) {
         molName: molName || null,
         email: email || null,
         organizationId,
+        rawLookupData: rawLookupData ? rawLookupData : null,
         source: isManualEntry ? "MANUAL" : "NAP_API",
         registryId,
       },

@@ -10,6 +10,7 @@ import {
   formatAddressForStorage,
   transformAddressFromCompanyData,
 } from "../../../../utility/company-registry-helpers";
+import { parseDateForDatabase } from "../../../../utility/date-formatter";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -77,7 +78,7 @@ async function fetchCompanyFromExternalApi(
   }
 }
 
-async function upsertCompanyRegistryCache(input: {
+async function createCompanyRegistryCache(input: {
   bulstat: string;
   name: string;
   vatNumber: string | null;
@@ -94,19 +95,6 @@ async function upsertCompanyRegistryCache(input: {
   });
 
   if (existing) {
-    await prisma.companyRegistryCache.update({
-      where: { bulstat: input.bulstat },
-      data: {
-        name: input.name,
-        vatNumber: input.vatNumber,
-        address: (input.address as any) ?? undefined,
-        rawLookupData:
-          input.rawLookupData === undefined
-            ? undefined
-            : (input.rawLookupData as any),
-        lastFetchedAt: new Date(),
-      },
-    });
     return existing.id;
   }
 
@@ -125,22 +113,6 @@ async function upsertCompanyRegistryCache(input: {
   });
 
   return created.id;
-}
-
-/**
- * Parse a DD.MM.YYYY date string into a JS Date.
- * Falls back to today if the string is invalid.
- */
-function parseBGDate(dateStr: string): Date {
-  if (!dateStr) return new Date();
-  const parts = dateStr.split(".");
-  if (parts.length === 3) {
-    const [day, month, year] = parts.map(Number);
-    const d = new Date(year, month - 1, day);
-    if (!isNaN(d.getTime())) return d;
-  }
-  const fallback = new Date(dateStr);
-  return isNaN(fallback.getTime()) ? new Date() : fallback;
 }
 
 /**
@@ -188,6 +160,7 @@ export async function POST(request: NextRequest) {
       originalFilename?: string;
       sourceDocumentUrl?: string | null;
       generatedPdfUrl?: string | null;
+      skipSourceDocumentCreation?: boolean;
     };
 
     const {
@@ -195,6 +168,7 @@ export async function POST(request: NextRequest) {
       originalFilename = "invoice.pdf",
       sourceDocumentUrl = null,
       generatedPdfUrl = null,
+      skipSourceDocumentCreation = false,
     } = body;
 
     if (!invoiceData) {
@@ -288,7 +262,7 @@ export async function POST(request: NextRequest) {
         },
       );
 
-      const registryId = await upsertCompanyRegistryCache({
+      const registryId = await createCompanyRegistryCache({
         bulstat: sellerEik,
         name: sellerFromExternal?.name || invoiceData.sellerName || sellerEik,
         vatNumber:
@@ -329,7 +303,7 @@ export async function POST(request: NextRequest) {
           },
         );
 
-        const buyerRegistryId = await upsertCompanyRegistryCache({
+        const buyerRegistryId = await createCompanyRegistryCache({
           bulstat: buyerEik,
           name: buyerFromExternal?.name || invoiceData.buyerName || buyerEik,
           vatNumber:
@@ -382,7 +356,7 @@ export async function POST(request: NextRequest) {
           },
         );
 
-        const buyerRegistryId = await upsertCompanyRegistryCache({
+        const buyerRegistryId = await createCompanyRegistryCache({
           bulstat: buyerEik,
           name: buyerFromExternal?.name || invoiceData.buyerName || buyerEik,
           vatNumber:
@@ -453,10 +427,24 @@ export async function POST(request: NextRequest) {
     // ------------------------------------------------------------------
     // Parse dates
     // ------------------------------------------------------------------
-    const issueDate = parseBGDate(invoiceData.invoiceDate);
+    const issueDate = parseDateForDatabase(invoiceData.invoiceDate);
     const taxEventDate = invoiceData.taxEventDate
-      ? parseBGDate(invoiceData.taxEventDate)
+      ? parseDateForDatabase(invoiceData.taxEventDate)
       : null;
+
+    if (!issueDate || (invoiceData.taxEventDate && !taxEventDate)) {
+      return NextResponse.json(
+        {
+          data: null,
+          alert: {
+            status: "error",
+            header: "uploader.alerts.invalidInvoicePayloadHeader",
+            message: "uploader.alerts.invalidInvoicePayloadMessage",
+          },
+        },
+        { status: 400 },
+      );
+    }
 
     // ------------------------------------------------------------------
     // Parse financial values
@@ -468,26 +456,31 @@ export async function POST(request: NextRequest) {
     // ------------------------------------------------------------------
     // Determine exchange rate / original currency if present
     // ------------------------------------------------------------------
-    const currency = (invoiceData.currency ?? "BGN").toUpperCase();
+    const currency = (invoiceData.currency ?? "EUR").toUpperCase();
 
     // ------------------------------------------------------------------
     // Upsert everything in a transaction
     // ------------------------------------------------------------------
     const result = await prisma.$transaction(async (tx) => {
-      // 1. SourceDocument — represents the original uploaded PDF
-      const sourceDoc = await tx.sourceDocument.create({
-        data: {
-          sourceType: "OTHER",
-          originalFileUrl: sourceDocumentUrl || "",
-          originalFilename: originalFilename,
-          mimeType: "application/pdf",
-          status: "CONVERTED",
-          parsedData: invoiceData as object,
-          organizationId: organization.id,
-          uploadedByUserId: dbUser.id,
-        },
-        select: { id: true },
-      });
+      // 1. SourceDocument — represents the original uploaded PDF (skip if requested)
+      let sourceDocId: number | null = null;
+
+      if (!skipSourceDocumentCreation) {
+        const sourceDoc = await tx.sourceDocument.create({
+          data: {
+            sourceType: "OTHER",
+            originalFileUrl: sourceDocumentUrl || "",
+            originalFilename: originalFilename,
+            mimeType: "application/pdf",
+            status: "CONVERTED",
+            parsedData: invoiceData as object,
+            organizationId: organization.id,
+            uploadedByUserId: dbUser.id,
+          },
+          select: { id: true },
+        });
+        sourceDocId = sourceDoc.id;
+      }
 
       // 2. GeneratedInvoice (upsert – if same series/number exists, update it)
       const existingInvoice = await tx.generatedInvoice.findUnique({
@@ -516,8 +509,9 @@ export async function POST(request: NextRequest) {
             totalAmount,
             status: "ISSUED",
             pdfFileUrl: generatedPdfUrl || undefined,
-            // Link source doc only if not already linked
-            sourceDocumentId: existingInvoice.sourceDocumentId ?? sourceDoc.id,
+            // Link source doc only if not already linked and we created one
+            sourceDocumentId:
+              existingInvoice.sourceDocumentId ?? sourceDocId ?? undefined,
           },
           select: { id: true },
         });
@@ -538,7 +532,7 @@ export async function POST(request: NextRequest) {
             creditsCost: 1, // default
             organizationId: organization.id,
             contragentId: contragent.id,
-            sourceDocumentId: sourceDoc.id,
+            sourceDocumentId: sourceDocId ?? undefined,
           },
           select: { id: true },
         });
@@ -577,7 +571,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      return { sourceDocumentId: sourceDoc.id, generatedInvoiceId };
+      return { sourceDocumentId: sourceDocId, generatedInvoiceId };
     });
 
     return NextResponse.json({ data: result }, { status: 200 });

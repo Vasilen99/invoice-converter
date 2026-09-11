@@ -110,7 +110,7 @@ export async function getOrganizationsForContragents(): Promise<
 > {
   const user = await getUserServer();
   if (!user) {
-    return [];
+    return notFound();
   }
 
   try {
@@ -124,7 +124,7 @@ export async function getOrganizationsForContragents(): Promise<
     });
 
     if (!userData) {
-      return [];
+      return notFound();
     }
 
     const organizations = await prisma.organization.findMany({

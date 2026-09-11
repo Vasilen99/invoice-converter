@@ -126,8 +126,8 @@ model SourceDocument {
 model GeneratedInvoice {
   invoiceSeries     String
   invoiceNumber     Int
-  issueDate         DateTime
-  taxEventDate      DateTime?
+  issueDate         DateTime           @db.Date
+  taxEventDate      DateTime?          @db.Date
   currency          String             @default("BGN")
   originalCurrency  String?
   exchangeRate      Decimal?           @db.Decimal(12, 6)

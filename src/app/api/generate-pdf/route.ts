@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BulgarianInvoiceData } from "../../../types";
+import { formatDateToBG } from "../../../../utility/date-formatter";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -10,6 +11,10 @@ const BORDER = "#b0c4de";
 
 function v(val: string | undefined): string {
   return val ?? "";
+}
+
+function d(val: string | undefined): string {
+  return formatDateToBG(val) || v(val);
 }
 
 function buildHtml(data: BulgarianInvoiceData): string {
@@ -136,9 +141,9 @@ function buildHtml(data: BulgarianInvoiceData): string {
   <tbody>
     <tr>
       <td class="label-td" style="width:33%">Дата на издаване:</td>
-      <td style="width:17%;background:#fff">${v(data.invoiceDate)} г.</td>
+  <td style="width:17%;background:#fff">${d(data.invoiceDate)} г.</td>
       <td class="label-td" style="width:33%">Дата на дан. събитие:</td>
-      <td style="width:17%;background:#fff">${v(data.taxEventDate)} г.</td>
+  <td style="width:17%;background:#fff">${d(data.taxEventDate)} г.</td>
     </tr>
     <tr>
       <td class="label-td">Място на сделката:</td>

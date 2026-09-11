@@ -87,7 +87,7 @@ export default function ContragentsPage({
               }}
               className="w-fit lg:ml-auto"
             >
-              {t("organizations.addOrganization")}
+              {t("contragents.addContragent")}
             </Button>
           </div>
         </FadeIn>
