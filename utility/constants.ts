@@ -21,3 +21,8 @@ export const INITIAL_STATUS: AlertStatus = {
 
 export const PLATFORM_NAME = "Invoice Converter";
 export const PROTECTED_ROUTES = ["/generator"];
+
+export const DEFAULT_UNIT = "бр.";
+export const DEFAULT_VAT_PERCENT = "20";
+export const DEFAULT_CURRENCY = "EUR";
+export const DEFAULT_INVOICE_NUMBER = "0000000000";

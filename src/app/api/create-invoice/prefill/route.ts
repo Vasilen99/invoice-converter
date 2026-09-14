@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import {
   aggregateInvoicePrefillData,
   buildPrefillResponse,
-} from "../../../../utility/helpers";
+} from "../../../../../utility/helpers";
 
 export async function GET(request: NextRequest) {
   const user = await getUserServer();

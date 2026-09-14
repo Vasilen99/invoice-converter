@@ -5,7 +5,7 @@ import { prisma } from "../../../../../utility/prisma";
 import {
   generateNextInvoiceNumber,
   parseJsonAddress,
-} from "../../../../utility/helpers";
+} from "../../../../../utility/helpers";
 import {
   formatDateForInput,
   getTodayForInput,

@@ -11,6 +11,7 @@ import {
   transformAddressFromCompanyData,
 } from "../../../../utility/company-registry-helpers";
 import { parseDateForDatabase } from "../../../../utility/date-formatter";
+import { fetchExternalCompanyByEik } from "../../../../utility/api-helpers/company";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -33,49 +34,19 @@ type RegistryCompanyData = {
 async function fetchCompanyFromExternalApi(
   bulstat: string,
 ): Promise<RegistryCompanyData | null> {
-  const apiKey = process.env.COMPANY_BOOK_API_KEY;
-
-  if (!apiKey || !bulstat) {
-    return null;
-  }
-
-  try {
-    const response = await fetch(
-      `https://api.companybook.bg/api/companies/${bulstat}?with_data=true`,
-      {
-        headers: {
-          "X-API-Key": apiKey,
-        },
-      },
-    );
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const data = await response.json();
-    const company = data.company || data;
-    const companyName =
-      company?.companyName?.name ||
-      company?.companyNameTransliteration?.name ||
-      "";
-
-    if (!companyName) {
-      return null;
-    }
-
-    return {
-      bulstat: normalizeBulstat(company?.uic || bulstat),
-      name: companyName,
-      vatNumber: extractVatNumber(company),
-      address: transformAddressFromCompanyData(company),
-      molName: extractManagerName(company),
-      email: extractEmail(company),
-      rawLookupData: company,
-    };
-  } catch {
-    return null;
-  }
+  const external = await fetchExternalCompanyByEik(bulstat);
+  if (!external) return null;
+  return {
+    bulstat: external.bulstat || normalizeBulstat(bulstat),
+    name: external.name,
+    vatNumber: external.vatNumber,
+    address:
+      external.address ??
+      transformAddressFromCompanyData(external.rawLookupData),
+    molName: external.molName ?? extractManagerName(external.rawLookupData),
+    email: external.email ?? extractEmail(external.rawLookupData),
+    rawLookupData: external.rawLookupData,
+  };
 }
 
 async function createCompanyRegistryCache(input: {

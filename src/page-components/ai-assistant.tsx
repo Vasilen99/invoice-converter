@@ -1,30 +1,58 @@
 "use client";
 
-import { useEffect, useMemo, useState, type KeyboardEventHandler } from "react";
-import { HeadingSection } from "@/components/HeadingSection";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEventHandler,
+} from "react";
 import { BulgarianInvoice } from "@/components";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useTranslations } from "next-intl";
 import { BulgarianInvoiceData } from "@/types";
-import { getTodayForInput } from "../../utility/date-formatter";
-import {
-  Bot,
-  Download,
-  Loader2,
-  MessageSquare,
-  Plus,
-  Save,
-  Send,
-  User,
-  WandSparkles,
-} from "lucide-react";
+import { uploadPdfToSupabase } from "../../utility/pdf-upload";
+import { useGlobalStore } from "@/store/global";
+import { Bot, Download, Loader2, Plus, Send, User } from "lucide-react";
 
-type AccountContext = {
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+type AccountOrgSnapshot = {
   id: number;
-  creditBalance?: number | null;
-  composer_name?: string | null;
-} | null;
+  name: string;
+  bulstat: string | null;
+  vatNumber: string | null;
+  molName: string | null;
+  address: unknown;
+  bank: string | null;
+  iban: string | null;
+  bic: string | null;
+  invoiceSeriesPrefix: string | null;
+  current_inv_number: string | number | null;
+  contragents: {
+    id: number;
+    name: string;
+    bulstat: string | null;
+    vatNumber: string | null;
+    molName: string | null;
+    address: unknown;
+    organizationId: number;
+  }[];
+};
+
+export type AccountContext = {
+  accountMembers: {
+    accountId: number;
+    account: {
+      creditBalance: number;
+      composer_name: string | null;
+      organizations: AccountOrgSnapshot[];
+    };
+  }[];
+};
 
 type ChatRole = "user" | "assistant";
 
@@ -33,415 +61,28 @@ type ChatMessage = {
   role: ChatRole;
   content: string;
   createdAt: string;
+  invoice?: BulgarianInvoiceData | null;
+  changedFields?: string[];
 };
 
-type ResolvedAddress = {
-  settlement?: string;
-  street?: string;
-};
-
-type ResolvedCompany = {
-  name: string;
-  bulstat: string;
-  vatNumber: string | null;
-  molName: string | null;
-  address?: ResolvedAddress;
-  source: "DB" | "CACHE" | "EXTERNAL";
-};
-
-type ResolveCompaniesResponse = {
+type ChatApiResponse = {
   data: {
-    organization: ResolvedCompany | null;
-    contragent: ResolvedCompany | null;
-    missingEikFor: Array<"organization" | "contragent">;
-    message: string | null;
+    intent: "create_invoice" | "edit_invoice" | "unsupported";
+    assistantMessage: string;
+    invoice: BulgarianInvoiceData | null;
+    changedFields: string[];
+    status:
+      | "ok"
+      | "unsupported"
+      | "missing-draft"
+      | "company-not-found"
+      | "invalid-input";
   } | null;
 };
 
-const STORAGE_KEY = "ai-invoice-assistant-session-v1";
-
-const SUGGESTIONS = [
-  "Create invoice INV-2026-001 for ABC Corp with consulting service - 1200 BGN",
-  "Change invoice number to INV-2026-009",
-  "Change the invoice date to 15.09.2026",
-  "Add line item: Monthly support - 450 BGN",
-];
-
-function toFixedMoney(value: number): string {
-  return Number.isFinite(value) ? value.toFixed(2) : "0.00";
-}
-
-function parseDecimal(value: string): number {
-  const normalized = value.replace(/[^\d.,-]/g, "").replace(",", ".");
-  const parsed = Number.parseFloat(normalized);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function calculateTotals(lineItems: BulgarianInvoiceData["lineItems"]) {
-  const subtotal = lineItems.reduce(
-    (sum, item) =>
-      sum + parseDecimal(item.quantity) * parseDecimal(item.unitPrice),
-    0,
-  );
-
-  const vatAmount = lineItems.reduce((sum, item) => {
-    const itemSubtotal =
-      parseDecimal(item.quantity) * parseDecimal(item.unitPrice);
-    return sum + itemSubtotal * (parseDecimal(item.vatPercent) / 100);
-  }, 0);
-
-  const total = subtotal + vatAmount;
-
-  return {
-    subtotal: toFixedMoney(subtotal),
-    vatAmount: toFixedMoney(vatAmount),
-    total: toFixedMoney(total),
-  };
-}
-
-function createInitialInvoice(account: AccountContext): BulgarianInvoiceData {
-  const today = getTodayForInput();
-
-  const lineItems: BulgarianInvoiceData["lineItems"] = [
-    {
-      description: "Консултантска услуга",
-      unit: "бр.",
-      quantity: "1",
-      unitPrice: "1000.00",
-      vatPercent: "20",
-      value: "1000.00",
-    },
-  ];
-
-  const totals = calculateTotals(lineItems);
-
-  return {
-    invoiceNumber: "INV-2026-001",
-    invoiceDate: today,
-    taxEventDate: today,
-    location: "София",
-    sellerName: "Вашата организация",
-    sellerEik: "",
-    sellerVatNumber: "",
-    sellerCity: "София",
-    sellerAddress: "",
-    sellerMol: "",
-    buyerName: "ABC Corp",
-    buyerEik: "",
-    buyerVatNumber: "",
-    buyerCity: "София",
-    buyerAddress: "",
-    buyerMol: "",
-    lineItems,
-    subtotal: totals.subtotal,
-    vatAmount: totals.vatAmount,
-    total: totals.total,
-    totalInWords: "",
-    currency: "BGN",
-    composer_name: account?.composer_name ?? "",
-    bank: "",
-    iban: "",
-    bic: "",
-  };
-}
-
-function applyLineItemTotals(lineItems: BulgarianInvoiceData["lineItems"]) {
-  return lineItems.map((item) => {
-    const value = parseDecimal(item.quantity) * parseDecimal(item.unitPrice);
-    return {
-      ...item,
-      value: toFixedMoney(value),
-    };
-  });
-}
-
-function extractFirstMatch(text: string, patterns: RegExp[]): string {
-  for (const pattern of patterns) {
-    const match = text.match(pattern);
-    if (match?.[1]) {
-      return match[1].trim();
-    }
-  }
-
-  return "";
-}
-
-function extractCompanyLookupInput(prompt: string): {
-  organizationName?: string;
-  contragentName?: string;
-  organizationEik?: string;
-  contragentEik?: string;
-} {
-  const normalized = prompt.trim();
-
-  const organizationName = extractFirstMatch(normalized, [
-    /organization\s*[:\-]?\s*(.+?)(?:\s+buyer\s*[:\-]?|\s+for\s+|\s+with\s+|$)/i,
-    /seller\s*[:\-]?\s*(.+?)(?:\s+buyer\s*[:\-]?|\s+for\s+|\s+with\s+|$)/i,
-    /from\s+(.+?)\s+(?:to|for|with|buyer|contragent)\b/i,
-  ]);
-
-  const contragentName = extractFirstMatch(normalized, [
-    /contragent\s*[:\-]?\s*(.+?)(?:\s+with\s+|\s*[-–—]\s*\d|$)/i,
-    /buyer\s*[:\-]?\s*(.+?)(?:\s+with\s+|\s*[-–—]\s*\d|$)/i,
-    /for\s+(.+?)(?:\s+with\s+|\s*[-–—]\s*\d|$)/i,
-    /to\s+(.+?)(?:\s+with\s+|\s*[-–—]\s*\d|$)/i,
-  ]);
-
-  const organizationEik = extractFirstMatch(normalized, [
-    /organization\s+eik\s*[:\-]?\s*(\d{9,13})/i,
-    /seller\s+eik\s*[:\-]?\s*(\d{9,13})/i,
-  ]);
-
-  const contragentEik = extractFirstMatch(normalized, [
-    /contragent\s+eik\s*[:\-]?\s*(\d{9,13})/i,
-    /buyer\s+eik\s*[:\-]?\s*(\d{9,13})/i,
-  ]);
-
-  const genericEiks = Array.from(normalized.matchAll(/\b\d{9,13}\b/g)).map(
-    (match) => match[0],
-  );
-
-  return {
-    organizationName: organizationName || undefined,
-    contragentName: contragentName || undefined,
-    organizationEik:
-      organizationEik || (genericEiks.length > 0 ? genericEiks[0] : undefined),
-    contragentEik:
-      contragentEik || (genericEiks.length > 1 ? genericEiks[1] : undefined),
-  };
-}
-
-async function resolveCompaniesForInvoice(prompt: string) {
-  const lookupInput = extractCompanyLookupInput(prompt);
-
-  if (
-    !lookupInput.organizationName &&
-    !lookupInput.contragentName &&
-    !lookupInput.organizationEik &&
-    !lookupInput.contragentEik
-  ) {
-    return null;
-  }
-
-  try {
-    const response = await fetch("/api/ai-assistant/resolve-companies", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(lookupInput),
-    });
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const payload = (await response.json()) as ResolveCompaniesResponse;
-    return payload.data;
-  } catch {
-    return null;
-  }
-}
-
-async function createInvoiceFromPrompt(
-  prompt: string,
-  account: AccountContext,
-): Promise<{
-  invoice: BulgarianInvoiceData;
-  response: string;
-  changedFields: string[];
-}> {
-  const invoice = createInitialInvoice(account);
-  const changedFields: string[] = [];
-  const normalized = prompt.trim();
-
-  const invoiceNumberMatch = normalized.match(
-    /\b([A-Z]{2,6}-\d{2,6}(?:-\d{1,6})?)\b/i,
-  );
-  if (invoiceNumberMatch) {
-    invoice.invoiceNumber = invoiceNumberMatch[1].toUpperCase();
-    changedFields.push("invoiceNumber");
-  }
-
-  const buyerMatch = normalized.match(/for\s+(.+?)(?:\s+with|\s*-\s*\d|$)/i);
-  if (buyerMatch) {
-    invoice.buyerName = buyerMatch[1].trim();
-    changedFields.push("buyerName");
-  }
-
-  const amountMatch = normalized.match(/(\d+[\d.,]*)\s*(?:bgn|лв|eur)?/i);
-  if (amountMatch) {
-    const amount = parseDecimal(amountMatch[1]);
-    if (amount > 0) {
-      invoice.lineItems[0].unitPrice = toFixedMoney(amount);
-      invoice.lineItems[0].value = toFixedMoney(amount);
-      changedFields.push("lineItems");
-    }
-  }
-
-  if (/support/i.test(normalized)) {
-    invoice.lineItems[0].description = "Месечна поддръжка";
-  }
-
-  if (/software/i.test(normalized)) {
-    invoice.lineItems[0].description = "Софтуерна услуга";
-  }
-
-  const totals = calculateTotals(invoice.lineItems);
-  invoice.subtotal = totals.subtotal;
-  invoice.vatAmount = totals.vatAmount;
-  invoice.total = totals.total;
-
-  const resolvedCompanies = await resolveCompaniesForInvoice(normalized);
-
-  if (resolvedCompanies?.organization) {
-    const organization = resolvedCompanies.organization;
-    invoice.sellerName = organization.name;
-    invoice.sellerEik = organization.bulstat;
-    invoice.sellerVatNumber = organization.vatNumber ?? "";
-    invoice.sellerMol = organization.molName ?? "";
-    invoice.sellerCity = organization.address?.settlement ?? invoice.sellerCity;
-    invoice.sellerAddress = organization.address?.street ?? "";
-    changedFields.push(
-      "sellerName",
-      "sellerEik",
-      "sellerVatNumber",
-      "sellerMol",
-      "sellerCity",
-      "sellerAddress",
-    );
-  }
-
-  if (resolvedCompanies?.contragent) {
-    const contragent = resolvedCompanies.contragent;
-    invoice.buyerName = contragent.name;
-    invoice.buyerEik = contragent.bulstat;
-    invoice.buyerVatNumber = contragent.vatNumber ?? "";
-    invoice.buyerMol = contragent.molName ?? "";
-    invoice.buyerCity = contragent.address?.settlement ?? invoice.buyerCity;
-    invoice.buyerAddress = contragent.address?.street ?? "";
-    changedFields.push(
-      "buyerName",
-      "buyerEik",
-      "buyerVatNumber",
-      "buyerMol",
-      "buyerCity",
-      "buyerAddress",
-    );
-  }
-
-  if (resolvedCompanies?.missingEikFor.length) {
-    return {
-      invoice,
-      changedFields: Array.from(new Set(changedFields)),
-      response:
-        resolvedCompanies.message ??
-        "Please write companies EIK's to find them",
-    };
-  }
-
-  const sourceHints: string[] = [];
-  if (resolvedCompanies?.organization) {
-    sourceHints.push(
-      `organization from ${resolvedCompanies.organization.source}`,
-    );
-  }
-  if (resolvedCompanies?.contragent) {
-    sourceHints.push(`contragent from ${resolvedCompanies.contragent.source}`);
-  }
-
-  return {
-    invoice,
-    changedFields: Array.from(new Set(changedFields)),
-    response: sourceHints.length
-      ? `I created a draft invoice and loaded ${sourceHints.join(" and ")}.`
-      : "I created a draft invoice. You can now ask for precise refinements like date, invoice number, buyer, or line items.",
-  };
-}
-
-function refineInvoice(
-  current: BulgarianInvoiceData,
-  prompt: string,
-): {
-  invoice: BulgarianInvoiceData;
-  response: string;
-  changedFields: string[];
-} {
-  const updated: BulgarianInvoiceData = {
-    ...current,
-    lineItems: [...current.lineItems],
-  };
-  const changedFields: string[] = [];
-  const normalized = prompt.trim();
-
-  const numberMatch = normalized.match(
-    /invoice\s*number\s*(?:to|as)?\s*([A-Z0-9\/-]+)/i,
-  );
-  if (numberMatch) {
-    updated.invoiceNumber = numberMatch[1].toUpperCase();
-    changedFields.push("invoiceNumber");
-  }
-
-  const dateMatch = normalized.match(
-    /(invoice\s*date|date).*?(\d{1,2}[.-]\d{1,2}[.-]\d{2,4}|\d{4}-\d{2}-\d{2})/i,
-  );
-  if (dateMatch) {
-    const normalizedDate = dateMatch[2].replace(/\./g, "-");
-    updated.invoiceDate = normalizedDate;
-    updated.taxEventDate = normalizedDate;
-    changedFields.push("invoiceDate", "taxEventDate");
-  }
-
-  const addItemMatch = normalized.match(
-    /add\s+line\s+item[:\-]?\s*(.+?)\s*-\s*(\d+[\d.,]*)\s*(?:bgn|лв|eur)?/i,
-  );
-  if (addItemMatch) {
-    const description = addItemMatch[1].trim();
-    const amount = parseDecimal(addItemMatch[2]);
-
-    if (description && amount > 0) {
-      updated.lineItems = [
-        ...updated.lineItems,
-        {
-          description,
-          unit: "бр.",
-          quantity: "1",
-          unitPrice: toFixedMoney(amount),
-          vatPercent: "20",
-          value: toFixedMoney(amount),
-        },
-      ];
-      changedFields.push("lineItems");
-    }
-  }
-
-  const buyerMatch = normalized.match(/change\s+buyer\s+to\s+(.+)/i);
-  if (buyerMatch) {
-    updated.buyerName = buyerMatch[1].trim();
-    changedFields.push("buyerName");
-  }
-
-  updated.lineItems = applyLineItemTotals(updated.lineItems);
-  const totals = calculateTotals(updated.lineItems);
-  updated.subtotal = totals.subtotal;
-  updated.vatAmount = totals.vatAmount;
-  updated.total = totals.total;
-
-  if (!changedFields.length) {
-    return {
-      invoice: current,
-      changedFields,
-      response:
-        "I did not detect a specific editable field. Try: ‘Change invoice number to ...’, ‘Change invoice date to ...’, or ‘Add line item: Description - 500 BGN’.",
-    };
-  }
-
-  return {
-    invoice: updated,
-    changedFields,
-    response: `Done. Updated: ${Array.from(new Set(changedFields)).join(", ")}.`,
-  };
-}
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 
 function buildWelcomeMessage(
   t: ReturnType<typeof useTranslations>,
@@ -454,58 +95,112 @@ function buildWelcomeMessage(
   };
 }
 
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
 export function AIAssistantPage({ account }: { account: AccountContext }) {
   const t = useTranslations("aiChat");
+  const { setAlertStatus } = useGlobalStore();
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [messageInput, setMessageInput] = useState("");
   const [currentInvoice, setCurrentInvoice] =
     useState<BulgarianInvoiceData | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [localStatus, setLocalStatus] = useState<string>("");
-  const [lastChangedFields, setLastChangedFields] = useState<string[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
 
-  useEffect(() => {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      setMessages([buildWelcomeMessage(t)]);
-      return;
+  const pendingNavigationRef = useRef<string | null>(null);
+  const bypassLeaveGuardRef = useRef(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const accountMember = account.accountMembers[0];
+  const accountOrgs = accountMember?.account.organizations ?? [];
+
+  // The latest assistant message that carries an invoice
+  const latestInvoiceMessageId = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === "assistant" && messages[i].invoice) {
+        return messages[i].id;
+      }
     }
+    return null;
+  }, [messages]);
 
-    try {
-      const parsed = JSON.parse(raw) as {
-        messages?: ChatMessage[];
-        invoice?: BulgarianInvoiceData | null;
-      };
+  const hasUnsavedDraft = useMemo(
+    () => Boolean(currentInvoice) || messages.some((m) => m.role === "user"),
+    [currentInvoice, messages],
+  );
 
-      setMessages(
-        parsed.messages && parsed.messages.length
-          ? parsed.messages
-          : [buildWelcomeMessage(t)],
-      );
-      setCurrentInvoice(parsed.invoice ?? null);
-    } catch {
-      setMessages([buildWelcomeMessage(t)]);
-    }
-  }, [t]);
-
-  useEffect(() => {
-    if (!messages.length) return;
-
-    sessionStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        messages,
-        invoice: currentInvoice,
-      }),
-    );
-  }, [messages, currentInvoice]);
+  const isInvoiceReadyForSave = useMemo(() => {
+    if (!currentInvoice) return false;
+    const hasSellerData =
+      Boolean(currentInvoice.sellerName?.trim()) ||
+      Boolean(currentInvoice.sellerEik?.trim());
+    const hasBuyerData =
+      Boolean(currentInvoice.buyerName?.trim()) ||
+      Boolean(currentInvoice.buyerEik?.trim());
+    return hasSellerData && hasBuyerData;
+  }, [currentInvoice]);
 
   const canSend = useMemo(
     () => messageInput.trim().length > 0 && !isGenerating,
     [messageInput, isGenerating],
   );
 
-  const pushMessage = (role: ChatRole, content: string) => {
+  // Scroll to bottom on new messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isGenerating]);
+
+  // Init welcome message
+  useEffect(() => {
+    setMessages([buildWelcomeMessage(t)]);
+    setCurrentInvoice(null);
+  }, [t]);
+
+  // Leave guard
+  useEffect(() => {
+    const onDocumentClick = (event: MouseEvent) => {
+      if (!hasUnsavedDraft || bypassLeaveGuardRef.current) return;
+      const anchor = (event.target as HTMLElement | null)?.closest(
+        "a[href]",
+      ) as HTMLAnchorElement | null;
+      if (!anchor) return;
+      const href = anchor.getAttribute("href");
+      if (!href || href.startsWith("#") || href.startsWith("javascript:"))
+        return;
+      const destination = new URL(href, window.location.origin);
+      const current = new URL(window.location.href);
+      const sameRoute =
+        destination.pathname === current.pathname &&
+        destination.search === current.search;
+      if (destination.origin !== current.origin || sameRoute) return;
+      event.preventDefault();
+      event.stopPropagation();
+      pendingNavigationRef.current = destination.toString();
+      setIsLeaveDialogOpen(true);
+    };
+    document.addEventListener("click", onDocumentClick, true);
+    return () => document.removeEventListener("click", onDocumentClick, true);
+  }, [hasUnsavedDraft]);
+
+  // ---------------------------------------------------------------------------
+  // Actions
+  // ---------------------------------------------------------------------------
+
+  const resetDraft = () => {
+    setMessages([buildWelcomeMessage(t)]);
+    setCurrentInvoice(null);
+    setMessageInput("");
+  };
+
+  const pushMessage = (
+    role: ChatRole,
+    content: string,
+    extra?: Partial<ChatMessage>,
+  ) => {
     setMessages((prev) => [
       ...prev,
       {
@@ -513,282 +208,353 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
         role,
         content,
         createdAt: new Date().toISOString(),
+        ...extra,
       },
     ]);
-  };
-
-  const saveSessionLocally = () => {
-    sessionStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        messages,
-        invoice: currentInvoice,
-      }),
-    );
-    setLocalStatus(t("savedLocally"));
-  };
-
-  const clearSession = () => {
-    const welcome = buildWelcomeMessage(t);
-    setMessages([welcome]);
-    setCurrentInvoice(null);
-    setMessageInput("");
-    setLastChangedFields([]);
-    setLocalStatus(t("newDraftCreated"));
   };
 
   const sendMessage = async () => {
     const text = messageInput.trim();
     if (!text || isGenerating) return;
 
-    setLocalStatus("");
     setMessageInput("");
     pushMessage("user", text);
     setIsGenerating(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 650));
+    try {
+      const response = await fetch("/api/ai-assistant/chat-invoice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: text,
+          currentInvoice,
+          accountOrgs,
+        }),
+      });
 
-    const result = currentInvoice
-      ? refineInvoice(currentInvoice, text)
-      : await createInvoiceFromPrompt(text, account);
+      const payload = (await response.json()) as ChatApiResponse;
+      const data = payload?.data;
 
-    setCurrentInvoice(result.invoice);
-    setLastChangedFields(result.changedFields);
-    pushMessage("assistant", result.response);
-    setIsGenerating(false);
+      if (!data) {
+        pushMessage("assistant", t("serverProcessingError"));
+        return;
+      }
+
+      if (data.invoice) {
+        setCurrentInvoice(data.invoice);
+      }
+
+      const fallbackByStatus: Record<string, string> = {
+        unsupported: t("unsupportedPromptFallback"),
+        "missing-draft": t("missingDraftFallback"),
+        "company-not-found": t("companyNotFoundFallback"),
+        "invalid-input": t("invalidInputFallback"),
+      };
+
+      const assistantMessage =
+        data.status === "ok"
+          ? data.assistantMessage || t("serverProcessingError")
+          : fallbackByStatus[data.status] ||
+            data.assistantMessage ||
+            t("serverProcessingError");
+
+      pushMessage("assistant", assistantMessage, {
+        invoice: data.status === "ok" ? data.invoice : undefined,
+        changedFields: data.changedFields,
+      });
+    } catch {
+      pushMessage("assistant", t("serverProcessingError"));
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const saveAndDownloadInvoice = async () => {
+    if (!currentInvoice || isSaving || !isInvoiceReadyForSave) return;
+
+    setIsSaving(true);
+
+    try {
+      let generatedPdfBlob: Blob | null = null;
+      let generatedPdfUrl: string | null = null;
+
+      try {
+        const pdfResponse = await fetch("/api/generate-pdf", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(currentInvoice),
+        });
+
+        if (pdfResponse.ok) {
+          generatedPdfBlob = await pdfResponse.blob();
+          generatedPdfUrl = await uploadPdfToSupabase(
+            generatedPdfBlob,
+            currentInvoice.invoiceNumber,
+            accountMember?.accountId ?? undefined,
+            currentInvoice.sellerEik,
+          );
+        }
+      } catch {
+        generatedPdfBlob = null;
+        generatedPdfUrl = null;
+      }
+
+      const recordResponse = await fetch("/api/record-invoice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          invoiceData: currentInvoice,
+          generatedPdfUrl,
+          skipSourceDocumentCreation: true,
+        }),
+      });
+
+      if (!recordResponse.ok) {
+        setAlertStatus({
+          status: "error",
+          statusHeader: t("invoiceSaveFailedHeader"),
+          statusContent: t("invoiceSaveFailed"),
+        });
+        return;
+      }
+
+      if (generatedPdfBlob) {
+        const downloadUrl = URL.createObjectURL(generatedPdfBlob);
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = `faktura-${currentInvoice.invoiceNumber}-${currentInvoice.sellerEik}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(downloadUrl);
+      }
+
+      const successMessage = generatedPdfBlob
+        ? t("invoiceSavedAndDownloaded")
+        : t("invoiceSavedNoPdf");
+      setAlertStatus({
+        status: "success",
+        statusHeader: t("invoiceSavedHeader"),
+        statusContent: successMessage,
+      });
+    } catch {
+      setAlertStatus({
+        status: "error",
+        statusHeader: t("invoiceSaveFailedHeader"),
+        statusContent: t("invoiceSaveFailed"),
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const onConfirmLeave = () => {
+    const destination = pendingNavigationRef.current;
+    resetDraft();
+    bypassLeaveGuardRef.current = true;
+    if (destination) {
+      window.location.href = destination;
+      return;
+    }
+    window.history.back();
+  };
+
+  const onCancelLeave = () => {
+    pendingNavigationRef.current = null;
+    setIsLeaveDialogOpen(false);
   };
 
   const onInputKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      void sendMessage();
+      sendMessage();
     }
   };
 
-  const downloadPdf = async () => {
-    if (!currentInvoice) return;
-
-    setLocalStatus("");
-    try {
-      const response = await fetch("/api/generate-pdf", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(currentInvoice),
-      });
-
-      if (!response.ok) {
-        setLocalStatus(t("downloadFailed"));
-        return;
-      }
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `faktura-${currentInvoice.invoiceNumber}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      setLocalStatus(t("downloadReady"));
-    } catch {
-      setLocalStatus(t("downloadFailed"));
-    }
-  };
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
 
   return (
-    <div className="space-y-6">
-      <HeadingSection title={t("title")} subtitle={t("subtitle")} />
-      <div className="grid gap-5 xl:grid-cols-[1.05fr,0.95fr]">
-        <section className="rounded-2xl border border-border bg-card p-4 md:p-5">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <MessageSquare className="h-4 w-4 text-primary" />
-              <h3 className="font-semibold text-foreground">
-                {t("messagesTitle")}
-              </h3>
-            </div>
-            <Button variant="ghost" size="sm" onClick={clearSession}>
-              <Plus className="h-4 w-4" />
-              {t("newInvoice")}
-            </Button>
-          </div>
+    <div className="mx-auto flex h-[calc(100vh-8rem)] max-w-4xl flex-col">
+      {/* Header */}
+      <div className="flex shrink-0 items-center justify-between py-4">
+        <div>
+          <h1 className="text-xl font-semibold text-foreground">
+            {t("title")}
+          </h1>
+          <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={resetDraft}
+          className="gap-2"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          {t("newDraft")}
+        </Button>
+      </div>
 
-          <div
-            className="mb-4 h-[46vh] min-h-85 overflow-y-auto rounded-xl border border-border bg-background p-3"
-            aria-live="polite"
-          >
-            <div className="space-y-3">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${
-                    message.role === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  <div
-                    className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
-                      message.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "border border-border bg-card text-foreground"
-                    }`}
-                  >
-                    <div className="mb-1 flex items-center gap-1 text-[11px] opacity-80">
-                      {message.role === "user" ? (
-                        <>
-                          <User className="h-3 w-3" /> {t("you")}
-                        </>
-                      ) : (
-                        <>
-                          <Bot className="h-3 w-3" /> {t("assistant")}
-                        </>
-                      )}
-                    </div>
-                    <p>{message.content}</p>
-                  </div>
-                </div>
-              ))}
-
-              {isGenerating && (
-                <div className="flex justify-start">
-                  <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-3 py-2 text-sm text-muted-foreground">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    {t("generating")}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="mb-3 flex flex-wrap gap-2">
-            {SUGGESTIONS.map((suggestion) => (
-              <Button
-                key={suggestion}
-                variant="outline"
-                size="xs"
-                onClick={() => setMessageInput(suggestion)}
-                className="max-w-full truncate"
-              >
-                <WandSparkles className="h-3 w-3" />
-                <span className="truncate">{suggestion}</span>
-              </Button>
-            ))}
-          </div>
-
-          <div className="space-y-2">
-            <label
-              htmlFor="ai-chat-input"
-              className="text-sm font-medium text-foreground"
-            >
-              {t("inputLabel")}
-            </label>
-            <textarea
-              id="ai-chat-input"
-              value={messageInput}
-              onChange={(event) => setMessageInput(event.target.value)}
-              onKeyDown={onInputKeyDown}
-              placeholder={t("placeholder")}
-              rows={4}
-              className="w-full resize-none rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-              aria-label={t("inputLabel")}
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto pb-4">
+        <div className="space-y-6">
+          {messages.map((message) => (
+            <MessageBubble
+              key={message.id}
+              message={message}
+              isLatestInvoice={message.id === latestInvoiceMessageId}
+              isInvoiceReadyForSave={isInvoiceReadyForSave}
+              isSaving={isSaving}
+              onSaveAndDownload={saveAndDownloadInvoice}
+              t={t}
             />
-            <div className="flex items-center justify-between">
-              <p className="text-xs text-muted-foreground">{t("inputHint")}</p>
-              <Button onClick={sendMessage} disabled={!canSend}>
-                {isGenerating ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="h-4 w-4" />
+          ))}
+
+          {isGenerating && (
+            <div className="flex gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Bot className="h-4 w-4" />
+              </div>
+              <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm bg-muted px-4 py-3 text-sm text-muted-foreground">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                {t("generating")}
+              </div>
+            </div>
+          )}
+
+          <div ref={messagesEndRef} />
+        </div>
+      </div>
+
+      {/* Input area */}
+      <div className="shrink-0 border-t border-border bg-background pb-2 pt-4">
+        <div className="relative">
+          <textarea
+            id="ai-chat-input"
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            onKeyDown={onInputKeyDown}
+            placeholder={t("placeholder")}
+            rows={3}
+            className="w-full resize-none rounded-2xl border border-input bg-background px-4 py-3 pr-14 text-sm outline-none transition focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            aria-label={t("inputLabel")}
+          />
+          <Button
+            onClick={sendMessage}
+            disabled={!canSend}
+            size="icon"
+            className="absolute bottom-3 right-3 h-8 w-8 rounded-xl"
+          >
+            <Send className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+        <p className="mt-1.5 text-center text-xs text-muted-foreground">
+          {t("inputHint")}
+        </p>
+      </div>
+
+      <ConfirmationDialog
+        isOpen={isLeaveDialogOpen}
+        onClose={onCancelLeave}
+        title={t("leaveDialog.title")}
+        description={t("leaveDialog.description")}
+        mainActionButtonContent={t("leaveDialog.leave")}
+        secondaryActionContent={t("leaveDialog.stay")}
+        onMainAction={onConfirmLeave}
+        onSecondaryAction={onCancelLeave}
+      />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// MessageBubble
+// ---------------------------------------------------------------------------
+
+type MessageBubbleProps = {
+  message: ChatMessage;
+  isLatestInvoice: boolean;
+  isInvoiceReadyForSave: boolean;
+  isSaving: boolean;
+  onSaveAndDownload: () => void;
+  t: ReturnType<typeof useTranslations>;
+};
+
+function MessageBubble({
+  message,
+  isLatestInvoice,
+  isInvoiceReadyForSave,
+  isSaving,
+  onSaveAndDownload,
+  t,
+}: MessageBubbleProps) {
+  const isUser = message.role === "user";
+
+  if (isUser) {
+    return (
+      <div className="flex justify-end gap-3">
+        <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-primary px-4 py-3 text-sm text-primary-foreground">
+          {message.content}
+        </div>
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
+          <User className="h-4 w-4" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex gap-3">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <Bot className="h-4 w-4" />
+      </div>
+      <div className="min-w-0 flex-1 space-y-3">
+        {/* Text */}
+        <div className="inline-block rounded-2xl rounded-tl-sm bg-muted px-4 py-3 text-sm text-foreground">
+          {message.content}
+        </div>
+
+        {/* Inline invoice preview */}
+        {message.invoice && (
+          <div className="space-y-3">
+            <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+              <BulgarianInvoice data={message.invoice} />
+            </div>
+
+            {/* Changed fields badge */}
+            {message.changedFields && message.changedFields.length > 0 && (
+              <p className="text-xs text-muted-foreground">
+                <span className="font-medium">{t("changedFields")}:</span>{" "}
+                {message.changedFields.join(", ")}
+              </p>
+            )}
+
+            {/* Save & download — only on the latest invoice message */}
+            {isLatestInvoice && (
+              <div className="flex flex-wrap items-center gap-2">
+                {!isInvoiceReadyForSave && (
+                  <p className="w-full text-xs text-amber-600 dark:text-amber-400">
+                    {t("missingPartiesForSave")}
+                  </p>
                 )}
-                {t("send")}
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        <section className="rounded-2xl border border-border bg-card p-4 md:p-5">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <h3 className="font-semibold text-foreground">
-              {t("previewTitle")}
-            </h3>
-            <div className="flex flex-wrap items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={saveSessionLocally}
-                disabled={!messages.length}
-              >
-                <Save className="h-4 w-4" />
-                {t("saveDraft")}
-              </Button>
-              <Button
-                variant="default"
-                size="sm"
-                onClick={downloadPdf}
-                disabled={!currentInvoice}
-              >
-                <Download className="h-4 w-4" />
-                {t("downloadPdf")}
-              </Button>
-            </div>
-          </div>
-
-          <Separator className="mb-3" />
-
-          {localStatus && (
-            <p className="mb-3 rounded-lg border border-border bg-background px-3 py-2 text-xs text-muted-foreground">
-              {localStatus}
-            </p>
-          )}
-
-          {!currentInvoice ? (
-            <div className="flex h-[56vh] min-h-95 items-center justify-center rounded-xl border border-dashed border-border bg-background p-6 text-center text-sm text-muted-foreground">
-              {t("emptyPreview")}
-            </div>
-          ) : (
-            <div className="space-y-3">
-              <div className="grid grid-cols-1 gap-2 text-xs text-muted-foreground sm:grid-cols-2">
-                <div className="rounded-lg border border-border bg-background px-3 py-2">
-                  {t("invoiceNumber")}:{" "}
-                  <span className="font-semibold text-foreground">
-                    {currentInvoice.invoiceNumber}
-                  </span>
-                </div>
-                <div className="rounded-lg border border-border bg-background px-3 py-2">
-                  {t("buyer")}:{" "}
-                  <span className="font-semibold text-foreground">
-                    {currentInvoice.buyerName}
-                  </span>
-                </div>
-                <div className="rounded-lg border border-border bg-background px-3 py-2">
-                  {t("total")}:{" "}
-                  <span className="font-semibold text-foreground">
-                    {currentInvoice.total} {currentInvoice.currency}
-                  </span>
-                </div>
-                <div className="rounded-lg border border-border bg-background px-3 py-2">
-                  {t("changedFields")}:{" "}
-                  <span className="font-semibold text-foreground">
-                    {lastChangedFields.length
-                      ? lastChangedFields.join(", ")
-                      : "-"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="h-[46vh] min-h-85 overflow-auto rounded-xl border border-border bg-zinc-100/60 p-2 dark:bg-zinc-900/40">
-                <div
-                  className="origin-top-left"
-                  style={{ minWidth: 810, transform: "scale(0.72)" }}
+                <Button
+                  onClick={onSaveAndDownload}
+                  disabled={!isInvoiceReadyForSave || isSaving}
+                  size="sm"
+                  className="gap-2"
                 >
-                  <BulgarianInvoice data={currentInvoice} />
-                </div>
+                  {isSaving ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Download className="h-3.5 w-3.5" />
+                  )}
+                  {isSaving ? t("savingInvoice") : t("saveAndDownload")}
+                </Button>
               </div>
-            </div>
-          )}
-        </section>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
