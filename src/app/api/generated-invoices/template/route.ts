@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { notFound } from "next/navigation";
-import { getUserServer } from "../../../../../utility/get-user-server";
-import { prisma } from "../../../../../utility/prisma";
+import { getUserServer } from "@/utility/get-user-server";
+import { prisma } from "@/utility/prisma";
 import {
   generateNextInvoiceNumber,
   parseJsonAddress,
-} from "../../../../../utility/helpers";
-import {
-  formatDateForInput,
-  getTodayForInput,
-} from "../../../../../utility/date-formatter";
+} from "@/utility/api-helpers";
+import { formatDateForInput, getTodayForInput } from "@/utility/date-formatter";
 
 type ParsedInvoiceData = {
   location?: string;

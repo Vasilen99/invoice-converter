@@ -1,4 +1,4 @@
-import { createClient } from "../../../../../utility/supabase/server";
+import { createClient } from "@/utility/supabase/server";
 import { NextResponse } from "next/server";
 
 /**

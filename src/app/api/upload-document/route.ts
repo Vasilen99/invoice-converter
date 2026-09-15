@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAdminClient } from "../../../../utility/supabase/server";
-import { getUserServer } from "../../../../utility/get-user-server";
+import { createAdminClient } from "@/utility/supabase/server";
+import { getUserServer } from "@/utility/get-user-server";
 
 /**
  * POST /api/upload-document

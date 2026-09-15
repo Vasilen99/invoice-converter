@@ -3,6 +3,11 @@
  * Handles data transformation, normalization, and aggregation
  */
 
+import {
+  generateNextInvoiceNumber as getNextInvoiceNumber,
+  parseJsonAddress as parseJsonAddressShared,
+} from "../api-helpers";
+
 type ParsedLineItem = {
   description?: string;
   unit?: string;
@@ -41,16 +46,7 @@ type BankInfo = {
 export function parseJsonAddress(
   value: unknown,
 ): { settlement?: string; street?: string } | null {
-  if (!value || typeof value !== "object") {
-    return null;
-  }
-
-  const address = value as Record<string, unknown>;
-  return {
-    settlement:
-      typeof address.settlement === "string" ? address.settlement : undefined,
-    street: typeof address.street === "string" ? address.street : undefined,
-  };
+  return parseJsonAddressShared(value);
 }
 
 /**
@@ -263,13 +259,7 @@ export function generateNextInvoiceNumber(
   prefix: string | null | undefined,
   currentNumber: number | string | null | undefined,
 ): string {
-  const invoiceSeries = prefix || "INV";
-  const current =
-    typeof currentNumber === "string"
-      ? Number(currentNumber)
-      : (currentNumber ?? 0);
-  const nextNumber = Math.max(current + 1, 1);
-  return `${invoiceSeries}${String(nextNumber).padStart(10, "0")}`;
+  return getNextInvoiceNumber(prefix, currentNumber);
 }
 
 /**

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "../../../../../utility/prisma";
-import { getUserServer } from "../../../../../utility/get-user-server";
+import { prisma } from "@/utility/prisma";
+import { getUserServer } from "@/utility/get-user-server";
 import { notFound } from "next/navigation";
+import { normalizeEik } from "@/utility/api-helpers";
 
 /**
  * POST /api/organizations/current-inv-numbers
@@ -59,9 +60,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Normalize EIKs
-    const normalizedEiks = eiks
-      .map((eik) => (eik ?? "").trim())
-      .filter(Boolean);
+    const normalizedEiks = eiks.map((eik) => normalizeEik(eik)).filter(Boolean);
 
     // Fetch all organizations matching these EIKs in the user's account
     const organizations = await prisma.organization.findMany({
@@ -83,7 +82,7 @@ export async function POST(request: NextRequest) {
     for (const eik of normalizedEiks) {
       const org = organizations.find(
         (o: { bulstat: string | null; current_inv_number: any }) =>
-          (o.bulstat ?? "").trim() === eik,
+          normalizeEik(o.bulstat) === eik,
       );
 
       if (org && org.current_inv_number !== null) {

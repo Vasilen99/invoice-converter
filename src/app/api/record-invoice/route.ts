@@ -1,25 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "../../../../utility/prisma";
-import { getUserServer } from "../../../../utility/get-user-server";
+import { prisma } from "@/utility/prisma";
+import { getUserServer } from "@/utility/get-user-server";
 import { BulgarianInvoiceData } from "../../../types";
 import { notFound } from "next/navigation";
 import {
   extractEmail,
   extractManagerName,
-  extractVatNumber,
   formatAddressForStorage,
   transformAddressFromCompanyData,
-} from "../../../../utility/company-registry-helpers";
-import { parseDateForDatabase } from "../../../../utility/date-formatter";
-import { fetchExternalCompanyByEik } from "../../../../utility/api-helpers/company";
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function normalizeBulstat(value: string | undefined | null): string {
-  return (value ?? "").trim();
-}
+} from "@/utility/company-registry-helpers";
+import {
+  getTodayForInput,
+  parseDateForDatabase,
+} from "@/utility/date-formatter";
+import {
+  fetchExternalCompanyByEik,
+  hasRequiredInvoiceFields,
+  normalizeEik,
+  parseDecimal,
+  parseInvoiceNumber,
+  sanitizeInvoice,
+} from "@/utility/api-helpers";
 
 type RegistryCompanyData = {
   bulstat: string;
@@ -37,7 +38,7 @@ async function fetchCompanyFromExternalApi(
   const external = await fetchExternalCompanyByEik(bulstat);
   if (!external) return null;
   return {
-    bulstat: external.bulstat || normalizeBulstat(bulstat),
+    bulstat: external.bulstat || normalizeEik(bulstat),
     name: external.name,
     vatNumber: external.vatNumber,
     address:
@@ -47,6 +48,62 @@ async function fetchCompanyFromExternalApi(
     email: external.email ?? extractEmail(external.rawLookupData),
     rawLookupData: external.rawLookupData,
   };
+}
+
+async function fetchCompanyFromRegistryCache(
+  bulstat: string,
+): Promise<RegistryCompanyData | null> {
+  const normalizedBulstat = normalizeEik(bulstat);
+  if (!normalizedBulstat) return null;
+
+  const cached = await prisma.companyRegistryCache.findUnique({
+    where: { bulstat: normalizedBulstat },
+    select: {
+      bulstat: true,
+      name: true,
+      vatNumber: true,
+      address: true,
+      rawLookupData: true,
+      lastFetchedAt: true,
+    },
+  });
+
+  if (!cached) return null;
+
+  await prisma.companyRegistryCache.update({
+    where: { bulstat: normalizedBulstat },
+    data: { lastFetchedAt: new Date() },
+  });
+
+  const rawLookupData = cached.rawLookupData as any;
+  const derivedAddress = rawLookupData
+    ? transformAddressFromCompanyData(rawLookupData)
+    : undefined;
+
+  return {
+    bulstat: cached.bulstat,
+    name: cached.name,
+    vatNumber: cached.vatNumber,
+    address: (cached.address as ReturnType<
+      typeof transformAddressFromCompanyData
+    >) ??
+      derivedAddress ?? { street: "", settlement: "" },
+    molName: rawLookupData ? extractManagerName(rawLookupData) : "",
+    email: rawLookupData ? extractEmail(rawLookupData) : null,
+    rawLookupData: cached.rawLookupData,
+  };
+}
+
+async function resolveCompanyDataByBulstat(
+  bulstat: string,
+): Promise<RegistryCompanyData | null> {
+  const normalizedBulstat = normalizeEik(bulstat);
+  if (!normalizedBulstat) return null;
+
+  const fromCache = await fetchCompanyFromRegistryCache(normalizedBulstat);
+  if (fromCache) return fromCache;
+
+  return fetchCompanyFromExternalApi(normalizedBulstat);
 }
 
 async function createCompanyRegistryCache(input: {
@@ -86,35 +143,6 @@ async function createCompanyRegistryCache(input: {
   return created.id;
 }
 
-/**
- * Parse a numeric string that may contain currency symbols / spaces.
- */
-function parseDecimal(value: string | undefined): number {
-  const cleaned = (value ?? "0").replace(/[^\d.,-]/g, "").replace(",", ".");
-  const num = parseFloat(cleaned);
-  return isNaN(num) ? 0 : num;
-}
-
-function parseInvoiceNumber(
-  invoiceNumber: string,
-  defaultSeries: string,
-): { series: string; seq: number } {
-  const trimmed = (invoiceNumber ?? "").trim();
-
-  // Match optional alpha prefix, optional separator, digits
-  const match = trimmed.match(/^([A-Za-zА-Яа-яЁё]+)[-\s]?(\d+)$/u);
-  if (match) {
-    return { series: match[1].toUpperCase(), seq: parseInt(match[2], 10) };
-  }
-
-  // Pure digits
-  const numOnly = parseInt(trimmed.replace(/\D/g, ""), 10);
-  return {
-    series: defaultSeries || "INV",
-    seq: isNaN(numOnly) || numOnly <= 0 ? 1 : numOnly,
-  };
-}
-
 // ---------------------------------------------------------------------------
 // POST /api/record-invoice
 // ---------------------------------------------------------------------------
@@ -136,7 +164,7 @@ export async function POST(request: NextRequest) {
 
     const {
       invoiceData,
-      originalFilename = "invoice.pdf",
+      originalFilename = "",
       sourceDocumentUrl = null,
       generatedPdfUrl = null,
       skipSourceDocumentCreation = false,
@@ -156,22 +184,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const sellerEik = normalizeBulstat(invoiceData.sellerEik);
-    const buyerEik = normalizeBulstat(invoiceData.buyerEik);
+    const normalizedInvoice = sanitizeInvoice(invoiceData);
 
-    if (!sellerEik || !buyerEik) {
+    if (!hasRequiredInvoiceFields(normalizedInvoice)) {
       return NextResponse.json(
         {
           data: null,
           alert: {
             status: "error",
-            header: "uploader.alerts.requiredEikHeader",
-            message: "uploader.alerts.requiredEikMessage",
+            header: "uploader.alerts.requiredInvoiceFieldsHeader",
+            message: "uploader.alerts.requiredInvoiceFieldsMessage",
           },
         },
         { status: 400 },
       );
     }
+
+    const sellerEik = normalizeEik(normalizedInvoice.sellerEik);
+    const buyerEik = normalizeEik(normalizedInvoice.buyerEik);
 
     // ------------------------------------------------------------------
     // Resolve current user's DB record and account
@@ -219,44 +249,47 @@ export async function POST(request: NextRequest) {
     // We'll use this for organization current_inv_number updates/creation.
     const defaultSeriesPrefix = "INV";
     const { seq: invoiceSeq } = parseInvoiceNumber(
-      invoiceData.invoiceNumber,
+      normalizedInvoice.invoiceNumber,
       defaultSeriesPrefix,
     );
 
     // Auto-create organization if it doesn't exist
     if (!organization && sellerEik) {
-      const sellerFromExternal = await fetchCompanyFromExternalApi(sellerEik);
+      const sellerResolved = await resolveCompanyDataByBulstat(sellerEik);
       const sellerAddress = formatAddressForStorage(
-        sellerFromExternal?.address ?? {
-          street: invoiceData.sellerAddress || "",
-          settlement: invoiceData.sellerCity || "",
+        sellerResolved?.address ?? {
+          street: normalizedInvoice.sellerAddress || "",
+          settlement: normalizedInvoice.sellerCity || "",
         },
       );
 
       const registryId = await createCompanyRegistryCache({
         bulstat: sellerEik,
-        name: sellerFromExternal?.name || invoiceData.sellerName || sellerEik,
+        name: sellerResolved?.name || normalizedInvoice.sellerName || sellerEik,
         vatNumber:
-          sellerFromExternal?.vatNumber || invoiceData.sellerVatNumber || null,
+          sellerResolved?.vatNumber ||
+          normalizedInvoice.sellerVatNumber ||
+          null,
         address: sellerAddress,
-        rawLookupData: sellerFromExternal?.rawLookupData,
+        rawLookupData: sellerResolved?.rawLookupData,
       });
 
       organization = await prisma.organization.create({
         data: {
           accountId: accountMember.accountId,
           bulstat: sellerEik,
-          name: sellerFromExternal?.name || invoiceData.sellerName || "",
+          name: sellerResolved?.name || normalizedInvoice.sellerName || "",
           vatNumber:
-            sellerFromExternal?.vatNumber ||
-            invoiceData.sellerVatNumber ||
+            sellerResolved?.vatNumber ||
+            normalizedInvoice.sellerVatNumber ||
             null,
-          molName: sellerFromExternal?.molName || invoiceData.sellerMol || null,
-          email: sellerFromExternal?.email || null,
+          molName:
+            sellerResolved?.molName || normalizedInvoice.sellerMol || null,
+          email: sellerResolved?.email || null,
           address: sellerAddress,
           invoiceSeriesPrefix: "INV",
           current_inv_number: invoiceSeq,
-          source: sellerFromExternal ? "NAP_API" : "MANUAL",
+          source: sellerResolved ? "NAP_API" : "MANUAL",
           registryId,
         },
         select: {
@@ -266,41 +299,44 @@ export async function POST(request: NextRequest) {
       });
 
       if (buyerEik) {
-        const buyerFromExternal = await fetchCompanyFromExternalApi(buyerEik);
+        const buyerResolved = await resolveCompanyDataByBulstat(buyerEik);
         const buyerAddress = formatAddressForStorage(
-          buyerFromExternal?.address ?? {
-            street: invoiceData.buyerAddress || "",
-            settlement: invoiceData.buyerCity || "",
+          buyerResolved?.address ?? {
+            street: normalizedInvoice.buyerAddress || "",
+            settlement: normalizedInvoice.buyerCity || "",
           },
         );
 
         const buyerRegistryId = await createCompanyRegistryCache({
           bulstat: buyerEik,
-          name: buyerFromExternal?.name || invoiceData.buyerName || buyerEik,
+          name: buyerResolved?.name || normalizedInvoice.buyerName || buyerEik,
           vatNumber:
-            buyerFromExternal?.vatNumber || invoiceData.buyerVatNumber || null,
+            buyerResolved?.vatNumber ||
+            normalizedInvoice.buyerVatNumber ||
+            null,
           address: buyerAddress,
-          rawLookupData: buyerFromExternal?.rawLookupData,
+          rawLookupData: buyerResolved?.rawLookupData,
         });
 
         contragent = await prisma.contragent.create({
           data: {
             organizationId: organization.id,
             bulstat: buyerEik,
-            name: buyerFromExternal?.name || invoiceData.buyerName || "",
+            name: buyerResolved?.name || normalizedInvoice.buyerName || "",
             vatNumber:
-              buyerFromExternal?.vatNumber ||
-              invoiceData.buyerVatNumber ||
+              buyerResolved?.vatNumber ||
+              normalizedInvoice.buyerVatNumber ||
               null,
-            molName: buyerFromExternal?.molName || invoiceData.buyerMol || null,
-            email: buyerFromExternal?.email || null,
+            molName:
+              buyerResolved?.molName || normalizedInvoice.buyerMol || null,
+            email: buyerResolved?.email || null,
             address: buyerAddress,
-            source: buyerFromExternal ? "NAP_API" : "MANUAL",
+            source: buyerResolved ? "NAP_API" : "MANUAL",
             registryId: buyerRegistryId,
             rawLookupData:
-              buyerFromExternal?.rawLookupData === undefined
+              buyerResolved?.rawLookupData === undefined
                 ? null
-                : (buyerFromExternal.rawLookupData as any),
+                : (buyerResolved.rawLookupData as any),
           },
           select: { id: true },
         });
@@ -319,41 +355,44 @@ export async function POST(request: NextRequest) {
       });
 
       if (!contragent) {
-        const buyerFromExternal = await fetchCompanyFromExternalApi(buyerEik);
+        const buyerResolved = await resolveCompanyDataByBulstat(buyerEik);
         const buyerAddress = formatAddressForStorage(
-          buyerFromExternal?.address ?? {
-            street: invoiceData.buyerAddress || "",
-            settlement: invoiceData.buyerCity || "",
+          buyerResolved?.address ?? {
+            street: normalizedInvoice.buyerAddress || "",
+            settlement: normalizedInvoice.buyerCity || "",
           },
         );
 
         const buyerRegistryId = await createCompanyRegistryCache({
           bulstat: buyerEik,
-          name: buyerFromExternal?.name || invoiceData.buyerName || buyerEik,
+          name: buyerResolved?.name || normalizedInvoice.buyerName || buyerEik,
           vatNumber:
-            buyerFromExternal?.vatNumber || invoiceData.buyerVatNumber || null,
+            buyerResolved?.vatNumber ||
+            normalizedInvoice.buyerVatNumber ||
+            null,
           address: buyerAddress,
-          rawLookupData: buyerFromExternal?.rawLookupData,
+          rawLookupData: buyerResolved?.rawLookupData,
         });
 
         contragent = await prisma.contragent.create({
           data: {
             organizationId: organization.id,
             bulstat: buyerEik,
-            name: buyerFromExternal?.name || invoiceData.buyerName || "",
+            name: buyerResolved?.name || normalizedInvoice.buyerName || "",
             vatNumber:
-              buyerFromExternal?.vatNumber ||
-              invoiceData.buyerVatNumber ||
+              buyerResolved?.vatNumber ||
+              normalizedInvoice.buyerVatNumber ||
               null,
-            molName: buyerFromExternal?.molName || invoiceData.buyerMol || null,
-            email: buyerFromExternal?.email || null,
+            molName:
+              buyerResolved?.molName || normalizedInvoice.buyerMol || null,
+            email: buyerResolved?.email || null,
             address: buyerAddress,
-            source: buyerFromExternal ? "NAP_API" : "MANUAL",
+            source: buyerResolved ? "NAP_API" : "MANUAL",
             registryId: buyerRegistryId,
             rawLookupData:
-              buyerFromExternal?.rawLookupData === undefined
+              buyerResolved?.rawLookupData === undefined
                 ? null
-                : (buyerFromExternal.rawLookupData as any),
+                : (buyerResolved.rawLookupData as any),
           },
           select: { id: true },
         });
@@ -391,43 +430,31 @@ export async function POST(request: NextRequest) {
 
     // Parse final invoice number with the resolved organization's series prefix
     const { series: invoiceSeries } = parseInvoiceNumber(
-      invoiceData.invoiceNumber,
+      normalizedInvoice.invoiceNumber,
       organization.invoiceSeriesPrefix,
     );
 
     // ------------------------------------------------------------------
     // Parse dates
     // ------------------------------------------------------------------
-    const issueDate = parseDateForDatabase(invoiceData.invoiceDate);
-    const taxEventDate = invoiceData.taxEventDate
-      ? parseDateForDatabase(invoiceData.taxEventDate)
-      : null;
-
-    if (!issueDate || (invoiceData.taxEventDate && !taxEventDate)) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "uploader.alerts.invalidInvoicePayloadHeader",
-            message: "uploader.alerts.invalidInvoicePayloadMessage",
-          },
-        },
-        { status: 400 },
-      );
-    }
+    const issueDate =
+      parseDateForDatabase(normalizedInvoice.invoiceDate) ??
+      parseDateForDatabase(getTodayForInput()) ??
+      new Date();
+    const taxEventDate =
+      parseDateForDatabase(normalizedInvoice.taxEventDate) ?? issueDate;
 
     // ------------------------------------------------------------------
     // Parse financial values
     // ------------------------------------------------------------------
-    const subtotal = parseDecimal(invoiceData.subtotal);
-    const vatAmount = parseDecimal(invoiceData.vatAmount);
-    const totalAmount = parseDecimal(invoiceData.total);
+    const subtotal = parseDecimal(normalizedInvoice.subtotal);
+    const vatAmount = parseDecimal(normalizedInvoice.vatAmount);
+    const totalAmount = parseDecimal(normalizedInvoice.total);
 
     // ------------------------------------------------------------------
     // Determine exchange rate / original currency if present
     // ------------------------------------------------------------------
-    const currency = (invoiceData.currency ?? "EUR").toUpperCase();
+    const currency = (normalizedInvoice.currency ?? "EUR").toUpperCase();
 
     // ------------------------------------------------------------------
     // Upsert everything in a transaction
@@ -444,7 +471,7 @@ export async function POST(request: NextRequest) {
             originalFilename: originalFilename,
             mimeType: "application/pdf",
             status: "CONVERTED",
-            parsedData: invoiceData as object,
+            parsedData: normalizedInvoice as object,
             organizationId: organization.id,
             uploadedByUserId: dbUser.id,
           },
@@ -515,9 +542,12 @@ export async function POST(request: NextRequest) {
         where: { generatedInvoiceId },
       });
 
-      if (invoiceData.lineItems && invoiceData.lineItems.length > 0) {
+      if (
+        normalizedInvoice.lineItems &&
+        normalizedInvoice.lineItems.length > 0
+      ) {
         await tx.invoiceLineItem.createMany({
-          data: invoiceData.lineItems.map((item) => ({
+          data: normalizedInvoice.lineItems.map((item) => ({
             generatedInvoiceId,
             description: item.description ?? "",
             quantity: parseDecimal(String(item.quantity)),

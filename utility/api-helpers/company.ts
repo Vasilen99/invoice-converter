@@ -11,34 +11,13 @@ import {
   extractVatNumber,
   transformAddressFromCompanyData,
 } from "../company-registry-helpers";
+import { normalizeEik, normalizeText, parseDecimal, toMoney } from "./common";
 
 // ---------------------------------------------------------------------------
 // Text normalisation
 // ---------------------------------------------------------------------------
 
-/** Trims a string value, returning "" for non-strings. */
-export function normalizeText(value: unknown): string {
-  return typeof value === "string" ? value.trim() : "";
-}
-
-/** Strips all non-digit characters from a string (EIK/BULSTAT). */
-export function normalizeEik(value: unknown): string {
-  return normalizeText(value).replace(/\D/g, "");
-}
-
-/** Parses a decimal string (handles comma separators). */
-export function parseDecimal(value: unknown): number {
-  const normalized = normalizeText(value)
-    .replace(/[^\d.,-]/g, "")
-    .replace(",", ".");
-  const parsed = Number.parseFloat(normalized);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-/** Formats a number to two decimal places as a string. */
-export function toMoney(value: number): string {
-  return Number.isFinite(value) ? value.toFixed(2) : "0.00";
-}
+export { normalizeText, normalizeEik, parseDecimal, toMoney };
 
 // ---------------------------------------------------------------------------
 // External company API

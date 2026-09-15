@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
-import { createClient } from "../../../../../utility/supabase/server";
+import { createClient } from "@/utility/supabase/server";
 
 export async function GET() {
   try {

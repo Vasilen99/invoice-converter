@@ -174,6 +174,8 @@
     "alerts": {
       "requiredEikHeader": "EIK/BULSTAT is required",
       "requiredEikMessage": "Both seller and buyer EIK/BULSTAT are required before generating an invoice. Please update invoice: {filename}",
+      "requiredInvoiceFieldsHeader": "Required invoice fields are missing",
+      "requiredInvoiceFieldsMessage": "Please provide seller and buyer company name and EIK/BULSTAT, plus at least one line item, before saving the invoice.",
       "invalidInvoicePayloadHeader": "Invalid invoice data",
       "invalidInvoicePayloadMessage": "Invoice data is missing or invalid. Please re-extract and try again.",
       "accountRequiredHeader": "Account is required",
@@ -616,8 +618,7 @@
     "invoiceNumber": "Invoice number",
     "buyer": "Buyer",
     "total": "Total",
-  "changedFields": "Last updated fields",
-  "missingPartiesForSave": "Add seller and buyer company details (name or EIK) before saving and downloading the PDF.",
+    "missingPartiesForSave": "Add seller and buyer company name + EIK/BULSTAT, and at least one line item, before saving and downloading the PDF.",
     "newDraftCreated": "Started a fresh draft session.",
     "unsupportedPromptFallback": "I currently support only invoice generation and invoice edits.",
     "missingDraftFallback": "Please ask me to generate an invoice draft first, then I can edit it.",

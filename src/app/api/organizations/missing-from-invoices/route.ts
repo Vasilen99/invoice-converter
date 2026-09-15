@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "../../../../../utility/prisma";
-import { getUserServer } from "../../../../../utility/get-user-server";
+import { prisma } from "@/utility/prisma";
+import { getUserServer } from "@/utility/get-user-server";
 import { notFound } from "next/navigation";
 
 type MissingOrganizationByEik = {

@@ -1,12 +1,11 @@
-import { prisma } from "../../../../../utility/prisma";
+import { prisma } from "@/utility/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { getUserServer } from "../../../../../utility/get-user-server";
+import { getUserServer } from "@/utility/get-user-server";
 import {
   formatAddressForStorage,
   isValidCompanyData,
-  formatRawLookupDataForStorage,
   enrichOrganizationDataFromRegistry,
-} from "../../../../../utility/company-registry-helpers";
+} from "@/utility/company-registry-helpers";
 import { notFound } from "next/navigation";
 
 export async function PUT(request: NextRequest) {

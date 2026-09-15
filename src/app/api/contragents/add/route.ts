@@ -1,13 +1,12 @@
-import { prisma } from "../../../../../utility/prisma";
+import { prisma } from "@/utility/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { getUserServer } from "../../../../../utility/get-user-server";
+import { getUserServer } from "@/utility/get-user-server";
 import { notFound } from "next/navigation";
 import {
   enrichOrganizationDataFromRegistry,
   formatAddressForStorage,
   isValidCompanyData,
-} from "../../../../../utility/company-registry-helpers";
-import { raw } from "@prisma/client/runtime/client";
+} from "@/utility/company-registry-helpers";
 
 export async function POST(request: NextRequest) {
   const user = await getUserServer();

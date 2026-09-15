@@ -7,14 +7,30 @@ import {
   useState,
   type KeyboardEventHandler,
 } from "react";
-import { BulgarianInvoice } from "@/components";
 import { Button } from "@/components/ui/button";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useTranslations } from "next-intl";
-import { BulgarianInvoiceData } from "@/types";
-import { uploadPdfToSupabase } from "../../utility/pdf-upload";
+import type { BulgarianInvoiceData } from "@/types";
+import { uploadPdfToSupabase } from "@/utility/pdf-upload";
 import { useGlobalStore } from "@/store/global";
-import { Bot, Download, Loader2, Plus, Send, User } from "lucide-react";
+import { Bot, Loader2, Plus, Send } from "lucide-react";
+import { hasRequiredInvoiceFields } from "@/utility/api-helpers/invoice";
+import type { ChatMessage, ChatRole } from "@/utility/types/ai-chat";
+import dynamic from "next/dynamic";
+import { callApi } from "@/utility/hooks/apiFetch";
+
+const MessageBubble = dynamic(
+  () => import("@/components/MessageBubble").then((mod) => mod.MessageBubble),
+  {
+    ssr: false,
+  },
+);
+
+const ConfirmationDialog = dynamic(
+  () => import("@/components/ConfirmationDialog").then((mod) => mod.default),
+  {
+    ssr: false,
+  },
+);
 
 // ---------------------------------------------------------------------------
 // Types
@@ -54,23 +70,11 @@ export type AccountContext = {
   }[];
 };
 
-type ChatRole = "user" | "assistant";
-
-type ChatMessage = {
-  id: string;
-  role: ChatRole;
-  content: string;
-  createdAt: string;
-  invoice?: BulgarianInvoiceData | null;
-  changedFields?: string[];
-};
-
 type ChatApiResponse = {
   data: {
     intent: "create_invoice" | "edit_invoice" | "unsupported";
     assistantMessage: string;
     invoice: BulgarianInvoiceData | null;
-    changedFields: string[];
     status:
       | "ok"
       | "unsupported"
@@ -134,14 +138,7 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
   );
 
   const isInvoiceReadyForSave = useMemo(() => {
-    if (!currentInvoice) return false;
-    const hasSellerData =
-      Boolean(currentInvoice.sellerName?.trim()) ||
-      Boolean(currentInvoice.sellerEik?.trim());
-    const hasBuyerData =
-      Boolean(currentInvoice.buyerName?.trim()) ||
-      Boolean(currentInvoice.buyerEik?.trim());
-    return hasSellerData && hasBuyerData;
+    return hasRequiredInvoiceFields(currentInvoice);
   }, [currentInvoice]);
 
   const canSend = useMemo(
@@ -222,7 +219,7 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
     setIsGenerating(true);
 
     try {
-      const response = await fetch("/api/ai-assistant/chat-invoice", {
+      const data = await callApi("/ai-assistant/chat-invoice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -231,9 +228,6 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
           accountOrgs,
         }),
       });
-
-      const payload = (await response.json()) as ChatApiResponse;
-      const data = payload?.data;
 
       if (!data) {
         pushMessage("assistant", t("serverProcessingError"));
@@ -252,15 +246,14 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
       };
 
       const assistantMessage =
-        data.status === "ok"
-          ? data.assistantMessage || t("serverProcessingError")
-          : fallbackByStatus[data.status] ||
-            data.assistantMessage ||
-            t("serverProcessingError");
+        data.status === "company-not-found"
+          ? data.assistantMessage || fallbackByStatus[data.status]
+          : data.status
+            ? fallbackByStatus[data.status] || data.assistantMessage
+            : data.assistantMessage || t("serverProcessingError");
 
       pushMessage("assistant", assistantMessage, {
-        invoice: data.status === "ok" ? data.invoice : undefined,
-        changedFields: data.changedFields,
+        invoice: data ? data.invoice : undefined,
       });
     } catch {
       pushMessage("assistant", t("serverProcessingError"));
@@ -293,40 +286,52 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
             accountMember?.accountId ?? undefined,
             currentInvoice.sellerEik,
           );
+
+          // Download PDF immediately after successful generation
+          const downloadUrl = URL.createObjectURL(generatedPdfBlob);
+          const link = document.createElement("a");
+          link.href = downloadUrl;
+          link.download = `faktura-${currentInvoice.invoiceNumber}-${currentInvoice.sellerEik}.pdf`;
+          document.body.appendChild(link);
+
+          // Temporarily bypass leave guard for programmatic download
+          bypassLeaveGuardRef.current = true;
+          link.click();
+          bypassLeaveGuardRef.current = false;
+
+          document.body.removeChild(link);
+          URL.revokeObjectURL(downloadUrl);
         }
-      } catch {
-        generatedPdfBlob = null;
-        generatedPdfUrl = null;
+      } catch (pdfError) {
+        console.warn("[ai-assistant] PDF generation failed:", pdfError);
+        setAlertStatus({
+          status: "error",
+          statusHeader: t("pdfGenerationErrorHeader"),
+          statusContent: t("pdfGenerationErrorMessage"),
+        });
       }
 
-      const recordResponse = await fetch("/api/record-invoice", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          invoiceData: currentInvoice,
-          generatedPdfUrl,
-          skipSourceDocumentCreation: true,
-        }),
-      });
+      const recordResponse = await callApi(
+        "/record-invoice",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            invoiceData: currentInvoice,
+            generatedPdfUrl,
+            skipSourceDocumentCreation: true,
+          }),
+        },
+        true,
+      );
 
-      if (!recordResponse.ok) {
+      if (!recordResponse) {
         setAlertStatus({
           status: "error",
           statusHeader: t("invoiceSaveFailedHeader"),
           statusContent: t("invoiceSaveFailed"),
         });
         return;
-      }
-
-      if (generatedPdfBlob) {
-        const downloadUrl = URL.createObjectURL(generatedPdfBlob);
-        const link = document.createElement("a");
-        link.href = downloadUrl;
-        link.download = `faktura-${currentInvoice.invoiceNumber}-${currentInvoice.sellerEik}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(downloadUrl);
       }
 
       const successMessage = generatedPdfBlob
@@ -397,7 +402,7 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto pb-4">
+      <div className="flex-1 overflow-y-auto no-scrollbar pb-4">
         <div className="space-y-6">
           {messages.map((message) => (
             <MessageBubble
@@ -471,91 +476,3 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
 // ---------------------------------------------------------------------------
 // MessageBubble
 // ---------------------------------------------------------------------------
-
-type MessageBubbleProps = {
-  message: ChatMessage;
-  isLatestInvoice: boolean;
-  isInvoiceReadyForSave: boolean;
-  isSaving: boolean;
-  onSaveAndDownload: () => void;
-  t: ReturnType<typeof useTranslations>;
-};
-
-function MessageBubble({
-  message,
-  isLatestInvoice,
-  isInvoiceReadyForSave,
-  isSaving,
-  onSaveAndDownload,
-  t,
-}: MessageBubbleProps) {
-  const isUser = message.role === "user";
-
-  if (isUser) {
-    return (
-      <div className="flex justify-end gap-3">
-        <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-primary px-4 py-3 text-sm text-primary-foreground">
-          {message.content}
-        </div>
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
-          <User className="h-4 w-4" />
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex gap-3">
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-        <Bot className="h-4 w-4" />
-      </div>
-      <div className="min-w-0 flex-1 space-y-3">
-        {/* Text */}
-        <div className="inline-block rounded-2xl rounded-tl-sm bg-muted px-4 py-3 text-sm text-foreground">
-          {message.content}
-        </div>
-
-        {/* Inline invoice preview */}
-        {message.invoice && (
-          <div className="space-y-3">
-            <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
-              <BulgarianInvoice data={message.invoice} />
-            </div>
-
-            {/* Changed fields badge */}
-            {message.changedFields && message.changedFields.length > 0 && (
-              <p className="text-xs text-muted-foreground">
-                <span className="font-medium">{t("changedFields")}:</span>{" "}
-                {message.changedFields.join(", ")}
-              </p>
-            )}
-
-            {/* Save & download — only on the latest invoice message */}
-            {isLatestInvoice && (
-              <div className="flex flex-wrap items-center gap-2">
-                {!isInvoiceReadyForSave && (
-                  <p className="w-full text-xs text-amber-600 dark:text-amber-400">
-                    {t("missingPartiesForSave")}
-                  </p>
-                )}
-                <Button
-                  onClick={onSaveAndDownload}
-                  disabled={!isInvoiceReadyForSave || isSaving}
-                  size="sm"
-                  className="gap-2"
-                >
-                  {isSaving ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  ) : (
-                    <Download className="h-3.5 w-3.5" />
-                  )}
-                  {isSaving ? t("savingInvoice") : t("saveAndDownload")}
-                </Button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}

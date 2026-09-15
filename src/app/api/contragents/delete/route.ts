@@ -1,6 +1,6 @@
-import { prisma } from "../../../../../utility/prisma";
+import { prisma } from "@/utility/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { getUserServer } from "../../../../../utility/get-user-server";
+import { getUserServer } from "@/utility/get-user-server";
 import { notFound } from "next/navigation";
 
 export async function DELETE(request: NextRequest) {

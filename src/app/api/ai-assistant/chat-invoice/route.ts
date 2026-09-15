@@ -4,23 +4,22 @@ import { getUserServer } from "@/utility/get-user-server";
 import type { AddressData } from "@/utility/types";
 import { formatAddressForStorage } from "@/utility/company-registry-helpers";
 import { getCachedCompanyData } from "@/utility/registry-cache";
-import { getTodayForInput } from "@/utility/date-formatter";
 import type { BulgarianInvoiceData } from "../../../../types";
-import {
-  DEFAULT_CURRENCY,
-  DEFAULT_INVOICE_NUMBER,
-  DEFAULT_UNIT,
-  DEFAULT_VAT_PERCENT,
-} from "@/utility/constants";
+import { DEFAULT_INVOICE_NUMBER } from "@/utility/constants";
 import {
   fetchExternalCompanyByEik,
   normalizeText,
   normalizeEik,
-  parseDecimal,
-  toMoney,
-} from "@/utility/api-helpers/company";
-import { generateNextInvoiceNumber } from "@/utility/helpers/api-helpers";
-
+  createBaseInvoice,
+  formatInvoiceNumber,
+  generateNextInvoiceNumber,
+  mergeInvoice,
+  parseJsonAddress,
+  sanitizeEditPatch,
+  sanitizeInvoice,
+  sanitizeInvoicePatch,
+} from "@/utility/api-helpers";
+import { EXTRACT_FROM_PROMPT } from "@/utility/constants";
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -40,6 +39,9 @@ type ResolvedCompany = {
   source: CompanyResolutionSource;
   invoiceSeriesPrefix?: string | null;
   currentInvNumber?: string | null;
+  bank?: string | null;
+  iban?: string | null;
+  bic?: string | null;
 };
 
 type PromptExtraction = {
@@ -59,7 +61,6 @@ type ChatResponse = {
     intent: Intent;
     assistantMessage: string;
     invoice: BulgarianInvoiceData | null;
-    changedFields: string[];
     status:
       | "ok"
       | "unsupported"
@@ -94,66 +95,6 @@ export type AccountContragentSnapshot = {
   organizationId: number;
 };
 
-// ---------------------------------------------------------------------------
-// Extraction prompt
-// ---------------------------------------------------------------------------
-
-const EXTRACTION_PROMPT = `You are an invoice assistant intent and field extractor.
-You will receive a user prompt and optionally a current invoice draft.
-
-Return ONLY valid JSON with this exact structure:
-{
-  "intent": "create_invoice" | "edit_invoice" | "unsupported",
-  "organizationName": string,
-  "organizationEik": string,
-  "contragentName": string,
-  "contragentEik": string,
-  "invoicePatch": {
-    "invoiceNumber": string,
-    "invoiceDate": string,
-    "taxEventDate": string,
-    "location": string,
-    "sellerName": string,
-    "sellerEik": string,
-    "sellerVatNumber": string,
-    "sellerCity": string,
-    "sellerAddress": string,
-    "sellerMol": string,
-    "buyerName": string,
-    "buyerEik": string,
-    "buyerVatNumber": string,
-    "buyerCity": string,
-    "buyerAddress": string,
-    "buyerMol": string,
-    "lineItems": [{ "description": string, "unit": string, "quantity": string, "unitPrice": string, "vatPercent": string, "value": string }],
-    "subtotal": string,
-    "vatAmount": string,
-    "total": string,
-    "totalInWords": string,
-    "currency": string,
-    "bank": string,
-    "iban": string,
-    "bic": string
-  },
-  "chatResponse": string
-}
-
-Rules:
-1) intent=create_invoice when user asks to create/generate/build an invoice draft.
-2) intent=edit_invoice when user asks to change/add/edit an existing invoice field.
-3) intent=unsupported for unrelated prompts (weather, code, jokes, etc.).
-4) If user mentions only one company in a create prompt without explicit role, treat it as organization/seller by default.
-5) Extract EIK as digits only (9-13), names as plain text.
-6) CRITICAL for edit_invoice: put ONLY the fields the user explicitly asked to change into invoicePatch. Completely omit all other fields — do NOT include them as empty strings or zeroes.
-7) For create_invoice: include all fields you can extract from the prompt.
-8) For line item requests, include full line item entries.
-9) chatResponse must be short and in the same language as the user prompt.
-10) Return JSON only, no markdown or explanations.`;
-
-// ---------------------------------------------------------------------------
-// Invoice helpers
-// ---------------------------------------------------------------------------
-
 function isExplicitNewDraftPrompt(prompt: string): boolean {
   const normalized = normalizeText(prompt).toLowerCase();
   if (!normalized) return false;
@@ -171,237 +112,13 @@ function isExplicitNewDraftPrompt(prompt: string): boolean {
   ].some((token) => normalized.includes(token));
 }
 
-function formatInvoiceNumber(value: unknown): string {
-  const digitsOnly = normalizeText(value).replace(/\D/g, "");
-  if (!digitsOnly) return DEFAULT_INVOICE_NUMBER;
-  return digitsOnly.padStart(10, "0");
-}
-
-function recalculateTotals(lineItems: BulgarianInvoiceData["lineItems"]): {
-  lineItems: BulgarianInvoiceData["lineItems"];
-  subtotal: string;
-  vatAmount: string;
-  total: string;
-} {
-  const normalizedItems = (lineItems ?? []).map((item) => {
-    const quantity = parseDecimal(item.quantity);
-    const unitPrice = parseDecimal(item.unitPrice);
-    const vatPercent = parseDecimal(item.vatPercent || DEFAULT_VAT_PERCENT);
-    const value = quantity * unitPrice;
-    return {
-      description: normalizeText(item.description),
-      unit: normalizeText(item.unit) || DEFAULT_UNIT,
-      quantity: normalizeText(item.quantity) || "1",
-      unitPrice: normalizeText(item.unitPrice) || "0.00",
-      vatPercent: normalizeText(item.vatPercent) || DEFAULT_VAT_PERCENT,
-      value: toMoney(value),
-      _vatPercentNumber: vatPercent,
-      _valueNumber: value,
-    };
-  });
-
-  const subtotalNumber = normalizedItems.reduce(
-    (sum, item) => sum + item._valueNumber,
-    0,
-  );
-  const vatNumber = normalizedItems.reduce(
-    (sum, item) => sum + item._valueNumber * (item._vatPercentNumber / 100),
-    0,
-  );
-
-  return {
-    lineItems: normalizedItems.map(
-      ({ _valueNumber, _vatPercentNumber, ...rest }) => rest,
-    ),
-    subtotal: toMoney(subtotalNumber),
-    vatAmount: toMoney(vatNumber),
-    total: toMoney(subtotalNumber + vatNumber),
-  };
-}
-
-function createBaseInvoice(composerName?: string | null): BulgarianInvoiceData {
-  const today = getTodayForInput();
-  const seedLineItems: BulgarianInvoiceData["lineItems"] = [
-    {
-      description: "Услуга",
-      unit: DEFAULT_UNIT,
-      quantity: "1",
-      unitPrice: "0.00",
-      vatPercent: DEFAULT_VAT_PERCENT,
-      value: "0.00",
-    },
-  ];
-  const totals = recalculateTotals(seedLineItems);
-  return {
-    invoiceNumber: DEFAULT_INVOICE_NUMBER,
-    invoiceDate: today,
-    taxEventDate: today,
-    location: "",
-    sellerName: "",
-    sellerEik: "",
-    sellerVatNumber: "",
-    sellerCity: "",
-    sellerAddress: "",
-    sellerMol: "",
-    buyerName: "",
-    buyerEik: "",
-    buyerVatNumber: "",
-    buyerCity: "",
-    buyerAddress: "",
-    buyerMol: "",
-    lineItems: totals.lineItems,
-    subtotal: totals.subtotal,
-    vatAmount: totals.vatAmount,
-    total: totals.total,
-    totalInWords: "",
-    currency: DEFAULT_CURRENCY,
-    composer_name: normalizeText(composerName),
-    bank: "",
-    iban: "",
-    bic: "",
-  };
-}
-
-function sanitizeLineItems(
-  lineItems: unknown,
-): BulgarianInvoiceData["lineItems"] | null {
-  if (!Array.isArray(lineItems)) return null;
-  const sanitized = lineItems
-    .filter((item) => item && typeof item === "object")
-    .map((item) => {
-      const v = item as Record<string, unknown>;
-      return {
-        description: normalizeText(v.description),
-        unit: normalizeText(v.unit) || DEFAULT_UNIT,
-        quantity: normalizeText(v.quantity) || "1",
-        unitPrice: normalizeText(v.unitPrice) || "0.00",
-        vatPercent: normalizeText(v.vatPercent) || DEFAULT_VAT_PERCENT,
-        value: normalizeText(v.value),
-      };
-    });
-  return sanitized.length ? sanitized : [];
-}
-
-const PATCH_FIELDS = [
-  "invoiceNumber",
-  "invoiceDate",
-  "taxEventDate",
-  "location",
-  "sellerName",
-  "sellerEik",
-  "sellerVatNumber",
-  "sellerCity",
-  "sellerAddress",
-  "sellerMol",
-  "buyerName",
-  "buyerEik",
-  "buyerVatNumber",
-  "buyerCity",
-  "buyerAddress",
-  "buyerMol",
-  "subtotal",
-  "vatAmount",
-  "total",
-  "totalInWords",
-  "currency",
-  "bank",
-  "iban",
-  "bic",
-] as const;
-
-function sanitizeInvoicePatch(
-  patch: Partial<BulgarianInvoiceData> & {
-    lineItems?: BulgarianInvoiceData["lineItems"];
-  },
-): Partial<BulgarianInvoiceData> {
-  const sanitized: Partial<BulgarianInvoiceData> = {};
-  for (const field of PATCH_FIELDS) {
-    if (field in patch) {
-      (sanitized as Record<string, string>)[field] = normalizeText(
-        patch[field],
-      );
-    }
-  }
-  const lineItems = sanitizeLineItems(patch.lineItems);
-  if (lineItems) sanitized.lineItems = lineItems;
-  if (sanitized.sellerEik)
-    sanitized.sellerEik = normalizeEik(sanitized.sellerEik);
-  if (sanitized.buyerEik) sanitized.buyerEik = normalizeEik(sanitized.buyerEik);
-  return sanitized;
-}
-
-/**
- * Edit-safe patch — only keeps fields with non-empty values so the AI
- * cannot accidentally wipe existing invoice data when editing a subset of fields.
- */
-function sanitizeEditPatch(
-  patch: Partial<BulgarianInvoiceData> & {
-    lineItems?: BulgarianInvoiceData["lineItems"];
-  },
-): Partial<BulgarianInvoiceData> {
-  const sanitized: Partial<BulgarianInvoiceData> = {};
-  for (const field of PATCH_FIELDS) {
-    if (field in patch) {
-      const val = normalizeText(patch[field]);
-      if (val) (sanitized as Record<string, string>)[field] = val;
-    }
-  }
-  const lineItems = sanitizeLineItems(patch.lineItems);
-  if (lineItems && lineItems.length > 0) sanitized.lineItems = lineItems;
-  if (sanitized.sellerEik)
-    sanitized.sellerEik = normalizeEik(sanitized.sellerEik);
-  if (sanitized.buyerEik) sanitized.buyerEik = normalizeEik(sanitized.buyerEik);
-  return sanitized;
-}
-
-function sanitizeInvoice(invoice: BulgarianInvoiceData): BulgarianInvoiceData {
-  const patch = sanitizeInvoicePatch(invoice);
-  const base = createBaseInvoice(invoice.composer_name);
-  const merged = {
-    ...base,
-    ...patch,
-    lineItems: patch.lineItems ?? base.lineItems,
-  } as BulgarianInvoiceData;
-  const totals = recalculateTotals(merged.lineItems);
-  return {
-    ...merged,
-    lineItems: totals.lineItems,
-    subtotal: totals.subtotal,
-    vatAmount: totals.vatAmount,
-    total: totals.total,
-    invoiceNumber:
-      normalizeText(merged.invoiceNumber) || DEFAULT_INVOICE_NUMBER,
-    currency: normalizeText(merged.currency) || DEFAULT_CURRENCY,
-  };
-}
-
-function mergeInvoice(
-  current: BulgarianInvoiceData,
-  patch: Partial<BulgarianInvoiceData>,
-): BulgarianInvoiceData {
-  const merged = {
-    ...current,
-    ...patch,
-    lineItems: patch.lineItems ?? current.lineItems,
-  };
-  const totals = recalculateTotals(merged.lineItems);
-  return sanitizeInvoice({
-    ...merged,
-    lineItems: totals.lineItems,
-    subtotal: totals.subtotal,
-    vatAmount: totals.vatAmount,
-    total: totals.total,
-  });
-}
-
 // ---------------------------------------------------------------------------
 // Address
 // ---------------------------------------------------------------------------
 
 function addressFromUnknown(value: unknown): AddressData | undefined {
-  if (!value || typeof value !== "object" || Array.isArray(value))
-    return undefined;
-  return value as AddressData;
+  const parsed = parseJsonAddress(value);
+  return parsed ?? undefined;
 }
 
 // ---------------------------------------------------------------------------
@@ -413,6 +130,7 @@ function resolveFromAccountContext(input: {
   name?: string;
   eik?: string;
   accountOrgs: AccountOrgSnapshot[];
+  scopedOrganizationId?: number | null;
 }): ResolvedCompany | null {
   const name = normalizeText(input.name).toLowerCase();
   const eik = normalizeEik(input.eik);
@@ -427,6 +145,7 @@ function resolveFromAccountContext(input: {
           : false,
     );
     if (!match) return null;
+
     return {
       id: match.id,
       name: match.name,
@@ -440,10 +159,17 @@ function resolveFromAccountContext(input: {
       currentInvNumber: match.current_inv_number
         ? String(match.current_inv_number)
         : null,
+      bank: match.bank,
+      iban: match.iban,
+      bic: match.bic,
     };
   }
 
-  for (const org of input.accountOrgs) {
+  const scopedOrgs = input.scopedOrganizationId
+    ? input.accountOrgs.filter((org) => org.id === input.scopedOrganizationId)
+    : input.accountOrgs;
+
+  for (const org of scopedOrgs) {
     const match = org.contragents.find((c) =>
       eik && c.bulstat
         ? normalizeEik(c.bulstat) === eik
@@ -471,6 +197,7 @@ async function resolveFromDbByName(input: {
   role: CompanyRole;
   accountId: number;
   name?: string;
+  scopedOrganizationId?: number | null;
 }): Promise<ResolvedCompany | null> {
   const query = normalizeText(input.name);
   if (!query) return null;
@@ -490,10 +217,14 @@ async function resolveFromDbByName(input: {
         molName: true,
         email: true,
         address: true,
+        bank: true,
+        iban: true,
+        bic: true,
         invoiceSeriesPrefix: true,
         current_inv_number: true,
       },
     });
+
     if (!org?.bulstat) return null;
     return {
       id: org.id,
@@ -506,13 +237,21 @@ async function resolveFromDbByName(input: {
       source: "DB",
       invoiceSeriesPrefix: org.invoiceSeriesPrefix,
       currentInvNumber: org.current_inv_number?.toString() ?? null,
+      bank: org.bank,
+      iban: org.iban,
+      bic: org.bic,
     };
   }
 
   const c = await prisma.contragent.findFirst({
     where: {
       name: { contains: query, mode: "insensitive" },
-      organization: { accountId: input.accountId },
+      organization: {
+        accountId: input.accountId,
+        ...(input.scopedOrganizationId
+          ? { id: input.scopedOrganizationId }
+          : {}),
+      },
     },
     orderBy: { createdAt: "asc" },
     select: {
@@ -542,6 +281,7 @@ async function resolveFromDbByEik(input: {
   role: CompanyRole;
   accountId: number;
   eik?: string;
+  scopedOrganizationId?: number | null;
 }): Promise<ResolvedCompany | null> {
   const eik = normalizeEik(input.eik);
   if (!eik) return null;
@@ -557,6 +297,9 @@ async function resolveFromDbByEik(input: {
         molName: true,
         email: true,
         address: true,
+        bank: true,
+        iban: true,
+        bic: true,
         invoiceSeriesPrefix: true,
         current_inv_number: true,
       },
@@ -573,11 +316,22 @@ async function resolveFromDbByEik(input: {
       source: "DB",
       invoiceSeriesPrefix: org.invoiceSeriesPrefix,
       currentInvNumber: org.current_inv_number?.toString() ?? null,
+      bank: org.bank,
+      iban: org.iban,
+      bic: org.bic,
     };
   }
 
   const c = await prisma.contragent.findFirst({
-    where: { bulstat: eik, organization: { accountId: input.accountId } },
+    where: {
+      bulstat: eik,
+      organization: {
+        accountId: input.accountId,
+        ...(input.scopedOrganizationId
+          ? { id: input.scopedOrganizationId }
+          : {}),
+      },
+    },
     select: {
       id: true,
       name: true,
@@ -598,33 +352,6 @@ async function resolveFromDbByEik(input: {
     email: c.email,
     address: addressFromUnknown(c.address),
     source: "DB",
-  };
-}
-
-async function resolveFromCacheByName(
-  name?: string,
-): Promise<ResolvedCompany | null> {
-  const query = normalizeText(name);
-  if (!query) return null;
-
-  const hit = await prisma.companyRegistryCache.findFirst({
-    where: { name: { contains: query, mode: "insensitive" } },
-    orderBy: { lastFetchedAt: "desc" },
-    select: { bulstat: true, name: true, vatNumber: true, address: true },
-  });
-  if (!hit?.bulstat) return null;
-  await prisma.companyRegistryCache.update({
-    where: { bulstat: hit.bulstat },
-    data: { lastFetchedAt: new Date() },
-  });
-  return {
-    name: hit.name,
-    bulstat: hit.bulstat,
-    vatNumber: hit.vatNumber,
-    molName: null,
-    email: null,
-    address: addressFromUnknown(hit.address),
-    source: "CACHE",
   };
 }
 
@@ -728,6 +455,7 @@ async function resolveByEikWithFallback(input: {
   accountId: number;
   primaryOrgId: number | null;
   eik?: string;
+  scopedOrganizationId?: number | null;
 }): Promise<ResolvedCompany | null> {
   const eik = normalizeEik(input.eik);
   if (!eik) return null;
@@ -736,6 +464,7 @@ async function resolveByEikWithFallback(input: {
     role: input.role,
     accountId: input.accountId,
     eik,
+    scopedOrganizationId: input.scopedOrganizationId,
   });
   if (dbHit) return dbHit;
 
@@ -772,7 +501,7 @@ async function resolveByEikWithFallback(input: {
   return upsertExternalCompanyToDb({
     role: input.role,
     accountId: input.accountId,
-    primaryOrgId: input.primaryOrgId,
+    primaryOrgId: input.scopedOrganizationId ?? input.primaryOrgId,
     resolved,
   });
 }
@@ -784,6 +513,7 @@ async function resolveCompany(input: {
   accountOrgs: AccountOrgSnapshot[];
   name?: string;
   eik?: string;
+  scopedOrganizationId?: number | null;
 }): Promise<ResolvedCompany | null> {
   const name = normalizeText(input.name);
   const eik = normalizeEik(input.eik);
@@ -793,6 +523,7 @@ async function resolveCompany(input: {
     name,
     eik,
     accountOrgs: input.accountOrgs,
+    scopedOrganizationId: input.scopedOrganizationId,
   });
   if (fromContext) return fromContext;
 
@@ -802,6 +533,7 @@ async function resolveCompany(input: {
       accountId: input.accountId,
       primaryOrgId: input.primaryOrgId,
       eik,
+      scopedOrganizationId: input.scopedOrganizationId,
     });
   }
 
@@ -809,10 +541,11 @@ async function resolveCompany(input: {
     role: input.role,
     accountId: input.accountId,
     name,
+    scopedOrganizationId: input.scopedOrganizationId,
   });
   if (fromDb) return fromDb;
 
-  return resolveFromCacheByName(name);
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -844,7 +577,7 @@ async function extractPromptData(
       {
         role: "user",
         content: [
-          { type: "input_text", text: EXTRACTION_PROMPT },
+          { type: "input_text", text: EXTRACT_FROM_PROMPT },
           { type: "input_text", text: `User prompt: ${prompt}` },
           {
             type: "input_text",
@@ -897,62 +630,6 @@ async function extractPromptData(
 }
 
 // ---------------------------------------------------------------------------
-// Changed-field tracking
-// ---------------------------------------------------------------------------
-
-function collectChangedFields(
-  previous: BulgarianInvoiceData | null,
-  next: BulgarianInvoiceData | null,
-): string[] {
-  if (!next) return [];
-  if (!previous)
-    return [
-      "invoiceNumber",
-      "invoiceDate",
-      "taxEventDate",
-      "sellerName",
-      "sellerEik",
-      "buyerName",
-      "buyerEik",
-      "lineItems",
-      "total",
-    ];
-
-  const watchedFields: Array<keyof BulgarianInvoiceData> = [
-    "invoiceNumber",
-    "invoiceDate",
-    "taxEventDate",
-    "location",
-    "sellerName",
-    "sellerEik",
-    "sellerVatNumber",
-    "sellerCity",
-    "sellerAddress",
-    "sellerMol",
-    "buyerName",
-    "buyerEik",
-    "buyerVatNumber",
-    "buyerCity",
-    "buyerAddress",
-    "buyerMol",
-    "subtotal",
-    "vatAmount",
-    "total",
-    "currency",
-    "bank",
-    "iban",
-    "bic",
-  ];
-
-  const changed = watchedFields.filter(
-    (field) => normalizeText(previous[field]) !== normalizeText(next[field]),
-  );
-  if (JSON.stringify(previous.lineItems) !== JSON.stringify(next.lineItems))
-    changed.push("lineItems");
-  return Array.from(new Set(changed));
-}
-
-// ---------------------------------------------------------------------------
 // POST handler
 // ---------------------------------------------------------------------------
 
@@ -965,7 +642,6 @@ export async function POST(request: NextRequest) {
             intent: "unsupported" as Intent,
             assistantMessage: "AI is temporarily unavailable.",
             invoice: null,
-            changedFields: [],
             status: "invalid-input" as const,
           },
         } satisfies ChatResponse,
@@ -992,7 +668,6 @@ export async function POST(request: NextRequest) {
             invoice: body.currentInvoice
               ? sanitizeInvoice(body.currentInvoice)
               : null,
-            changedFields: [],
             status: "invalid-input" as const,
           },
         } satisfies ChatResponse,
@@ -1013,7 +688,6 @@ export async function POST(request: NextRequest) {
             assistantMessage:
               "I couldn't find an account to build your invoice draft.",
             invoice: null,
-            changedFields: [],
             status: "invalid-input" as const,
           },
         } satisfies ChatResponse,
@@ -1084,7 +758,6 @@ export async function POST(request: NextRequest) {
             invoice: body.currentInvoice
               ? sanitizeInvoice(body.currentInvoice)
               : null,
-            changedFields: [],
             status: "unsupported" as const,
           },
         } satisfies ChatResponse,
@@ -1105,7 +778,6 @@ export async function POST(request: NextRequest) {
               extraction.chatResponse ||
               "Start by asking me to generate an invoice draft first.",
             invoice: null,
-            changedFields: [],
             status: "missing-draft" as const,
           },
         } satisfies ChatResponse,
@@ -1146,10 +818,11 @@ export async function POST(request: NextRequest) {
         ? await resolveCompany({
             role: "contragent",
             accountId: accountMember.accountId,
-            primaryOrgId,
+            primaryOrgId: organizationResolved?.id ?? primaryOrgId,
             accountOrgs,
             name: contragentInputName,
             eik: contragentInputEik,
+            scopedOrganizationId: organizationResolved?.id ?? null,
           })
         : null;
 
@@ -1158,58 +831,9 @@ export async function POST(request: NextRequest) {
     const contragentLookupAsked =
       Boolean(contragentInputName) || Boolean(contragentInputEik);
 
-    // Cross-role fallback for single-company prompts
-    if (
-      organizationLookupAsked &&
-      !organizationResolved &&
-      !contragentLookupAsked
-    ) {
-      const crossHit = await resolveCompany({
-        role: "contragent",
-        accountId: accountMember.accountId,
-        primaryOrgId,
-        accountOrgs,
-        name: organizationInputName,
-        eik: organizationInputEik,
-      });
-      if (crossHit) contragentResolved = crossHit;
-    }
-    if (
-      contragentLookupAsked &&
-      !contragentResolved &&
-      !organizationLookupAsked
-    ) {
-      const crossHit = await resolveCompany({
-        role: "organization",
-        accountId: accountMember.accountId,
-        primaryOrgId,
-        accountOrgs,
-        name: contragentInputName,
-        eik: contragentInputEik,
-      });
-      if (crossHit) organizationResolved = crossHit;
-    }
-
-    const companyNotFound =
-      (organizationLookupAsked && !organizationResolved) ||
-      (contragentLookupAsked && !contragentResolved);
-
-    if (companyNotFound) {
-      return NextResponse.json(
-        {
-          data: {
-            intent: extraction.intent,
-            assistantMessage:
-              extraction.chatResponse ||
-              "I couldn't find company information from your prompt. Please verify the company name/EIK and try again.",
-            invoice: currentInvoice,
-            changedFields: [],
-            status: "company-not-found" as const,
-          },
-        } satisfies ChatResponse,
-        { status: 200 },
-      );
-    }
+    const missingOrganization =
+      organizationLookupAsked && !organizationResolved;
+    const missingContragent = contragentLookupAsked && !contragentResolved;
 
     const shouldStartFreshDraft =
       !currentInvoice ||
@@ -1244,6 +868,11 @@ export async function POST(request: NextRequest) {
         ? sanitizeEditPatch(extraction.invoicePatch)
         : sanitizeInvoicePatch(extraction.invoicePatch);
 
+    const hasExplicitInvoiceNumber = Boolean(
+      patch.invoiceNumber && normalizeText(patch.invoiceNumber),
+    );
+    const previousSellerEik = normalizeEik(currentInvoice?.sellerEik);
+
     nextInvoice = mergeInvoice(nextInvoice, patch);
 
     if (organizationResolved) {
@@ -1260,9 +889,28 @@ export async function POST(request: NextRequest) {
         normalizeText(organizationResolved.address?.street) ||
         nextInvoice.sellerAddress;
 
+      if (!normalizeText(patch.bank)) {
+        nextInvoice.bank =
+          normalizeText(organizationResolved.bank) || nextInvoice.bank;
+      }
+      if (!normalizeText(patch.iban)) {
+        nextInvoice.iban =
+          normalizeText(organizationResolved.iban) || nextInvoice.iban;
+      }
+      if (!normalizeText(patch.bic)) {
+        nextInvoice.bic =
+          normalizeText(organizationResolved.bic) || nextInvoice.bic;
+      }
+
+      const sellerWasUpdated =
+        Boolean(organizationResolved.bulstat) &&
+        organizationResolved.bulstat !== previousSellerEik;
+      const invoiceIsDefault =
+        normalizeText(nextInvoice.invoiceNumber) === DEFAULT_INVOICE_NUMBER;
+
       if (
-        shouldStartFreshDraft &&
-        !(patch.invoiceNumber && normalizeText(patch.invoiceNumber))
+        !hasExplicitInvoiceNumber &&
+        (shouldStartFreshDraft || sellerWasUpdated || invoiceIsDefault)
       ) {
         nextInvoice.invoiceNumber =
           organizationResolved.source === "DB"
@@ -1285,24 +933,53 @@ export async function POST(request: NextRequest) {
       nextInvoice.buyerAddress =
         normalizeText(contragentResolved.address?.street) ||
         nextInvoice.buyerAddress;
+    } else if (missingContragent && shouldStartFreshDraft) {
+      nextInvoice.buyerName = "";
+      nextInvoice.buyerEik = "";
+      nextInvoice.buyerVatNumber = "";
+      nextInvoice.buyerMol = "";
+      nextInvoice.buyerCity = "";
+      nextInvoice.buyerAddress = "";
     }
 
     nextInvoice = sanitizeInvoice(nextInvoice);
 
-    const changedFields = collectChangedFields(currentInvoice, nextInvoice);
+    const missingCompanyNames: string[] = [];
+    if (missingOrganization) {
+      missingCompanyNames.push(
+        organizationInputName || organizationInputEik || "продавач",
+      );
+    }
+    if (missingContragent) {
+      missingCompanyNames.push(
+        contragentInputName || contragentInputEik || "получател",
+      );
+    }
+
+    const hasMissingCompanies = missingCompanyNames.length > 0;
+    const missingMessage = hasMissingCompanies
+      ? `Компания ${missingCompanyNames.map((n) => `"${n}"`).join(" и ")} не беше намерена. Моля проверете името/ЕИК и опитайте отново или я добавете ръчно в профила.`
+      : "";
+
+    const buyerSkippedNote =
+      missingContragent && !missingOrganization
+        ? " Черновата е визуализирана без данни за получателя."
+        : "";
+
+    const assistantMessage = hasMissingCompanies
+      ? `${missingMessage}${buyerSkippedNote}`.trim()
+      : extraction.chatResponse ||
+        "I parsed your request. Please add more invoice details if needed.";
 
     return NextResponse.json(
       {
         data: {
           intent: extraction.intent,
-          assistantMessage:
-            extraction.chatResponse ||
-            (changedFields.length
-              ? `Done. Updated: ${changedFields.join(", ")}.`
-              : "I parsed your request. Please add more invoice details if needed."),
+          assistantMessage,
           invoice: nextInvoice,
-          changedFields,
-          status: "ok" as const,
+          status: hasMissingCompanies
+            ? ("company-not-found" as const)
+            : ("ok" as const),
         },
       } satisfies ChatResponse,
       { status: 200 },
@@ -1315,7 +992,6 @@ export async function POST(request: NextRequest) {
           intent: "unsupported" as Intent,
           assistantMessage: "Failed to process the request.",
           invoice: null,
-          changedFields: [],
           status: "invalid-input" as const,
         },
       } satisfies ChatResponse,
