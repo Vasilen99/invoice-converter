@@ -463,7 +463,7 @@ const BulgarianInvoice = React.forwardRef<HTMLDivElement, Props>(
                           fontWeight: 600,
                         }}
                       >
-                        {data.vatAmount}
+                        {data.vatAmount} {data.currency}
                       </td>
                     </tr>
                     <tr>

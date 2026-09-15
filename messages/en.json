@@ -121,7 +121,7 @@
     "addRow": "+ Add row",
     "row": "Row {number}",
     "invoices": "Invoices",
-    "invoicesCount": "{count}",
+    "invoicesCount": "Брой фактури:",
     "selectInvoiceToEdit": "Select an invoice from the list to edit",
     "aiSteps": {
       "step1": "Reading invoice structure…",
@@ -291,7 +291,12 @@
       "quantityMeasure": "Quantity measure",
       "unit": "Unit",
       "description": "Description",
-      "value": "Value"
+      "value": "Value",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "enterTotalInWords": "Enter the total amount in words",
+      "totalInWords": "Total amount in words",
+      "enterTotalInWordsDescription": "Please enter the total amount in words to ensure clarity and compliance with Bulgarian invoice regulations."
     },
     "step3": {
       "invoiceNumber": "Invoice number",
