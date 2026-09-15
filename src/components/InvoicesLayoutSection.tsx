@@ -109,7 +109,7 @@ export const InvoicesLayoutSection = ({
       {/* Top bar with add more and extract all */}
       <div className="flex items-center justify-between px-1">
         <div className="text-sm font-semibold text-foreground lg:flex hidden">
-          {t("invoicesCount", { count: invoices.length })} invoices
+          {t("invoicesCount", { count: invoices.length })}
         </div>
         <div className="flex lg:flex-row flex-col lg:items-center items-start gap-3">
           {allExtracted && (
@@ -339,16 +339,6 @@ export const InvoicesLayoutSection = ({
                         updateInvoiceData(selectedInvoiceId!, {
                           ...selectedInvoice.data!,
                           location: v,
-                        })
-                      }
-                    />
-                    <EditField
-                      label={t("fields.currency")}
-                      value={selectedInvoice.data.currency}
-                      onChange={(v) =>
-                        updateInvoiceData(selectedInvoiceId!, {
-                          ...selectedInvoice.data!,
-                          currency: v,
                         })
                       }
                     />
@@ -643,6 +633,16 @@ export const InvoicesLayoutSection = ({
                       }
                     />
                     <EditField
+                      label={t("fields.currency")}
+                      value={selectedInvoice.data.currency}
+                      onChange={(v) =>
+                        updateInvoiceData(selectedInvoiceId!, {
+                          ...selectedInvoice.data!,
+                          currency: v,
+                        })
+                      }
+                    />
+                    <EditField
                       label={t("fields.vatAmount")}
                       value={selectedInvoice.data.vatAmount}
                       onChange={(v) =>
@@ -652,6 +652,7 @@ export const InvoicesLayoutSection = ({
                         })
                       }
                     />
+                    <div />
                     <EditField
                       label={t("fields.total")}
                       value={selectedInvoice.data.total}

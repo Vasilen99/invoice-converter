@@ -79,6 +79,7 @@ export default function GeneratedInvoices({
   const [bank, setBank] = useState<string>("");
   const [iban, setIban] = useState<string>("");
   const [bic, setBic] = useState<string>("");
+  const [totalInWords, setTotalInWords] = useState<string>("");
   const [selectedOrganizationDetails, setSelectedOrganizationDetails] =
     useState<OrganizationDetails | null>(null);
   const [selectedContragentDetails, setSelectedContragentDetails] =
@@ -267,7 +268,7 @@ export default function GeneratedInvoices({
       subtotal: totals.subtotal.toFixed(2),
       vatAmount: totals.vatAmount.toFixed(2),
       total: totals.total.toFixed(2),
-      totalInWords: "",
+      totalInWords: totalInWords,
       currency,
       composer_name: resolvedComposerName || "",
       bank: bank.trim(),
@@ -304,6 +305,7 @@ export default function GeneratedInvoices({
     setTaxEventDate(templateData.taxEventDate || today);
     setCurrency(templateData.currency || "EUR");
     setLocation(templateData.location || "");
+    setTotalInWords("");
     setSelectedOrganizationDetails(templateData.organization || null);
     setSelectedContragentDetails(templateData.contragent || null);
     setResolvedComposerName(templateData.composerName ?? composerName ?? "");
@@ -658,6 +660,9 @@ export default function GeneratedInvoices({
                   onUpdateLineItem={updateLineItem}
                   onRemoveLineItem={removeLineItem}
                   layout="vertical"
+                  totalInWords={totalInWords}
+                  onTotalInWordsChange={setTotalInWords}
+                  currency={currency}
                 />
 
                 <StepThreeContent

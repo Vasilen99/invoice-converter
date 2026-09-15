@@ -190,15 +190,15 @@ function buildHtml(data: BulgarianInvoiceData): string {
       <tbody>
         <tr>
           <td class="label-td">Данъчна основа (20.00%):</td>
-          <td style="background:#fff;text-align:right;font-weight:600">${v(data.subtotal)}</td>
+          <td style="background:#fff;text-align:right;font-weight:600">${v(data.subtotal)} ${v(data.currency)}</td>
         </tr>
         <tr>
           <td class="label-td">Начислен ДДС (20.00%):</td>
-          <td style="background:#fff;text-align:right;font-weight:600">${v(data.vatAmount)}</td>
+          <td style="background:#fff;text-align:right;font-weight:600">${v(data.vatAmount)} ${v(data.currency)}</td>
         </tr>
         <tr class="totals-total-row">
           <td class="lbl label-td">Сума за плащане:</td>
-          <td class="val">${v(data.total)}</td>
+          <td class="val">${v(data.total)} ${v(data.currency)}</td>
         </tr>
         <tr class="totals-words">
           <td colspan="2"><strong>Словом: </strong>${v(data.totalInWords)}</td>

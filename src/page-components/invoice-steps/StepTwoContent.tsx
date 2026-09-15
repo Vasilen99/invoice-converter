@@ -39,6 +39,9 @@ interface StepTwoContentProps {
   ) => void;
   onRemoveLineItem: (id: string) => void;
   layout?: "horizontal" | "vertical";
+  totalInWords: string;
+  onTotalInWordsChange: (value: string) => void;
+  currency?: string;
 }
 
 export const StepTwoContent: React.FC<StepTwoContentProps> = ({
@@ -51,6 +54,9 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
   onUpdateLineItem,
   onRemoveLineItem,
   layout = "horizontal",
+  totalInWords,
+  onTotalInWordsChange,
+  currency = "EUR",
 }) => {
   const t = useTranslations("createInvoice.step2");
   return (
@@ -172,6 +178,66 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
           </div>
         ))}
       </div>
+
+      {/* Totals Summary and Total in Words */}
+      {lineItemsWithTotals.length > 0 && (
+        <div className="flex flex-col gap-4">
+          <div className="rounded-lg border p-4 text-sm bg-muted/30">
+            <div className="flex justify-between mb-2">
+              <span className="font-medium">{t("subtotal")}:</span>
+              <span>
+                {lineItemsWithTotals
+                  .reduce((acc, item) => acc + item.lineTotal, 0)
+                  .toFixed(2)}{" "}
+                {currency}
+              </span>
+            </div>
+            <div className="flex justify-between mb-3">
+              <span className="font-medium">{t("VAT")}:</span>
+              <span>
+                {lineItemsWithTotals
+                  .reduce((acc, item) => {
+                    const vatPercent = Number.parseFloat(item.vatPercent) || 0;
+                    return acc + item.lineTotal * (vatPercent / 100);
+                  }, 0)
+                  .toFixed(2)}{" "}
+                {currency}
+              </span>
+            </div>
+            <div className="border-t pt-3 flex justify-between">
+              <span className="font-bold">{t("total")}:</span>
+              <span className="font-bold">
+                {(
+                  lineItemsWithTotals.reduce(
+                    (acc, item) => acc + item.lineTotal,
+                    0,
+                  ) +
+                  lineItemsWithTotals.reduce((acc, item) => {
+                    const vatPercent = Number.parseFloat(item.vatPercent) || 0;
+                    return acc + item.lineTotal * (vatPercent / 100);
+                  }, 0)
+                ).toFixed(2)}{" "}
+                {currency}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>{t("totalInWords") || "Total in Words"}</Label>
+            <Input
+              value={totalInWords}
+              onChange={(event) => onTotalInWordsChange(event.target.value)}
+              placeholder={
+                t("enterTotalInWords") || "Enter total amount in words"
+              }
+            />
+            <p className="text-xs text-muted-foreground">
+              {t("enterTotalInWordsDescription") ||
+                "Write the total amount in Bulgarian words based on the calculated sum above"}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

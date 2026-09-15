@@ -121,7 +121,7 @@
     "addRow": "+ Добави ред",
     "row": "Ред {number}",
     "invoices": "Фактури",
-    "invoicesCount": "{count}",
+    "invoicesCount": "Брой фактури:",
     "selectInvoiceToEdit": "Изберете фактура от списъка, за да редактирате",
     "aiSteps": {
       "step1": "Четене на структурата на фактурата…",
@@ -287,7 +287,12 @@
       "quantity": "Количество",
       "unit": "Мярка",
       "description": "Описание",
-      "value": "Стойност"
+      "value": "Стойност",
+      "subtotal": "Междинна сума",
+      "total": "Общо за плащане",
+      "enterTotalInWords": "Въведете общата сума с думи",
+      "totalInWords": "Обща сума с думи",
+      "enterTotalInWordsDescription": "Моля, въведете общата сума с думи, за да се осигури яснота и съответствие с българските изисквания за фактури."
     },
     "step3": {
       "invoiceNumber": "Номер на фактура",

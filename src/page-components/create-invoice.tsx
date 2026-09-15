@@ -88,6 +88,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
   const [bank, setBank] = useState<string>("");
   const [iban, setIban] = useState<string>("");
   const [bic, setBic] = useState<string>("");
+  const [totalInWords, setTotalInWords] = useState<string>("");
   const [selectedOrganizationDetails, setSelectedOrganizationDetails] =
     useState<OrganizationDetails | null>(null);
   const [selectedContragentDetails, setSelectedContragentDetails] =
@@ -177,6 +178,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
     setBank("");
     setIban("");
     setBic("");
+    setTotalInWords("");
     setSelectedOrganizationDetails(null);
     setSelectedContragentDetails(null);
 
@@ -285,7 +287,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
       subtotal: totals.subtotal.toFixed(2),
       vatAmount: totals.vatAmount.toFixed(2),
       total: totals.total.toFixed(2),
-      totalInWords: "",
+      totalInWords: totalInWords,
       currency,
       composer_name: data?.composer_name || "",
       bank: bank.trim(),
@@ -487,6 +489,9 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
       onAddManualLineItem={addManualLineItem}
       onUpdateLineItem={updateLineItem}
       onRemoveLineItem={removeLineItem}
+      totalInWords={totalInWords}
+      onTotalInWordsChange={setTotalInWords}
+      currency={currency}
     />
   );
 
