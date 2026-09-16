@@ -75,7 +75,7 @@ export default function ContragentsPage({
     <>
       <div className="text-2xl">
         <FadeIn delay={0.01}>
-          <div className="grid lg:grid-cols-2 lg:gap-0 grid-cols-1 gap-3 justify-between lg:items-start">
+          <div className="grid lg:grid-cols-2 lg:gap-0 grid-cols-1 gap-3 justify-between lg:items-start lg:mb-0 mb-6">
             <HeadingSection
               title={t("contragents.contragentsHeader")}
               subtitle={t("contragents.contragentsSubheader")}
@@ -106,18 +106,22 @@ export default function ContragentsPage({
                   exit={{ opacity: 0, y: -10 }}
                   className="flex flex-col gap-2 items-start p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors"
                 >
-                  <div className="flex lg:flex-row flex-col gap-2 lg:w-full w-fit justify-between lg:items-start items-center">
-                    <div className="flex lg:flex-row flex-col gap-2 flex-1 lg:items-center items-start">
-                      <span className="font-semibold">{cont.name}</span>
+                  <div className="flex lg:flex-row flex-col gap-2 w-full  lg:justify-between justify-center lg:items-start items-center">
+                    <div className="flex lg:flex-row flex-col gap-2 flex-1 items-center">
+                      <span className="lg:text-2xl text-xl font-semibold shrink text-center line-clamp-2">
+                        {cont.name}
+                      </span>
                       {cont.bulstat && (
                         <span className="text-sm bg-foreground text-primary-foreground font-semibold px-2 py-1 rounded">
                           {cont.bulstat}
                         </span>
                       )}
                       {cont.organizationName && (
-                        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                        <div className="flex lg:flex-row flex-col items-center gap-1.5 text-sm text-muted-foreground">
                           <Building2 size={14} />
-                          <span>{cont.organizationName}</span>
+                          <span className="lg:text-start text-center">
+                            {cont.organizationName}
+                          </span>
                         </div>
                       )}
                     </div>

@@ -19,7 +19,7 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
   if (!isOpen || !invoiceData) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
       <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between bg-linear-to-r from-blue-600 to-blue-700 px-6 py-4">

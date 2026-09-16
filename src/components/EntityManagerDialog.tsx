@@ -578,7 +578,7 @@ export function EntityManagerDialog(props: EntityManagerDialogProps) {
       <DialogContent
         from="bottom"
         overlayClassName="bg-background/60 backdrop-blur-md"
-        className="glass max-w-[min(850px,calc(100%-2rem))] rounded-2xl border border-border p-8 shadow-2xl"
+        className="glass max-w-[min(850px,calc(100%-2rem))] flex justify-center items-center rounded-2xl border border-border p-8 shadow-2xl"
       >
         <motion.div
           initial="hidden"

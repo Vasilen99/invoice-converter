@@ -235,6 +235,11 @@ export function sanitizeInvoice(
   } as BulgarianInvoiceData;
   const totals = recalculateTotals(merged.lineItems);
   const today = getTodayForInput();
+  const normalizedIncomingTotal = normalizeText(merged.total);
+  const normalizedIncomingTotalInWords = normalizeText(merged.totalInWords);
+  const shouldKeepProvidedTotalInWords =
+    normalizedIncomingTotalInWords.length > 0 &&
+    normalizedIncomingTotal === totals.total;
 
   return {
     ...merged,
@@ -242,7 +247,9 @@ export function sanitizeInvoice(
     subtotal: totals.subtotal,
     vatAmount: totals.vatAmount,
     total: totals.total,
-    totalInWords: normalizeText(merged.totalInWords),
+    totalInWords: shouldKeepProvidedTotalInWords
+      ? normalizedIncomingTotalInWords
+      : "",
     invoiceNumber:
       normalizeText(merged.invoiceNumber) || DEFAULT_INVOICE_NUMBER,
     invoiceDate: normalizeText(merged.invoiceDate) || today,

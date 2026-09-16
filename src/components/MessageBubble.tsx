@@ -54,18 +54,19 @@ export function MessageBubble({
           {message.content}
         </div>
 
-        {/* Debug indicator */}
-        {process.env.NODE_ENV === "development" && message.invoice && (
-          <div className="text-xs text-gray-500">
-            [Invoice data present: {Object.keys(message.invoice).length} fields]
-          </div>
-        )}
-
         {/* Inline invoice preview */}
         {message.invoice && (
           <div className="space-y-3">
-            <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
-              <BulgarianInvoice data={message.invoice} />
+            <div className="w-full overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
+              {/* CSS zoom shrinks both visuals AND layout space — no overflow, no empty whitespace */}
+              <div
+                style={{
+                  zoom: 0.5,
+                }}
+                className="pointer-events-none"
+              >
+                <BulgarianInvoice data={message.invoice} />
+              </div>
             </div>
 
             {/* Save & download — only on the latest invoice message */}

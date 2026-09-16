@@ -20,9 +20,6 @@ import {
   sanitizeInvoicePatch,
 } from "@/utility/api-helpers";
 import { EXTRACT_FROM_PROMPT } from "@/utility/constants";
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 type Intent = "create_invoice" | "edit_invoice" | "unsupported";
 type CompanyRole = "organization" | "contragent";
@@ -95,23 +92,6 @@ export type AccountContragentSnapshot = {
   organizationId: number;
 };
 
-function isExplicitNewDraftPrompt(prompt: string): boolean {
-  const normalized = normalizeText(prompt).toLowerCase();
-  if (!normalized) return false;
-  return [
-    "new invoice",
-    "new draft",
-    "start new",
-    "create new",
-    "reset invoice",
-    "restart invoice",
-    "нова фактура",
-    "нова чернова",
-    "започни нова",
-    "създай нова",
-  ].some((token) => normalized.includes(token));
-}
-
 // ---------------------------------------------------------------------------
 // Address
 // ---------------------------------------------------------------------------
@@ -145,7 +125,6 @@ function resolveFromAccountContext(input: {
           : false,
     );
     if (!match) return null;
-
     return {
       id: match.id,
       name: match.name,
@@ -165,11 +144,36 @@ function resolveFromAccountContext(input: {
     };
   }
 
-  const scopedOrgs = input.scopedOrganizationId
-    ? input.accountOrgs.filter((org) => org.id === input.scopedOrganizationId)
-    : input.accountOrgs;
+  // If scoped to a specific org, try that org first
+  if (input.scopedOrganizationId) {
+    const scopedOrg = input.accountOrgs.find(
+      (org) => org.id === input.scopedOrganizationId,
+    );
+    if (scopedOrg) {
+      const match = scopedOrg.contragents.find((c) =>
+        eik && c.bulstat
+          ? normalizeEik(c.bulstat) === eik
+          : name
+            ? c.name.toLowerCase().includes(name)
+            : false,
+      );
+      if (match) {
+        return {
+          id: match.id,
+          name: match.name,
+          bulstat: normalizeEik(match.bulstat),
+          vatNumber: match.vatNumber,
+          molName: match.molName,
+          email: null,
+          address: addressFromUnknown(match.address),
+          source: "DB",
+        };
+      }
+    }
+  }
 
-  for (const org of scopedOrgs) {
+  // Search globally across all organizations' contragents
+  for (const org of input.accountOrgs) {
     const match = org.contragents.find((c) =>
       eik && c.bulstat
         ? normalizeEik(c.bulstat) === eik
@@ -177,6 +181,7 @@ function resolveFromAccountContext(input: {
           ? c.name.toLowerCase().includes(name)
           : false,
     );
+
     if (match) {
       return {
         id: match.id,
@@ -243,14 +248,76 @@ async function resolveFromDbByName(input: {
     };
   }
 
+  // For contragents, try scoped search first if applicable
+  if (input.role === "contragent" && input.scopedOrganizationId) {
+    const searchInOrganization = await prisma.organization.findFirst({
+      where: {
+        accountId: input.accountId,
+        name: { contains: query, mode: "insensitive" },
+      },
+      select: {
+        id: true,
+        name: true,
+        bulstat: true,
+        vatNumber: true,
+        molName: true,
+        email: true,
+        address: true,
+      },
+    });
+    if (searchInOrganization?.bulstat) {
+      return {
+        id: searchInOrganization.id,
+        name: searchInOrganization.name,
+        bulstat: searchInOrganization.bulstat,
+        vatNumber: searchInOrganization.vatNumber,
+        molName: searchInOrganization.molName,
+        email: searchInOrganization.email,
+        address: addressFromUnknown(searchInOrganization.address),
+        source: "DB",
+      };
+    }
+
+    const c = await prisma.contragent.findFirst({
+      where: {
+        name: { contains: query, mode: "insensitive" },
+        organization: {
+          accountId: input.accountId,
+          id: input.scopedOrganizationId,
+        },
+      },
+      orderBy: { createdAt: "asc" },
+      select: {
+        id: true,
+        name: true,
+        bulstat: true,
+        vatNumber: true,
+        molName: true,
+        email: true,
+        address: true,
+      },
+    });
+    if (c?.bulstat) {
+      return {
+        id: c.id,
+        name: c.name,
+        bulstat: c.bulstat,
+        vatNumber: c.vatNumber,
+        molName: c.molName,
+        email: c.email,
+        address: addressFromUnknown(c.address),
+        source: "DB",
+      };
+    }
+    // If not found in scoped org, fall through to global search
+  }
+
+  // Global contragent search (no organization scope)
   const c = await prisma.contragent.findFirst({
     where: {
       name: { contains: query, mode: "insensitive" },
       organization: {
         accountId: input.accountId,
-        ...(input.scopedOrganizationId
-          ? { id: input.scopedOrganizationId }
-          : {}),
       },
     },
     orderBy: { createdAt: "asc" },
@@ -322,14 +389,47 @@ async function resolveFromDbByEik(input: {
     };
   }
 
+  // For contragents, try scoped search first if applicable
+  if (input.role === "contragent" && input.scopedOrganizationId) {
+    const c = await prisma.contragent.findFirst({
+      where: {
+        bulstat: eik,
+        organization: {
+          accountId: input.accountId,
+          id: input.scopedOrganizationId,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        bulstat: true,
+        vatNumber: true,
+        molName: true,
+        email: true,
+        address: true,
+      },
+    });
+    if (c?.bulstat) {
+      return {
+        id: c.id,
+        name: c.name,
+        bulstat: c.bulstat,
+        vatNumber: c.vatNumber,
+        molName: c.molName,
+        email: c.email,
+        address: addressFromUnknown(c.address),
+        source: "DB",
+      };
+    }
+    // If not found in scoped org, fall through to global search
+  }
+
+  // Global contragent search (no organization scope)
   const c = await prisma.contragent.findFirst({
     where: {
       bulstat: eik,
       organization: {
         accountId: input.accountId,
-        ...(input.scopedOrganizationId
-          ? { id: input.scopedOrganizationId }
-          : {}),
       },
     },
     select: {
@@ -785,9 +885,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const primaryOrg = accountOrgs[0] ?? null;
-    const primaryOrgId = primaryOrg?.id ?? null;
-
     const organizationInputName =
       normalizeText(extraction.invoicePatch.sellerName) ||
       extraction.organizationName;
@@ -801,30 +898,34 @@ export async function POST(request: NextRequest) {
       normalizeEik(extraction.invoicePatch.buyerEik) ||
       extraction.contragentEik;
 
+    // STEP 1: Resolve the organization/seller first
     let organizationResolved =
       organizationInputName || organizationInputEik
         ? await resolveCompany({
             role: "organization",
             accountId: accountMember.accountId,
-            primaryOrgId,
+            primaryOrgId: null,
             accountOrgs,
             name: organizationInputName,
             eik: organizationInputEik,
           })
         : null;
 
-    let contragentResolved =
-      contragentInputName || contragentInputEik
-        ? await resolveCompany({
-            role: "contragent",
-            accountId: accountMember.accountId,
-            primaryOrgId: organizationResolved?.id ?? primaryOrgId,
-            accountOrgs,
-            name: contragentInputName,
-            eik: contragentInputEik,
-            scopedOrganizationId: organizationResolved?.id ?? null,
-          })
-        : null;
+    // STEP 2: Resolve contragent independently — scoped to the resolved org if found,
+    // otherwise search globally across all contragents and cache
+    let contragentResolved: ResolvedCompany | null = null;
+
+    if (contragentInputName || contragentInputEik) {
+      contragentResolved = await resolveCompany({
+        role: "contragent",
+        accountId: accountMember.accountId,
+        primaryOrgId: organizationResolved?.id ?? null,
+        accountOrgs,
+        name: contragentInputName,
+        eik: contragentInputEik,
+        scopedOrganizationId: organizationResolved?.id ?? null,
+      });
+    }
 
     const organizationLookupAsked =
       Boolean(organizationInputName) || Boolean(organizationInputEik);
@@ -835,32 +936,27 @@ export async function POST(request: NextRequest) {
       organizationLookupAsked && !organizationResolved;
     const missingContragent = contragentLookupAsked && !contragentResolved;
 
+    // If organization is missing, fail fast — don't create invoice without seller
+    if (missingOrganization) {
+      return NextResponse.json(
+        {
+          data: {
+            intent: extraction.intent,
+            assistantMessage: `Компания "${organizationInputName || organizationInputEik}" не беше намерена. Моля проверете името/ЕИК и опитайте отново.`,
+            invoice: null,
+            status: "company-not-found" as const,
+          },
+        } satisfies ChatResponse,
+        { status: 200 },
+      );
+    }
+
     const shouldStartFreshDraft =
-      !currentInvoice ||
-      (extraction.intent === "create_invoice" &&
-        isExplicitNewDraftPrompt(prompt));
+      !currentInvoice || extraction.intent === "create_invoice";
 
     let nextInvoice = shouldStartFreshDraft
       ? createBaseInvoice(composerName)
       : (currentInvoice as BulgarianInvoiceData);
-
-    if (primaryOrg && shouldStartFreshDraft) {
-      nextInvoice.sellerName = primaryOrg.name;
-      nextInvoice.sellerEik = normalizeEik(primaryOrg.bulstat);
-      nextInvoice.sellerVatNumber = normalizeText(primaryOrg.vatNumber);
-      nextInvoice.sellerMol = normalizeText(primaryOrg.molName);
-      const orgAddr = addressFromUnknown(primaryOrg.address);
-      nextInvoice.sellerCity =
-        normalizeText(orgAddr?.settlement) || nextInvoice.sellerCity;
-      nextInvoice.sellerAddress = normalizeText(orgAddr?.street);
-      nextInvoice.bank = normalizeText(primaryOrg.bank);
-      nextInvoice.iban = normalizeText(primaryOrg.iban);
-      nextInvoice.bic = normalizeText(primaryOrg.bic);
-      nextInvoice.invoiceNumber = generateNextInvoiceNumber(
-        primaryOrg.invoiceSeriesPrefix,
-        primaryOrg.current_inv_number,
-      );
-    }
 
     // Apply AI patch — edit-safe for edits (only non-empty changed fields), full for creates
     const patch =
@@ -941,15 +1037,9 @@ export async function POST(request: NextRequest) {
       nextInvoice.buyerCity = "";
       nextInvoice.buyerAddress = "";
     }
-
     nextInvoice = sanitizeInvoice(nextInvoice);
 
     const missingCompanyNames: string[] = [];
-    if (missingOrganization) {
-      missingCompanyNames.push(
-        organizationInputName || organizationInputEik || "продавач",
-      );
-    }
     if (missingContragent) {
       missingCompanyNames.push(
         contragentInputName || contragentInputEik || "получател",
@@ -957,17 +1047,8 @@ export async function POST(request: NextRequest) {
     }
 
     const hasMissingCompanies = missingCompanyNames.length > 0;
-    const missingMessage = hasMissingCompanies
-      ? `Компания ${missingCompanyNames.map((n) => `"${n}"`).join(" и ")} не беше намерена. Моля проверете името/ЕИК и опитайте отново или я добавете ръчно в профила.`
-      : "";
-
-    const buyerSkippedNote =
-      missingContragent && !missingOrganization
-        ? " Черновата е визуализирана без данни за получателя."
-        : "";
-
     const assistantMessage = hasMissingCompanies
-      ? `${missingMessage}${buyerSkippedNote}`.trim()
+      ? `Компания ${missingCompanyNames.map((n) => `"${n}"`).join(" и ")} не беше намерена. Моля проверете името/ЕИК и опитайте отново.`
       : extraction.chatResponse ||
         "I parsed your request. Please add more invoice details if needed.";
 

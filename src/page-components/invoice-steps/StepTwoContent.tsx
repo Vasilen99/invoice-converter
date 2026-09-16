@@ -65,7 +65,7 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
       {lineItemTemplates.length > 0 && (
         <div className="flex flex-col gap-3">
           <h4 className="font-medium text-sm">{t("previouslyAddedItems")}</h4>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 max-h-50 overflow-y-auto">
             {lineItemTemplates.map((template, index) => {
               const selected = selectedTemplates.includes(String(index));
               return (
@@ -107,7 +107,7 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
         </Button>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col overflow-y-auto gap-3">
         {lineItemsWithTotals.map((item) => (
           <div
             key={item.id}
@@ -116,8 +116,9 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
             }`}
           >
             <div className="lg:col-span-4 flex lg:flex-col flex-row gap-2">
-              <Label>{t("description")}</Label>
+              <Label className="flex-1 lg:flex-none">{t("description")}</Label>
               <Input
+                className="flex-1 lg:flex-none"
                 value={item.description}
                 onChange={(event) =>
                   onUpdateLineItem(item.id, "description", event.target.value)
@@ -125,8 +126,9 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
               />
             </div>
             <div className="lg:col-span-1 flex lg:flex-col flex-row gap-2">
-              <Label>{t("unit")}</Label>
+              <Label className="flex-1 lg:flex-none">{t("unit")}</Label>
               <Input
+                className="flex-1 lg:flex-none"
                 value={item.unit}
                 onChange={(event) =>
                   onUpdateLineItem(item.id, "unit", event.target.value)
@@ -134,8 +136,9 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
               />
             </div>
             <div className="lg:col-span-1 flex lg:flex-col flex-row gap-2">
-              <Label>{t("quantity")}</Label>
+              <Label className="flex-1 lg:flex-none">{t("quantity")}</Label>
               <Input
+                className="flex-1 lg:flex-none"
                 value={item.quantity}
                 onChange={(event) =>
                   onUpdateLineItem(item.id, "quantity", event.target.value)
@@ -143,8 +146,9 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
               />
             </div>
             <div className="lg:col-span-2 flex lg:flex-col flex-row gap-2">
-              <Label>{t("unitPrice")}</Label>
+              <Label className="flex-1 lg:flex-none">{t("unitPrice")}</Label>
               <Input
+                className="flex-1 lg:flex-none"
                 value={item.unitPrice}
                 onChange={(event) =>
                   onUpdateLineItem(item.id, "unitPrice", event.target.value)
@@ -152,8 +156,9 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
               />
             </div>
             <div className="lg:col-span-1 flex lg:flex-col flex-row gap-2">
-              <Label>{t("VAT")} %</Label>
+              <Label className="flex-1 lg:flex-none">{t("VAT")} %</Label>
               <Input
+                className="flex-1 lg:flex-none"
                 value={item.vatPercent}
                 onChange={(event) =>
                   onUpdateLineItem(item.id, "vatPercent", event.target.value)
@@ -161,12 +166,12 @@ export const StepTwoContent: React.FC<StepTwoContentProps> = ({
               />
             </div>
             <div className="lg:col-span-2 flex lg:flex-col flex-row gap-2">
-              <Label>{t("value")}</Label>
-              <div className="flex items-center h-10 rounded-md border border-input bg-background px-3 py-2">
+              <Label className="flex-1 lg:flex-none">{t("value")}</Label>
+              <div className="flex items-center flex-1 lg:flex-none h-10 rounded-md border border-input bg-background px-3 py-2">
                 {item.lineTotal.toFixed(2)}
               </div>
             </div>
-            <div className="lg:col-span-1 flex items-start">
+            <div className="lg:col-span-1 flex rounded-full">
               <Button
                 size="sm"
                 variant="destructive"

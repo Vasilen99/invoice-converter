@@ -305,7 +305,7 @@ export default function Dashboard() {
     <SidebarProvider defaultOpen={!isMobile}>
       <DashboardSidebarContent />
       <SidebarInset>
-        <header className="flex h-14 items-center gap-3 border-b border-border px-4 md:hidden">
+        <header className="flex h-14 items-center gap-3 px-4 md:hidden">
           <SidebarTrigger className="size-9 text-foreground hover:text-foreground transition-colors" />
         </header>
         {/* main dashboard content goes here */}

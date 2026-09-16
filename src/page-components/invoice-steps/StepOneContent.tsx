@@ -26,6 +26,10 @@ interface StepOneContentProps {
   isLoadingPrefill: boolean;
 }
 
+const truncateText = (text: string, maxLength: number = 20): string => {
+  return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+};
+
 export const StepOneContent: React.FC<StepOneContentProps> = ({
   organizations,
   selectedOrganization,
@@ -55,7 +59,11 @@ export const StepOneContent: React.FC<StepOneContentProps> = ({
           disabled={isLoadingPrefill}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={t("selectOrganization")} />
+            <SelectValue placeholder={t("selectOrganization")}>
+              {selectedOrganization
+                ? truncateText(selectedOrganization.name)
+                : null}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent className="bg-primary-foreground">
             {organizations.map((org) => (
@@ -85,7 +93,11 @@ export const StepOneContent: React.FC<StepOneContentProps> = ({
           disabled={!selectedOrganization || isLoadingPrefill}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={t("selectContragent")} />
+            <SelectValue placeholder={t("selectContragent")}>
+              {selectedContragent
+                ? truncateText(selectedContragent.name)
+                : null}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent className="bg-primary-foreground">
             {contragents.map((contragent) => (

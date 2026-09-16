@@ -108,14 +108,15 @@ Return ONLY valid JSON with this exact structure:
 
 Rules:
 1) intent=create_invoice when user asks to create/generate/build an invoice draft.
-2) intent=edit_invoice when user asks to change/add/edit an existing invoice field.
+2) intent=edit_invoice when user asks to change/add/edit/remove an existing invoice field. This includes adding, removing or updating line items, changing invoice number, dates, etc.
 3) intent=unsupported for unrelated prompts (weather, code, jokes, etc.).
 4) If user mentions only one company in a create prompt without explicit role, treat it as organization/seller by default.
 5) Extract EIK as digits only (9-13), names as plain text.
 6) CRITICAL for edit_invoice: put ONLY the fields the user explicitly asked to change into invoicePatch. Completely omit all other fields — do NOT include them as empty strings or zeroes.
 7) For create_invoice: include all fields you can extract from the prompt.
-8) For line item requests, include full line item entries.
+8) CRITICAL for lineItems in edit_invoice: when the user asks to add, remove, or update any line item (including quantity/price changes), you MUST return the COMPLETE final lineItems array reflecting ALL items that should remain after the edit — including unchanged existing items from the current invoice draft. Do NOT return only the changed item. Omit lineItems entirely only if no line item change was requested.
 9) chatResponse must be short and in the same language as the user prompt.
 10) Return JSON only, no markdown or explanations.
 11) If currency is specified as direct name (e.g., "euro", "долар"), convert it to the appropriate currency code (e.g., "EUR", "USD").
-12) totalInWords must be in Bulgarian and shall represent the "total" including VAT, even if the prompt is in another language.`;
+12) totalInWords must be in Bulgarian and shall represent the "total" including VAT (default 20%), even if the prompt is in another language. 
+13) When user is adding/editing/removing line items u shall rewrite the new price from the total field into totalInWords in Bulgarian words (e.g. "Деветстотин и шестдесет евро").`;

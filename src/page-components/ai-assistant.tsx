@@ -17,6 +17,7 @@ import { hasRequiredInvoiceFields } from "@/utility/api-helpers/invoice";
 import type { ChatMessage, ChatRole } from "@/utility/types/ai-chat";
 import dynamic from "next/dynamic";
 import { callApi } from "@/utility/hooks/apiFetch";
+import { HeadingSection } from "@/components/HeadingSection";
 
 const MessageBubble = dynamic(
   () => import("@/components/MessageBubble").then((mod) => mod.MessageBubble),
@@ -31,10 +32,6 @@ const ConfirmationDialog = dynamic(
     ssr: false,
   },
 );
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 type AccountOrgSnapshot = {
   id: number;
@@ -70,24 +67,6 @@ export type AccountContext = {
   }[];
 };
 
-type ChatApiResponse = {
-  data: {
-    intent: "create_invoice" | "edit_invoice" | "unsupported";
-    assistantMessage: string;
-    invoice: BulgarianInvoiceData | null;
-    status:
-      | "ok"
-      | "unsupported"
-      | "missing-draft"
-      | "company-not-found"
-      | "invalid-input";
-  } | null;
-};
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
 function buildWelcomeMessage(
   t: ReturnType<typeof useTranslations>,
 ): ChatMessage {
@@ -98,10 +77,6 @@ function buildWelcomeMessage(
     createdAt: new Date().toISOString(),
   };
 }
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 export function AIAssistantPage({ account }: { account: AccountContext }) {
   const t = useTranslations("aiChat");
@@ -384,12 +359,7 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
     <div className="mx-auto flex h-[calc(100vh-8rem)] max-w-4xl flex-col">
       {/* Header */}
       <div className="flex shrink-0 items-center justify-between py-4">
-        <div>
-          <h1 className="text-xl font-semibold text-foreground">
-            {t("title")}
-          </h1>
-          <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
-        </div>
+        <HeadingSection title={t("title")} subtitle={t("subtitle")} />
         <Button
           variant="outline"
           size="sm"
