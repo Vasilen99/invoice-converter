@@ -1,46 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "../../../../utility/prisma";
-import { getUserServer } from "../../../../utility/get-user-server";
-const PROMPT = `You are an invoice data extraction specialist. Extract all available data from this Stripe invoice PDF and return it as a valid JSON object with the following structure (use empty string "" for missing fields):
-{
-  "invoiceNumber": string,
-  "invoiceDate": string,
-  "taxEventDate": string,
-  "location": string,
-  "sellerName": string,
-  "sellerEik": string,
-  "sellerVatNumber": string,
-  "sellerCity": string,
-  "sellerAddress": string,
-  "sellerMol": string,
-  "buyerName": string,
-  "buyerEik": string,
-  "buyerVatNumber": string,
-  "buyerCity": string,
-  "buyerAddress": string,
-  "buyerMol": string,
-  "lineItems": [{ "description": string, "unit": string, "quantity": string, "unitPrice": string, "vatPercent": string, "value": string }],
-  "subtotal": string,
-  "vatAmount": string,
-  "total": string,
-  "totalInWords": string,
-  "currency": string
-}
-
-Notes:
-- invoiceDate and taxEventDate should be in DD-MM-YYYY format
-- for taxEventDate, look for "Дата на данъчно събитие" / "Tax Event Date" / "Падеж" / "Due Date" / "Дата на падеж"
-- SELLER (sellerName, sellerEik, etc.) is the company/entity that ISSUED the invoice (the "From" or "Billed by" section)
-- BUYER (buyerName, buyerEik, etc.) is the company/entity that RECEIVES the invoice (the "Bill to" or "Customer" section)
-- For sellerEik and buyerEik try to find company registration numbers / EIK / tax IDs
-- For sellerVatNumber and buyerVatNumber look for VAT / ДДС numbers (prefix with BG if Bulgarian)
-- For sellerMol and buyerMol look for the person responsible / МОЛ / contact person
-- For lineItems.unit use "бр." if not specified
-- For lineItems.vatPercent use "20.00" if not specified
-- For totalInWords write the total amount in Bulgarian words (e.g. "Деветстотин и шестдесет евро")
-- Return ONLY the JSON object, no extra text.`;
-
-const DEFAULT_INVOICE_NUMBER = "0000000000";
+import { prisma } from "@/utility/prisma";
+import { getUserServer } from "@/utility/get-user-server";
+import { EXTRACT_PROMPT, DEFAULT_INVOICE_NUMBER } from "@/utility/constants";
 
 function normalizeBulstat(value: string | undefined | null): string {
   return (value ?? "").trim();
@@ -96,7 +57,7 @@ export async function POST(req: NextRequest) {
             },
             {
               type: "input_text",
-              text: PROMPT,
+              text: EXTRACT_PROMPT,
             },
           ],
         },

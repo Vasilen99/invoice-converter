@@ -174,6 +174,8 @@
     "alerts": {
       "requiredEikHeader": "EIK/BULSTAT is required",
       "requiredEikMessage": "Both seller and buyer EIK/BULSTAT are required before generating an invoice. Please update invoice: {filename}",
+      "requiredInvoiceFieldsHeader": "Required invoice fields are missing",
+      "requiredInvoiceFieldsMessage": "Please provide seller and buyer company name and EIK/BULSTAT, plus at least one line item, before saving the invoice.",
       "invalidInvoicePayloadHeader": "Invalid invoice data",
       "invalidInvoicePayloadMessage": "Invoice data is missing or invalid. Please re-extract and try again.",
       "accountRequiredHeader": "Account is required",
@@ -198,6 +200,7 @@
     "overview": "Overview",
     "reports": "Reports",
     "aiConvertor": "AI Convertor",
+    "aiAssistant": "AI Assistant",
     "documents": "Documents",
     "createInvoice": "Create Invoice",
     "uploadDocument": "Upload document",
@@ -601,6 +604,43 @@
   },
   "redirectLogin": {
     "redirectHeader": "Redirecting to Google login..."
+  },
+  "aiChat": {
+    "title": "AI Invoice Assistant",
+    "subtitle": "Create and refine invoices. The assistant only supports invoice generation and edits.",
+    "messagesTitle": "Conversation",
+    "newDraft": "New chat",
+    "welcome": "Hello! Tell me what invoice to generate (company name/EIK, service, amount) and I’ll create a draft. Then ask for edits with another prompt.",
+    "generating": "Processing your request...",
+    "inputLabel": "Message",
+    "placeholder": "Example: Generate invoice for company with EIK 123456789, service Monthly support - 1200 BGN",
+    "inputHint": "Press Enter to send · Shift+Enter for a new line",
+    "send": "Send",
+    "previewTitle": "Invoice preview",
+    "saveAndDownload": "Save & download PDF",
+    "savingInvoice": "Saving...",
+    "emptyPreview": "Invoice preview will appear here after your first request.",
+    "invoiceNumber": "Invoice number",
+    "buyer": "Buyer",
+    "total": "Total",
+    "missingPartiesForSave": "Add seller and buyer company name + EIK/BULSTAT, and at least one line item, before saving and downloading the PDF.",
+    "newDraftCreated": "Started a fresh draft session.",
+    "unsupportedPromptFallback": "I currently support only invoice generation and invoice edits.",
+    "missingDraftFallback": "Please ask me to generate an invoice draft first, then I can edit it.",
+    "companyNotFoundFallback": "I couldn't find available company information. Please verify the company name/EIK and try again.",
+    "invalidInputFallback": "I couldn't process this request. Please rephrase it with invoice details.",
+    "serverProcessingError": "There was a server error while processing your request. Please try again.",
+    "invoiceSavedHeader": "Invoice saved",
+    "invoiceSavedAndDownloaded": "Invoice was saved successfully and the PDF was downloaded.",
+    "invoiceSavedNoPdf": "Invoice was saved successfully, but PDF generation/download was skipped.",
+    "invoiceSaveFailedHeader": "Invoice save failed",
+    "invoiceSaveFailed": "We couldn't save this invoice draft. Please check required invoice fields and try again.",
+    "leaveDialog": {
+      "title": "Leave this page?",
+      "description": "Your current AI chat invoice conversation is not saved. If you leave now, the draft and messages will be lost.",
+      "leave": "Leave without saving",
+      "stay": "Stay on this page"
+    }
   },
   "confirmationDialog": {
     "confirmCancel": "Cancel"

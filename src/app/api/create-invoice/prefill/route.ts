@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "../../../../../utility/prisma";
-import { getUserServer } from "../../../../../utility/get-user-server";
+import { prisma } from "@/utility/prisma";
+import { getUserServer } from "@/utility/get-user-server";
 import { notFound } from "next/navigation";
 import {
   aggregateInvoicePrefillData,
   buildPrefillResponse,
-} from "../../../../utility/helpers";
+} from "@/utility/helpers";
 
 export async function GET(request: NextRequest) {
   const user = await getUserServer();

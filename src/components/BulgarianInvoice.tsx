@@ -279,7 +279,7 @@ const BulgarianInvoice = React.forwardRef<HTMLDivElement, Props>(
                   textAlign: "left",
                 }}
               >
-                Ime на стоката/услугата
+                Име на стоката/услугата
               </th>
               <th
                 style={{

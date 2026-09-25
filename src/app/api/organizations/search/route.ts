@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { SearchResult, CompanyData } from "../../../../../utility/types";
-import { getCachedCompanyData } from "../../../../../utility/registry-cache";
+import type { SearchResult, CompanyData } from "@/utility/types";
+import { getCachedCompanyData } from "@/utility/registry-cache";
 import {
   extractManagerName,
   extractVatNumber,
   extractEmail,
   transformAddressFromCompanyData,
-} from "../../../../../utility/company-registry-helpers";
+} from "@/utility/company-registry-helpers";
 
 /**
  * Transforms raw CompanyData into SearchResult format

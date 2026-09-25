@@ -9,9 +9,11 @@ import dynamic from "next/dynamic";
 import type { OrganizationLight } from "../../utility/types";
 import { Edit2, Trash2 } from "lucide-react";
 import { useGlobalStore } from "@/store/global";
-import EntityManagerDialog from "./EntityManagerDialog";
 import { HeadingSection } from "./HeadingSection";
 
+const EntityManagerDialog = dynamic(() => import("./EntityManagerDialog"), {
+  ssr: false,
+});
 const ConfirmationDialog = dynamic(() => import("./ConfirmationDialog"), {
   ssr: false,
 });
@@ -77,7 +79,7 @@ export default function Organizations({
     <>
       <div className="text-2xl">
         <FadeIn delay={0.01}>
-          <div className="grid lg:grid-cols-2 lg:gap-0 grid-cols-1 gap-3 justify-between lg:items-start">
+          <div className="grid lg:grid-cols-2 lg:gap-0 grid-cols-1 gap-3 justify-between lg:items-start lg:mb-0 mb-6">
             <HeadingSection
               title={t("organizations.organizationsHeader")}
               subtitle={t("organizations.organizationsSubheader")}
@@ -93,7 +95,7 @@ export default function Organizations({
             </Button>
           </div>
         </FadeIn>
-        <FadeIn delay={0.02} className="pb-12 overflow-auto no-scrollbar">
+        <FadeIn delay={0.02} className="pb-12 overflow-y-auto no-scrollbar">
           {organizationsList.length === 0 ? (
             <p className="text-base text-primary/50">
               {t("organizations.noOrganizations")}
@@ -106,13 +108,15 @@ export default function Organizations({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="flex flex-col gap-2 items-start p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors"
+                  className="flex flex-col lg:max-w-full w-full gap-2 lg:items-start items-center p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors"
                 >
-                  <div className="flex lg:flex-row flex-col gap-2 lg:w-full w-fit justify-between lg:items-start items-center">
-                    <div className="flex lg:flex-row flex-col gap-2 flex-1 lg:items-center items-start">
-                      <span className="font-semibold">{org.name}</span>
+                  <div className="flex lg:flex-row flex-col gap-2 w-full justify-center lg:items-start items-center">
+                    <div className="flex lg:flex-row flex-col gap-2 flex-1 items-center">
+                      <span className="lg:text-2xl text-xl font-semibold shrink text-center line-clamp-2">
+                        {org.name}
+                      </span>
                       {org.bulstat && (
-                        <span className="text-sm bg-foreground text-primary-foreground font-semibold px-2 py-1 rounded">
+                        <span className="text-sm shrink bg-foreground text-primary-foreground font-semibold px-2 py-1 rounded">
                           {org.bulstat}
                         </span>
                       )}

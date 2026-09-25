@@ -1,6 +1,6 @@
-import { prisma } from "../../../../../utility/prisma";
+import { prisma } from "@/utility/prisma";
 import { NextResponse } from "next/server";
-import { getUserServer } from "../../../../../utility/get-user-server";
+import { getUserServer } from "@/utility/get-user-server";
 
 export async function GET() {
   try {

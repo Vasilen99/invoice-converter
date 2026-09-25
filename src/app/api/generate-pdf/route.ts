@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BulgarianInvoiceData } from "../../../types";
-import { formatDateToBG } from "../../../../utility/date-formatter";
+import { formatDateToBG } from "@/utility/date-formatter";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;

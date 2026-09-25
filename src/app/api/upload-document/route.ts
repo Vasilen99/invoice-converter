@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAdminClient } from "../../../../utility/supabase/server";
-import { getUserServer } from "../../../../utility/get-user-server";
+import { createAdminClient } from "@/utility/supabase/server";
+import { getUserServer } from "@/utility/get-user-server";
 
 /**
  * POST /api/upload-document
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
 
     // Upload file to Supabase storage using admin client (bypasses RLS)
-    const { error: uploadError, data: uploadData } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from("documents")
       .upload(storagePath, buffer, {
         contentType: file.type,
