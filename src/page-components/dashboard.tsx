@@ -12,7 +12,6 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarTrigger,
-  SidebarInset,
 } from "@/components/animate-ui/components/radix/sidebar";
 import Link from "next/link";
 import {
@@ -304,12 +303,15 @@ export default function Dashboard() {
   return (
     <SidebarProvider defaultOpen={!isMobile}>
       <DashboardSidebarContent />
-      <SidebarInset>
-        <header className="flex h-14 items-center gap-3 px-4 md:hidden">
-          <SidebarTrigger className="size-9 text-foreground hover:text-foreground transition-colors" />
-        </header>
-        {/* main dashboard content goes here */}
-      </SidebarInset>
+      {/* <SidebarInset> */}
+      <header className="flex h-14 items-center gap-3 px-4 my-3">
+        <SidebarTrigger className="size-9 text-foreground hover:text-foreground transition-colors" />
+        <span className="font-bold text-foreground tracking-tight text-base">
+          Invoice<span className="text-muted-foreground">AI</span>
+        </span>
+      </header>
+      {/* main dashboard content goes here */}
+      {/* </SidebarInset> */}
     </SidebarProvider>
   );
 }

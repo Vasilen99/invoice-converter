@@ -33,6 +33,16 @@ const ConfirmationDialog = dynamic(
   },
 );
 
+const InvoicePreviewModal = dynamic(
+  () =>
+    import("@/components/InvoicePreviewModal").then(
+      (mod) => mod.InvoicePreviewModal,
+    ),
+  {
+    ssr: false,
+  },
+);
+
 type AccountOrgSnapshot = {
   id: number;
   name: string;
@@ -89,6 +99,8 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
+  const [previewInvoiceData, setPreviewInvoiceData] =
+    useState<BulgarianInvoiceData | null>(null);
 
   const pendingNavigationRef = useRef<string | null>(null);
   const bypassLeaveGuardRef = useRef(false);
@@ -166,6 +178,11 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
     setMessages([buildWelcomeMessage(t)]);
     setCurrentInvoice(null);
     setMessageInput("");
+    setPreviewInvoiceData(null);
+  };
+
+  const openInvoicePreview = (invoice: BulgarianInvoiceData) => {
+    setPreviewInvoiceData(invoice);
   };
 
   const pushMessage = (
@@ -358,13 +375,13 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
   return (
     <div className="mx-auto flex h-[calc(100vh-8rem)] max-w-4xl flex-col">
       {/* Header */}
-      <div className="flex shrink-0 items-center justify-between py-4">
+      <div className="flex flex-col shrink-0 items-center justify-between pb-6">
         <HeadingSection title={t("title")} subtitle={t("subtitle")} />
         <Button
           variant="outline"
           size="sm"
           onClick={resetDraft}
-          className="gap-2"
+          className="gap-2 place-self-end"
         >
           <Plus className="h-3.5 w-3.5" />
           {t("newDraft")}
@@ -382,6 +399,7 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
               isInvoiceReadyForSave={isInvoiceReadyForSave}
               isSaving={isSaving}
               onSaveAndDownload={saveAndDownloadInvoice}
+              onPreviewInvoice={openInvoicePreview}
               t={t}
             />
           ))}
@@ -438,6 +456,12 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
         secondaryActionContent={t("leaveDialog.stay")}
         onMainAction={onConfirmLeave}
         onSecondaryAction={onCancelLeave}
+      />
+
+      <InvoicePreviewModal
+        isOpen={Boolean(previewInvoiceData)}
+        onClose={() => setPreviewInvoiceData(null)}
+        invoiceData={previewInvoiceData}
       />
     </div>
   );
