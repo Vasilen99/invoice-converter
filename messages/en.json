@@ -55,6 +55,18 @@
       "download": { "label": "Download", "desc": "Get a perfect PDF, ready for accounting" }
     }
   },
+  "pricing": {
+    "title": "Transparent pricing, no surprises",
+    "subtitle": "Choose the right credit package for your needs.",
+    "button": "Choose package",
+    "tierStarter": "Essential",
+    "tierStarterDesc": "Start small and try out the platform.",
+    "tierMedium": "Professional",
+    "tierMediumDesc": "For small and medium teams processing invoices regularly.",
+    "tierEnterprise": "Enterprise",
+    "tierEnterpriseDesc": "For large organizations with high invoice volumes.",
+    "creditsCount": "Credits count"
+  },
   "providers": {
     "title": "Works with all popular platforms",
     "subtitle": "Stripe, PayPal, Wix, Google, Shopify and many more — if it's a PDF invoice, we understand it."
@@ -269,6 +281,11 @@
     "addCredits": "Add credits",
     "saveChanges": "Save changes",
     "saving": "Saving..."
+  },
+  "creditsPage": {
+    "header": "Credit Management",
+    "subheader": "View your credit balance, purchase new packages.",
+    "creditsBalance": "Current credit balance"
   },
     "createInvoice": {
     "header": "Create invoice",

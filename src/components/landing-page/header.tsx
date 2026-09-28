@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Zap,
-  ArrowRight,
-  User,
-  LayoutDashboard,
-  LogOut,
-  ChevronDown,
-} from "lucide-react";
+import { Zap, User, LayoutDashboard, LogOut, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import ThemeToggle from "../ThemeToggle";

@@ -16,25 +16,14 @@ import {
 import Link from "next/link";
 import {
   Building2,
-  // BarChart3,
-  // Upload,
   FileText,
   User,
-  // Clock,
   LogOut,
   FileUser,
   Users,
-  // ShieldLock,
-  // ChartPie,
-  // Building,
-  // Globe,
-  // Cable,
-  // Bell,
-  // ReceiptText,
-  // Repeat,
-  // CircleDollarSign,
   FileBox,
   MessageSquare,
+  CoinsIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
@@ -43,13 +32,13 @@ import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import {
   accountLink,
-  // dashboardLink,
   organizationsLink,
   aiConvertorLink,
   aiAssistantLink,
   contragentsLink,
   createInvoiceLink,
   generatedInvoicesLink,
+  creditsLink,
 } from "../../utility/links";
 import { useUserStore } from "@/store/user";
 import { PLATFORM_NAME } from "../../utility/constants";
@@ -140,26 +129,26 @@ const NAVIGATION_CONFIG = [
   //     },
   //   ],
   // },
-  // {
-  //   labelKey: "dashboard.billing",
-  //   items: [
-  //     {
-  //       nameKey: "dashboard.creditsAndPackages",
-  //       href: "/dashboard/credits",
-  //       icon: CircleDollarSign,
-  //     },
-  //     {
-  //       nameKey: "dashboard.orderHistory",
-  //       href: "/billing",
-  //       icon: Clock,
-  //     },
-  //     {
-  //       nameKey: "dashboard.usageByMember",
-  //       href: "/dashboard/usage-by-member",
-  //       icon: ChartPie,
-  //     },
-  //   ],
-  // },
+  {
+    labelKey: "dashboard.billing",
+    items: [
+      {
+        nameKey: "dashboard.creditsAndPackages",
+        href: creditsLink,
+        icon: CoinsIcon,
+      },
+      // {
+      //   nameKey: "dashboard.orderHistory",
+      //   href: "/billing",
+      //   icon: Clock,
+      // },
+      // {
+      //   nameKey: "dashboard.usageByMember",
+      //   href: "/dashboard/usage-by-member",
+      //   icon: ChartPie,
+      // },
+    ],
+  },
   {
     labelKey: "dashboard.settings",
     items: [
@@ -304,7 +293,7 @@ export default function Dashboard() {
     <SidebarProvider defaultOpen={!isMobile}>
       <DashboardSidebarContent />
       {/* <SidebarInset> */}
-      <header className="flex h-14 items-center gap-3 px-4 my-3">
+      <header className="absolute flex h-14 items-center gap-3 px-4 my-3 lg:hidden">
         <SidebarTrigger className="size-9 text-foreground hover:text-foreground transition-colors" />
         <span className="font-bold text-foreground tracking-tight text-base">
           Invoice<span className="text-muted-foreground">AI</span>

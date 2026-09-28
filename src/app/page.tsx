@@ -9,6 +9,7 @@ import { Solution } from "@/components/landing-page/solution";
 import { Problem } from "@/components/landing-page/problem";
 import { Header } from "@/components/landing-page/header";
 import { Footer } from "@/components/landing-page/footer";
+import { Pricing } from "@/components/landing-page/pricing";
 /* ─────────────────────────── Hero ─────────────────────────── */
 
 const PROVIDERS = [
@@ -120,6 +121,7 @@ const HomePage = () => {
           <Problem />
           <Solution />
           <Features />
+          <Pricing />
           <FinalCta />
         </div>
       </main>
