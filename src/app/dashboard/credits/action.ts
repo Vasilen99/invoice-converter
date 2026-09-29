@@ -17,7 +17,10 @@ export async function getAccountData() {
     });
 
     if (!userData) {
-      return null;
+      return {
+        accountData: null,
+        packageData: null,
+      };
     }
 
     const accountData = await prisma.account.findFirst({
@@ -28,13 +31,28 @@ export async function getAccountData() {
       },
     });
 
-    if (!accountData) {
-      return null;
-    }
+    const packageData = await prisma.creditPackage.findUnique({
+      where: { id: 1 },
+      select: {
+        id: true,
+        name: true,
+        priceAmount: true,
+      },
+    });
 
-    return accountData;
+    const transformedPackageData = packageData
+      ? {
+          id: packageData.id,
+          name: packageData.name,
+          priceAmount: packageData.priceAmount.toString(),
+        }
+      : null;
+    return { accountData, packageData: transformedPackageData };
   } catch (err) {
     console.error("Error fetching account data for credits page:", err);
-    return null;
+    return {
+      accountData: null,
+      packageData: null,
+    };
   }
 }

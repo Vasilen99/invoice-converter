@@ -12,14 +12,28 @@ import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { creditsLink } from "@/utility/links";
 import { useTranslations } from "next-intl";
+import { Decimal } from "@prisma/client/runtime/index-browser";
 
 const LoginModal = dynamic(() => import("./LoginModal"), { ssr: false });
 
-export const PricingSlider = () => {
+type PackageData = {
+  id: number;
+  name: string;
+  priceAmount: string;
+};
+export const PricingSlider = ({
+  packageData,
+  layout,
+}: {
+  packageData?: PackageData | null;
+  layout: "dashboard" | "landing";
+}) => {
   const t = useTranslations("pricing");
   const [value, setValue] = useState([10]);
   const [selectedTier, setSelectedTier] = useState(PRICING_TIERS[0]);
-  const [price, setPrice] = useState(3);
+  const [price, setPrice] = useState(
+    packageData ? Number(packageData.priceAmount).toFixed(2) : 4.0,
+  );
   const { user } = useUserStore();
   const { isLoginModalOpen, setIsLoginModalOpen } = useGlobalStore();
   const pathname = usePathname();
@@ -80,7 +94,9 @@ export const PricingSlider = () => {
 
   return (
     <>
-      <FadeIn className="mb-14">
+      <FadeIn
+        className={`mb-14 ${layout === "landing" ? "flex items-center justify-center" : ""} `}
+      >
         <div className="relative w-full max-w-xs">
           <div
             className="absolute -top-10 flex justify-center pointer-events-none transition-all duration-75"
@@ -99,7 +115,9 @@ export const PricingSlider = () => {
           />
         </div>
       </FadeIn>
-      <FadeIn className="mb-14">
+      <FadeIn
+        className={`mb-14 ${layout === "landing" ? "flex items-center justify-center" : ""} `}
+      >
         <div className="grid grid-cols-1 place-items-center place-content-center gap-8 bg-muted/30 rounded-2xl p-8 md:p-12 w-fit">
           <div className="flex flex-col justify-between">
             <div>
@@ -113,7 +131,7 @@ export const PricingSlider = () => {
             <div className="mb-4">
               <div className="flex items-baseline gap-1 justify-center">
                 <span className="text-4xl md:text-5xl font-bold text-foreground">
-                  {price.toFixed(2)}
+                  {price}
                 </span>
                 <Euro className="w-6 h-6 text-primary" />
               </div>

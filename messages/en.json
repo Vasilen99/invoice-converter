@@ -285,7 +285,13 @@
   "creditsPage": {
     "header": "Credit Management",
     "subheader": "View your credit balance, purchase new packages.",
-    "creditsBalance": "Current credit balance"
+    "creditsBalance": "Current credit balance",
+    "payment": {
+    "paymentSuccess": "Payment successful",
+    "paymentSuccessMessage": "Your credits have been added to your account.",
+    "paymentFailed": "Payment failed",
+    "paymentFailedMessage": "Your payment was declined. Please try again with a different payment method."
+  }
   },
     "createInvoice": {
     "header": "Create invoice",
@@ -662,5 +668,4 @@
   "confirmationDialog": {
     "confirmCancel": "Cancel"
   }
-  
 }

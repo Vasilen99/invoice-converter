@@ -17,7 +17,7 @@ export const Pricing = () => {
             {t("subtitle")}
           </p>
         </FadeIn>
-        <PricingSlider />
+        <PricingSlider layout="landing" />
       </div>
     </section>
   );

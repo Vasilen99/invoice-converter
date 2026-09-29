@@ -271,7 +271,13 @@
   "creditsPage": {
     "header": "Управление на кредити",
     "subheader": "Прегледайте вашия кредитен баланс, закупете нови пакети.",
-    "creditsBalance": "Текущ кредитен баланс"
+    "creditsBalance": "Текущ кредитен баланс",
+    "payment": {
+    "paymentSuccess": "Плащането е успешно",
+    "paymentSuccessMessage": "Кредитите са добавени към вашия акаунт.",
+    "paymentFailed": "Плащането е отказано",
+    "paymentFailedMessage": "Вашето плащане е отказано. Моля опитайте отново с различен начин на плащане."
+  }
   },
   "account": {
     "accountHeader": "Профил",

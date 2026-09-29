@@ -53,10 +53,10 @@ export async function POST(req: NextRequest) {
             charge.payment_intent as string,
           );
 
-          const { account_id, credits_amount, package_id, user_id } =
+          const { account_id, credits_amount, package_id, user_id, order_id } =
             paymentIntent.metadata;
 
-          if (!account_id || !credits_amount || !package_id) {
+          if (!account_id || !credits_amount || !package_id || !order_id) {
             console.error(
               "❌ Missing required metadata in charge succeeded event",
             );
@@ -100,11 +100,11 @@ export async function POST(req: NextRequest) {
           });
 
           // Update order status if one exists
-          await prisma.order.updateMany({
+          await prisma.order.update({
             where: {
+              id: parseInt(order_id),
               accountId: accountIdNum,
               packageId: packageIdNum,
-              status: "PENDING",
             },
             data: { status: "PAID" },
           });
@@ -133,9 +133,9 @@ export async function POST(req: NextRequest) {
             charge.payment_intent as string,
           );
 
-          const { account_id, package_id } = paymentIntent.metadata;
+          const { account_id, package_id, order_id } = paymentIntent.metadata;
 
-          if (!account_id || !package_id) {
+          if (!account_id || !package_id || !order_id) {
             console.error(
               "❌ Missing required metadata in charge failed event",
             );
@@ -146,8 +146,9 @@ export async function POST(req: NextRequest) {
           const packageIdNum = parseInt(package_id);
 
           // Update order status to FAILED
-          await prisma.order.updateMany({
+          await prisma.order.update({
             where: {
+              id: parseInt(order_id),
               accountId: accountIdNum,
               packageId: packageIdNum,
               status: "PENDING",

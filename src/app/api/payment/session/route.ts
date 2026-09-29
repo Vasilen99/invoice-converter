@@ -78,15 +78,49 @@ export async function POST(req: NextRequest) {
 
     const accountId = user.accountMembers[0].account.id;
 
+    // Verify the package exists
+    const creditPackage = await prisma.creditPackage.findUnique({
+      where: { id: package_id },
+    });
+
+    if (!creditPackage) {
+      return NextResponse.json(
+        {
+          data: null,
+          alert: {
+            status: "error",
+            header: "Невалиден пакет",
+            message: "Избраният пакет не съществува",
+          },
+        },
+        { status: 404 },
+      );
+    }
+
+    // Create Order record before creating Stripe session
+    const order = await prisma.order.create({
+      data: {
+        amount: price.toString(),
+        currency: currency,
+        status: "PENDING",
+        accountId: accountId,
+        packageId: package_id,
+        provider: "STRIPE",
+      },
+    });
+
     // Create Checkout Session for one-time purchase
     const params: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ["card"],
       mode: "payment",
-      metadata: {
-        account_id: accountId.toString(),
-        package_id: package_id.toString(),
-        credits_amount: credits_amount.toString(),
-        user_id: user.id.toString(),
+      payment_intent_data: {
+        metadata: {
+          account_id: accountId.toString(),
+          package_id: package_id.toString(),
+          credits_amount: credits_amount.toString(),
+          user_id: user.id.toString(),
+          order_id: order.id.toString(),
+        },
       },
       line_items: [
         {
