@@ -190,6 +190,7 @@ function DashboardSidebarContent() {
     user?.accountName && user.accountName.length > 15
       ? `${user.accountName.slice(0, 15)}...`
       : user?.accountName;
+  const accountCredits = user?.creditBalance ?? 0;
 
   // const handleNavigation = (href: string) => {
   //   setOpenMobile(false); // Close mobile sidebar
@@ -211,11 +212,17 @@ function DashboardSidebarContent() {
               <span className="font-bold text-foreground text-sm leading-4">
                 {PLATFORM_NAME}
               </span>
-              {accountName && (
-                <span className="text-xs text-muted-foreground">
-                  {accountName}
+              <div className="flex gap-3">
+                {accountName && (
+                  <span className="text-xs text-muted-foreground">
+                    {accountName}
+                  </span>
+                )}
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                  <CoinsIcon className="stroke-muted-foreground" size={16} />{" "}
+                  {accountCredits}
                 </span>
-              )}
+              </div>
             </div>
             <div className="flex items-center ml-auto group-data-[collapsible=icon]:ml-0">
               <SidebarTrigger className="size-9 text-foreground hover:text-foreground transition-colors" />

@@ -1,6 +1,7 @@
 import { prisma } from "@/utility/prisma";
 import { getUserServer } from "@/utility/get-user-server";
 import { notFound } from "next/navigation";
+import { CREDIT_PRICING_CURRENCY } from "@/utility/credit-pricing";
 
 export async function getAccountData() {
   const user = await getUserServer();
@@ -31,12 +32,18 @@ export async function getAccountData() {
       },
     });
 
-    const packageData = await prisma.creditPackage.findUnique({
-      where: { id: 1 },
+    const packageData = await prisma.creditPackage.findFirst({
+      where: {
+        isActive: true,
+        currency: {
+          equals: CREDIT_PRICING_CURRENCY,
+        },
+      },
       select: {
         id: true,
         name: true,
         priceAmount: true,
+        currency: true,
       },
     });
 
@@ -45,6 +52,7 @@ export async function getAccountData() {
           id: packageData.id,
           name: packageData.name,
           priceAmount: packageData.priceAmount.toString(),
+          currency: packageData.currency,
         }
       : null;
     return { accountData, packageData: transformedPackageData };

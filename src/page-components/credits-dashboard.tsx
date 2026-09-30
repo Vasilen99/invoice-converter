@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useGlobalStore } from "@/store/global";
-import { Decimal } from "@prisma/client/runtime/index-browser";
 
 type CreditsPageProps = {
   accountData: {
@@ -17,6 +16,7 @@ type CreditsPageProps = {
     id: number;
     name: string;
     priceAmount: string;
+    currency: string;
   } | null;
 };
 

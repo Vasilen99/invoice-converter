@@ -6,13 +6,17 @@ import { ArrowRight, Euro } from "lucide-react";
 import { Button } from "@base-ui/react";
 import { useUserStore } from "@/store/user";
 import { useGlobalStore } from "@/store/global";
-import { PRICING_TIERS } from "@/utility/constants";
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { creditsLink } from "@/utility/links";
 import { useTranslations } from "next-intl";
-import { Decimal } from "@prisma/client/runtime/index-browser";
+import {
+  ALLOWED_CREDIT_VALUES,
+  calculateCreditPrice,
+  CREDIT_BASE_PRICE_PER_CREDIT,
+} from "@/utility/credit-pricing";
+import { callApi } from "@/utility/hooks/apiFetch";
 
 const LoginModal = dynamic(() => import("./LoginModal"), { ssr: false });
 
@@ -20,6 +24,7 @@ type PackageData = {
   id: number;
   name: string;
   priceAmount: string;
+  currency: string;
 };
 export const PricingSlider = ({
   packageData,
@@ -29,55 +34,54 @@ export const PricingSlider = ({
   layout: "dashboard" | "landing";
 }) => {
   const t = useTranslations("pricing");
-  const [value, setValue] = useState([10]);
-  const [selectedTier, setSelectedTier] = useState(PRICING_TIERS[0]);
-  const [price, setPrice] = useState(
-    packageData ? Number(packageData.priceAmount).toFixed(2) : 4.0,
-  );
+  const [sliderIndex, setSliderIndex] = useState(0);
+
+  const selectedCredits =
+    ALLOWED_CREDIT_VALUES[sliderIndex] ?? ALLOWED_CREDIT_VALUES[0];
+  const pricing = useMemo(() => {
+    return (
+      calculateCreditPrice(selectedCredits) ??
+      calculateCreditPrice(ALLOWED_CREDIT_VALUES[0])
+    );
+  }, [selectedCredits]);
+
+  const selectedTier = useMemo(() => {
+    if (selectedCredits <= 100) {
+      return { name: "tierStarter", desc: "tierStarterDesc" };
+    }
+
+    if (selectedCredits <= 300) {
+      return { name: "tierMedium", desc: "tierMediumDesc" };
+    }
+
+    return { name: "tierEnterprise", desc: "tierEnterpriseDesc" };
+  }, [selectedCredits]);
+
   const { user } = useUserStore();
   const { isLoginModalOpen, setIsLoginModalOpen } = useGlobalStore();
   const pathname = usePathname();
   const router = useRouter();
-  const sliderPercentage = (value[0] / 100) * 100;
-  useEffect(() => {
-    if (value[0] < 10) {
-      setValue([10]);
-      setSelectedTier(PRICING_TIERS[0]);
-      setPrice(3.0);
-    }
-    if (value[0] >= 10 && value[0] < 50) {
-      setSelectedTier(PRICING_TIERS[0]);
-      setPrice((3 * value[0] + 10) / 10);
-    }
-    if (value[0] >= 50 && value[0] < 90) {
-      setSelectedTier(PRICING_TIERS[1]);
-      setPrice((2.5 * value[0] + 10) / 10);
-    }
-    if (value[0] >= 90) {
-      setSelectedTier(PRICING_TIERS[2]);
-      setPrice((2 * value[0] + 10) / 10);
-    }
-  }, [value]);
+  const sliderPercentage =
+    (sliderIndex / (ALLOWED_CREDIT_VALUES.length - 1)) * 100;
 
   const handlePayment = async () => {
-    try {
-      const response = await fetch("/api/payment/session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          data: {
-            package_id: 1, // Replace with the actual package ID
-            price: price,
-            credits_amount: value[0],
-          },
-        }),
-      });
-      const data = await response.json();
-      if (data?.data?.url) {
-        window.location.href = data.data.url;
-      }
-    } catch (err) {
-      console.error("Payment session error:", err);
+    if (!pricing) {
+      return;
+    }
+
+    const data = await callApi("/payment/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        data: {
+          package_id: packageData?.id ?? 1,
+          credits_amount: pricing.credits,
+        },
+      }),
+    });
+
+    if (data?.url) {
+      window.location.href = data.url;
     }
   };
   const handleButtonClick = () => {
@@ -103,14 +107,18 @@ export const PricingSlider = ({
             style={{ left: `calc(${sliderPercentage}% - 21px)` }}
           >
             <div className="bg-primary text-primary-foreground text-sm font-semibold px-3 py-2 rounded-full">
-              {value[0]}
+              {selectedCredits}
             </div>
           </div>
           <Slider
-            value={value}
-            max={100}
-            step={10}
-            onValueChange={(val) => setValue(Array.isArray(val) ? val : [val])}
+            min={0}
+            max={ALLOWED_CREDIT_VALUES.length - 1}
+            step={1}
+            value={[sliderIndex]}
+            onValueChange={(values) => {
+              const nextIndex = Array.isArray(values) ? values[0] : values;
+              setSliderIndex(nextIndex);
+            }}
             className="w-full"
           />
         </div>
@@ -131,10 +139,27 @@ export const PricingSlider = ({
             <div className="mb-4">
               <div className="flex items-baseline gap-1 justify-center">
                 <span className="text-4xl md:text-5xl font-bold text-foreground">
-                  {price}
+                  {pricing?.finalPrice.toFixed(2)}
                 </span>
                 <Euro className="w-6 h-6 text-primary" />
               </div>
+            </div>
+            <div className="mb-6 space-y-1 text-center">
+              <p className="text-muted-foreground text-sm">
+                {t("perCreditLabel")}: €{pricing?.pricePerCredit.toFixed(3)}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                {t("basePriceLabel")}: €
+                {(selectedCredits * CREDIT_BASE_PRICE_PER_CREDIT).toFixed(2)}
+              </p>
+              {pricing && pricing.discountAmount >= 1 && (
+                <p className="text-primary text-sm font-semibold">
+                  {t("saveLabel", {
+                    percent: Math.round(pricing.discountPercent),
+                    amount: pricing.discountAmount.toFixed(2),
+                  })}
+                </p>
+              )}
             </div>
             <Button
               onClick={() => handleButtonClick()}
@@ -146,7 +171,10 @@ export const PricingSlider = ({
           </div>
           <div className="flex flex-col">
             <span className="text-foreground">
-              {t("creditsCount")}: {value[0]}
+              {t("creditsCount")}: {selectedCredits}
+            </span>
+            <span className="text-muted-foreground text-sm">
+              {t("totalLabel")}: €{pricing?.finalPrice.toFixed(2)}
             </span>
           </div>
         </div>

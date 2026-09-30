@@ -65,7 +65,11 @@
     "tierMediumDesc": "For small and medium teams processing invoices regularly.",
     "tierEnterprise": "Enterprise",
     "tierEnterpriseDesc": "For large organizations with high invoice volumes.",
-    "creditsCount": "Credits count"
+    "creditsCount": "Credits count",
+    "perCreditLabel": "Effective price per credit",
+    "basePriceLabel": "Base price at €0.160/credit",
+    "saveLabel": "Save {percent}% (€{amount})",
+    "totalLabel": "Total"
   },
   "providers": {
     "title": "Works with all popular platforms",
@@ -667,5 +671,7 @@
   },
   "confirmationDialog": {
     "confirmCancel": "Cancel"
-  }
+  },
+    "insufficientCreditsMessage": "You do not have enough credits for this operation. Please add credits to your account to continue."
+  
 }

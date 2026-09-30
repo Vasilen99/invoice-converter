@@ -14,12 +14,15 @@ import {
   formatInvoiceNumber,
   generateNextInvoiceNumber,
   mergeInvoice,
+  hasRequiredInvoiceFields,
   parseJsonAddress,
   sanitizeEditPatch,
   sanitizeInvoice,
   sanitizeInvoicePatch,
 } from "@/utility/api-helpers";
 import { EXTRACT_FROM_PROMPT } from "@/utility/constants";
+import { deductCredits } from "@/utility/credit-system";
+import { CREDIT_COSTS } from "@/utility/constants";
 
 type Intent = "create_invoice" | "edit_invoice" | "unsupported";
 type CompanyRole = "organization" | "contragent";
@@ -58,12 +61,15 @@ type ChatResponse = {
     intent: Intent;
     assistantMessage: string;
     invoice: BulgarianInvoiceData | null;
+    creditsCharged?: number;
+    creditsRemaining?: number;
     status:
       | "ok"
       | "unsupported"
       | "missing-draft"
       | "company-not-found"
-      | "invalid-input";
+      | "invalid-input"
+      | "insufficient-credits";
   };
 };
 
@@ -775,12 +781,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const accountMember = await prisma.accountMember.findFirst({
-      where: { user: { auth_uid: user.sub } },
-      select: { accountId: true },
+    const userData = await prisma.user.findUnique({
+      where: { auth_uid: user.sub },
+      select: {
+        id: true,
+        accountMembers: {
+          select: { accountId: true },
+          take: 1,
+        },
+      },
     });
 
-    if (!accountMember?.accountId) {
+    const accountId = userData?.accountMembers[0]?.accountId;
+    if (!userData?.id || !accountId) {
       return NextResponse.json(
         {
           data: {
@@ -800,7 +813,7 @@ export async function POST(request: NextRequest) {
 
     if (accountOrgs.length === 0) {
       const dbOrgs = await prisma.organization.findMany({
-        where: { accountId: accountMember.accountId },
+        where: { accountId },
         orderBy: { createdAt: "asc" },
         select: {
           id: true,
@@ -837,7 +850,7 @@ export async function POST(request: NextRequest) {
 
     const composerName = await prisma.account
       .findUnique({
-        where: { id: accountMember.accountId },
+        where: { id: accountId },
         select: { composer_name: true },
       })
       .then((a) => a?.composer_name ?? null);
@@ -903,7 +916,7 @@ export async function POST(request: NextRequest) {
       organizationInputName || organizationInputEik
         ? await resolveCompany({
             role: "organization",
-            accountId: accountMember.accountId,
+            accountId,
             primaryOrgId: null,
             accountOrgs,
             name: organizationInputName,
@@ -918,7 +931,7 @@ export async function POST(request: NextRequest) {
     if (contragentInputName || contragentInputEik) {
       contragentResolved = await resolveCompany({
         role: "contragent",
-        accountId: accountMember.accountId,
+        accountId,
         primaryOrgId: organizationResolved?.id ?? null,
         accountOrgs,
         name: contragentInputName,
@@ -1052,12 +1065,45 @@ export async function POST(request: NextRequest) {
       : extraction.chatResponse ||
         "I parsed your request. Please add more invoice details if needed.";
 
+    const shouldChargeForPreview = hasRequiredInvoiceFields(nextInvoice);
+    let creditsRemaining: number | undefined;
+
+    if (shouldChargeForPreview) {
+      const creditResult = await deductCredits(
+        accountId,
+        CREDIT_COSTS.CHAT_MESSAGE,
+        userData.id,
+      );
+
+      if (!creditResult.success) {
+        return NextResponse.json(
+          {
+            data: {
+              intent: extraction.intent,
+              assistantMessage:
+                creditResult.error ||
+                "Insufficient credits for this operation.",
+              invoice: null,
+              status: "insufficient-credits" as const,
+            },
+          } satisfies ChatResponse,
+          { status: 402 },
+        );
+      }
+
+      creditsRemaining = creditResult.remainingBalance;
+    }
+
     return NextResponse.json(
       {
         data: {
           intent: extraction.intent,
           assistantMessage,
           invoice: nextInvoice,
+          creditsCharged: shouldChargeForPreview
+            ? CREDIT_COSTS.CHAT_MESSAGE
+            : 0,
+          creditsRemaining,
           status: hasMissingCompanies
             ? ("company-not-found" as const)
             : ("ok" as const),

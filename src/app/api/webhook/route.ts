@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/utility/prisma";
+import { CREDIT_PRICING_CURRENCY } from "@/utility/credit-pricing";
 
 export const runtime = "nodejs";
 
@@ -48,69 +49,130 @@ export async function POST(req: NextRequest) {
         try {
           const charge = event.data.object as Stripe.Charge;
 
+          if (!charge.payment_intent) {
+            console.error("❌ Missing payment_intent in successful charge");
+            break;
+          }
+
           // Get the payment intent to access metadata
           const paymentIntent = await stripe.paymentIntents.retrieve(
             charge.payment_intent as string,
           );
 
-          const { account_id, credits_amount, package_id, user_id, order_id } =
-            paymentIntent.metadata;
+          const orderIdRaw =
+            paymentIntent.metadata.order_id ?? paymentIntent.metadata.orderId;
 
-          if (!account_id || !credits_amount || !package_id || !order_id) {
-            console.error(
-              "❌ Missing required metadata in charge succeeded event",
+          if (!orderIdRaw) {
+            console.error("❌ Missing order_id in charge succeeded event");
+            break;
+          }
+
+          const orderIdNum = Number.parseInt(orderIdRaw, 10);
+
+          if (Number.isNaN(orderIdNum)) {
+            console.error("❌ Invalid order_id in charge succeeded event");
+            break;
+          }
+
+          // Fetch Order as the single source of truth for amount and credits
+          const order = await prisma.order.findUnique({
+            where: { id: orderIdNum },
+            select: {
+              id: true,
+              amount: true,
+              currency: true,
+              status: true,
+              accountId: true,
+              packageId: true,
+            },
+          });
+
+          if (!order) {
+            console.error(`❌ Order ${orderIdNum} not found`);
+            break;
+          }
+
+          if (order.status === "PAID") {
+            console.log(
+              `ℹ️ Order ${orderIdNum} is already marked as PAID (idempotent)`,
             );
             break;
           }
 
-          const accountIdNum = parseInt(account_id);
-          const creditsAmountNum = parseInt(credits_amount);
-          const packageIdNum = parseInt(package_id);
-          const userIdNum = parseInt(user_id);
-
-          // Get current account balance
-          const account = await prisma.account.findUnique({
-            where: { id: accountIdNum },
-            select: { creditBalance: true },
-          });
-
-          if (!account) {
-            console.error(`❌ Account ${accountIdNum} not found`);
+          if (order.currency.toUpperCase() !== CREDIT_PRICING_CURRENCY) {
+            console.error(`❌ Order currency mismatch: ${order.currency}`);
             break;
           }
 
-          const newBalance = account.creditBalance + creditsAmountNum;
+          const orderAmount = Number.parseFloat(order.amount.toString());
+          const chargeAmountInCents = charge.amount;
+          const expectedChargeAmountInCents = Math.round(orderAmount * 100);
 
-          // Update account credit balance
-          await prisma.account.update({
-            where: { id: accountIdNum },
-            data: { creditBalance: newBalance },
-          });
+          if (chargeAmountInCents !== expectedChargeAmountInCents) {
+            console.error(
+              `❌ Charge amount mismatch. Expected ${expectedChargeAmountInCents}¢, got ${chargeAmountInCents}¢ (€${(chargeAmountInCents / 100).toFixed(2)})`,
+            );
+            break;
+          }
 
-          // Create credit transaction record
-          await prisma.creditTransaction.create({
-            data: {
-              type: "PURCHASE",
-              amount: creditsAmountNum,
-              balanceAfter: newBalance,
-              note: `Purchased ${creditsAmountNum} credits from package ${packageIdNum}`,
-              accountId: accountIdNum,
-              consumedByUserId: userIdNum || undefined,
-            },
-          });
+          // Get credits amount from metadata (needed for credit transaction logging)
+          const creditsAmountRaw =
+            paymentIntent.metadata.credits_amount ??
+            paymentIntent.metadata.creditsAmount;
 
-          // Update order status if one exists
-          await prisma.order.update({
-            where: {
-              id: parseInt(order_id),
-              accountId: accountIdNum,
-              packageId: packageIdNum,
-            },
-            data: { status: "PAID" },
+          if (!creditsAmountRaw) {
+            console.error("❌ Missing creditsAmount in charge succeeded event");
+            break;
+          }
+
+          const creditsAmountNum = Number.parseInt(creditsAmountRaw, 10);
+
+          if (Number.isNaN(creditsAmountNum)) {
+            console.error("❌ Invalid creditsAmount in charge succeeded event");
+            break;
+          }
+
+          const userIdRaw =
+            paymentIntent.metadata.user_id ?? paymentIntent.metadata.userId;
+          const userIdNum = userIdRaw ? Number.parseInt(userIdRaw, 10) : null;
+
+          await prisma.$transaction(async (transaction) => {
+            const account = await transaction.account.findUnique({
+              where: { id: order.accountId },
+              select: { creditBalance: true },
+            });
+
+            if (!account) {
+              throw new Error(`Account ${order.accountId} not found`);
+            }
+
+            const newBalance = account.creditBalance + creditsAmountNum;
+
+            await transaction.account.update({
+              where: { id: order.accountId },
+              data: { creditBalance: newBalance },
+            });
+
+            await transaction.creditTransaction.create({
+              data: {
+                type: "PURCHASE",
+                amount: creditsAmountNum,
+                balanceAfter: newBalance,
+                note: `Purchased ${creditsAmountNum} credits for €${orderAmount.toFixed(2)}`,
+                accountId: order.accountId,
+                consumedByUserId: userIdNum ?? undefined,
+                orderId: orderIdNum,
+              },
+            });
+
+            await transaction.order.update({
+              where: { id: orderIdNum },
+              data: { status: "PAID" },
+            });
           });
 
           console.log(
-            `✅ Credits purchased: ${creditsAmountNum} credits added to account ${accountIdNum}`,
+            `✅ Credits purchased: ${creditsAmountNum} credits added to account ${order.accountId}, amount €${orderAmount.toFixed(2)}`,
           );
           break;
         } catch (err) {
@@ -123,7 +185,6 @@ export async function POST(req: NextRequest) {
         try {
           const charge = event.data.object as Stripe.Charge;
 
-          // Get the payment intent to access metadata
           if (!charge.payment_intent) {
             console.error("❌ No payment_intent in failed charge");
             break;
@@ -133,32 +194,31 @@ export async function POST(req: NextRequest) {
             charge.payment_intent as string,
           );
 
-          const { account_id, package_id, order_id } = paymentIntent.metadata;
+          const orderIdRaw =
+            paymentIntent.metadata.order_id ?? paymentIntent.metadata.orderId;
 
-          if (!account_id || !package_id || !order_id) {
-            console.error(
-              "❌ Missing required metadata in charge failed event",
-            );
+          if (!orderIdRaw) {
+            console.error("❌ Missing order_id in charge.failed event");
             break;
           }
 
-          const accountIdNum = parseInt(account_id);
-          const packageIdNum = parseInt(package_id);
+          const orderIdNum = Number.parseInt(orderIdRaw, 10);
 
-          // Update order status to FAILED
-          await prisma.order.update({
+          if (Number.isNaN(orderIdNum)) {
+            console.error("❌ Invalid order_id in charge.failed event");
+            break;
+          }
+
+          // Update order status to FAILED if it's still PENDING
+          await prisma.order.updateMany({
             where: {
-              id: parseInt(order_id),
-              accountId: accountIdNum,
-              packageId: packageIdNum,
+              id: orderIdNum,
               status: "PENDING",
             },
             data: { status: "FAILED" },
           });
 
-          console.log(
-            `⚠️ Charge failed for account ${accountIdNum}, package ${packageIdNum}`,
-          );
+          console.log(`⚠️ Charge failed for order ${orderIdNum}`);
           break;
         } catch (err) {
           console.error("Error processing charge.failed event:", err);
