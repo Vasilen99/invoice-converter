@@ -7,6 +7,7 @@ import { BulgarianInvoiceData } from "../types";
 import { HeadingSection } from "./HeadingSection";
 import { callApi } from "../../utility/hooks/apiFetch";
 import { useGlobalStore } from "@/store/global";
+import { useUserStore } from "@/store/user";
 import dynamic from "next/dynamic";
 const SuccessGenerationModal = dynamic(
   () => import("./SuccessModal").then((mod) => mod.SuccessGenerationModal),
@@ -84,6 +85,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   >([]);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const { setAlertStatus } = useGlobalStore();
+  const { user, setUser } = useUserStore();
   const accountComposerName = account?.composer_name || "";
   const selectedInvoice = invoices.find((inv) => inv.id === selectedInvoiceId);
 
@@ -285,6 +287,18 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         true,
       );
 
+      // Extract the data and creditsRemaining from the response
+      const creditsRemaining = data?.creditsRemaining;
+      console.log(data, "DATA RESPONSE");
+
+      // Update user store with new credit balance if available
+      if (typeof creditsRemaining === "number" && user) {
+        setUser({
+          ...user,
+          creditBalance: creditsRemaining,
+        });
+      }
+
       // Save source document to Supabase (non-blocking, fire-and-forget)
       if (data) {
         saveDocument(file, data.sellerEik, data.sellerVatNumber, "source")
@@ -318,6 +332,25 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
     if (!selectedFiles || selectedFiles.length === 0) return;
+
+    // Check if account has sufficient credits before processing
+    if (account) {
+      const EXTRACTION_COST = 3; // Credits per file
+      const totalCreditsNeeded = selectedFiles.length * EXTRACTION_COST;
+
+      if (account.creditBalance < totalCreditsNeeded) {
+        notifyAlert(
+          "error",
+          "alerts.insufficientCreditsHeader",
+          "alerts.insufficientCreditsMessage",
+          {
+            available: String(account.creditBalance),
+            required: String(totalCreditsNeeded),
+          },
+        );
+        return;
+      }
+    }
 
     const newInvoices: InvoiceFile[] = [];
     const filePromises: Promise<void>[] = [];

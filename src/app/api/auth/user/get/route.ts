@@ -28,6 +28,7 @@ export async function GET() {
           account: {
             select: {
               name: true,
+              creditBalance: true,
             },
           },
         },
@@ -47,6 +48,7 @@ export async function GET() {
   }
 
   const accountName = userData.accountMembers[0]?.account?.name || null;
+  const creditBalance = userData.accountMembers[0]?.account?.creditBalance ?? 0;
   const { ...userDataWithoutMembers } = userData;
 
   return NextResponse.json(
@@ -54,6 +56,7 @@ export async function GET() {
       data: {
         ...userDataWithoutMembers,
         accountName,
+        creditBalance,
       },
     },
     {

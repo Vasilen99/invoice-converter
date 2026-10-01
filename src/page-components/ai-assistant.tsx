@@ -18,7 +18,8 @@ import type { ChatMessage, ChatRole } from "@/utility/types/ai-chat";
 import dynamic from "next/dynamic";
 import { callApi } from "@/utility/hooks/apiFetch";
 import { HeadingSection } from "@/components/HeadingSection";
-
+import { useUserStore } from "@/store/user";
+import { CREDIT_COSTS } from "@/utility/constants";
 const MessageBubble = dynamic(
   () => import("@/components/MessageBubble").then((mod) => mod.MessageBubble),
   {
@@ -101,13 +102,16 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
   const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
   const [previewInvoiceData, setPreviewInvoiceData] =
     useState<BulgarianInvoiceData | null>(null);
-
+  const { user, setUser } = useUserStore();
   const pendingNavigationRef = useRef<string | null>(null);
   const bypassLeaveGuardRef = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const accountMember = account.accountMembers[0];
   const accountOrgs = accountMember?.account.organizations ?? [];
+  const [availableCredits, setAvailableCredits] = useState(
+    accountMember?.account.creditBalance ?? 0,
+  );
 
   // The latest assistant message that carries an invoice
   const latestInvoiceMessageId = useMemo(() => {
@@ -206,6 +210,11 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
     const text = messageInput.trim();
     if (!text || isGenerating) return;
 
+    if (availableCredits < CREDIT_COSTS.CHAT_MESSAGE) {
+      pushMessage("assistant", t("insufficientCreditsMessage"));
+      return;
+    }
+
     setMessageInput("");
     pushMessage("user", text);
     setIsGenerating(true);
@@ -226,6 +235,18 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
         return;
       }
 
+      if (typeof data.creditsRemaining === "number") {
+        const newCredits = data.creditsRemaining;
+        setAvailableCredits(newCredits);
+        // Update user store only if user exists
+        if (user) {
+          setUser({
+            ...user,
+            creditBalance: newCredits,
+          });
+        }
+      }
+
       if (data.invoice) {
         setCurrentInvoice(data.invoice);
       }
@@ -235,13 +256,14 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
         "missing-draft": t("missingDraftFallback"),
         "company-not-found": t("companyNotFoundFallback"),
         "invalid-input": t("invalidInputFallback"),
+        "insufficient-credits": t("insufficientCreditsMessage"),
       };
 
       const assistantMessage =
         data.status === "company-not-found"
           ? data.assistantMessage || fallbackByStatus[data.status]
           : data.status
-            ? fallbackByStatus[data.status] || data.assistantMessage
+            ? data.assistantMessage || fallbackByStatus[data.status]
             : data.assistantMessage || t("serverProcessingError");
 
       pushMessage("assistant", assistantMessage, {
@@ -466,7 +488,3 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// MessageBubble
-// ---------------------------------------------------------------------------

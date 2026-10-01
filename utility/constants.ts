@@ -19,7 +19,7 @@ export const INITIAL_STATUS: AlertStatus = {
   statusContent: "",
 };
 
-export const PLATFORM_NAME = "Invoice Converter";
+export const PLATFORM_NAME = "Invoice AI";
 export const PROTECTED_ROUTES = ["/generator"];
 
 export const DEFAULT_UNIT = "бр.";
@@ -120,3 +120,23 @@ Rules:
 11) If currency is specified as direct name (e.g., "euro", "долар"), convert it to the appropriate currency code (e.g., "EUR", "USD").
 12) totalInWords must be in Bulgarian and shall represent the "total" including VAT (default 20%), even if the prompt is in another language. 
 13) When user is adding/editing/removing line items u shall rewrite the new price from the total field into totalInWords in Bulgarian words (e.g. "Деветстотин и шестдесет евро").`;
+
+export const PRICING_TIERS = [
+  {
+    name: "tierStarter",
+    desc: "tierStarterDesc",
+  },
+  {
+    name: "tierMedium",
+    desc: "tierMediumDesc",
+  },
+  {
+    name: "tierEnterprise",
+    desc: "tierEnterpriseDesc",
+  },
+];
+
+export const CREDIT_COSTS = {
+  INVOICE_EXTRACTION: 3, // Credits for extracting invoice from file
+  CHAT_MESSAGE: 1, // Credits per chat message in AI assistant
+};
