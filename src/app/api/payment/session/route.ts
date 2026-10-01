@@ -27,7 +27,6 @@ export async function POST(req: NextRequest) {
     const body: DataProps = await req.json();
     const origin = req.nextUrl.origin;
     const { package_id, credits_amount } = body.data;
-
     if (!Number.isInteger(package_id) || !Number.isInteger(credits_amount)) {
       return NextResponse.json(
         {
