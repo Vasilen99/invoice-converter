@@ -20,11 +20,11 @@ import {
   sanitizeInvoice,
   sanitizeInvoicePatch,
 } from "@/utility/api-helpers";
-import { EXTRACT_FROM_PROMPT } from "@/utility/constants";
 import { deductCredits } from "@/utility/credit-system";
 import { CREDIT_COSTS } from "@/utility/constants";
+import { extractPromptData, type Intent } from "./prompt-extraction";
+import { buildLatestTemplateInvoice } from "./latest-invoice-template";
 
-type Intent = "create_invoice" | "edit_invoice" | "unsupported";
 type CompanyRole = "organization" | "contragent";
 type CompanyResolutionSource = "DB" | "CACHE" | "EXTERNAL";
 
@@ -42,18 +42,6 @@ type ResolvedCompany = {
   bank?: string | null;
   iban?: string | null;
   bic?: string | null;
-};
-
-type PromptExtraction = {
-  intent: Intent;
-  organizationName: string;
-  organizationEik: string;
-  contragentName: string;
-  contragentEik: string;
-  invoicePatch: Partial<BulgarianInvoiceData> & {
-    lineItems?: BulgarianInvoiceData["lineItems"];
-  };
-  chatResponse: string;
 };
 
 type ChatResponse = {
@@ -214,7 +202,8 @@ async function resolveFromDbByName(input: {
   if (!query) return null;
 
   if (input.role === "organization") {
-    const org = await prisma.organization.findFirst({
+    let orgData = null;
+    orgData = await prisma.organization.findFirst({
       where: {
         accountId: input.accountId,
         name: { contains: query, mode: "insensitive" },
@@ -236,21 +225,61 @@ async function resolveFromDbByName(input: {
       },
     });
 
-    if (!org?.bulstat) return null;
+    if (!orgData?.bulstat || !orgData) {
+      orgData = await prisma.organization.findFirst({
+        where: {
+          accountId: input.accountId,
+          contragents: {
+            some: {
+              name: { contains: query, mode: "insensitive" },
+            },
+          },
+        },
+        select: {
+          contragents: {
+            select: {
+              id: true,
+              name: true,
+              bulstat: true,
+              vatNumber: true,
+              molName: true,
+              email: true,
+              address: true,
+            },
+          },
+        },
+      });
+
+      if (!orgData?.contragents?.[0]?.bulstat || !orgData) {
+        return null;
+      }
+
+      return {
+        id: orgData.contragents[0].id,
+        name: orgData.contragents[0].name,
+        bulstat: orgData.contragents[0].bulstat,
+        vatNumber: orgData.contragents[0].vatNumber,
+        molName: orgData.contragents[0].molName,
+        email: orgData.contragents[0].email,
+        address: addressFromUnknown(orgData.contragents[0].address),
+        source: "DB",
+      };
+    }
+
     return {
-      id: org.id,
-      name: org.name,
-      bulstat: org.bulstat,
-      vatNumber: org.vatNumber,
-      molName: org.molName,
-      email: org.email,
-      address: addressFromUnknown(org.address),
+      id: orgData.id,
+      name: orgData.name,
+      bulstat: orgData.bulstat,
+      vatNumber: orgData.vatNumber,
+      molName: orgData.molName,
+      email: orgData.email,
+      address: addressFromUnknown(orgData.address),
       source: "DB",
-      invoiceSeriesPrefix: org.invoiceSeriesPrefix,
-      currentInvNumber: org.current_inv_number?.toString() ?? null,
-      bank: org.bank,
-      iban: org.iban,
-      bic: org.bic,
+      invoiceSeriesPrefix: orgData.invoiceSeriesPrefix,
+      currentInvNumber: orgData.current_inv_number?.toString() ?? null,
+      bank: orgData.bank,
+      iban: orgData.iban,
+      bic: orgData.bic,
     };
   }
 
@@ -655,87 +684,6 @@ async function resolveCompany(input: {
 }
 
 // ---------------------------------------------------------------------------
-// JSON / AI extraction
-// ---------------------------------------------------------------------------
-
-function parseJSON(jsonString: string): { success: boolean; data?: unknown } {
-  try {
-    return { success: true, data: JSON.parse(jsonString) };
-  } catch {
-    return { success: false };
-  }
-}
-
-function extractJsonFromText(text: string): string | null {
-  return text.match(/\{[\s\S]*\}/)?.[0] ?? null;
-}
-
-async function extractPromptData(
-  prompt: string,
-  currentInvoice: BulgarianInvoiceData | null,
-): Promise<PromptExtraction> {
-  const { default: OpenAI } = await import("openai");
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-  const response = await openai.responses.create({
-    model: "gpt-5.6-luna",
-    input: [
-      {
-        role: "user",
-        content: [
-          { type: "input_text", text: EXTRACT_FROM_PROMPT },
-          { type: "input_text", text: `User prompt: ${prompt}` },
-          {
-            type: "input_text",
-            text: `Current invoice draft JSON: ${currentInvoice ? JSON.stringify(currentInvoice) : "null"}`,
-          },
-        ],
-      },
-    ],
-  });
-
-  const content = response.output_text ?? "";
-  const jsonString = extractJsonFromText(content);
-
-  const fallback: PromptExtraction = {
-    intent: "unsupported",
-    organizationName: "",
-    organizationEik: "",
-    contragentName: "",
-    contragentEik: "",
-    invoicePatch: {},
-    chatResponse:
-      "I couldn't process that as invoice-related. Please ask me to create or edit an invoice.",
-  };
-
-  if (!jsonString) return fallback;
-
-  const parsed = parseJSON(jsonString);
-  if (!parsed.success || !parsed.data || typeof parsed.data !== "object")
-    return fallback;
-
-  const data = parsed.data as Record<string, unknown>;
-  const rawIntent = normalizeText(data.intent);
-  const intent: Intent =
-    rawIntent === "create_invoice" ||
-    rawIntent === "edit_invoice" ||
-    rawIntent === "unsupported"
-      ? rawIntent
-      : "unsupported";
-
-  return {
-    intent,
-    organizationName: normalizeText(data.organizationName),
-    organizationEik: normalizeEik(data.organizationEik),
-    contragentName: normalizeText(data.contragentName),
-    contragentEik: normalizeEik(data.contragentEik),
-    invoicePatch: ((data.invoicePatch as Record<string, unknown>) ??
-      {}) as Partial<BulgarianInvoiceData>,
-    chatResponse: normalizeText(data.chatResponse),
-  };
-}
-
-// ---------------------------------------------------------------------------
 // POST handler
 // ---------------------------------------------------------------------------
 
@@ -867,7 +815,7 @@ export async function POST(request: NextRequest) {
             intent: extraction.intent,
             assistantMessage:
               extraction.chatResponse ||
-              "I currently support only invoice generation and invoice edits.",
+              "I currently support invoice generation, invoice edits, and creating new drafts from your latest invoice.",
             invoice: body.currentInvoice
               ? sanitizeInvoice(body.currentInvoice)
               : null,
@@ -964,23 +912,69 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const shouldUseLatestTemplate =
+      extraction.intent === "use_latest_invoice_template";
     const shouldStartFreshDraft =
       !currentInvoice || extraction.intent === "create_invoice";
 
-    let nextInvoice = shouldStartFreshDraft
-      ? createBaseInvoice(composerName)
-      : (currentInvoice as BulgarianInvoiceData);
+    let nextInvoice: BulgarianInvoiceData;
+
+    if (shouldUseLatestTemplate) {
+      if (!organizationResolved?.id) {
+        return NextResponse.json(
+          {
+            data: {
+              intent: extraction.intent,
+              assistantMessage:
+                extraction.chatResponse ||
+                "Не успях да намеря история на фактури за тази фирма. Посочете фирма от вашия акаунт с предишни фактури.",
+              invoice: null,
+              status: "missing-draft" as const,
+            },
+          } satisfies ChatResponse,
+          { status: 200 },
+        );
+      }
+
+      const latestTemplateInvoice = await buildLatestTemplateInvoice({
+        accountId,
+        organizationId: organizationResolved.id,
+        composerName,
+      });
+
+      if (!latestTemplateInvoice) {
+        return NextResponse.json(
+          {
+            data: {
+              intent: extraction.intent,
+              assistantMessage:
+                extraction.chatResponse ||
+                `Не намерих предишна фактура за "${organizationResolved.name}". Първо създайте поне една фактура за тази фирма.`,
+              invoice: null,
+              status: "missing-draft" as const,
+            },
+          } satisfies ChatResponse,
+          { status: 200 },
+        );
+      }
+
+      nextInvoice = latestTemplateInvoice.invoice;
+    } else {
+      nextInvoice = shouldStartFreshDraft
+        ? createBaseInvoice(composerName)
+        : (currentInvoice as BulgarianInvoiceData);
+    }
 
     // Apply AI patch — edit-safe for edits (only non-empty changed fields), full for creates
     const patch =
-      extraction.intent === "edit_invoice"
+      extraction.intent === "edit_invoice" || shouldUseLatestTemplate
         ? sanitizeEditPatch(extraction.invoicePatch)
         : sanitizeInvoicePatch(extraction.invoicePatch);
 
     const hasExplicitInvoiceNumber = Boolean(
       patch.invoiceNumber && normalizeText(patch.invoiceNumber),
     );
-    const previousSellerEik = normalizeEik(currentInvoice?.sellerEik);
+    const previousSellerEik = normalizeEik(nextInvoice?.sellerEik);
 
     nextInvoice = mergeInvoice(nextInvoice, patch);
 
@@ -1019,7 +1013,10 @@ export async function POST(request: NextRequest) {
 
       if (
         !hasExplicitInvoiceNumber &&
-        (shouldStartFreshDraft || sellerWasUpdated || invoiceIsDefault)
+        (shouldStartFreshDraft ||
+          shouldUseLatestTemplate ||
+          sellerWasUpdated ||
+          invoiceIsDefault)
       ) {
         nextInvoice.invoiceNumber =
           organizationResolved.source === "DB"

@@ -133,7 +133,6 @@ export async function POST(req: NextRequest) {
         { status: 402 }, // 402 Payment Required
       );
     }
-    console.log(creditResult, "creditResult");
 
     return NextResponse.json({
       data: { ...extracted, creditsRemaining: creditResult.remainingBalance },
