@@ -97,9 +97,11 @@ export const PricingSlider = ({
   const redirectUrl = pathname === "/" && user ? creditsLink : null;
 
   return (
-    <>
+    <div
+      className={`flex flex-col justify-center gap-14 ${layout === "landing" ? "w-full" : "w-fit"}`}
+    >
       <FadeIn
-        className={`mb-14 ${layout === "landing" ? "flex items-center justify-center" : ""} `}
+        className={`${layout === "landing" ? "flex items-center justify-center" : "flex items-center justify-center"} `}
       >
         <div className="relative w-full max-w-xs">
           <div
@@ -119,12 +121,12 @@ export const PricingSlider = ({
               const nextIndex = Array.isArray(values) ? values[0] : values;
               setSliderIndex(nextIndex);
             }}
-            className="w-full"
+            className="w-fit"
           />
         </div>
       </FadeIn>
       <FadeIn
-        className={`mb-14 ${layout === "landing" ? "flex items-center justify-center" : ""} `}
+        className={`${layout === "landing" ? "flex items-center justify-center" : ""} `}
       >
         <div className="grid grid-cols-1 place-items-center place-content-center gap-8 bg-muted/30 rounded-2xl p-8 md:p-12 w-fit">
           <div className="flex flex-col justify-between">
@@ -185,6 +187,6 @@ export const PricingSlider = ({
           onClose={() => setIsLoginModalOpen(false)}
         />
       )}
-    </>
+    </div>
   );
 };
