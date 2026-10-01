@@ -92,7 +92,6 @@ function buildWelcomeMessage(
 export function AIAssistantPage({ account }: { account: AccountContext }) {
   const t = useTranslations("aiChat");
   const { setAlertStatus } = useGlobalStore();
-
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [messageInput, setMessageInput] = useState("");
   const [currentInvoice, setCurrentInvoice] =

@@ -289,7 +289,6 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
       // Extract the data and creditsRemaining from the response
       const creditsRemaining = data?.creditsRemaining;
-      console.log(data, "DATA RESPONSE");
 
       // Update user store with new credit balance if available
       if (typeof creditsRemaining === "number" && user) {
