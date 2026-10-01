@@ -97,13 +97,11 @@ export const PricingSlider = ({
   const redirectUrl = pathname === "/" && user ? creditsLink : null;
 
   return (
-    <div
-      className={`flex flex-col justify-center gap-14 ${layout === "landing" ? "w-full" : "w-fit"}`}
-    >
+    <>
       <FadeIn
-        className={`${layout === "landing" ? "flex items-center justify-center" : "flex items-center justify-center"} `}
+        className={`mb-14 ${layout === "landing" ? "flex items-center justify-center" : ""} `}
       >
-        <div className="relative w-full max-w-xs">
+        <div className="relative w-full max-w-100">
           <div
             className="absolute -top-10 flex justify-center pointer-events-none transition-all duration-75"
             style={{ left: `calc(${sliderPercentage}% - 21px)` }}
@@ -121,23 +119,23 @@ export const PricingSlider = ({
               const nextIndex = Array.isArray(values) ? values[0] : values;
               setSliderIndex(nextIndex);
             }}
-            className="w-fit"
+            className="w-full"
           />
         </div>
       </FadeIn>
       <FadeIn
-        className={`${layout === "landing" ? "flex items-center justify-center" : ""} `}
+        className={`mb-14 ${layout === "landing" ? "flex items-center justify-center" : ""} `}
       >
-        <div className="grid grid-cols-1 place-items-center place-content-center gap-8 bg-muted/30 rounded-2xl p-8 md:p-12 w-fit">
-          <div className="flex flex-col justify-between">
-            <div>
+        <div className="grid grid-cols-1 place-items-center place-content-center gap-8 bg-muted/30 rounded-2xl p-8 md:p-12 w-full max-w-100">
+          <div className="flex flex-col justify-between w-full">
+            <>
               <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4 text-center">
                 {t(selectedTier.name)}
               </h3>
               <p className="text-muted-foreground mb-4 text-center">
                 {t(selectedTier.desc)}
               </p>
-            </div>
+            </>
             <div className="mb-4">
               <div className="flex items-baseline gap-1 justify-center">
                 <span className="text-4xl md:text-5xl font-bold text-foreground">
@@ -171,7 +169,7 @@ export const PricingSlider = ({
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full items-center justify-center gap-2">
             <span className="text-foreground">
               {t("creditsCount")}: {selectedCredits}
             </span>
@@ -187,6 +185,6 @@ export const PricingSlider = ({
           onClose={() => setIsLoginModalOpen(false)}
         />
       )}
-    </div>
+    </>
   );
 };

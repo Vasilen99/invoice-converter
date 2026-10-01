@@ -207,7 +207,9 @@
       "organizationCreateFailedHeader": "Organization could not be created",
       "organizationCreateFailedMessage": "The seller organization could not be created from external registry or form data.",
       "contragentCreateFailedHeader": "Contragent could not be created",
-      "contragentCreateFailedMessage": "The buyer contragent could not be created from external registry or form data."
+      "contragentCreateFailedMessage": "The buyer contragent could not be created from external registry or form data.",
+      "insufficientCreditsHeader": "Insufficient credits",
+      "insufficientCreditsMessage": "You don't have enough credits to generate an invoice. Please add credits to your account."
     }
   },
   "dashboardNaming": "Dashboard",
@@ -667,11 +669,11 @@
       "description": "Your current AI chat invoice conversation is not saved. If you leave now, the draft and messages will be lost.",
       "leave": "Leave without saving",
       "stay": "Stay on this page"
-    }
+    },
+    "insufficientCreditsMessage": "You do not have enough credits for this operation. Please add credits to your account to continue."
   },
   "confirmationDialog": {
     "confirmCancel": "Cancel"
-  },
-    "insufficientCreditsMessage": "You do not have enough credits for this operation. Please add credits to your account to continue."
+  }
   
 }
