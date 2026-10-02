@@ -243,7 +243,8 @@
     "localizations": "Localizations",
     "logout": "Log out",
     "actionButtons": "Action buttons",
-    "noOrganizations": "You don't have any organizations yet. Add your first organization to get started."
+    "noOrganizations": "You don't have any organizations yet. Add your first organization to get started.",
+    "invoiceTemplate": "Invoice Template"
   },
   "generatedInvoices": {
     "header": "Generated Invoices",
@@ -287,6 +288,61 @@
     "addCredits": "Add credits",
     "saveChanges": "Save changes",
     "saving": "Saving..."
+  },
+  "invoiceTemplate": {
+    "header": "Invoice template",
+    "subheader": "Create and manage your invoice templates to customize your invoices the way you want.",
+    "upload": {
+      "title": "Upload template source",
+      "hint": "Upload a .pdf, .doc or .docx file and AI will extract layout, typography and reusable styles.",
+      "cta": "Upload and analyze",
+      "analyzing": "Analyzing template...",
+      "selectedFile": "Selected file: {file}"
+    },
+    "currentTemplate": {
+      "title": "Current active template",
+      "description": "This is the template currently used for generated invoices in your account."
+    },
+    "candidateTemplate": {
+      "title": "Extracted template preview",
+      "description": "Review the AI extracted template before you save it.",
+      "empty": "Upload a document to generate a reusable template preview."
+    },
+    "analysis": {
+      "primaryFont": "Primary font",
+      "secondaryFont": "Secondary font",
+      "headingStyle": "Heading style",
+      "bodyStyle": "Body style",
+      "colorPalette": "Color palette",
+      "notes": "AI notes"
+    },
+    "actions": {
+      "save": "Save template",
+      "saving": "Saving...",
+      "discard": "Discard"
+    },
+    "alerts": {
+      "invalidFileHeader": "Invalid file",
+      "invalidFileMessage": "Please choose a valid file to analyze.",
+      "unsupportedFileHeader": "Unsupported file type",
+      "unsupportedFileMessage": "Only .pdf, .doc and .docx files are supported.",
+      "accountMissingIdHeader": "Missing account ID",
+      "accountMissingIdMessage": "Failed to retrieve account ID",
+      "accountMissingHeader": "Account not found",
+      "accountMissingMessage": "We could not find an active account for saving template data.",
+      "analysisSuccessHeader": "Template extracted",
+      "analysisSuccessMessage": "The template was extracted successfully. Review it and save if you like it.",
+      "analysisFailedHeader": "Template extraction failed",
+      "analysisFailedMessage": "We couldn't extract a template from this file. Please try another file.",
+      "saveSuccessHeader": "Template saved",
+      "saveSuccessMessage": "Your invoice template was saved successfully.",
+      "saveFailedHeader": "Template save failed",
+      "saveFailedMessage": "We couldn't save your invoice template. Please try again.",
+      "insufficientCreditsHeader": "Insufficient credits",
+      "insufficientCreditsMessage": "You don't have enough credits to analyze a template. Each analysis costs 3 credits.",
+      "templateTooLargeHeader": "Template is too large",
+      "templateTooLargeMessage": "The extracted template is too large to store. Please use a simpler source document."
+    }
   },
   "creditsPage": {
     "header": "Credit Management",

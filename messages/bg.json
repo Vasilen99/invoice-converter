@@ -242,8 +242,8 @@
     "notifications": "Известия",
     "localizations": "Локализации",
     "logout": "Изход",
-    "actionButtons": "Бутони за действия"
-
+    "actionButtons": "Бутони за действия",
+    "invoiceTemplate": "Шаблон за фактура"
   },
   "generatedInvoices": {
     "header": "Генерирани фактури",
@@ -298,6 +298,61 @@
     "lastUpdatedAt": "Последно обновен на",
     "saveChanges": "Запази промените",
     "saving": "Запазване..."
+  },
+  "invoiceTemplate": {
+    "header": "Шаблон за фактура",
+    "subheader": "Създайте и управлявайте вашите шаблони за фактури, за да персонализирате фактурите си по желания от вас начин.",
+    "upload": {
+      "title": "Качване на източник за шаблон",
+      "hint": "Качете .pdf, .doc или .docx файл и AI ще извлече оформление, типография и преизползваеми стилове.",
+      "cta": "Качи и анализирай",
+      "analyzing": "Анализиране на шаблон...",
+      "selectedFile": "Избран файл: {file}"
+    },
+    "currentTemplate": {
+      "title": "Текущ активен шаблон",
+      "description": "Това е шаблонът, който в момента се използва за генерираните фактури в акаунта ви."
+    },
+    "candidateTemplate": {
+      "title": "Преглед на извлечен шаблон",
+      "description": "Прегледайте шаблона, извлечен от AI, преди да го запазите.",
+      "empty": "Качете документ, за да генерирате преглед на преизползваем шаблон."
+    },
+    "analysis": {
+      "primaryFont": "Основен шрифт",
+      "secondaryFont": "Вторичен шрифт",
+      "headingStyle": "Стил на заглавия",
+      "bodyStyle": "Стил на основен текст",
+      "colorPalette": "Цветова палитра",
+      "notes": "Бележки от AI"
+    },
+    "actions": {
+      "save": "Запази шаблона",
+      "saving": "Запазване...",
+      "discard": "Откажи"
+    },
+    "alerts": {
+      "invalidFileHeader": "Невалиден файл",
+      "invalidFileMessage": "Моля, изберете валиден файл за анализ.",
+      "unsupportedFileHeader": "Неподдържан тип файл",
+      "unsupportedFileMessage": "Поддържат се само .pdf, .doc и .docx файлове.",
+      "accountMissingIdHeader": "Липсващ идентификатор на акаунт",
+      "accountMissingIdMessage": "Неуспешно извличане на идентификатор на акаунта",
+      "accountMissingHeader": "Акаунтът не е намерен",
+      "accountMissingMessage": "Не успяхме да намерим активен акаунт за запазване на шаблона.",
+      "analysisSuccessHeader": "Шаблонът е извлечен",
+      "analysisSuccessMessage": "Шаблонът беше извлечен успешно. Прегледайте го и запазете при нужда.",
+      "analysisFailedHeader": "Неуспешно извличане на шаблон",
+      "analysisFailedMessage": "Не успяхме да извлечем шаблон от този файл. Моля, опитайте с друг файл.",
+      "saveSuccessHeader": "Шаблонът е запазен",
+      "saveSuccessMessage": "Вашият шаблон за фактура беше запазен успешно.",
+      "saveFailedHeader": "Неуспешно запазване на шаблон",
+      "saveFailedMessage": "Не успяхме да запазим шаблона за фактура. Моля, опитайте отново.",
+      "insufficientCreditsHeader": "Недостатъчно кредити",
+      "insufficientCreditsMessage": "Нямате достатъчно кредити за анализ на шаблон. Всеки анализ струва 3 кредита.",
+      "templateTooLargeHeader": "Шаблонът е твърде голям",
+      "templateTooLargeMessage": "Извлеченият шаблон е твърде голям за съхранение. Моля, използвайте по-опростен изходен документ."
+    }
   },
   "createInvoice": {
     "header": "Създай фактура",

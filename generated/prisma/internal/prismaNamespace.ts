@@ -1361,7 +1361,8 @@ export const AccountScalarFieldEnum = {
   creditBalance: 'creditBalance',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  composer_name: 'composer_name'
+  composer_name: 'composer_name',
+  inv_template: 'inv_template'
 } as const
 
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]

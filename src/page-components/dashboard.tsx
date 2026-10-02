@@ -39,6 +39,7 @@ import {
   createInvoiceLink,
   generatedInvoicesLink,
   creditsLink,
+  invoiceTemplateLink,
 } from "../../utility/links";
 import { useUserStore } from "@/store/user";
 import { PLATFORM_NAME } from "../../utility/constants";
@@ -161,6 +162,11 @@ const NAVIGATION_CONFIG = [
         nameKey: "dashboard.myAccount",
         href: accountLink,
         icon: User,
+      },
+      {
+        nameKey: "dashboard.invoiceTemplate",
+        href: invoiceTemplateLink,
+        icon: FileText,
       },
       // {
       //   nameKey: "dashboard.integrations",
