@@ -209,13 +209,15 @@ const NORMALIZATION_STYLE = `<style ${NORMALIZED_TEMPLATE_MARKER}>
 
   body {
     width: 794px;
-    max-width: 794px;
+    max-width: none !important;
+    min-width: 794px;
     font-family: "DejaVu Sans", "Arial Unicode MS", Arial, sans-serif;
     font-size: 11pt;
     line-height: 1.4;
     color: #222;
     box-sizing: border-box;
     padding: 28px 32px;
+    overflow: visible;
   }
 
   *, *::before, *::after {
@@ -226,6 +228,7 @@ const NORMALIZATION_STYLE = `<style ${NORMALIZED_TEMPLATE_MARKER}>
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
+    max-width: 100%;
   }
 
   td, th {
@@ -234,6 +237,7 @@ const NORMALIZATION_STYLE = `<style ${NORMALIZED_TEMPLATE_MARKER}>
     word-break: break-word;
     white-space: normal;
     line-height: 1.4;
+    max-width: 100%;
   }
 
   p, span, div, li, strong, b, em, small {
@@ -244,13 +248,14 @@ const NORMALIZATION_STYLE = `<style ${NORMALIZED_TEMPLATE_MARKER}>
   }
 
   .tpl-var {
-    display: block;
+    display: inline-block;
     min-width: 0;
     max-width: 100%;
     white-space: normal;
     overflow-wrap: anywhere;
     word-break: break-word;
     line-height: inherit;
+    vertical-align: top;
   }
 
   td .tpl-var,
@@ -259,11 +264,13 @@ const NORMALIZATION_STYLE = `<style ${NORMALIZED_TEMPLATE_MARKER}>
   div .tpl-var,
   span .tpl-var {
     max-width: 100%;
+    display: inline;
   }
 
   img, svg, canvas {
     max-width: 100%;
     height: auto;
+    display: block;
   }
 </style>`;
 

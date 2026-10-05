@@ -24,6 +24,7 @@ export async function getOrganizationsWithGeneratedInvoices(): Promise<{
   hasAccount: boolean;
   accountId: number | null;
   composerName: string | null;
+  invTemplate: string | null;
 }> {
   const user = await getUserServer();
   if (!user?.sub) {
@@ -62,6 +63,7 @@ export async function getOrganizationsWithGeneratedInvoices(): Promise<{
         hasAccount: false,
         accountId: null,
         composerName: null,
+        invTemplate: null,
       };
     }
 
@@ -72,6 +74,7 @@ export async function getOrganizationsWithGeneratedInvoices(): Promise<{
       select: {
         id: true,
         composer_name: true,
+        inv_template: true,
       },
     });
 
@@ -81,6 +84,7 @@ export async function getOrganizationsWithGeneratedInvoices(): Promise<{
         hasAccount: false,
         accountId: null,
         composerName: null,
+        invTemplate: null,
       };
     }
 
@@ -159,6 +163,7 @@ export async function getOrganizationsWithGeneratedInvoices(): Promise<{
       hasAccount: true,
       accountId: account.id,
       composerName: account.composer_name,
+      invTemplate: account.inv_template,
     };
   } catch (error) {
     console.error("[generated-invoices/action] Error:", error);
@@ -167,6 +172,7 @@ export async function getOrganizationsWithGeneratedInvoices(): Promise<{
       hasAccount: true,
       accountId: null,
       composerName: null,
+      invTemplate: null,
     };
   }
 }

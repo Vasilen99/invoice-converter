@@ -73,6 +73,7 @@ export type AccountContext = {
     account: {
       creditBalance: number;
       composer_name: string | null;
+      inv_template: string | null;
       organizations: AccountOrgSnapshot[];
     };
   }[];
@@ -108,6 +109,7 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
 
   const accountMember = account.accountMembers[0];
   const accountOrgs = accountMember?.account.organizations ?? [];
+  const invoiceTemplateHtml = accountMember?.account.inv_template ?? null;
   const [availableCredits, setAvailableCredits] = useState(
     accountMember?.account.creditBalance ?? 0,
   );
@@ -333,6 +335,7 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
             invoiceData: currentInvoice,
             generatedPdfUrl,
             skipSourceDocumentCreation: true,
+            creditsCost: CREDIT_COSTS.CHAT_MESSAGE,
           }),
         },
         true,
@@ -483,6 +486,7 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
         isOpen={Boolean(previewInvoiceData)}
         onClose={() => setPreviewInvoiceData(null)}
         invoiceData={previewInvoiceData}
+        templateHtml={invoiceTemplateHtml}
       />
     </div>
   );

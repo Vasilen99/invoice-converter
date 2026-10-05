@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import { HeadingSection } from "@/components/HeadingSection";
 import NoAccountFallback from "@/components/NoAccountFallback";
 import { useMemo, useRef, useState } from "react";
@@ -203,7 +204,7 @@ export default function InvoiceTemplatePage({
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-border bg-card p-4 lg:p-5">
+        <div className="rounded-xl border border-border bg-card p-4 lg:p-5 min-w-0 flex flex-col">
           <div className="mb-3">
             <h3 className="text-base font-semibold text-foreground">
               {t("currentTemplate.title")}
@@ -212,7 +213,10 @@ export default function InvoiceTemplatePage({
               {t("currentTemplate.description")}
             </p>
           </div>
-          <div className="h-130 overflow-auto rounded-lg border border-border bg-background">
+          <div
+            className="rounded-lg border border-border bg-background flex-1"
+            style={{ overflow: "auto", minHeight: "520px" }}
+          >
             <iframe
               title="current-template"
               sandbox=""
@@ -223,7 +227,7 @@ export default function InvoiceTemplatePage({
           </div>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 lg:p-5">
+        <div className="rounded-xl border border-border bg-card p-4 lg:p-5 min-w-0 flex flex-col">
           <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h3 className="text-base font-semibold text-foreground">
@@ -237,7 +241,10 @@ export default function InvoiceTemplatePage({
 
           {normalizedCandidateTemplate ? (
             <>
-              <div className="h-130 overflow-auto rounded-lg border border-border bg-background">
+              <div
+                className="rounded-lg border border-border bg-background flex-1"
+                style={{ overflow: "auto", minHeight: "520px" }}
+              >
                 <iframe
                   title="candidate-template"
                   sandbox=""

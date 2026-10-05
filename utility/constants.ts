@@ -141,4 +141,5 @@ export const PRICING_TIERS = [
 export const CREDIT_COSTS = {
   INVOICE_EXTRACTION: 3, // Credits for extracting invoice from file
   CHAT_MESSAGE: 1, // Credits per chat message in AI assistant
+  TEMPLATE_EXTRACTION: 8, // Credits for analyzing and extracting template from invoice
 };

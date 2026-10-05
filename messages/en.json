@@ -124,6 +124,7 @@
     "remove": "Remove",
     "removeAll": "Remove All",
     "addMore": "Add More",
+  "previewInvoice": "Preview invoice",
     "downloadPdf": "Download PDF",
     "generating": "Generating…",
     "stripeInvoice": "Stripe Invoice",

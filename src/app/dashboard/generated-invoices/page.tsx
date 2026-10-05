@@ -11,6 +11,7 @@ const Page = async () => {
       hasAccount={response.hasAccount}
       accountId={response.accountId}
       composerName={response.composerName}
+      invTemplate={response.invTemplate}
     />
   );
 };

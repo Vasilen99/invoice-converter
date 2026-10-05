@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import type React from "react";
 
 const Dashboard = dynamic(() => import("@/page-components/dashboard"));
 

@@ -21,6 +21,7 @@ import {
   parseInvoiceNumber,
   sanitizeInvoice,
 } from "@/utility/api-helpers";
+import type { CompanyData } from "@/utility/types";
 
 type RegistryCompanyData = {
   bulstat: string;
@@ -50,6 +51,8 @@ async function fetchCompanyFromExternalApi(
   };
 }
 
+type AddressFormat = ReturnType<typeof transformAddressFromCompanyData>;
+
 async function fetchCompanyFromRegistryCache(
   bulstat: string,
 ): Promise<RegistryCompanyData | null> {
@@ -75,7 +78,7 @@ async function fetchCompanyFromRegistryCache(
     data: { lastFetchedAt: new Date() },
   });
 
-  const rawLookupData = cached.rawLookupData as any;
+  const rawLookupData = cached.rawLookupData as CompanyData | null;
   const derivedAddress = rawLookupData
     ? transformAddressFromCompanyData(rawLookupData)
     : undefined;
@@ -84,9 +87,7 @@ async function fetchCompanyFromRegistryCache(
     bulstat: cached.bulstat,
     name: cached.name,
     vatNumber: cached.vatNumber,
-    address: (cached.address as ReturnType<
-      typeof transformAddressFromCompanyData
-    >) ??
+    address: ((cached.address as unknown) as AddressFormat) ??
       derivedAddress ?? { street: "", settlement: "" },
     molName: rawLookupData ? extractManagerName(rawLookupData) : "",
     email: rawLookupData ? extractEmail(rawLookupData) : null,
@@ -126,17 +127,25 @@ async function createCompanyRegistryCache(input: {
     return existing.id;
   }
 
+  // Build the data object dynamically to avoid type issues with JSON fields
+  const createData: Record<string, unknown> = {
+    bulstat: input.bulstat,
+    name: input.name,
+    vatNumber: input.vatNumber,
+    lastFetchedAt: new Date(),
+    createdAt: new Date(),
+  };
+
+  if (input.address) {
+    createData.address = input.address;
+  }
+
+  if (input.rawLookupData !== undefined) {
+    createData.rawLookupData = input.rawLookupData;
+  }
+
   const created = await prisma.companyRegistryCache.create({
-    data: {
-      bulstat: input.bulstat,
-      name: input.name,
-      vatNumber: input.vatNumber,
-      address: (input.address as any) ?? undefined,
-      rawLookupData:
-        input.rawLookupData === undefined ? null : (input.rawLookupData as any),
-      lastFetchedAt: new Date(),
-      createdAt: new Date(),
-    },
+    data: createData as Parameters<typeof prisma.companyRegistryCache.create>[0]['data'],
     select: { id: true },
   });
 
@@ -160,6 +169,7 @@ export async function POST(request: NextRequest) {
       sourceDocumentUrl?: string | null;
       generatedPdfUrl?: string | null;
       skipSourceDocumentCreation?: boolean;
+      creditsCost?: number;
     };
 
     const {
@@ -168,6 +178,7 @@ export async function POST(request: NextRequest) {
       sourceDocumentUrl = null,
       generatedPdfUrl = null,
       skipSourceDocumentCreation = false,
+      creditsCost = undefined,
     } = body;
 
     if (!invoiceData) {
@@ -318,26 +329,32 @@ export async function POST(request: NextRequest) {
           rawLookupData: buyerResolved?.rawLookupData,
         });
 
+        // Build the data object dynamically to avoid type issues with JSON fields
+        const contragentData: Record<string, unknown> = {
+          organizationId: organization.id,
+          bulstat: buyerEik,
+          name: buyerResolved?.name || normalizedInvoice.buyerName || "",
+          vatNumber:
+            buyerResolved?.vatNumber ||
+            normalizedInvoice.buyerVatNumber ||
+            null,
+          molName:
+            buyerResolved?.molName || normalizedInvoice.buyerMol || null,
+          email: buyerResolved?.email || null,
+          source: buyerResolved ? "NAP_API" : "MANUAL",
+          registryId: buyerRegistryId,
+        };
+
+        if (buyerAddress) {
+          contragentData.address = buyerAddress;
+        }
+
+        if (buyerResolved?.rawLookupData !== undefined) {
+          contragentData.rawLookupData = buyerResolved.rawLookupData;
+        }
+
         contragent = await prisma.contragent.create({
-          data: {
-            organizationId: organization.id,
-            bulstat: buyerEik,
-            name: buyerResolved?.name || normalizedInvoice.buyerName || "",
-            vatNumber:
-              buyerResolved?.vatNumber ||
-              normalizedInvoice.buyerVatNumber ||
-              null,
-            molName:
-              buyerResolved?.molName || normalizedInvoice.buyerMol || null,
-            email: buyerResolved?.email || null,
-            address: buyerAddress,
-            source: buyerResolved ? "NAP_API" : "MANUAL",
-            registryId: buyerRegistryId,
-            rawLookupData:
-              buyerResolved?.rawLookupData === undefined
-                ? null
-                : (buyerResolved.rawLookupData as any),
-          },
+          data: contragentData as Parameters<typeof prisma.contragent.create>[0]['data'],
           select: { id: true },
         });
       }
@@ -374,26 +391,32 @@ export async function POST(request: NextRequest) {
           rawLookupData: buyerResolved?.rawLookupData,
         });
 
+        // Build the data object dynamically to avoid type issues with JSON fields
+        const contragent2Data: Record<string, unknown> = {
+          organizationId: organization.id,
+          bulstat: buyerEik,
+          name: buyerResolved?.name || normalizedInvoice.buyerName || "",
+          vatNumber:
+            buyerResolved?.vatNumber ||
+            normalizedInvoice.buyerVatNumber ||
+            null,
+          molName:
+            buyerResolved?.molName || normalizedInvoice.buyerMol || null,
+          email: buyerResolved?.email || null,
+          source: buyerResolved ? "NAP_API" : "MANUAL",
+          registryId: buyerRegistryId,
+        };
+
+        if (buyerAddress) {
+          contragent2Data.address = buyerAddress;
+        }
+
+        if (buyerResolved?.rawLookupData !== undefined) {
+          contragent2Data.rawLookupData = buyerResolved.rawLookupData;
+        }
+
         contragent = await prisma.contragent.create({
-          data: {
-            organizationId: organization.id,
-            bulstat: buyerEik,
-            name: buyerResolved?.name || normalizedInvoice.buyerName || "",
-            vatNumber:
-              buyerResolved?.vatNumber ||
-              normalizedInvoice.buyerVatNumber ||
-              null,
-            molName:
-              buyerResolved?.molName || normalizedInvoice.buyerMol || null,
-            email: buyerResolved?.email || null,
-            address: buyerAddress,
-            source: buyerResolved ? "NAP_API" : "MANUAL",
-            registryId: buyerRegistryId,
-            rawLookupData:
-              buyerResolved?.rawLookupData === undefined
-                ? null
-                : (buyerResolved.rawLookupData as any),
-          },
+          data: contragent2Data as Parameters<typeof prisma.contragent.create>[0]['data'],
           select: { id: true },
         });
       }
@@ -527,7 +550,7 @@ export async function POST(request: NextRequest) {
             totalAmount,
             status: "ISSUED",
             pdfFileUrl: generatedPdfUrl || undefined,
-            creditsCost: 1, // default
+            creditsCost: creditsCost, // default
             organizationId: organization.id,
             contragentId: contragent.id,
             sourceDocumentId: sourceDocId ?? undefined,

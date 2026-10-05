@@ -37,6 +37,7 @@ export async function getUserAccountData() {
               select: {
                 composer_name: true,
                 creditBalance: true,
+                inv_template: true,
                 organizations: {
                   orderBy: { createdAt: "asc" },
                   select: {

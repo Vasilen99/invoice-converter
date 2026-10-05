@@ -1,22 +1,32 @@
 "use client";
 
-import React from "react";
-import BulgarianInvoice from "./BulgarianInvoice";
+import React, { useMemo } from "react";
 import { BulgarianInvoiceData } from "../types";
 import { X } from "lucide-react";
+import {
+  renderInvoiceTemplateHtml,
+  resolveInvoiceTemplateHtml,
+} from "@/utility/invoice-template-renderer";
 
 interface InvoicePreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   invoiceData: BulgarianInvoiceData | null;
+  templateHtml?: string | null;
 }
 
 export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
   isOpen,
   onClose,
   invoiceData,
+  templateHtml,
 }) => {
   if (!isOpen || !invoiceData) return null;
+
+  const renderedTemplate = useMemo(() => {
+    const resolvedTemplate = resolveInvoiceTemplateHtml(templateHtml);
+    return renderInvoiceTemplateHtml(resolvedTemplate, invoiceData);
+  }, [invoiceData, templateHtml]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
@@ -37,8 +47,16 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
 
         {/* Invoice Preview */}
         <div className="flex-1 overflow-auto bg-gray-50 p-6">
-          <div className="bg-white rounded-lg shadow-sm p-8">
-            <BulgarianInvoice data={invoiceData} />
+          <div className="bg-white rounded-lg shadow-sm p-4">
+            <div className="rounded-md border border-border bg-white overflow-auto no-scrollbar">
+              <iframe
+                title="invoice-template-preview"
+                sandbox=""
+                className="block border-0"
+                style={{ width: 794, minWidth: 794, height: 1123 }}
+                srcDoc={renderedTemplate}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import InvoiceTemplatePage from "@/page-components/invoice-template";
 import { getAccountDataTemplate } from "./action";
 

@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
       data: userContragents,
       status: 200,
     });
-  } catch (er) {
+  } catch (_er) {
     return NextResponse.json(
       {
         data: null,

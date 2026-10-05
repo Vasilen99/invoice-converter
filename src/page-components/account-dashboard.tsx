@@ -89,7 +89,15 @@ export default function AccountDashboardPage({
       });
     }
   };
+  const testCall = async () => {
+    const response = await callApi("/all-orgs", { method: "GET" }, true);
 
+    console.log(response, "testCall");
+  };
+
+  useEffect(() => {
+    testCall();
+  }, []);
   return (
     <section className="flex flex-col">
       <HeadingSection

@@ -41,6 +41,7 @@ export default function GeneratedInvoices({
   hasAccount,
   accountId,
   composerName,
+  invTemplate,
 }: GeneratedInvoicesProps) {
   const t = useTranslations("generatedInvoices");
   const { setAlertStatus } = useGlobalStore();
@@ -408,6 +409,7 @@ export default function GeneratedInvoices({
             invoiceData,
             generatedPdfUrl: pdfFileUrl,
             skipSourceDocumentCreation: true,
+            creditsCost: undefined,
           }),
         },
         true,
@@ -705,6 +707,7 @@ export default function GeneratedInvoices({
         isOpen={isPreviewModalOpen}
         onClose={() => setIsPreviewModalOpen(false)}
         invoiceData={buildInvoiceData()}
+        templateHtml={invTemplate}
       />
     </section>
   );

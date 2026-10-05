@@ -80,6 +80,7 @@ interface InvoicesLayoutSectionProps {
     sourceDocumentUrl?: string | null,
   ) => Promise<void>;
   handleDownloadAll: () => Promise<void>;
+  onPreview: (invoiceData: BulgarianInvoiceData) => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   reset: () => void;
 }
@@ -98,6 +99,7 @@ export const InvoicesLayoutSection = ({
   updateInvoiceData,
   handleDownload,
   handleDownloadAll,
+  onPreview,
   inputRef,
   reset,
 }: InvoicesLayoutSectionProps) => {
@@ -734,22 +736,35 @@ export const InvoicesLayoutSection = ({
                   />
                 </EditSection>
 
-                <button
-                  onClick={() => {
-                    if (selectedInvoice.data) {
-                      handleDownload(
-                        selectedInvoice.data,
-                        selectedInvoice.file.name,
-                        selectedInvoice.sourceDocumentUrl || null,
-                      );
-                    }
-                  }}
-                  className="btn-glow w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold text-primary-foreground hover:cursor-pointer
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      if (selectedInvoice.data) {
+                        onPreview(selectedInvoice.data);
+                      }
+                    }}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold border border-border bg-background text-foreground hover:bg-accent hover:cursor-pointer"
+                  >
+                    {t("previewInvoice")}
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (selectedInvoice.data) {
+                        handleDownload(
+                          selectedInvoice.data,
+                          selectedInvoice.file.name,
+                          selectedInvoice.sourceDocumentUrl || null,
+                        );
+                      }
+                    }}
+                    className="btn-glow w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold text-primary-foreground hover:cursor-pointer
                         bg-primary hover:bg-primary/90"
-                >
-                  <FileOutput className="w-5 h-5" />
-                  {downloading ? t("generating") : t("downloadPdf")}
-                </button>
+                  >
+                    <FileOutput className="w-5 h-5" />
+                    {downloading ? t("generating") : t("downloadPdf")}
+                  </button>
+                </div>
               </div>
             </div>
           )}

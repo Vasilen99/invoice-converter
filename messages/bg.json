@@ -124,6 +124,7 @@
     "remove": "Премахни",
     "removeAll": "Премахни всички",
     "addMore": "Добави още",
+  "previewInvoice": "Преглед на фактурата",
     "downloadPdf": "Изтегли PDF",
     "generating": "Генериране…",
     "stripeInvoice": "Stripe Фактура",

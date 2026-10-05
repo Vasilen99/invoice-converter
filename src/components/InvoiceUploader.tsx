@@ -9,6 +9,7 @@ import { callApi } from "../../utility/hooks/apiFetch";
 import { useGlobalStore } from "@/store/global";
 import { useUserStore } from "@/store/user";
 import dynamic from "next/dynamic";
+import { CREDIT_COSTS } from "@/utility/constants";
 const SuccessGenerationModal = dynamic(
   () => import("./SuccessModal").then((mod) => mod.SuccessGenerationModal),
   {
@@ -25,6 +26,15 @@ const InvoicesLayoutSection = dynamic(
 
 const UploadZone = dynamic(
   () => import("./UploadZone").then((mod) => mod.UploadZone),
+  {
+    ssr: false,
+  },
+);
+const InvoicePreviewModal = dynamic(
+  () =>
+    import("@/components/InvoicePreviewModal").then(
+      (mod) => mod.InvoicePreviewModal,
+    ),
   {
     ssr: false,
   },
@@ -60,6 +70,7 @@ type InvoiceUploaderProps = {
     id: number;
     creditBalance: number;
     composer_name?: string | null;
+    inv_template?: string | null;
   } | null;
 };
 
@@ -77,13 +88,15 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [aiStep, setAiStep] = useState(0);
-  const [missingOrganizations, setMissingOrganizations] = useState<
+  const [_missingOrganizations, setMissingOrganizations] = useState<
     MissingOrganizationByEik[]
   >([]);
-  const [missingContragents, setMissingContragents] = useState<
+  const [_missingContragents, setMissingContragents] = useState<
     MissingContragentByEik[]
   >([]);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [previewInvoiceData, setPreviewInvoiceData] =
+    useState<BulgarianInvoiceData | null>(null);
   const { setAlertStatus } = useGlobalStore();
   const { user, setUser } = useUserStore();
   const accountComposerName = account?.composer_name || "";
@@ -442,16 +455,16 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
                   status: "extracted",
                   data: preparedData,
                   sourceDocumentUrl:
-                    (preparedData as any)?.sourceDocumentUrl || null,
+                    (preparedData as BulgarianInvoiceData & { sourceDocumentUrl?: string | null })?.sourceDocumentUrl || null,
                 };
               }),
             );
 
             // Auto-select first successfully extracted invoice
             setSelectedInvoiceId((prev) => prev || id);
-          } catch (err: unknown) {
+          } catch (_err: unknown) {
             const error =
-              err instanceof Error ? err.message : t("extractFailed");
+              _err instanceof Error ? _err.message : t("extractFailed");
             setInvoices((prev) =>
               prev.map((inv) =>
                 inv.id === id ? { ...inv, status: "error", error } : inv,
@@ -583,7 +596,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
             invoiceData.sellerVatNumber,
             "generated",
           );
-        } catch (err) {
+        } catch (_err: unknown) {
           notifyAlert(
             "warning",
             "alerts.generatedDocumentSaveFailedHeader",
@@ -601,6 +614,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
               originalFilename: filename,
               sourceDocumentUrl: sourceDocumentUrl || null,
               generatedPdfUrl: generatedPdfUrl || null,
+              creditsCost: CREDIT_COSTS.INVOICE_EXTRACTION,
             }),
           },
           true,
@@ -721,6 +735,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
           updateInvoiceData={updateInvoiceData}
           handleDownload={handleDownload}
           handleDownloadAll={handleDownloadAll}
+          onPreview={setPreviewInvoiceData}
           inputRef={inputRef}
           reset={reset}
         />
@@ -730,6 +745,13 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         open={successModalOpen}
         onClose={() => setSuccessModalOpen(false)}
         t={t}
+      />
+
+      <InvoicePreviewModal
+        isOpen={Boolean(previewInvoiceData)}
+        onClose={() => setPreviewInvoiceData(null)}
+        invoiceData={previewInvoiceData}
+        templateHtml={account?.inv_template ?? null}
       />
     </div>
   );

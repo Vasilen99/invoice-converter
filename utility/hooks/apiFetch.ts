@@ -1,17 +1,29 @@
 "use client";
 import { globalStore } from "@/store/global";
 import { server } from "../constants";
+import { useRouter } from "next/navigation";
+
+type FetchOptions = {
+  method?: string;
+  headers?: Record<string, string>;
+  body?: FormData | string | null;
+};
 
 // Store translation function for use in async contexts
 let tFunction: ((key: string) => string) | null = null;
+let router: ReturnType<typeof useRouter> | null = null;
 
 export const setTranslationFunction = (t: (key: string) => string) => {
   tFunction = t;
 };
 
+export const setRouter = (r: ReturnType<typeof useRouter>) => {
+  router = r;
+};
+
 export const callApi = async (
   url: string,
-  options?: RequestInit,
+  options?: FetchOptions,
   showAlert?: boolean,
 ) => {
   const { setIsLoading, setAlertStatus, isLoading } = globalStore.getState();
@@ -33,11 +45,12 @@ export const callApi = async (
       body: options?.body ? options.body : null,
     });
 
-    if (response.status === 404) {
-      return (window.location.href = "/404");
-    }
-    if (response.status === 401) {
-      return (window.location.href = "/404");
+    if (response.status === 404 || response.status === 401) {
+      if (typeof window !== "undefined" && router) {
+        router.push("/404");
+      }
+      // Note: In SSR contexts without router, redirect will be handled at page level
+      return;
     }
 
     const contentType = response.headers.get("content-type") || "";

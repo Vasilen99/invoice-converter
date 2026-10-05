@@ -355,6 +355,7 @@ export type GeneratedInvoicesProps = {
   hasAccount: boolean;
   accountId: number | null;
   composerName: string | null;
+  invTemplate: string | null;
 };
 
 export type OrganizationOrContragent = {
@@ -395,6 +396,7 @@ export type CreateInvoicePrefillData = {
 export type AccountProps = {
   id: number;
   composer_name: string | null;
+  inv_template: string | null;
   organizations: OrganizationOrContragent[];
 } | null;
 
