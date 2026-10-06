@@ -129,8 +129,7 @@ export function EntityManagerDialog(props: EntityManagerDialogProps) {
   }, [editingItem]);
   // ─── Form data (unified; we cast to the correct type at usage) ────────────
   const buildInitialFormData = useCallback(():
-    | OrganizationFormData
-    | ContragentFormData => {
+    OrganizationFormData | ContragentFormData => {
     if (!editingItem) {
       return isContragent ? defaultContragentForm() : defaultOrganizationForm();
     }
@@ -673,7 +672,15 @@ export function EntityManagerDialog(props: EntityManagerDialogProps) {
                 <ManualAddOrganization
                   translations={t}
                   formData={formData}
-                  setFormData={isContragent ? (setFormData as React.Dispatch<React.SetStateAction<ContragentFormData>>) : (setFormData as React.Dispatch<React.SetStateAction<OrganizationFormData>>)}
+                  setFormData={
+                    isContragent
+                      ? (setFormData as React.Dispatch<
+                          React.SetStateAction<ContragentFormData>
+                        >)
+                      : (setFormData as React.Dispatch<
+                          React.SetStateAction<OrganizationFormData>
+                        >)
+                  }
                   onValidationChange={setIsFormValid}
                   isContragent={isContragent}
                 />

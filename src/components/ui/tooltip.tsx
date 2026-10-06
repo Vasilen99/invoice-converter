@@ -29,7 +29,12 @@ function TooltipTrigger({
   ...props
 }: TooltipPrimitive.Trigger.Props & { asChild?: boolean }) {
   if (asChild) {
-    return <Slot data-slot="tooltip-trigger" {...(props as Record<string, unknown>)} />;
+    return (
+      <Slot
+        data-slot="tooltip-trigger"
+        {...(props as Record<string, unknown>)}
+      />
+    );
   }
   return (
     <TooltipPrimitive.Trigger

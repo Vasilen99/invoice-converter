@@ -157,12 +157,17 @@ export async function POST(request: NextRequest) {
             registryData.address = formattedAddress;
           }
 
-          if (formattedRawLookupData !== null && formattedRawLookupData !== undefined) {
+          if (
+            formattedRawLookupData !== null &&
+            formattedRawLookupData !== undefined
+          ) {
             registryData.rawLookupData = formattedRawLookupData;
           }
 
           const registry = await prisma.companyRegistryCache.create({
-            data: registryData as Parameters<typeof prisma.companyRegistryCache.create>[0]['data'],
+            data: registryData as Parameters<
+              typeof prisma.companyRegistryCache.create
+            >[0]["data"],
           });
           registryId = registry.id;
         } else {

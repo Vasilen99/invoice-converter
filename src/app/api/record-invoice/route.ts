@@ -87,7 +87,7 @@ async function fetchCompanyFromRegistryCache(
     bulstat: cached.bulstat,
     name: cached.name,
     vatNumber: cached.vatNumber,
-    address: ((cached.address as unknown) as AddressFormat) ??
+    address: (cached.address as unknown as AddressFormat) ??
       derivedAddress ?? { street: "", settlement: "" },
     molName: rawLookupData ? extractManagerName(rawLookupData) : "",
     email: rawLookupData ? extractEmail(rawLookupData) : null,
@@ -145,7 +145,9 @@ async function createCompanyRegistryCache(input: {
   }
 
   const created = await prisma.companyRegistryCache.create({
-    data: createData as Parameters<typeof prisma.companyRegistryCache.create>[0]['data'],
+    data: createData as Parameters<
+      typeof prisma.companyRegistryCache.create
+    >[0]["data"],
     select: { id: true },
   });
 
@@ -338,8 +340,7 @@ export async function POST(request: NextRequest) {
             buyerResolved?.vatNumber ||
             normalizedInvoice.buyerVatNumber ||
             null,
-          molName:
-            buyerResolved?.molName || normalizedInvoice.buyerMol || null,
+          molName: buyerResolved?.molName || normalizedInvoice.buyerMol || null,
           email: buyerResolved?.email || null,
           source: buyerResolved ? "NAP_API" : "MANUAL",
           registryId: buyerRegistryId,
@@ -354,7 +355,9 @@ export async function POST(request: NextRequest) {
         }
 
         contragent = await prisma.contragent.create({
-          data: contragentData as Parameters<typeof prisma.contragent.create>[0]['data'],
+          data: contragentData as Parameters<
+            typeof prisma.contragent.create
+          >[0]["data"],
           select: { id: true },
         });
       }
@@ -400,8 +403,7 @@ export async function POST(request: NextRequest) {
             buyerResolved?.vatNumber ||
             normalizedInvoice.buyerVatNumber ||
             null,
-          molName:
-            buyerResolved?.molName || normalizedInvoice.buyerMol || null,
+          molName: buyerResolved?.molName || normalizedInvoice.buyerMol || null,
           email: buyerResolved?.email || null,
           source: buyerResolved ? "NAP_API" : "MANUAL",
           registryId: buyerRegistryId,
@@ -416,7 +418,9 @@ export async function POST(request: NextRequest) {
         }
 
         contragent = await prisma.contragent.create({
-          data: contragent2Data as Parameters<typeof prisma.contragent.create>[0]['data'],
+          data: contragent2Data as Parameters<
+            typeof prisma.contragent.create
+          >[0]["data"],
           select: { id: true },
         });
       }

@@ -164,7 +164,11 @@ export default function ManualAddOrganization({
     if (field.startsWith("address.")) {
       const addressField = field.split(".")[1];
       if (isContragent) {
-        (setFormData as React.Dispatch<React.SetStateAction<ContragentFormData>>)((prev) => ({
+        (
+          setFormData as React.Dispatch<
+            React.SetStateAction<ContragentFormData>
+          >
+        )((prev) => ({
           ...prev,
           address: {
             ...prev.address,
@@ -172,7 +176,11 @@ export default function ManualAddOrganization({
           },
         }));
       } else {
-        (setFormData as React.Dispatch<React.SetStateAction<OrganizationFormData>>)((prev) => ({
+        (
+          setFormData as React.Dispatch<
+            React.SetStateAction<OrganizationFormData>
+          >
+        )((prev) => ({
           ...prev,
           address: {
             ...prev.address,
@@ -182,12 +190,20 @@ export default function ManualAddOrganization({
       }
     } else {
       if (isContragent) {
-        (setFormData as React.Dispatch<React.SetStateAction<ContragentFormData>>)((prev) => ({
+        (
+          setFormData as React.Dispatch<
+            React.SetStateAction<ContragentFormData>
+          >
+        )((prev) => ({
           ...prev,
           [field]: value,
         }));
       } else {
-        (setFormData as React.Dispatch<React.SetStateAction<OrganizationFormData>>)((prev) => ({
+        (
+          setFormData as React.Dispatch<
+            React.SetStateAction<OrganizationFormData>
+          >
+        )((prev) => ({
           ...prev,
           [field]: value,
         }));

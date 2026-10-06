@@ -455,7 +455,11 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
                   status: "extracted",
                   data: preparedData,
                   sourceDocumentUrl:
-                    (preparedData as BulgarianInvoiceData & { sourceDocumentUrl?: string | null })?.sourceDocumentUrl || null,
+                    (
+                      preparedData as BulgarianInvoiceData & {
+                        sourceDocumentUrl?: string | null;
+                      }
+                    )?.sourceDocumentUrl || null,
                 };
               }),
             );

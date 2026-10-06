@@ -81,8 +81,11 @@ export async function POST(request: NextRequest) {
 
     for (const eik of normalizedEiks) {
       const org = organizations.find(
-        (o: { bulstat: string | null; current_inv_number: string | number | { toString: () => string } | null }) =>
-          normalizeEik(o.bulstat) === eik,
+        (o: {
+          bulstat: string | null;
+          current_inv_number:
+            string | number | { toString: () => string } | null;
+        }) => normalizeEik(o.bulstat) === eik,
       );
 
       if (org && org.current_inv_number !== null) {
