@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { OrganizationFormData, ContragentFormData } from "../../utility/types";
@@ -162,18 +163,51 @@ export default function ManualAddOrganization({
   const handleChange = (field: string, value: string) => {
     if (field.startsWith("address.")) {
       const addressField = field.split(".")[1];
-      setFormData((prev: any) => ({
-        ...prev,
-        address: {
-          ...prev.address,
-          [addressField]: value,
-        },
-      }));
+      if (isContragent) {
+        (
+          setFormData as React.Dispatch<
+            React.SetStateAction<ContragentFormData>
+          >
+        )((prev) => ({
+          ...prev,
+          address: {
+            ...prev.address,
+            [addressField]: value,
+          },
+        }));
+      } else {
+        (
+          setFormData as React.Dispatch<
+            React.SetStateAction<OrganizationFormData>
+          >
+        )((prev) => ({
+          ...prev,
+          address: {
+            ...prev.address,
+            [addressField]: value,
+          },
+        }));
+      }
     } else {
-      setFormData((prev: any) => ({
-        ...prev,
-        [field]: value,
-      }));
+      if (isContragent) {
+        (
+          setFormData as React.Dispatch<
+            React.SetStateAction<ContragentFormData>
+          >
+        )((prev) => ({
+          ...prev,
+          [field]: value,
+        }));
+      } else {
+        (
+          setFormData as React.Dispatch<
+            React.SetStateAction<OrganizationFormData>
+          >
+        )((prev) => ({
+          ...prev,
+          [field]: value,
+        }));
+      }
     }
 
     // Clear error for this field when user starts typing

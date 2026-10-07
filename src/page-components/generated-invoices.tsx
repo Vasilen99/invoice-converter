@@ -41,6 +41,7 @@ export default function GeneratedInvoices({
   hasAccount,
   accountId,
   composerName,
+  invTemplate,
 }: GeneratedInvoicesProps) {
   const t = useTranslations("generatedInvoices");
   const { setAlertStatus } = useGlobalStore();
@@ -369,7 +370,10 @@ export default function GeneratedInvoices({
         const pdfResponse = await fetch("/api/generate-pdf", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(invoiceData),
+          body: JSON.stringify({
+            ...invoiceData,
+            templateHtml: invTemplate || undefined,
+          }),
         });
 
         if (pdfResponse.ok) {
@@ -408,6 +412,7 @@ export default function GeneratedInvoices({
             invoiceData,
             generatedPdfUrl: pdfFileUrl,
             skipSourceDocumentCreation: true,
+            creditsCost: undefined,
           }),
         },
         true,
@@ -705,6 +710,7 @@ export default function GeneratedInvoices({
         isOpen={isPreviewModalOpen}
         onClose={() => setIsPreviewModalOpen(false)}
         invoiceData={buildInvoiceData()}
+        templateHtml={invTemplate}
       />
     </section>
   );

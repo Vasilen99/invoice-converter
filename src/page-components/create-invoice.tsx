@@ -354,6 +354,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
             invoiceData,
             generatedPdfUrl: pdfFileUrl,
             skipSourceDocumentCreation: true,
+            creditsCost: undefined,
           }),
         },
         true,
@@ -562,6 +563,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
             isOpen={isPreviewModalOpen}
             onClose={() => setIsPreviewModalOpen(false)}
             invoiceData={buildInvoiceData()}
+            templateHtml={data?.inv_template ?? null}
           />
         </>
       )}

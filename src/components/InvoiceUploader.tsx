@@ -9,6 +9,13 @@ import { callApi } from "../../utility/hooks/apiFetch";
 import { useGlobalStore } from "@/store/global";
 import { useUserStore } from "@/store/user";
 import dynamic from "next/dynamic";
+import { CREDIT_COSTS, AI_STEP_KEYS } from "@/utility/constants";
+import {
+  normalizeBulstat,
+  parseInvoiceSequence,
+  formatInvoiceSequence,
+} from "@/utility/helpers";
+
 const SuccessGenerationModal = dynamic(
   () => import("./SuccessModal").then((mod) => mod.SuccessGenerationModal),
   {
@@ -29,6 +36,15 @@ const UploadZone = dynamic(
     ssr: false,
   },
 );
+const InvoicePreviewModal = dynamic(
+  () =>
+    import("@/components/InvoicePreviewModal").then(
+      (mod) => mod.InvoicePreviewModal,
+    ),
+  {
+    ssr: false,
+  },
+);
 
 type InvoiceFile = {
   file: File;
@@ -39,31 +55,14 @@ type InvoiceFile = {
   sourceDocumentUrl?: string | null;
 };
 
-type MissingOrganizationByEik = {
-  bulstat: string;
-};
-
-type MissingContragentByEik = {
-  bulstat: string;
-  organizationId: number | null;
-  organizationBulstat: string;
-  organizationName: string | null;
-};
-
-type InvoicePartyPair = {
-  sellerEik: string;
-  buyerEik: string;
-};
-
 type InvoiceUploaderProps = {
   account?: {
     id: number;
     creditBalance: number;
     composer_name?: string | null;
+    inv_template?: string | null;
   } | null;
 };
-
-const AI_STEP_KEYS = ["step1", "step2", "step3", "step4", "step5"] as const;
 
 const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   const t = useTranslations("uploader");
@@ -77,13 +76,9 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   const [downloadingAll, setDownloadingAll] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [aiStep, setAiStep] = useState(0);
-  const [missingOrganizations, setMissingOrganizations] = useState<
-    MissingOrganizationByEik[]
-  >([]);
-  const [missingContragents, setMissingContragents] = useState<
-    MissingContragentByEik[]
-  >([]);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [previewInvoiceData, setPreviewInvoiceData] =
+    useState<BulgarianInvoiceData | null>(null);
   const { setAlertStatus } = useGlobalStore();
   const { user, setUser } = useUserStore();
   const accountComposerName = account?.composer_name || "";
@@ -111,104 +106,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     return id;
   };
 
-  const normalizeEik = (value: string | undefined): string =>
-    (value ?? "").trim();
-
-  const parseInvoiceSequence = (value: unknown): number => {
-    if (value === null || value === undefined) {
-      return 0;
-    }
-
-    const digits = String(value).replace(/\D/g, "");
-    if (!digits) {
-      return 0;
-    }
-
-    const parsed = parseInt(digits, 10);
-    return Number.isFinite(parsed) ? parsed : 0;
-  };
-
-  const formatInvoiceSequence = (sequence: number): string => {
-    const safeSequence = Number.isFinite(sequence) ? Math.max(0, sequence) : 0;
-    return String(safeSequence).padStart(10, "0");
-  };
-
-  const checkMissingEntities = async (
-    organizationEiks: string[],
-    invoicePairs: InvoicePartyPair[],
-  ) => {
-    const uniqueEiks = [
-      ...new Set(organizationEiks.map((eik) => normalizeEik(eik))),
-    ].filter(Boolean);
-
-    const uniqueInvoicePairs = Array.from(
-      new Map(
-        invoicePairs
-          .map((pair) => ({
-            sellerEik: normalizeEik(pair.sellerEik),
-            buyerEik: normalizeEik(pair.buyerEik),
-          }))
-          .filter((pair) => pair.sellerEik && pair.buyerEik)
-          .map((pair) => [`${pair.sellerEik}::${pair.buyerEik}`, pair]),
-      ).values(),
-    );
-
-    if (uniqueEiks.length === 0 && uniqueInvoicePairs.length === 0) {
-      return;
-    }
-
-    const result = await callApi(
-      "/organizations/missing-from-invoices",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          eiks: uniqueEiks,
-          invoicePairs: uniqueInvoicePairs,
-        }),
-      },
-      false,
-    );
-
-    const organizations = result?.missingOrganizations ?? [];
-    const contragents = result?.missingContragents ?? [];
-
-    setMissingOrganizations((prev) => {
-      const deduped = new Map<string, MissingOrganizationByEik>();
-      for (const org of [...prev, ...organizations]) {
-        deduped.set(normalizeEik(org.bulstat), org);
-      }
-
-      return Array.from(deduped.values());
-    });
-
-    setMissingContragents((prev) => {
-      const deduped = new Map<string, MissingContragentByEik>();
-      for (const contragent of [...prev, ...contragents]) {
-        const key = `${normalizeEik(contragent.bulstat)}::${normalizeEik(contragent.organizationBulstat)}`;
-        deduped.set(key, contragent);
-      }
-
-      return Array.from(deduped.values());
-    });
-  };
-
-  const handleGenerationSuccess = async (generatedSellerEiks: Set<string>) => {
-    // Only remove organizations that were just generated
-    setMissingOrganizations((prev) =>
-      prev.filter((org) => !generatedSellerEiks.has(normalizeEik(org.bulstat))),
-    );
-
-    // Only remove contragents that were just generated
-    // A contragent is "generated" if its seller org was generated
-    setMissingContragents((prev) =>
-      prev.filter(
-        (contragent) =>
-          !generatedSellerEiks.has(
-            normalizeEik(contragent.organizationBulstat),
-          ),
-      ),
-    );
-
+  const handleGenerationSuccess = () => {
     setSuccessModalOpen(true);
   };
 
@@ -334,7 +232,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
     // Check if account has sufficient credits before processing
     if (account) {
-      const EXTRACTION_COST = 3; // Credits per file
+      const EXTRACTION_COST = CREDIT_COSTS.INVOICE_EXTRACTION; // Credits per file
       const totalCreditsNeeded = selectedFiles.length * EXTRACTION_COST;
 
       if (account.creditBalance < totalCreditsNeeded) {
@@ -353,9 +251,6 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
     const newInvoices: InvoiceFile[] = [];
     const filePromises: Promise<void>[] = [];
-    const extractedOrganizationEiks = new Set<string>();
-    const extractedInvoicePairs = new Map<string, InvoicePartyPair>();
-
     // Add all files to the list with pending status
     for (let i = 0; i < selectedFiles.length; i++) {
       const file = selectedFiles[i];
@@ -378,18 +273,6 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
           try {
             const data = await processFile(file, id);
 
-            if (data) {
-              const sellerEik = normalizeEik(data.sellerEik);
-              const buyerEik = normalizeEik(data.buyerEik);
-              if (sellerEik) extractedOrganizationEiks.add(sellerEik);
-              if (sellerEik && buyerEik) {
-                extractedInvoicePairs.set(`${sellerEik}::${buyerEik}`, {
-                  sellerEik,
-                  buyerEik,
-                });
-              }
-            }
-
             // Update with extracted data
             setInvoices((prev) =>
               prev.map((inv) => {
@@ -406,7 +289,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
                   };
                 }
 
-                const sellerEik = normalizeEik(data.sellerEik);
+                const sellerEik = normalizeBulstat(data.sellerEik);
                 const dbCurrentSequence = parseInvoiceSequence(
                   data.invoiceNumber,
                 );
@@ -418,7 +301,8 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
                       return max;
                     }
 
-                    return normalizeEik(current.data.sellerEik) === sellerEik
+                    return normalizeBulstat(current.data.sellerEik) ===
+                      sellerEik
                       ? Math.max(
                           max,
                           parseInvoiceSequence(current.data.invoiceNumber),
@@ -442,16 +326,20 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
                   status: "extracted",
                   data: preparedData,
                   sourceDocumentUrl:
-                    (preparedData as any)?.sourceDocumentUrl || null,
+                    (
+                      preparedData as BulgarianInvoiceData & {
+                        sourceDocumentUrl?: string | null;
+                      }
+                    )?.sourceDocumentUrl || null,
                 };
               }),
             );
 
             // Auto-select first successfully extracted invoice
             setSelectedInvoiceId((prev) => prev || id);
-          } catch (err: unknown) {
+          } catch (_err: unknown) {
             const error =
-              err instanceof Error ? err.message : t("extractFailed");
+              _err instanceof Error ? _err.message : t("extractFailed");
             setInvoices((prev) =>
               prev.map((inv) =>
                 inv.id === id ? { ...inv, status: "error", error } : inv,
@@ -470,10 +358,6 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     setAiStep(0);
 
     await Promise.allSettled(filePromises);
-    await checkMissingEntities(
-      [...extractedOrganizationEiks],
-      Array.from(extractedInvoicePairs.values()),
-    );
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -521,8 +405,8 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     setLoading(true);
     try {
       const invalidInvoice = invoiceDataList.find(({ data }) => {
-        const sellerEik = normalizeEik(data.sellerEik);
-        const buyerEik = normalizeEik(data.buyerEik);
+        const sellerEik = normalizeBulstat(data.sellerEik);
+        const buyerEik = normalizeBulstat(data.buyerEik);
         return !sellerEik || !buyerEik;
       });
 
@@ -536,10 +420,6 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         return;
       }
 
-      // Collect all seller/buyer EIKs from invoices being generated
-      // so we can remove only those from missingOrganizations/Contragents
-      const generatedSellerEiks = new Set<string>();
-
       for (const {
         data: invoiceData,
         filename,
@@ -550,6 +430,8 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
           ...invoiceData,
           invoiceNumber: invoiceData.invoiceNumber || formatInvoiceSequence(1),
           composer_name: invoiceData.composer_name || accountComposerName || "",
+          // Include the account's saved template if available
+          templateHtml: account?.inv_template || undefined,
         };
 
         const finalInvoiceNumber = String(dataToSend.invoiceNumber);
@@ -583,7 +465,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
             invoiceData.sellerVatNumber,
             "generated",
           );
-        } catch (err) {
+        } catch (_err: unknown) {
           notifyAlert(
             "warning",
             "alerts.generatedDocumentSaveFailedHeader",
@@ -592,29 +474,36 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         }
 
         // Record the invoice in the database with the generated PDF URL
-        callApi(
-          "/record-invoice",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              invoiceData: dataToSend,
-              originalFilename: filename,
-              sourceDocumentUrl: sourceDocumentUrl || null,
-              generatedPdfUrl: generatedPdfUrl || null,
-            }),
-          },
-          true,
-        ).catch(() => {
+        try {
+          const recordResponse = await callApi(
+            "/record-invoice",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                invoiceData: dataToSend,
+                originalFilename: filename,
+                sourceDocumentUrl: sourceDocumentUrl || null,
+                generatedPdfUrl: generatedPdfUrl || null,
+                creditsCost: CREDIT_COSTS.INVOICE_EXTRACTION,
+              }),
+            },
+            true,
+          );
+
+          if (!recordResponse) {
+            notifyAlert(
+              "warning",
+              "alerts.recordInvoiceFailedHeader",
+              "alerts.recordInvoiceFailedMessage",
+            );
+          }
+        } catch {
           notifyAlert(
             "warning",
             "alerts.recordInvoiceFailedHeader",
             "alerts.recordInvoiceFailedMessage",
           );
-        });
-
-        // Track which sellers/buyers were generated in this batch
-        const sellerEik = normalizeEik(invoiceData.sellerEik);
-        if (sellerEik) generatedSellerEiks.add(sellerEik);
+        }
 
         // Add a small delay between downloads to avoid issues (only for bulk)
         if (isBulk) {
@@ -622,8 +511,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         }
       }
 
-      // Only remove organizations/contragents that were just generated
-      handleGenerationSuccess(generatedSellerEiks);
+      handleGenerationSuccess();
     } catch (err: unknown) {
       const error = err instanceof Error ? err.message : t("extractFailed");
       setErrorMsg(error);
@@ -721,6 +609,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
           updateInvoiceData={updateInvoiceData}
           handleDownload={handleDownload}
           handleDownloadAll={handleDownloadAll}
+          onPreview={setPreviewInvoiceData}
           inputRef={inputRef}
           reset={reset}
         />
@@ -730,6 +619,13 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         open={successModalOpen}
         onClose={() => setSuccessModalOpen(false)}
         t={t}
+      />
+
+      <InvoicePreviewModal
+        isOpen={Boolean(previewInvoiceData)}
+        onClose={() => setPreviewInvoiceData(null)}
+        invoiceData={previewInvoiceData}
+        templateHtml={account?.inv_template ?? null}
       />
     </div>
   );

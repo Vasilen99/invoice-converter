@@ -301,8 +301,8 @@ function SidebarTrigger({ className, onClick, ...props }: SidebarTriggerProps) {
       variant="ghost"
       size="icon"
       className={cn(" w-full", className)}
-      onClick={(event: any) => {
-        onClick?.(event);
+      onClick={(...args) => {
+        onClick?.(...args);
         toggleSidebar();
       }}
       {...props}

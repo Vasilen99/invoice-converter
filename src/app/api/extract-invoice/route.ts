@@ -1,27 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/utility/prisma";
 import { getUserServer } from "@/utility/get-user-server";
-import { EXTRACT_PROMPT, DEFAULT_INVOICE_NUMBER } from "@/utility/constants";
+import {
+  EXTRACT_PROMPT,
+  DEFAULT_INVOICE_NUMBER,
+  CREDIT_COSTS,
+} from "@/utility/constants";
 import { deductCredits } from "@/utility/credit-system";
-import { CREDIT_COSTS } from "@/utility/constants";
-
-function normalizeBulstat(value: string | undefined | null): string {
-  return (value ?? "").trim();
-}
-
-function formatInvoiceNumber(value: unknown): string {
-  if (value === null || value === undefined) {
-    return DEFAULT_INVOICE_NUMBER;
-  }
-
-  const digitsOnly = String(value).replace(/\D/g, "");
-  if (!digitsOnly) {
-    return DEFAULT_INVOICE_NUMBER;
-  }
-
-  return digitsOnly.padStart(10, "0");
-}
-
+import { formatInvoiceNumber } from "@/utility/api-helpers";
+import {
+  normalizeBulstat,
+  getFilePageCount,
+} from "@/utility/helpers/api-helpers";
 export async function POST(req: NextRequest) {
   try {
     const user = await getUserServer();
@@ -55,7 +45,20 @@ export async function POST(req: NextRequest) {
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
-
+    const pageCount = await getFilePageCount(file);
+    if (pageCount && pageCount > 1) {
+      return NextResponse.json(
+        {
+          data: null,
+          alert: {
+            status: "warning",
+            header: "uploader.alerts.pdfPageLimitExceededHeader",
+            message: "uploader.alerts.pdfPageLimitExceededMessage",
+          },
+        },
+        { status: 400 },
+      );
+    }
     const bytes = await file.arrayBuffer();
 
     // Upload the PDF as a file so the Responses API can read it

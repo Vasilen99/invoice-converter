@@ -144,16 +144,30 @@ export async function POST(request: NextRequest) {
         });
 
         if (!existingRegistry) {
+          // Build the data object dynamically to avoid type issues with JSON fields
+          const registryData: Record<string, unknown> = {
+            bulstat,
+            name,
+            vatNumber: vatNumber || null,
+            lastFetchedAt: new Date(),
+            createdAt: new Date(),
+          };
+
+          if (formattedAddress) {
+            registryData.address = formattedAddress;
+          }
+
+          if (
+            formattedRawLookupData !== null &&
+            formattedRawLookupData !== undefined
+          ) {
+            registryData.rawLookupData = formattedRawLookupData;
+          }
+
           const registry = await prisma.companyRegistryCache.create({
-            data: {
-              bulstat,
-              name,
-              vatNumber: vatNumber || null,
-              address: formattedAddress,
-              rawLookupData: formattedRawLookupData,
-              lastFetchedAt: new Date(),
-              createdAt: new Date(),
-            },
+            data: registryData as Parameters<
+              typeof prisma.companyRegistryCache.create
+            >[0]["data"],
           });
           registryId = registry.id;
         } else {

@@ -23,13 +23,13 @@ interface HighlightItemProps {
 
 export const Highlight = ({
   children,
-  enabled = true,
-  hover = false,
-  controlledItems = false,
-  mode,
+  enabled: _enabled = true,
+  hover: _hover = false,
+  controlledItems: _controlledItems = false,
+  mode: _mode,
   containerClassName,
-  forceUpdateBounds = false,
-  transition,
+  forceUpdateBounds: _forceUpdateBounds = false,
+  transition: _transition,
 }: HighlightProps) => {
   return <div className={containerClassName}>{children}</div>;
 };

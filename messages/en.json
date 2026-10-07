@@ -122,22 +122,22 @@
     "somethingWrong": "Something went wrong",
     "close": "Close",
     "remove": "Remove",
-    "removeAll": "Remove All",
-    "addMore": "Add More",
+    "removeAll": "Remove all",
+    "addMore": "Add more",
+    "previewInvoice": "Preview invoice",
     "downloadPdf": "Download PDF",
     "generating": "Generating…",
-    "stripeInvoice": "Stripe Invoice",
-    "bulgarianInvoice": "Bulgarian Invoice",
+    "originalInvoice": "Original Invoice",
     "aiReading": "AI is reading your invoice",
     "dataExtracted": "Data extracted — review and edit if needed",
     "generateInvoice": "Generate Bulgarian Invoice",
     "generatingPdf": "Generating PDF…",
     "downloadBulgarianPdf": "Download Bulgarian Invoice (PDF)",
-    "extractAllInvoices": "Extract All Invoices",
+    "extractAllInvoices": "Extract all invoices",
     "addRow": "+ Add row",
     "row": "Row {number}",
     "invoices": "Invoices",
-    "invoicesCount": "Брой фактури:",
+    "invoicesCount": "Number of invoices:",
     "selectInvoiceToEdit": "Select an invoice from the list to edit",
     "aiSteps": {
       "step1": "Reading invoice structure…",
@@ -209,7 +209,9 @@
       "contragentCreateFailedHeader": "Contragent could not be created",
       "contragentCreateFailedMessage": "The buyer contragent could not be created from external registry or form data.",
       "insufficientCreditsHeader": "Insufficient credits",
-      "insufficientCreditsMessage": "You don't have enough credits to generate an invoice. Please add credits to your account."
+      "insufficientCreditsMessage": "You don't have enough credits to generate an invoice. Please add credits to your account.",
+      "pdfPageLimitExceededHeader": "Document page limit exceeded",
+      "pdfPageLimitExceededMessage": "The document exceeds the maximum number of 1 page."
     }
   },
   "dashboardNaming": "Dashboard",
@@ -243,7 +245,8 @@
     "localizations": "Localizations",
     "logout": "Log out",
     "actionButtons": "Action buttons",
-    "noOrganizations": "You don't have any organizations yet. Add your first organization to get started."
+    "noOrganizations": "You don't have any organizations yet. Add your first organization to get started.",
+    "invoiceTemplate": "Invoice Template"
   },
   "generatedInvoices": {
     "header": "Generated Invoices",
@@ -287,6 +290,70 @@
     "addCredits": "Add credits",
     "saveChanges": "Save changes",
     "saving": "Saving..."
+  },
+  "invoiceTemplate": {
+    "header": "Invoice template",
+    "subheader": "Create and manage your invoice templates to customize your invoices the way you want.",
+    "upload": {
+      "title": "Upload template source",
+      "hint": "Upload a .pdf, .doc or .docx file and AI will extract layout, typography and reusable styles.",
+      "cta": "Upload and analyze",
+      "analyzing": "Analyzing template...",
+      "selectedFile": "Selected file: {file}"
+    },
+    "currentTemplate": {
+      "title": "Current active template",
+      "description": "This is the template currently used for generated invoices in your account."
+    },
+    "candidateTemplate": {
+      "title": "Extracted template preview",
+      "description": "Review the AI extracted template before you save it.",
+      "empty": "Upload a document to generate a reusable template preview."
+    },
+    "analysis": {
+      "primaryFont": "Primary font",
+      "secondaryFont": "Secondary font",
+      "headingStyle": "Heading style",
+      "bodyStyle": "Body style",
+      "colorPalette": "Color palette",
+      "notes": "AI notes"
+    },
+    "actions": {
+      "save": "Save template",
+      "saving": "Saving...",
+      "discard": "Discard"
+    },
+    "aiSteps": {
+      "step1": "Reading document structure…",
+      "step2": "Identifying fonts and styles…",
+      "step3": "Extracting color palette…",
+      "step4": "Creating reusable template…",
+      "step5":"Converting template…"
+    },
+    "alerts": {
+      "invalidFileHeader": "Invalid file",
+      "invalidFileMessage": "Please choose a valid file to analyze.",
+      "unsupportedFileHeader": "Unsupported file type",
+      "unsupportedFileMessage": "Only .pdf, .doc and .docx files are supported.",
+      "accountMissingIdHeader": "Missing account ID",
+      "accountMissingIdMessage": "Failed to retrieve account ID",
+      "accountMissingHeader": "Account not found",
+      "accountMissingMessage": "We could not find an active account for saving template data.",
+      "analysisSuccessHeader": "Template extracted",
+      "analysisSuccessMessage": "The template was extracted successfully. Review it and save if you like it.",
+      "analysisFailedHeader": "Template extraction failed",
+      "analysisFailedMessage": "We couldn't extract a template from this file. Please try another file.",
+      "saveSuccessHeader": "Template saved",
+      "saveSuccessMessage": "Your invoice template was saved successfully.",
+      "saveFailedHeader": "Template save failed",
+      "saveFailedMessage": "We couldn't save your invoice template. Please try again.",
+      "insufficientCreditsHeader": "Insufficient credits",
+      "insufficientCreditsMessage": "You don't have enough credits to analyze a template. Each analysis costs 3 credits.",
+      "templateTooLargeHeader": "Template is too large",
+      "templateTooLargeMessage": "The extracted template is too large to store. Please use a simpler source document.",
+      "multiPageFileHeader": "File contains multiple pages",
+      "multiPageFileMessage": "The file contains more than one page. Please select a file with only one page for template extraction."
+    }
   },
   "creditsPage": {
     "header": "Credit Management",

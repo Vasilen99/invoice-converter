@@ -1,6 +1,5 @@
 import { prisma } from "./prisma";
 import type { CreditTransactionType } from "../generated/prisma/enums";
-import { CREDIT_COSTS } from "./constants";
 
 export interface CreditDeductionResult {
   success: boolean;

@@ -54,7 +54,7 @@ export function enrichOrganizationDataFromRegistry(
     bulstat: string;
     name: string;
     vatNumber?: string | null;
-    address?: Record<string, any>;
+    address?: Record<string, unknown>;
     molName?: string;
     email?: string | null;
   },
@@ -88,9 +88,11 @@ export function enrichOrganizationDataFromRegistry(
 /**
  * Validates that rawLookupData contains the expected CompanyData structure
  */
-export function isValidCompanyData(data: any): data is CompanyData {
+export function isValidCompanyData(data: unknown): data is CompanyData {
   return (
-    data && typeof data === "object" && ("uic" in data || "companyName" in data)
+    data !== null &&
+    typeof data === "object" &&
+    ("uic" in data || "companyName" in data)
   );
 }
 
@@ -99,7 +101,7 @@ export function isValidCompanyData(data: any): data is CompanyData {
  * Returns null if address is empty, otherwise returns the formatted address object
  */
 export function formatAddressForStorage(
-  address: Record<string, any> | undefined | null,
+  address: Record<string, unknown> | undefined | null,
 ) {
   if (!address) return undefined;
 
@@ -123,7 +125,7 @@ export function formatAddressForStorage(
 /**
  * Formats rawLookupData for database storage, ensuring it's properly serialized as JSON
  */
-export function formatRawLookupDataForStorage(data: any) {
+export function formatRawLookupDataForStorage(data: unknown) {
   if (!data) return null;
   // Prisma will handle JSON serialization, but we ensure it's clean
   return data;

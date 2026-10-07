@@ -1,4 +1,5 @@
 import { Upload } from "lucide-react";
+import type React from "react";
 
 type UploadZoneProps = {
   dragOver: boolean;

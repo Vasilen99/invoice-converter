@@ -36,9 +36,10 @@ const PATCH_FIELDS = [
 ] as const;
 
 export function formatInvoiceNumber(value: unknown): string {
-  const digitsOnly = normalizeText(value).replace(/\D/g, "");
-  if (!digitsOnly) return DEFAULT_INVOICE_NUMBER;
-  return digitsOnly.padStart(10, "0");
+  const digits = value
+    ? value.toString().trim().padStart(10, "0")
+    : DEFAULT_INVOICE_NUMBER;
+  return digits;
 }
 
 export function parseInvoiceNumber(

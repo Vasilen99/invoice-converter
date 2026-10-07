@@ -21,6 +21,7 @@ export async function getAccountData() {
             id: true,
             creditBalance: true,
             composer_name: true,
+            inv_template: true,
           },
         },
       },

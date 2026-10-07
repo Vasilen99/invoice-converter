@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import PdfViewer from "./PdfViewer";
 import { BulgarianInvoiceData } from "../types";
-
+import { AI_STEP_KEYS } from "@/utility/constants";
 type InvoiceFile = {
   file: File;
   id: string;
@@ -23,8 +23,6 @@ type InvoiceFile = {
   error?: string;
   sourceDocumentUrl?: string | null;
 };
-
-const AI_STEP_KEYS = ["step1", "step2", "step3", "step4", "step5"] as const;
 
 const EditField: React.FC<{
   label: string;
@@ -80,6 +78,7 @@ interface InvoicesLayoutSectionProps {
     sourceDocumentUrl?: string | null,
   ) => Promise<void>;
   handleDownloadAll: () => Promise<void>;
+  onPreview: (invoiceData: BulgarianInvoiceData) => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   reset: () => void;
 }
@@ -98,6 +97,7 @@ export const InvoicesLayoutSection = ({
   updateInvoiceData,
   handleDownload,
   handleDownloadAll,
+  onPreview,
   inputRef,
   reset,
 }: InvoicesLayoutSectionProps) => {
@@ -109,7 +109,7 @@ export const InvoicesLayoutSection = ({
       {/* Top bar with add more and extract all */}
       <div className="flex items-center justify-between px-1">
         <div className="text-sm font-semibold text-foreground lg:flex hidden">
-          {t("invoicesCount", { count: invoices.length })}
+          {t("invoicesCount")} {invoices.length}
         </div>
         <div className="flex lg:flex-row flex-col lg:items-center items-start gap-3">
           {allExtracted && (
@@ -147,7 +147,7 @@ export const InvoicesLayoutSection = ({
         </div>
       </div>
       <div className="text-sm font-semibold text-foreground flex lg:hidden">
-        {t("invoicesCount", { count: invoices.length })} invoices
+        {t("invoicesCount")} {invoices.length}
       </div>
       {/* Two-column area: Invoice list + Viewer/Editor */}
       <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -222,7 +222,7 @@ export const InvoicesLayoutSection = ({
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-foreground/50 inline-block" />
               <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                {t("stripeInvoice")}
+                {t("originalInvoice")}
               </span>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-xl shadow-foreground/5 border border-border">
@@ -236,7 +236,7 @@ export const InvoicesLayoutSection = ({
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-foreground/70 inline-block" />
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-              {t("bulgarianInvoice")}
+              {t("previewInvoice")}
             </span>
           </div>
 
@@ -734,22 +734,35 @@ export const InvoicesLayoutSection = ({
                   />
                 </EditSection>
 
-                <button
-                  onClick={() => {
-                    if (selectedInvoice.data) {
-                      handleDownload(
-                        selectedInvoice.data,
-                        selectedInvoice.file.name,
-                        selectedInvoice.sourceDocumentUrl || null,
-                      );
-                    }
-                  }}
-                  className="btn-glow w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold text-primary-foreground hover:cursor-pointer
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      if (selectedInvoice.data) {
+                        onPreview(selectedInvoice.data);
+                      }
+                    }}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold border border-border bg-background text-foreground hover:bg-accent hover:cursor-pointer"
+                  >
+                    {t("previewInvoice")}
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (selectedInvoice.data) {
+                        handleDownload(
+                          selectedInvoice.data,
+                          selectedInvoice.file.name,
+                          selectedInvoice.sourceDocumentUrl || null,
+                        );
+                      }
+                    }}
+                    className="btn-glow w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold text-primary-foreground hover:cursor-pointer
                         bg-primary hover:bg-primary/90"
-                >
-                  <FileOutput className="w-5 h-5" />
-                  {downloading ? t("generating") : t("downloadPdf")}
-                </button>
+                  >
+                    <FileOutput className="w-5 h-5" />
+                    {downloading ? t("generating") : t("downloadPdf")}
+                  </button>
+                </div>
               </div>
             </div>
           )}

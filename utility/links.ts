@@ -7,6 +7,7 @@ const aiAssistantLink = `${dashboardLink}/ai-assistant`;
 const contragentsLink = `${dashboardLink}/contragents`;
 const createInvoiceLink = `${dashboardLink}/create-invoice`;
 const generatedInvoicesLink = `${dashboardLink}/generated-invoices`;
+const invoiceTemplateLink = `${dashboardLink}/invoice-template`;
 export {
   accountLink,
   dashboardLink,
@@ -17,4 +18,5 @@ export {
   contragentsLink,
   createInvoiceLink,
   generatedInvoicesLink,
+  invoiceTemplateLink,
 };
