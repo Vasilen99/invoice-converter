@@ -8,9 +8,8 @@ import {
   sanitizeTemplateHtml,
 } from "@/utility/invoice-template";
 import { CREDIT_COSTS } from "@/utility/constants";
-
+import { getFilePageCount } from "@/utility/helpers";
 export const runtime = "nodejs";
-export const maxDuration = 60;
 
 type ExtractedTemplateResponse = {
   templateHtml: string;
@@ -76,6 +75,23 @@ export async function POST(req: NextRequest) {
             status: "error",
             header: "invoiceTemplate.alerts.unsupportedFileHeader",
             message: "invoiceTemplate.alerts.unsupportedFileMessage",
+          },
+        },
+        { status: 400 },
+      );
+    }
+
+    // Check page count and warn if > 1 page
+    const pageCount = await getFilePageCount(file);
+    if (pageCount && pageCount > 1) {
+      return NextResponse.json(
+        {
+          data: null,
+          alert: {
+            status: "warning",
+            header: "invoiceTemplate.alerts.multiPageFileHeader",
+            message: "invoiceTemplate.alerts.multiPageFileMessage",
+            details: `File contains ${pageCount} pages. Only the first page will be analyzed.`,
           },
         },
         { status: 400 },
@@ -304,7 +320,6 @@ export async function POST(req: NextRequest) {
       CREDIT_COSTS.TEMPLATE_EXTRACTION,
       userData.id,
     );
-    console.log(finalTemplate, "FINAL TEMPLATE");
 
     if (!creditResult.success) {
       return NextResponse.json(

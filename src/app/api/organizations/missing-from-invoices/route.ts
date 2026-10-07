@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/utility/prisma";
 import { getUserServer } from "@/utility/get-user-server";
 import { notFound } from "next/navigation";
-
+import { normalizeBulstat } from "@/utility/helpers";
 type MissingOrganizationByEik = {
   bulstat: string;
 };
@@ -18,10 +18,6 @@ type MissingContragentRelationByEik = {
   organizationBulstat: string;
   organizationName: string | null;
 };
-
-function normalizeBulstat(value: string | undefined | null): string {
-  return (value ?? "").trim();
-}
 
 async function getCachedBulstats(bulstats: string[]): Promise<Set<string>> {
   if (bulstats.length === 0) {

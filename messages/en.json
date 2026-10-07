@@ -122,23 +122,22 @@
     "somethingWrong": "Something went wrong",
     "close": "Close",
     "remove": "Remove",
-    "removeAll": "Remove All",
-    "addMore": "Add More",
-  "previewInvoice": "Preview invoice",
+    "removeAll": "Remove all",
+    "addMore": "Add more",
+    "previewInvoice": "Preview invoice",
     "downloadPdf": "Download PDF",
     "generating": "Generating…",
-    "stripeInvoice": "Stripe Invoice",
-    "bulgarianInvoice": "Bulgarian Invoice",
+    "originalInvoice": "Original Invoice",
     "aiReading": "AI is reading your invoice",
     "dataExtracted": "Data extracted — review and edit if needed",
     "generateInvoice": "Generate Bulgarian Invoice",
     "generatingPdf": "Generating PDF…",
     "downloadBulgarianPdf": "Download Bulgarian Invoice (PDF)",
-    "extractAllInvoices": "Extract All Invoices",
+    "extractAllInvoices": "Extract all invoices",
     "addRow": "+ Add row",
     "row": "Row {number}",
     "invoices": "Invoices",
-    "invoicesCount": "Брой фактури:",
+    "invoicesCount": "Number of invoices:",
     "selectInvoiceToEdit": "Select an invoice from the list to edit",
     "aiSteps": {
       "step1": "Reading invoice structure…",
@@ -210,7 +209,9 @@
       "contragentCreateFailedHeader": "Contragent could not be created",
       "contragentCreateFailedMessage": "The buyer contragent could not be created from external registry or form data.",
       "insufficientCreditsHeader": "Insufficient credits",
-      "insufficientCreditsMessage": "You don't have enough credits to generate an invoice. Please add credits to your account."
+      "insufficientCreditsMessage": "You don't have enough credits to generate an invoice. Please add credits to your account.",
+      "pdfPageLimitExceededHeader": "Document page limit exceeded",
+      "pdfPageLimitExceededMessage": "The document exceeds the maximum number of 1 page."
     }
   },
   "dashboardNaming": "Dashboard",
@@ -322,6 +323,13 @@
       "saving": "Saving...",
       "discard": "Discard"
     },
+    "aiSteps": {
+      "step1": "Reading document structure…",
+      "step2": "Identifying fonts and styles…",
+      "step3": "Extracting color palette…",
+      "step4": "Creating reusable template…",
+      "step5":"Converting template…"
+    },
     "alerts": {
       "invalidFileHeader": "Invalid file",
       "invalidFileMessage": "Please choose a valid file to analyze.",
@@ -342,7 +350,9 @@
       "insufficientCreditsHeader": "Insufficient credits",
       "insufficientCreditsMessage": "You don't have enough credits to analyze a template. Each analysis costs 3 credits.",
       "templateTooLargeHeader": "Template is too large",
-      "templateTooLargeMessage": "The extracted template is too large to store. Please use a simpler source document."
+      "templateTooLargeMessage": "The extracted template is too large to store. Please use a simpler source document.",
+      "multiPageFileHeader": "File contains multiple pages",
+      "multiPageFileMessage": "The file contains more than one page. Please select a file with only one page for template extraction."
     }
   },
   "creditsPage": {

@@ -7,8 +7,6 @@ import {
   sanitizeTemplateHtml,
 } from "@/utility/invoice-template";
 
-const TEMPLATE_MAX_LENGTH = 250_000;
-
 export async function POST(req: NextRequest) {
   try {
     const user = await getUserServer();
@@ -32,20 +30,6 @@ export async function POST(req: NextRequest) {
     const sanitized = sanitizeTemplateHtml(incomingTemplate);
     const normalized = normalizeTemplateHtml(sanitized);
     const templateToSave = normalized || getDefaultInvoiceTemplateHtml();
-
-    if (templateToSave.length > TEMPLATE_MAX_LENGTH) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "invoiceTemplate.alerts.templateTooLargeHeader",
-            message: "invoiceTemplate.alerts.templateTooLargeMessage",
-          },
-        },
-        { status: 400 },
-      );
-    }
 
     const accountMember = await prisma.accountMember.findFirst({
       where: {
@@ -78,6 +62,7 @@ export async function POST(req: NextRequest) {
       },
       data: {
         inv_template: templateToSave,
+        updatedAt: new Date(),
       },
       select: {
         id: true,

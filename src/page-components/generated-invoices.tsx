@@ -370,7 +370,10 @@ export default function GeneratedInvoices({
         const pdfResponse = await fetch("/api/generate-pdf", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(invoiceData),
+          body: JSON.stringify({
+            ...invoiceData,
+            templateHtml: invTemplate || undefined,
+          }),
         });
 
         if (pdfResponse.ok) {

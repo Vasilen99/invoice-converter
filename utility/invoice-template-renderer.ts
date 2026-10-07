@@ -5,8 +5,11 @@ import {
 } from "@/utility/invoice-template";
 import type { BulgarianInvoiceData } from "@/types";
 
-const LINE_ITEM_REPEAT_BLOCK_REGEX =
-  /<([a-zA-Z][\w:-]*)([^>]*\sdata-repeat=(['"])lineItem\3[^>]*)>([\s\S]*?)<\/\1>/gi;
+const LINE_ITEM_REPEAT_TBODY_REGEX =
+  /<tbody([^>]*\sdata-repeat=(['"])lineItem\2[^>]*)>([\s\S]*?)<\/tbody>/gi;
+const LINE_ITEM_REPEAT_ATTR_REGEX = /data-repeat=(['"])lineItem\1/i;
+const LEGACY_LINE_ITEM_ROW_REGEX =
+  /<tr\b[^>]*>[\s\S]*?{{\s*(?:lineItemDescription|lineItem\.description|lineItemValue|lineItem\.value)\s*}}[\s\S]*?<\/tr>/i;
 
 function escapeHtml(value: string): string {
   return value
@@ -101,6 +104,38 @@ function replacePlaceholders(
   );
 }
 
+function expandLegacyLineItemRows(templateHtml: string): string {
+  // Only expand if the template does NOT already have data-repeat attribute
+  if (LINE_ITEM_REPEAT_ATTR_REGEX.test(templateHtml)) {
+    return templateHtml;
+  }
+
+  const legacyRow = templateHtml.match(LEGACY_LINE_ITEM_ROW_REGEX)?.[0];
+  if (!legacyRow) {
+    return templateHtml;
+  }
+
+  // For legacy templates: find the <tbody> containing the legacy row
+  // and mark it with data-repeat="lineItem" so the main replacement handles it uniformly
+  const tbodyWithLegacyRow = templateHtml.match(
+    /<tbody[^>]*>([\s\S]*?)<\/tbody>/i,
+  );
+  if (!tbodyWithLegacyRow) {
+    return templateHtml;
+  }
+
+  const tbodyOpenTag = templateHtml.substring(
+    templateHtml.indexOf("<tbody"),
+    templateHtml.indexOf(">", templateHtml.indexOf("<tbody")) + 1,
+  );
+
+  const updatedTbodyOpen = tbodyOpenTag.includes('data-repeat="lineItem"')
+    ? tbodyOpenTag
+    : tbodyOpenTag.replace(">", ' data-repeat="lineItem">');
+
+  return templateHtml.replace(tbodyOpenTag, updatedTbodyOpen);
+}
+
 export function resolveInvoiceTemplateHtml(
   savedTemplate: string | null | undefined,
 ): string {
@@ -131,9 +166,11 @@ export function renderInvoiceTemplateHtml(
           },
         ];
 
-  const withRepeatedRows = templateHtml.replace(
-    LINE_ITEM_REPEAT_BLOCK_REGEX,
-    (_, tag: string, attrs: string, quote: string, inner: string) => {
+  const templateWithExpandedLegacyRows = expandLegacyLineItemRows(templateHtml);
+
+  const withRepeatedRows = templateWithExpandedLegacyRows.replace(
+    LINE_ITEM_REPEAT_TBODY_REGEX,
+    (match: string, attrs: string, quote: string, inner: string) => {
       const attrsWithoutRepeat = attrs.replace(
         new RegExp(`\\sdata-repeat=${quote}lineItem${quote}`, "i"),
         "",
@@ -148,7 +185,7 @@ export function renderInvoiceTemplateHtml(
         )
         .join("");
 
-      return `<${tag}${attrsWithoutRepeat}>${rows}</${tag}>`;
+      return `<tbody${attrsWithoutRepeat}>${rows}</tbody>`;
     },
   );
 

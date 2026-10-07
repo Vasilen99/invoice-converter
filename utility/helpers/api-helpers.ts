@@ -343,3 +343,105 @@ export function buildPrefillResponse(
     locationOptions: aggregatedData.locationOptions,
   };
 }
+
+export async function getFilePageCount(file: File): Promise<number | null> {
+  try {
+    const { parseOffice } = await import("officeparser");
+    const bytes = await file.arrayBuffer();
+
+    const buffer = Buffer.from(bytes);
+
+    // Determine file type from file extension as hint for parseOffice
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+    const fileType: "pdf" | "docx" | "pptx" | null =
+      fileExtension === "pdf"
+        ? "pdf"
+        : fileExtension === "docx"
+          ? "docx"
+          : fileExtension === "pptx"
+            ? "pptx"
+            : null;
+
+    const ast = await parseOffice(buffer, { fileType });
+
+    // For PDF files, count page nodes in content
+    if (ast.type === "pdf") {
+      const pageNodes = ast.content.filter((node) => node.type === "page");
+      return pageNodes.length > 0 ? pageNodes.length : null;
+    }
+
+    // For DOCX and other formats, check metadata first
+    if (ast.metadata.pages && typeof ast.metadata.pages === "number") {
+      return ast.metadata.pages;
+    }
+
+    // For DOCX, estimate pages based on content length and break nodes
+    if (ast.type === "docx") {
+      // Count break nodes (page breaks)
+      const breakNodes = ast.content.filter((node) => node.type === "break");
+
+      // If there are explicit page breaks, pages = breaks + 1
+      if (breakNodes.length > 0) {
+        const pageCount = breakNodes.length + 1;
+        return pageCount;
+      }
+
+      // Fallback: estimate based on total text content length
+      // Count paragraphs and tables as rough page estimators
+      const paragraphs = ast.content.filter(
+        (node) => node.type === "paragraph",
+      );
+      const tables = ast.content.filter((node) => node.type === "table");
+
+      // Estimate: roughly 40-50 paragraphs per page, tables add 1-2 pages each
+      const estimatedPagesFromStructure = Math.max(
+        1,
+        Math.ceil(paragraphs.length / 40) +
+          (tables.length > 0 ? tables.length : 0),
+      );
+
+      // Also try character-based estimation
+      const totalTextLength = ast.content.reduce((acc, node) => {
+        return acc + (node.text?.length || 0);
+      }, 0);
+
+      // ~4000-5000 characters per page for documents with tables/structure
+      const estimatedPagesFromChars = Math.max(
+        1,
+        Math.ceil(totalTextLength / 4000),
+      );
+
+      // Take the higher estimate to be conservative
+      const estimatedPages = Math.max(
+        estimatedPagesFromStructure,
+        estimatedPagesFromChars,
+      );
+      return estimatedPages > 0 ? estimatedPages : null;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error getting page count:", error);
+    return null;
+  }
+}
+export function normalizeBulstat(value: string | undefined | null): string {
+  return (value ?? "").trim();
+}
+export const parseInvoiceSequence = (value: unknown): number => {
+  if (value === null || value === undefined) {
+    return 0;
+  }
+
+  const digits = String(value).replace(/\D/g, "");
+  if (!digits) {
+    return 0;
+  }
+
+  const parsed = parseInt(digits, 10);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+export const formatInvoiceSequence = (sequence: number): string => {
+  const safeSequence = Number.isFinite(sequence) ? Math.max(0, sequence) : 0;
+  return String(safeSequence).padStart(10, "0");
+};

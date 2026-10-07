@@ -143,3 +143,11 @@ export const CREDIT_COSTS = {
   CHAT_MESSAGE: 1, // Credits per chat message in AI assistant
   TEMPLATE_EXTRACTION: 8, // Credits for analyzing and extracting template from invoice
 };
+
+export const AI_STEP_KEYS = [
+  "step1",
+  "step2",
+  "step3",
+  "step4",
+  "step5",
+] as const;

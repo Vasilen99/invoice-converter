@@ -290,7 +290,10 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
         const pdfResponse = await fetch("/api/generate-pdf", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(currentInvoice),
+          body: JSON.stringify({
+            ...currentInvoice,
+            templateHtml: invoiceTemplateHtml || undefined,
+          }),
         });
 
         if (pdfResponse.ok) {

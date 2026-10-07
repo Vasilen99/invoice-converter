@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import PdfViewer from "./PdfViewer";
 import { BulgarianInvoiceData } from "../types";
-
+import { AI_STEP_KEYS } from "@/utility/constants";
 type InvoiceFile = {
   file: File;
   id: string;
@@ -23,8 +23,6 @@ type InvoiceFile = {
   error?: string;
   sourceDocumentUrl?: string | null;
 };
-
-const AI_STEP_KEYS = ["step1", "step2", "step3", "step4", "step5"] as const;
 
 const EditField: React.FC<{
   label: string;
@@ -111,7 +109,7 @@ export const InvoicesLayoutSection = ({
       {/* Top bar with add more and extract all */}
       <div className="flex items-center justify-between px-1">
         <div className="text-sm font-semibold text-foreground lg:flex hidden">
-          {t("invoicesCount", { count: invoices.length })}
+          {t("invoicesCount")} {invoices.length}
         </div>
         <div className="flex lg:flex-row flex-col lg:items-center items-start gap-3">
           {allExtracted && (
@@ -149,7 +147,7 @@ export const InvoicesLayoutSection = ({
         </div>
       </div>
       <div className="text-sm font-semibold text-foreground flex lg:hidden">
-        {t("invoicesCount", { count: invoices.length })} invoices
+        {t("invoicesCount")} {invoices.length}
       </div>
       {/* Two-column area: Invoice list + Viewer/Editor */}
       <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -224,7 +222,7 @@ export const InvoicesLayoutSection = ({
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-foreground/50 inline-block" />
               <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                {t("stripeInvoice")}
+                {t("originalInvoice")}
               </span>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-xl shadow-foreground/5 border border-border">
@@ -238,7 +236,7 @@ export const InvoicesLayoutSection = ({
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-foreground/70 inline-block" />
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-              {t("bulgarianInvoice")}
+              {t("previewInvoice")}
             </span>
           </div>
 

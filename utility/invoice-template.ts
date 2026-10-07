@@ -131,15 +131,15 @@ export const DEFAULT_INVOICE_TEMPLATE_HTML = `<!DOCTYPE html>
       <th class="right">Стойност</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody data-repeat="lineItem">
     <tr>
-      <td style="text-align:center">1</td>
-      <td>{{lineItemDescription}}</td>
-      <td style="text-align:center">{{lineItemUnit}}</td>
-      <td style="text-align:center">{{lineItemQuantity}}</td>
-      <td style="text-align:right">{{lineItemUnitPrice}}</td>
-      <td style="text-align:center">{{lineItemVatPercent}}%</td>
-      <td style="text-align:right">{{lineItemValue}}</td>
+      <td style="text-align:center">{{lineItem.index}}</td>
+      <td>{{lineItem.description}}</td>
+      <td style="text-align:center">{{lineItem.unit}}</td>
+      <td style="text-align:center">{{lineItem.quantity}}</td>
+      <td style="text-align:right">{{lineItem.unitPrice}}</td>
+      <td style="text-align:center">{{lineItem.vatPercent}}%</td>
+      <td style="text-align:right">{{lineItem.value}}</td>
     </tr>
   </tbody>
 </table>
@@ -199,8 +199,15 @@ export const DEFAULT_INVOICE_TEMPLATE_HTML = `<!DOCTYPE html>
 const SCRIPT_TAG_REGEX = /<script[\s\S]*?>[\s\S]*?<\/script>/gi;
 const EVENT_HANDLER_ATTR_REGEX = /\son[a-z]+="[^"]*"/gi;
 const NORMALIZED_TEMPLATE_MARKER = 'data-template-normalized="true"';
+const NORMALIZED_STYLE_BLOCK_REGEX =
+  /<style[^>]*data-template-normalized="true"[^>]*>[\s\S]*?<\/style>/i;
 
 const NORMALIZATION_STYLE = `<style ${NORMALIZED_TEMPLATE_MARKER}>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
   html, body {
     margin: 0;
     padding: 0;
@@ -216,8 +223,8 @@ const NORMALIZATION_STYLE = `<style ${NORMALIZED_TEMPLATE_MARKER}>
     line-height: 1.4;
     color: #222;
     box-sizing: border-box;
-    padding: 28px 32px;
-    overflow: visible;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   *, *::before, *::after {
@@ -282,8 +289,11 @@ export function sanitizeTemplateHtml(templateHtml: string): string {
 }
 
 function injectNormalizationStyle(templateHtml: string): string {
-  if (templateHtml.includes(NORMALIZED_TEMPLATE_MARKER)) {
-    return templateHtml;
+  if (NORMALIZED_STYLE_BLOCK_REGEX.test(templateHtml)) {
+    return templateHtml.replace(
+      NORMALIZED_STYLE_BLOCK_REGEX,
+      NORMALIZATION_STYLE,
+    );
   }
 
   if (templateHtml.includes("</head>")) {

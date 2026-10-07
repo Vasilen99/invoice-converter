@@ -13,7 +13,8 @@ import {
 } from "@/utility/invoice-template";
 import { useGlobalStore } from "@/store/global";
 import { useUserStore } from "@/store/user";
-import { Loader2, UploadCloud } from "lucide-react";
+import { Loader2, UploadCloud, Wand2 } from "lucide-react";
+import { CREDIT_COSTS, AI_STEP_KEYS } from "@/utility/constants";
 
 type InvoiceTemplatePageProps = {
   account: {
@@ -34,7 +35,6 @@ export default function InvoiceTemplatePage({
   const { setAlertStatus } = useGlobalStore();
   const { user } = useUserStore();
   const fallbackTemplate = useMemo(() => getDefaultInvoiceTemplateHtml(), []);
-
   const [savedTemplate, setSavedTemplate] = useState<string>(
     account?.inv_template || fallbackTemplate,
   );
@@ -44,7 +44,7 @@ export default function InvoiceTemplatePage({
   const [sourceFileName, setSourceFileName] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-
+  const [aiStep, setAiStep] = useState(0);
   const normalizedSavedTemplate = useMemo(
     () => normalizeTemplateHtml(savedTemplate) || fallbackTemplate,
     [savedTemplate, fallbackTemplate],
@@ -54,6 +54,15 @@ export default function InvoiceTemplatePage({
     if (!candidateTemplate) return null;
     return normalizeTemplateHtml(candidateTemplate) || null;
   }, [candidateTemplate]);
+
+  const cycleAiStep = () => {
+    let i = 0;
+    const id = setInterval(() => {
+      i = (i + 1) % AI_STEP_KEYS.length;
+      setAiStep(i);
+    }, 1800);
+    return id;
+  };
 
   const onAnalyzeFile = async (file: File) => {
     const allowed = [".pdf", ".doc", ".docx"];
@@ -69,7 +78,7 @@ export default function InvoiceTemplatePage({
     }
 
     // Check if user has enough credits (3 required for analysis)
-    const requiredCredits = 3;
+    const requiredCredits = CREDIT_COSTS.TEMPLATE_EXTRACTION;
     const userCredits = user?.creditBalance ?? 0;
     if (userCredits < requiredCredits) {
       setAlertStatus({
@@ -87,6 +96,8 @@ export default function InvoiceTemplatePage({
       const formData = new FormData();
       formData.append("file", file);
 
+      const stepTimer = cycleAiStep();
+
       const result = (await callApi(
         "/invoice-template/analyze",
         {
@@ -95,6 +106,8 @@ export default function InvoiceTemplatePage({
         },
         true,
       )) as AnalyzeTemplateResponse | null;
+
+      clearInterval(stepTimer);
 
       if (!result?.templateHtml) {
         return;
@@ -105,6 +118,7 @@ export default function InvoiceTemplatePage({
       console.error("Template analyze failed", error);
     } finally {
       setIsAnalyzing(false);
+      setAiStep(0);
     }
   };
 
@@ -213,15 +227,12 @@ export default function InvoiceTemplatePage({
               {t("currentTemplate.description")}
             </p>
           </div>
-          <div
-            className="rounded-lg border border-border bg-background flex-1"
-            style={{ overflow: "auto", minHeight: "520px" }}
-          >
+          <div className="rounded-lg border border-border bg-background h-130 overflow-auto overscroll-contain touch-pan-x touch-pan-y">
             <iframe
               title="current-template"
-              sandbox=""
-              className="block border-0"
-              style={{ width: 794, minWidth: 794, height: 1123 }}
+              sandbox="allow-same-origin"
+              className="block border-0 max-w-none"
+              style={{ width: "794px", height: "1123px", display: "block" }}
               srcDoc={normalizedSavedTemplate}
             />
           </div>
@@ -239,17 +250,38 @@ export default function InvoiceTemplatePage({
             </div>
           </div>
 
-          {normalizedCandidateTemplate ? (
+          {isAnalyzing ? (
+            <div className="flex h-130 items-center justify-center rounded-lg border border-dashed border-border bg-background p-6">
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Wand2 className="w-6 h-6 text-foreground/60 animate-pulse" />
+                </div>
+                <div className="text-center">
+                  <p
+                    className="text-sm font-semibold text-foreground mb-1 animate-fade-in"
+                    key={aiStep}
+                  >
+                    {t(`aiSteps.${AI_STEP_KEYS[aiStep]}`)}
+                  </p>
+                  <div className="flex gap-1 justify-center mt-3">
+                    {AI_STEP_KEYS.map((_, i) => (
+                      <div
+                        key={i}
+                        className={`h-1 rounded-full transition-all duration-500 ${i === aiStep ? "w-6 bg-foreground" : "w-2 bg-muted"}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : normalizedCandidateTemplate ? (
             <>
-              <div
-                className="rounded-lg border border-border bg-background flex-1"
-                style={{ overflow: "auto", minHeight: "520px" }}
-              >
+              <div className="rounded-lg border border-border bg-background h-130 overflow-auto overscroll-contain touch-pan-x touch-pan-y">
                 <iframe
                   title="candidate-template"
-                  sandbox=""
-                  className="block border-0"
-                  style={{ width: 794, minWidth: 794, height: 1123 }}
+                  sandbox="allow-same-origin"
+                  className="block border-0 max-w-none"
+                  style={{ width: "794px", height: "1123px", display: "block" }}
                   srcDoc={normalizedCandidateTemplate}
                 />
               </div>
