@@ -1,57 +1,42 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@/utility/prisma";
-import { getUserServer } from "@/utility/get-user-server";
-import { notFound } from "next/navigation";
 import {
   aggregateInvoicePrefillData,
   buildPrefillResponse,
-} from "@/utility/helpers";
+} from "@/utility/helpers/api-helpers";
+import {
+  apiResponse,
+  resolveAuthenticatedAccountContext,
+} from "@/utility/helpers/server-api";
 
 export async function GET(request: NextRequest) {
-  const user = await getUserServer();
-  if (!user?.sub) {
-    return notFound();
-  }
-
   try {
+    const accountContext = await resolveAuthenticatedAccountContext();
+    if (!accountContext) {
+      return apiResponse(null, 401, {
+        status: "error",
+        header: "errorMessagesCommon.unauthorizedErrorHeader",
+        message: "errorMessagesCommon.unauthorizedErrorMessage",
+      });
+    }
+
     const searchParams = request.nextUrl.searchParams;
     const organizationId = Number(searchParams.get("organizationId"));
     const contragentId = Number(searchParams.get("contragentId"));
 
     if (!organizationId || !contragentId) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "errorMessagesCommon.serverErrorHeader",
-            message: "errorMessagesCommon.serverErrorMessage",
-          },
-        },
-        { status: 400 },
-      );
-    }
-
-    const accountMember = await prisma.accountMember.findFirst({
-      where: {
-        user: {
-          auth_uid: user.sub,
-        },
-      },
-      select: {
-        accountId: true,
-      },
-    });
-
-    if (!accountMember) {
-      return notFound();
+      return apiResponse(null, 400, {
+        status: "error",
+        header: "errorMessagesCommon.serverErrorHeader",
+        message: "errorMessagesCommon.serverErrorMessage",
+      });
     }
 
     const [organization, contragent, generatedInvoices] = await Promise.all([
       prisma.organization.findFirst({
         where: {
           id: organizationId,
-          accountId: accountMember.accountId,
+          accountId: accountContext.accountId,
         },
         select: {
           id: true,
@@ -109,11 +94,19 @@ export async function GET(request: NextRequest) {
     ]);
 
     if (!organization) {
-      return notFound();
+      return apiResponse(null, 404, {
+        status: "error",
+        header: "errorMessagesCommon.serverErrorHeader",
+        message: "errorMessagesCommon.serverErrorMessage",
+      });
     }
 
     if (!contragent) {
-      return notFound();
+      return apiResponse(null, 404, {
+        status: "error",
+        header: "errorMessagesCommon.serverErrorHeader",
+        message: "errorMessagesCommon.serverErrorMessage",
+      });
     }
 
     // Convert Prisma Decimal/JsonValue types to compatible formats
@@ -149,24 +142,13 @@ export async function GET(request: NextRequest) {
       aggregatedData,
     );
 
-    return NextResponse.json(
-      {
-        data: prefillData,
-      },
-      { status: 200 },
-    );
+    return apiResponse(prefillData, 200);
   } catch (error) {
     console.error("[create-invoice/prefill] Error:", error);
-    return NextResponse.json(
-      {
-        data: null,
-        alert: {
-          status: "error",
-          header: "errorMessagesCommon.serverErrorHeader",
-          message: "errorMessagesCommon.serverErrorMessage",
-        },
-      },
-      { status: 500 },
-    );
+    return apiResponse(null, 500, {
+      status: "error",
+      header: "errorMessagesCommon.serverErrorHeader",
+      message: "errorMessagesCommon.serverErrorMessage",
+    });
   }
 }

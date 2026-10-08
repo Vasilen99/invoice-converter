@@ -119,6 +119,7 @@
     "choosePdf": "Choose PDF",
     "invalidPdf": "Please upload a valid PDF file.",
     "extractFailed": "Failed to extract data from the invoice.",
+    "extractFailedGeneric": "Failed to extract file",
     "somethingWrong": "Something went wrong",
     "close": "Close",
     "remove": "Remove",

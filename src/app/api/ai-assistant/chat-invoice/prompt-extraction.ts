@@ -1,5 +1,5 @@
 import { EXTRACT_FROM_PROMPT } from "@/utility/constants";
-import { normalizeEik, normalizeText } from "@/utility/api-helpers";
+import { normalizeEik, normalizeText } from "@/utility/helpers/common";
 import type { BulgarianInvoiceData } from "@/types";
 
 export type Intent =

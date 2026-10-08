@@ -14,13 +14,12 @@ import {
   parseDateForDatabase,
 } from "@/utility/date-formatter";
 import {
-  fetchExternalCompanyByEik,
   hasRequiredInvoiceFields,
-  normalizeEik,
-  parseDecimal,
   parseInvoiceNumber,
   sanitizeInvoice,
-} from "@/utility/api-helpers";
+} from "@/utility/helpers/api-helpers";
+import { fetchExternalCompanyByEik } from "@/utility/helpers/company";
+import { normalizeEik, parseDecimal } from "@/utility/helpers/common";
 import type { CompanyData } from "@/utility/types";
 
 type RegistryCompanyData = {
@@ -554,7 +553,7 @@ export async function POST(request: NextRequest) {
             totalAmount,
             status: "ISSUED",
             pdfFileUrl: generatedPdfUrl || undefined,
-            creditsCost: creditsCost, // default
+            creditsCost: creditsCost ? creditsCost : 0, // default
             organizationId: organization.id,
             contragentId: contragent.id,
             sourceDocumentId: sourceDocId ?? undefined,

@@ -8,7 +8,7 @@ import {
   sanitizeTemplateHtml,
 } from "@/utility/invoice-template";
 import { CREDIT_COSTS } from "@/utility/constants";
-import { getFilePageCount } from "@/utility/helpers";
+import { getFilePageCount } from "@/utility/helpers/api-helpers";
 export const runtime = "nodejs";
 
 type ExtractedTemplateResponse = {

@@ -11,7 +11,7 @@ import {
   extractVatNumber,
   transformAddressFromCompanyData,
 } from "../company-registry-helpers";
-import { normalizeEik, normalizeText, parseDecimal, toMoney } from "./common";
+import { normalizeEik, normalizeText, toMoney, parseDecimal } from "./common";
 
 // ---------------------------------------------------------------------------
 // Text normalisation
