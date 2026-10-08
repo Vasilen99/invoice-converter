@@ -234,8 +234,6 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
       return data;
     } catch (err: unknown) {
-      console.log("failing, loading catch");
-
       throw err instanceof Error ? err : new Error(t("extractFailedGeneric"));
     }
   };
