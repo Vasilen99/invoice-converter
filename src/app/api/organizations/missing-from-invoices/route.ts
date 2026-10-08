@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/utility/prisma";
 import { getUserServer } from "@/utility/get-user-server";
 import { notFound } from "next/navigation";
-import { normalizeBulstat } from "@/utility/helpers";
+import { normalizeBulstat } from "@/utility/helpers/common";
 type MissingOrganizationByEik = {
   bulstat: string;
 };

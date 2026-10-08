@@ -1,20 +1,27 @@
 import { prisma } from "@/utility/prisma";
-import { NextRequest, NextResponse } from "next/server";
-import { getUserServer } from "@/utility/get-user-server";
-import { notFound } from "next/navigation";
+import { NextRequest } from "next/server";
 import {
   enrichOrganizationDataFromRegistry,
   formatAddressForStorage,
   formatRawLookupDataForStorage,
   isValidCompanyData,
 } from "@/utility/company-registry-helpers";
-export async function POST(request: NextRequest) {
-  const user = await getUserServer();
-  if (!user) {
-    return notFound();
-  }
+import {
+  apiResponse,
+  resolveAuthenticatedAccountContext,
+} from "@/utility/helpers/server-api";
 
+export async function POST(request: NextRequest) {
   try {
+    const accountContext = await resolveAuthenticatedAccountContext();
+    if (!accountContext) {
+      return apiResponse(null, 401, {
+        status: "error",
+        header: "errorMessagesCommon.unauthorizedErrorHeader",
+        message: "errorMessagesCommon.unauthorizedErrorMessage",
+      });
+    }
+
     const body = await request.json();
     let {
       bulstat,
@@ -30,22 +37,14 @@ export async function POST(request: NextRequest) {
       isManualEntry = false,
     } = body;
 
-    // Validate required fields
     if (!bulstat || !name) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "organizations.missingFieldsHeader",
-            message: "organizations.missingRequiredFieldsMessage",
-          },
-        },
-        { status: 400 },
-      );
+      return apiResponse(null, 400, {
+        status: "error",
+        header: "organizations.missingFieldsHeader",
+        message: "organizations.missingRequiredFieldsMessage",
+      });
     }
 
-    // Sanitize inputs
     bulstat = bulstat.trim();
     name = name.trim();
     bank = bank ? bank.trim() : null;
@@ -55,7 +54,6 @@ export async function POST(request: NextRequest) {
     if (molName) molName = molName.trim();
     if (email) email = email.trim();
 
-    // Enrich data from rawLookupData if available
     if (rawLookupData && isValidCompanyData(rawLookupData)) {
       const enrichedData = enrichOrganizationDataFromRegistry(
         {
@@ -77,74 +75,49 @@ export async function POST(request: NextRequest) {
       email = enrichedData.email || null;
     }
 
-    // Format address for storage
     const formattedAddress = formatAddressForStorage(address);
 
-    const userAccount = await prisma.accountMember.findFirst({
+    const account = await prisma.account.findUnique({
       where: {
-        user: {
-          auth_uid: user.sub,
-        },
+        id: accountContext.accountId,
       },
       select: {
-        accountId: true,
-        account: {
+        organizations: {
           select: {
-            organizations: {
-              select: {
-                bulstat: true,
-              },
-            },
+            bulstat: true,
           },
         },
       },
     });
 
-    if (!userAccount) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "organizations.accountNotFoundHeader",
-            message: "organizations.accountNotFoundMessage",
-          },
-        },
-        { status: 400 },
-      );
+    if (!account) {
+      return apiResponse(null, 400, {
+        status: "error",
+        header: "organizations.accountNotFoundHeader",
+        message: "organizations.accountNotFoundMessage",
+      });
     }
 
-    if (
-      userAccount.account.organizations.some((org) => org.bulstat === bulstat)
-    ) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "info",
-            header: "organizations.alreadyAddedHeader",
-            message: "organizations.alreadyAddedMessage",
-          },
-        },
-        { status: 200 },
-      );
+    if (account.organizations.some((org) => org.bulstat === bulstat)) {
+      return apiResponse(null, 200, {
+        status: "info",
+        header: "organizations.alreadyAddedHeader",
+        message: "organizations.alreadyAddedMessage",
+      });
     }
 
     let registryId: number | null = null;
 
-    // Store raw lookup data in CompanyRegistryCache - only create new records
     if (rawLookupData && isValidCompanyData(rawLookupData) && bulstat) {
       try {
         const formattedRawLookupData =
           formatRawLookupDataForStorage(rawLookupData);
 
-        // Check if registry cache already exists for this bulstat
         const existingRegistry = await prisma.companyRegistryCache.findUnique({
           where: { bulstat },
         });
 
         if (!existingRegistry) {
-          // Build the data object dynamically to avoid type issues with JSON fields
           const registryData: Record<string, unknown> = {
             bulstat,
             name,
@@ -171,7 +144,6 @@ export async function POST(request: NextRequest) {
           });
           registryId = registry.id;
         } else {
-          // Update lastFetchedAt when we find existing registry
           await prisma.companyRegistryCache.update({
             where: { bulstat },
             data: { lastFetchedAt: new Date() },
@@ -183,10 +155,8 @@ export async function POST(request: NextRequest) {
           `[Registry Cache Error] Failed to create registry for BULSTAT ${bulstat}:`,
           registryErr,
         );
-        // Continue even if registry cache fails - it's not critical
       }
     } else if (isManualEntry && bulstat) {
-      // For manual entries, create registry cache only if it doesn't exist
       try {
         const existingRegistry = await prisma.companyRegistryCache.findUnique({
           where: { bulstat },
@@ -205,7 +175,6 @@ export async function POST(request: NextRequest) {
           });
           registryId = registry.id;
         } else {
-          // Update lastFetchedAt when we find existing registry
           await prisma.companyRegistryCache.update({
             where: { bulstat },
             data: { lastFetchedAt: new Date() },
@@ -217,15 +186,13 @@ export async function POST(request: NextRequest) {
           `[Registry Cache Error] Failed to create manual registry for BULSTAT ${bulstat}:`,
           registryErr,
         );
-        // Continue even if registry cache fails - it's not critical
       }
     }
 
-    // Create the organization
     const newOrganization = await prisma.organization.create({
       data: {
         bulstat,
-        name: name,
+        name,
         vatNumber: vatNumber || null,
         address: formattedAddress,
         molName: molName || null,
@@ -234,33 +201,23 @@ export async function POST(request: NextRequest) {
         bic: bic || null,
         email: email || null,
         invoiceSeriesPrefix: "INV",
-        accountId: userAccount.accountId,
+        accountId: accountContext.accountId,
         source: isManualEntry ? "MANUAL" : "NAP_API",
         registryId,
       },
     });
 
-    return NextResponse.json({
-      id: newOrganization.id,
-      data: newOrganization,
-      alert: {
-        status: "success",
-        header: "organizations.addSuccessHeader",
-        message: "organizations.addSuccessMessage",
-      },
+    return apiResponse(newOrganization, 200, {
+      status: "success",
+      header: "organizations.addSuccessHeader",
+      message: "organizations.addSuccessMessage",
     });
   } catch (err) {
     console.error("Error adding organization:", err);
-    return NextResponse.json(
-      {
-        data: null,
-        alert: {
-          status: "error",
-          header: "errorMessagesCommon.serverErrorHeader",
-          message: "errorMessagesCommon.serverErrorMessage",
-        },
-      },
-      { status: 500 },
-    );
+    return apiResponse(null, 500, {
+      status: "error",
+      header: "errorMessagesCommon.serverErrorHeader",
+      message: "errorMessagesCommon.serverErrorMessage",
+    });
   }
 }

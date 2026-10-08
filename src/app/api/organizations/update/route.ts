@@ -1,30 +1,26 @@
 import { prisma } from "@/utility/prisma";
-import { NextRequest, NextResponse } from "next/server";
-import { getUserServer } from "@/utility/get-user-server";
+import { NextRequest } from "next/server";
 import {
   formatAddressForStorage,
   isValidCompanyData,
   enrichOrganizationDataFromRegistry,
 } from "@/utility/company-registry-helpers";
-import { notFound } from "next/navigation";
+import {
+  apiResponse,
+  resolveAuthenticatedAccountContext,
+} from "@/utility/helpers/server-api";
 
 export async function PUT(request: NextRequest) {
-  const user = await getUserServer();
-  if (!user) {
-    return NextResponse.json(
-      {
-        data: null,
-        alert: {
-          status: "error",
-          header: "errorMessagesCommon.unauthorizedErrorHeader",
-          message: "errorMessagesCommon.unauthorizedErrorMessage",
-        },
-      },
-      { status: 401 },
-    );
-  }
-
   try {
+    const accountContext = await resolveAuthenticatedAccountContext();
+    if (!accountContext) {
+      return apiResponse(null, 401, {
+        status: "error",
+        header: "errorMessagesCommon.unauthorizedErrorHeader",
+        message: "errorMessagesCommon.unauthorizedErrorMessage",
+      });
+    }
+
     const body = await request.json();
     let {
       organizationId,
@@ -43,17 +39,11 @@ export async function PUT(request: NextRequest) {
 
     // Validate required fields
     if (!organizationId || !bulstat || !name) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "organizations.missingFieldsHeader",
-            message: "organizations.missingFieldsMessage",
-          },
-        },
-        { status: 400 },
-      );
+      return apiResponse(null, 400, {
+        status: "error",
+        header: "organizations.missingFieldsHeader",
+        message: "organizations.missingFieldsMessage",
+      });
     }
 
     // Sanitize inputs
@@ -68,41 +58,33 @@ export async function PUT(request: NextRequest) {
     if (invoiceSeriesPrefix) invoiceSeriesPrefix = invoiceSeriesPrefix.trim();
 
     // Check user has access to this organization
-    const userAccount = await prisma.accountMember.findFirst({
-      where: {
-        user: {
-          auth_uid: user.sub,
-        },
-      },
-      select: {
-        accountId: true,
-      },
+    const account = await prisma.account.findUnique({
+      where: { id: accountContext.accountId },
+      select: { id: true },
     });
 
-    if (!userAccount) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "organizations.accountNotFoundHeader",
-            message: "organizations.accountNotFoundMessage",
-          },
-        },
-        { status: 400 },
-      );
+    if (!account) {
+      return apiResponse(null, 400, {
+        status: "error",
+        header: "organizations.accountNotFoundHeader",
+        message: "organizations.accountNotFoundMessage",
+      });
     }
 
     // Verify organization belongs to user's account
     const organization = await prisma.organization.findFirst({
       where: {
         id: organizationId,
-        accountId: userAccount.accountId,
+        accountId: accountContext.accountId,
       },
     });
 
     if (!organization) {
-      return notFound();
+      return apiResponse(null, 404, {
+        status: "error",
+        header: "errorMessagesCommon.notFoundErrorHeader",
+        message: "errorMessagesCommon.notFoundErrorMessage",
+      });
     }
 
     // Enrich data from rawLookupData if available
@@ -189,27 +171,17 @@ export async function PUT(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({
-      id: updatedOrganization.id,
-      data: updatedOrganization,
-      alert: {
-        status: "success",
-        header: "organizations.updateSuccessHeader",
-        message: "organizations.updateSuccessMessage",
-      },
+    return apiResponse(updatedOrganization, 200, {
+      status: "success",
+      header: "organizations.updateSuccessHeader",
+      message: "organizations.updateSuccessMessage",
     });
   } catch (err) {
     console.error("Error updating organization:", err);
-    return NextResponse.json(
-      {
-        data: null,
-        alert: {
-          status: "error",
-          header: "errorMessagesCommon.serverErrorHeader",
-          message: "errorMessagesCommon.serverErrorMessage",
-        },
-      },
-      { status: 500 },
-    );
+    return apiResponse(null, 500, {
+      status: "error",
+      header: "errorMessagesCommon.serverErrorHeader",
+      message: "errorMessagesCommon.serverErrorMessage",
+    });
   }
 }

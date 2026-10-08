@@ -10,11 +10,12 @@ import { useGlobalStore } from "@/store/global";
 import { useUserStore } from "@/store/user";
 import dynamic from "next/dynamic";
 import { CREDIT_COSTS, AI_STEP_KEYS } from "@/utility/constants";
+import { normalizeBulstat } from "@/utility/helpers/common";
 import {
-  normalizeBulstat,
-  parseInvoiceSequence,
+  calculateCreditsNeeded,
   formatInvoiceSequence,
-} from "@/utility/helpers";
+  parseInvoiceSequence,
+} from "@/utility/helpers/common";
 
 const SuccessGenerationModal = dynamic(
   () => import("./SuccessModal").then((mod) => mod.SuccessGenerationModal),
@@ -106,10 +107,6 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     return id;
   };
 
-  const handleGenerationSuccess = () => {
-    setSuccessModalOpen(true);
-  };
-
   const saveDocument = async (
     file: File,
     bulstat?: string,
@@ -126,7 +123,6 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         return null;
       }
 
-      const accountId = account.id;
       const vatNumberWithoutPrefix = vatNumber
         ?.replace(/^BG/, "")
         .replace(/^EU/, "")
@@ -139,7 +135,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
       // Call the unified upload endpoint
       const response = await fetch(
-        `/api/upload-document?accountId=${accountId}&bulstat=${encodeURIComponent(finalBulstat)}&documentType=${documentType}`,
+        `/api/upload-document?bulstat=${encodeURIComponent(finalBulstat)}&documentType=${documentType}`,
         {
           method: "POST",
           body: formData,
@@ -155,8 +151,10 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         return null;
       }
 
-      const { publicUrl } = await response.json();
-      return publicUrl;
+      const payload = (await response.json()) as {
+        data?: { publicUrl?: string | null };
+      };
+      return payload.data?.publicUrl ?? null;
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "";
       notifyAlert(
@@ -185,8 +183,13 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         true,
       );
 
+      // Check if data is null or invalid
+      if (!data) {
+        throw new Error(t("extractFailedGeneric"));
+      }
+
       // Extract the data and creditsRemaining from the response
-      const creditsRemaining = data?.creditsRemaining;
+      const creditsRemaining = data.creditsRemaining;
 
       // Update user store with new credit balance if available
       if (typeof creditsRemaining === "number" && user) {
@@ -198,31 +201,42 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
       // Save source document to Supabase (non-blocking, fire-and-forget)
       if (data) {
-        saveDocument(file, data.sellerEik, data.sellerVatNumber, "source")
-          .then((sourceDocUrl: string | null) => {
-            if (sourceDocUrl) {
-              // Update invoice with the source document URL after upload completes
-              setInvoices((prev) =>
-                prev.map((inv) =>
-                  inv.id === invoiceId
-                    ? { ...inv, sourceDocumentUrl: sourceDocUrl }
-                    : inv,
-                ),
-              );
-            }
-          })
-          .catch(() => {
-            notifyAlert(
-              "warning",
-              "alerts.sourceDocumentSaveFailedHeader",
-              "alerts.sourceDocumentSaveFailedMessage",
+        try {
+          const sourceDocUrl = await saveDocument(
+            file,
+            data.sellerEik,
+            data.sellerVatNumber,
+            "source",
+          );
+          if (sourceDocUrl) {
+            // Update invoice with the source document URL after upload completes
+            setInvoices((prev) =>
+              prev.map((inv) =>
+                inv.id === invoiceId
+                  ? { ...inv, sourceDocumentUrl: sourceDocUrl }
+                  : inv,
+              ),
             );
-          });
+          }
+        } catch (err) {
+          console.log(
+            "There was an error while saving the source document:",
+            err,
+          );
+
+          notifyAlert(
+            "warning",
+            "alerts.sourceDocumentSaveFailedHeader",
+            "alerts.sourceDocumentSaveFailedMessage",
+          );
+        }
       }
 
       return data;
     } catch (err: unknown) {
-      throw err instanceof Error ? err : new Error(t("extractFailed"));
+      console.log("failing, loading catch");
+
+      throw err instanceof Error ? err : new Error(t("extractFailedGeneric"));
     }
   };
 
@@ -230,20 +244,18 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
     const selectedFiles = e.target.files;
     if (!selectedFiles || selectedFiles.length === 0) return;
 
-    // Check if account has sufficient credits before processing
     if (account) {
-      const EXTRACTION_COST = CREDIT_COSTS.INVOICE_EXTRACTION; // Credits per file
-      const totalCreditsNeeded = selectedFiles.length * EXTRACTION_COST;
-
-      if (account.creditBalance < totalCreditsNeeded) {
+      if (
+        !calculateCreditsNeeded(
+          CREDIT_COSTS.INVOICE_EXTRACTION,
+          account.creditBalance,
+          Array.from(selectedFiles),
+        )
+      ) {
         notifyAlert(
           "error",
           "alerts.insufficientCreditsHeader",
           "alerts.insufficientCreditsMessage",
-          {
-            available: String(account.creditBalance),
-            required: String(totalCreditsNeeded),
-          },
         );
         return;
       }
@@ -380,11 +392,16 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
   };
 
   const removeInvoice = (id: string) => {
-    setInvoices((prev) => prev.filter((inv) => inv.id !== id));
-    if (selectedInvoiceId === id) {
-      const remaining = invoices.filter((inv) => inv.id !== id);
-      setSelectedInvoiceId(remaining.length > 0 ? remaining[0].id : null);
-    }
+    setInvoices((prev) => {
+      const updated = prev.filter((inv) => inv.id !== id);
+
+      // Update selected invoice if the deleted one was selected
+      if (selectedInvoiceId === id) {
+        setSelectedInvoiceId(updated.length > 0 ? updated[0].id : null);
+      }
+
+      return updated;
+    });
   };
 
   const updateInvoiceData = (id: string, data: BulgarianInvoiceData) => {
@@ -511,7 +528,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
         }
       }
 
-      handleGenerationSuccess();
+      setSuccessModalOpen(true);
     } catch (err: unknown) {
       const error = err instanceof Error ? err.message : t("extractFailed");
       setErrorMsg(error);
@@ -574,7 +591,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
       {/* ── ERROR ── */}
       {errorMsg && (
-        <div className="mt-4 p-4 rounded-2xl bg-destructive/10 border border-destructive/30 flex items-start gap-3 animate-fade-up">
+        <div className="my-4 p-4 rounded-2xl bg-destructive/10 border border-destructive/30 flex items-start gap-3 animate-fade-up">
           <div className="w-8 h-8 rounded-lg bg-destructive/15 flex items-center justify-center shrink-0">
             <AlertCircle className="w-4 h-4 text-destructive" />
           </div>

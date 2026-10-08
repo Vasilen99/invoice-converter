@@ -5,7 +5,12 @@ import {
   DEFAULT_UNIT,
   DEFAULT_VAT_PERCENT,
 } from "@/utility/constants";
-import { normalizeEik, normalizeText, parseDecimal, toMoney } from "./common";
+import {
+  normalizeEik,
+  normalizeText,
+  toMoney,
+  parseDecimal,
+} from "@/utility/helpers/common";
 import type { BulgarianInvoiceData } from "@/types";
 
 const PATCH_FIELDS = [

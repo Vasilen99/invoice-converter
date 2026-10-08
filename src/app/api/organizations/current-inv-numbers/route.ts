@@ -1,8 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@/utility/prisma";
-import { getUserServer } from "@/utility/get-user-server";
-import { notFound } from "next/navigation";
-import { normalizeEik } from "@/utility/api-helpers";
+import { normalizeEik } from "@/utility/helpers/common";
+import {
+  apiResponse,
+  resolveAuthenticatedAccountContext,
+} from "@/utility/helpers/server-api";
 
 /**
  * POST /api/organizations/current-inv-numbers
@@ -28,9 +30,13 @@ import { normalizeEik } from "@/utility/api-helpers";
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await getUserServer();
-    if (!user) {
-      return notFound();
+    const accountContext = await resolveAuthenticatedAccountContext();
+    if (!accountContext) {
+      return apiResponse(null, 401, {
+        status: "error",
+        header: "errorMessagesCommon.unauthorizedErrorHeader",
+        message: "errorMessagesCommon.unauthorizedErrorMessage",
+      });
     }
 
     const body = (await request.json()) as {
@@ -40,23 +46,7 @@ export async function POST(request: NextRequest) {
     const { eiks = [] } = body;
 
     if (!Array.isArray(eiks) || eiks.length === 0) {
-      return NextResponse.json({ data: {} }, { status: 200 });
-    }
-
-    // Get user's account
-    const accountMember = await prisma.accountMember.findFirst({
-      where: {
-        user: {
-          auth_uid: user.sub,
-        },
-      },
-      select: {
-        accountId: true,
-      },
-    });
-
-    if (!accountMember) {
-      return notFound();
+      return apiResponse({}, 200);
     }
 
     // Normalize EIKs
@@ -65,7 +55,7 @@ export async function POST(request: NextRequest) {
     // Fetch all organizations matching these EIKs in the user's account
     const organizations = await prisma.organization.findMany({
       where: {
-        accountId: accountMember.accountId,
+        accountId: accountContext.accountId,
         bulstat: {
           in: normalizedEiks,
         },
@@ -76,17 +66,15 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    const organizationByBulstat = new Map(
+      organizations.map((org) => [normalizeEik(org.bulstat), org] as const),
+    );
+
     // Build response: for each EIK, return current_inv_number or default
     const result: Record<string, string> = {};
 
     for (const eik of normalizedEiks) {
-      const org = organizations.find(
-        (o: {
-          bulstat: string | null;
-          current_inv_number:
-            string | number | { toString: () => string } | null;
-        }) => normalizeEik(o.bulstat) === eik,
-      );
+      const org = organizationByBulstat.get(eik);
 
       if (org && org.current_inv_number !== null) {
         // Convert Decimal to string with leading zeros (10 digits)
@@ -98,19 +86,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ data: result }, { status: 200 });
+    return apiResponse(result, 200);
   } catch (error) {
     console.error("[current-inv-numbers] Error:", error);
-    return NextResponse.json(
-      {
-        data: null,
-        alert: {
-          status: "error",
-          header: "errorMessagesCommon.serverErrorHeader",
-          message: "errorMessagesCommon.serverErrorMessage",
-        },
-      },
-      { status: 500 },
-    );
+    return apiResponse(null, 500, {
+      status: "error",
+      header: "errorMessagesCommon.serverErrorHeader",
+      message: "errorMessagesCommon.serverErrorMessage",
+    });
   }
 }

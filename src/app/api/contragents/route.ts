@@ -1,37 +1,38 @@
 import { prisma } from "@/utility/prisma";
-import { NextResponse, NextRequest } from "next/server";
-import { getUserServer } from "@/utility/get-user-server";
-import { notFound } from "next/navigation";
+import { NextRequest } from "next/server";
+import {
+  apiResponse,
+  resolveAuthenticatedAccountContext,
+} from "@/utility/helpers/server-api";
 export async function GET(req: NextRequest) {
-  const user = await getUserServer();
-  if (!user) {
-    return notFound();
-  }
-
   try {
+    const accountContext = await resolveAuthenticatedAccountContext();
+    if (!accountContext) {
+      return apiResponse(null, 401, {
+        status: "error",
+        header: "errorMessagesCommon.unauthorizedErrorHeader",
+        message: "errorMessagesCommon.unauthorizedErrorMessage",
+      });
+    }
+
     const searchParams = req.nextUrl.searchParams;
     const organizationId = searchParams.get("organizationId");
-    const accId = searchParams.get("accountId");
 
-    if (!organizationId || !accId) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "createInvoice.errors.missingOrganizationId",
-            message: "createInvoice.errors.missingOrganizationIdDescription",
-          },
-        },
-        { status: 400 },
-      );
+    const parsedOrganizationId = Number(organizationId);
+
+    if (!organizationId || !Number.isFinite(parsedOrganizationId)) {
+      return apiResponse(null, 400, {
+        status: "error",
+        header: "createInvoice.errors.missingOrganizationId",
+        message: "createInvoice.errors.missingOrganizationIdDescription",
+      });
     }
 
     const userContragents = await prisma.contragent.findMany({
       where: {
         organization: {
-          id: Number(organizationId),
-          accountId: Number(accId),
+          id: parsedOrganizationId,
+          accountId: accountContext.accountId,
         },
       },
       select: {
@@ -40,22 +41,12 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({
-      data: userContragents,
-      status: 200,
-    });
+    return apiResponse(userContragents, 200);
   } catch (_er) {
-    return NextResponse.json(
-      {
-        data: null,
-        alert: {
-          status: "error",
-          header: "createInvoice.errors.serverErrorHeaderFetchContragents",
-          message:
-            "createInvoice.errors.serverErrorDescriptionFetchContragents",
-        },
-      },
-      { status: 500 },
-    );
+    return apiResponse(null, 500, {
+      status: "error",
+      header: "createInvoice.errors.serverErrorHeaderFetchContragents",
+      message: "createInvoice.errors.serverErrorDescriptionFetchContragents",
+    });
   }
 }

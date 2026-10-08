@@ -7,11 +7,9 @@ import {
   CREDIT_COSTS,
 } from "@/utility/constants";
 import { deductCredits } from "@/utility/credit-system";
-import { formatInvoiceNumber } from "@/utility/api-helpers";
-import {
-  normalizeBulstat,
-  getFilePageCount,
-} from "@/utility/helpers/api-helpers";
+import { formatInvoiceNumber } from "@/utility/helpers/api-helpers";
+import { normalizeBulstat } from "@/utility/helpers/common";
+import { getFilePageCount } from "@/utility/helpers/api-helpers";
 export async function POST(req: NextRequest) {
   try {
     const user = await getUserServer();

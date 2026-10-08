@@ -14,6 +14,7 @@ import {
   getTodayForInput,
   toIsoDateOrNull,
 } from "../../utility/date-formatter";
+import { parseDecimal } from "@/utility/helpers/common";
 import type {
   CreateInvoiceMainProps,
   OrganizationOrContragent,
@@ -23,6 +24,7 @@ import type {
   SelectedPartyDetails,
   CreateInvoicePrefillData,
 } from "../../utility/types";
+import { DEFAULT_CURRENCY } from "@/utility/constants";
 const InvoicePreviewModal = dynamic(
   () =>
     import("@/components/InvoicePreviewModal").then(
@@ -84,7 +86,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
     getTodayForInput(),
   );
   const [location, setLocation] = useState<string>("");
-  const [currency, setCurrency] = useState<string>("EUR");
+  const [currency, setCurrency] = useState<string>(DEFAULT_CURRENCY);
   const [bank, setBank] = useState<string>("");
   const [iban, setIban] = useState<string>("");
   const [bic, setBic] = useState<string>("");
@@ -99,17 +101,11 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
 
   const accountId = data?.id || null;
 
-  const normalizeNumber = (value: string): number => {
-    const normalized = value.replace(/[^\d.,-]/g, "").replace(",", ".");
-    const parsed = Number.parseFloat(normalized);
-    return Number.isFinite(parsed) ? parsed : 0;
-  };
-
   const lineItemsWithTotals = useMemo(
     () =>
       lineItems.map((item) => {
-        const quantity = normalizeNumber(item.quantity);
-        const unitPrice = normalizeNumber(item.unitPrice);
+        const quantity = parseDecimal(item.quantity);
+        const unitPrice = parseDecimal(item.unitPrice);
         const lineTotal = quantity * unitPrice;
         return {
           ...item,
@@ -126,7 +122,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
     );
 
     const vatAmount = lineItemsWithTotals.reduce((acc, item) => {
-      const vatPercent = normalizeNumber(item.vatPercent);
+      const vatPercent = parseDecimal(item.vatPercent);
       return acc + item.lineTotal * (vatPercent / 100);
     }, 0);
 
@@ -163,10 +159,8 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
     invoiceNumber,
     invoiceDate,
     taxEventDate,
-    location,
     bank,
     iban,
-    bic,
   ]);
 
   const resetStepTwoAndThree = () => {
@@ -391,10 +385,10 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
   };
 
   useEffect(() => {
-    if (selectedOrganization && accountId) {
+    if (selectedOrganization) {
       const fetchContragents = async () => {
         const contragentsData = await callApi(
-          `/contragents?organizationId=${selectedOrganization.id}&accountId=${accountId}`,
+          `/contragents?organizationId=${selectedOrganization.id}`,
         );
         if (contragentsData) {
           setContragents(contragentsData);
@@ -410,7 +404,7 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
     if (!selectedOrganization) {
       setContragents([]);
     }
-  }, [selectedOrganization, accountId]);
+  }, [selectedOrganization]);
 
   useEffect(() => {
     if (!selectedOrganization || !selectedContragent) {

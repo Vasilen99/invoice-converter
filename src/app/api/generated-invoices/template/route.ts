@@ -5,7 +5,7 @@ import { prisma } from "@/utility/prisma";
 import {
   generateNextInvoiceNumber,
   parseJsonAddress,
-} from "@/utility/api-helpers";
+} from "@/utility/helpers/api-helpers";
 import { formatDateForInput, getTodayForInput } from "@/utility/date-formatter";
 
 type ParsedInvoiceData = {

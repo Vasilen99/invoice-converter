@@ -1,27 +1,24 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getUserServer } from "@/utility/get-user-server";
+import { NextRequest } from "next/server";
 import { prisma } from "@/utility/prisma";
 import {
   getDefaultInvoiceTemplateHtml,
   normalizeTemplateHtml,
   sanitizeTemplateHtml,
 } from "@/utility/invoice-template";
+import {
+  apiResponse,
+  resolveAuthenticatedAccountContext,
+} from "@/utility/helpers/server-api";
 
 export async function POST(req: NextRequest) {
   try {
-    const user = await getUserServer();
-    if (!user?.sub) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "errorMessagesCommon.unauthorizedErrorHeader",
-            message: "errorMessagesCommon.unauthorizedErrorMessage",
-          },
-        },
-        { status: 401 },
-      );
+    const accountContext = await resolveAuthenticatedAccountContext();
+    if (!accountContext) {
+      return apiResponse(null, 401, {
+        status: "error",
+        header: "errorMessagesCommon.unauthorizedErrorHeader",
+        message: "errorMessagesCommon.unauthorizedErrorMessage",
+      });
     }
 
     const body = await req.json();
@@ -31,34 +28,26 @@ export async function POST(req: NextRequest) {
     const normalized = normalizeTemplateHtml(sanitized);
     const templateToSave = normalized || getDefaultInvoiceTemplateHtml();
 
-    const accountMember = await prisma.accountMember.findFirst({
+    const account = await prisma.account.findUnique({
       where: {
-        user: {
-          auth_uid: user.sub,
-        },
+        id: accountContext.accountId,
       },
       select: {
-        accountId: true,
+        id: true,
       },
     });
 
-    if (!accountMember?.accountId) {
-      return NextResponse.json(
-        {
-          data: null,
-          alert: {
-            status: "error",
-            header: "invoiceTemplate.alerts.accountMissingHeader",
-            message: "invoiceTemplate.alerts.accountMissingMessage",
-          },
-        },
-        { status: 400 },
-      );
+    if (!account?.id) {
+      return apiResponse(null, 400, {
+        status: "error",
+        header: "invoiceTemplate.alerts.accountMissingHeader",
+        message: "invoiceTemplate.alerts.accountMissingMessage",
+      });
     }
 
     const updatedAccount = await prisma.account.update({
       where: {
-        id: accountMember.accountId,
+        id: accountContext.accountId,
       },
       data: {
         inv_template: templateToSave,
@@ -70,29 +59,17 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(
-      {
-        data: updatedAccount,
-        alert: {
-          status: "success",
-          header: "invoiceTemplate.alerts.saveSuccessHeader",
-          message: "invoiceTemplate.alerts.saveSuccessMessage",
-        },
-      },
-      { status: 200 },
-    );
+    return apiResponse(updatedAccount, 200, {
+      status: "success",
+      header: "invoiceTemplate.alerts.saveSuccessHeader",
+      message: "invoiceTemplate.alerts.saveSuccessMessage",
+    });
   } catch (error) {
     console.error("Invoice template save error:", error);
-    return NextResponse.json(
-      {
-        data: null,
-        alert: {
-          status: "error",
-          header: "invoiceTemplate.alerts.saveFailedHeader",
-          message: "invoiceTemplate.alerts.saveFailedMessage",
-        },
-      },
-      { status: 500 },
-    );
+    return apiResponse(null, 500, {
+      status: "error",
+      header: "invoiceTemplate.alerts.saveFailedHeader",
+      message: "invoiceTemplate.alerts.saveFailedMessage",
+    });
   }
 }

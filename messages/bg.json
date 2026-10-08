@@ -119,6 +119,7 @@
     "choosePdf": "Изберете PDF",
     "invalidPdf": "Моля, качете валиден PDF файл.",
     "extractFailed": "Неуспешно извличане на данните от фактурата.",
+    "extractFailedGeneric": "Неуспешно извличане на файл",
     "somethingWrong": "Нещо се обърка",
     "close": "Затвори",
     "remove": "Премахни",

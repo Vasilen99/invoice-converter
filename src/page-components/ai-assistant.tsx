@@ -13,13 +13,14 @@ import type { BulgarianInvoiceData } from "@/types";
 import { uploadPdfToSupabase } from "@/utility/pdf-upload";
 import { useGlobalStore } from "@/store/global";
 import { Bot, Loader2, Plus, Send } from "lucide-react";
-import { hasRequiredInvoiceFields } from "@/utility/api-helpers/invoice";
+import { hasRequiredInvoiceFields } from "@/utility/helpers/api-helpers";
 import type { ChatMessage, ChatRole } from "@/utility/types/ai-chat";
 import dynamic from "next/dynamic";
 import { callApi } from "@/utility/hooks/apiFetch";
 import { HeadingSection } from "@/components/HeadingSection";
 import { useUserStore } from "@/store/user";
 import { CREDIT_COSTS } from "@/utility/constants";
+import type { AccountContext } from "@/utility/types/ai-assistant";
 const MessageBubble = dynamic(
   () => import("@/components/MessageBubble").then((mod) => mod.MessageBubble),
   {
@@ -43,41 +44,6 @@ const InvoicePreviewModal = dynamic(
     ssr: false,
   },
 );
-
-type AccountOrgSnapshot = {
-  id: number;
-  name: string;
-  bulstat: string | null;
-  vatNumber: string | null;
-  molName: string | null;
-  address: unknown;
-  bank: string | null;
-  iban: string | null;
-  bic: string | null;
-  invoiceSeriesPrefix: string | null;
-  current_inv_number: string | number | null;
-  contragents: {
-    id: number;
-    name: string;
-    bulstat: string | null;
-    vatNumber: string | null;
-    molName: string | null;
-    address: unknown;
-    organizationId: number;
-  }[];
-};
-
-export type AccountContext = {
-  accountMembers: {
-    accountId: number;
-    account: {
-      creditBalance: number;
-      composer_name: string | null;
-      inv_template: string | null;
-      organizations: AccountOrgSnapshot[];
-    };
-  }[];
-};
 
 function buildWelcomeMessage(
   t: ReturnType<typeof useTranslations>,

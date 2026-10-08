@@ -1,6 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { createAdminClient } from "@/utility/supabase/server";
-import { getUserServer } from "@/utility/get-user-server";
+import {
+  apiResponse,
+  resolveAuthenticatedAccountContext,
+} from "@/utility/helpers/server-api";
 
 /**
  * POST /api/upload-document
@@ -8,8 +11,8 @@ import { getUserServer } from "@/utility/get-user-server";
  * Generic document upload endpoint for saving files to Supabase storage.
  * Supports both source and generated documents using admin/service role client to bypass RLS.
  *
- * Required query params:
- * - accountId: The account ID
+ * Query params:
+ * - accountId: Optional, validated against authenticated user's account
  * - bulstat: The seller's BULSTAT/EIK
  * - documentType: "source" or "generated" (defaults to "source")
  *
@@ -24,23 +27,40 @@ import { getUserServer } from "@/utility/get-user-server";
  */
 export async function POST(request: NextRequest) {
   try {
-    // Verify user is authenticated
-    const user = await getUserServer();
-    if (!user?.sub) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const accountContext = await resolveAuthenticatedAccountContext();
+    if (!accountContext) {
+      return apiResponse(null, 401, {
+        status: "error",
+        header: "errorMessagesCommon.unauthorizedErrorHeader",
+        message: "errorMessagesCommon.unauthorizedErrorMessage",
+      });
     }
 
     // Get query parameters
     const searchParams = request.nextUrl.searchParams;
-    const accountId = searchParams.get("accountId");
+    const accountIdParam = searchParams.get("accountId");
     const bulstat = searchParams.get("bulstat");
     const documentType = searchParams.get("documentType") || "source";
 
-    if (!accountId) {
-      return NextResponse.json(
-        { error: "Missing accountId parameter" },
-        { status: 400 },
-      );
+    const parsedAccountId =
+      accountIdParam !== null
+        ? Number(accountIdParam)
+        : accountContext.accountId;
+
+    if (!Number.isFinite(parsedAccountId)) {
+      return apiResponse(null, 400, {
+        status: "error",
+        header: "errorMessagesCommon.serverErrorHeader",
+        message: "errorMessagesCommon.serverErrorMessage",
+      });
+    }
+
+    if (parsedAccountId !== accountContext.accountId) {
+      return apiResponse(null, 403, {
+        status: "error",
+        header: "errorMessagesCommon.unauthorizedErrorHeader",
+        message: "errorMessagesCommon.unauthorizedErrorMessage",
+      });
     }
 
     // Get form data
@@ -48,7 +68,11 @@ export async function POST(request: NextRequest) {
     const file = formData.get("file") as File;
 
     if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+      return apiResponse(null, 400, {
+        status: "error",
+        header: "errorMessagesCommon.serverErrorHeader",
+        message: "errorMessagesCommon.serverErrorMessage",
+      });
     }
 
     // Create admin Supabase client (uses service role key to bypass RLS)
@@ -66,7 +90,7 @@ export async function POST(request: NextRequest) {
     // Prepare storage path
     const bulstatFolder = bulstat || "unknown";
     const fileName = `${Date.now()}-${sanitizedFileName}`;
-    const storagePath = `${folderPrefix}/${accountId}/${bulstatFolder}/${fileName}`;
+    const storagePath = `${folderPrefix}/${parsedAccountId}/${bulstatFolder}/${fileName}`;
 
     // Convert File to Buffer for upload
     const arrayBuffer = await file.arrayBuffer();
@@ -82,10 +106,11 @@ export async function POST(request: NextRequest) {
 
     if (uploadError) {
       console.error("Supabase upload error:", uploadError);
-      return NextResponse.json(
-        { error: `Upload failed: ${uploadError.message}` },
-        { status: 500 },
-      );
+      return apiResponse(null, 500, {
+        status: "error",
+        header: "errorMessagesCommon.serverErrorHeader",
+        message: "errorMessagesCommon.serverErrorMessage",
+      });
     }
 
     // Get public URL
@@ -93,17 +118,20 @@ export async function POST(request: NextRequest) {
       .from("documents")
       .getPublicUrl(storagePath);
 
-    return NextResponse.json({
-      success: true,
-      publicUrl: urlData.publicUrl,
-      path: storagePath,
-    });
+    return apiResponse(
+      {
+        success: true,
+        publicUrl: urlData.publicUrl,
+        path: storagePath,
+      },
+      200,
+    );
   } catch (err: unknown) {
     console.error("Error uploading document:", err);
-    const message = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json(
-      { error: `Failed to upload document: ${message}` },
-      { status: 500 },
-    );
+    return apiResponse(null, 500, {
+      status: "error",
+      header: "errorMessagesCommon.serverErrorHeader",
+      message: "errorMessagesCommon.serverErrorMessage",
+    });
   }
 }

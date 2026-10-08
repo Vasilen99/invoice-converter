@@ -4,71 +4,23 @@
  */
 
 import {
-  generateNextInvoiceNumber as getNextInvoiceNumber,
-  parseJsonAddress as parseJsonAddressShared,
-} from "../api-helpers";
-
-type ParsedLineItem = {
-  description?: string;
-  unit?: string;
-  quantity?: string | number;
-  unitPrice?: string | number;
-  vatPercent?: string | number;
-};
-
-type ParsedInvoiceData = {
-  location?: string;
-  bank?: string;
-  iban?: string;
-  bic?: string;
-  lineItems?: ParsedLineItem[];
-};
-
-type LineItemTemplate = {
-  description: string;
-  unit: string;
-  quantity: string;
-  unitPrice: string;
-  vatPercent: string;
-};
-
-type BankInfo = {
-  bank: string;
-  iban: string;
-  bic: string;
-};
-
-/**
- * Parses and validates a JSON address object
- * @param value - Unknown value that should be an address object
- * @returns Parsed address or null if invalid
- */
-export function parseJsonAddress(
-  value: unknown,
-): { settlement?: string; street?: string } | null {
-  return parseJsonAddressShared(value);
-}
-
-/**
- * Converts a value to a number with fallback
- * Handles string normalization and parsing
- * @param value - Value to convert (string or number)
- * @param fallback - Default value if parsing fails
- * @returns Parsed number or fallback
- */
-export function toNumber(
-  value: string | number | undefined,
-  fallback = 0,
-): number {
-  if (typeof value === "number") {
-    return Number.isFinite(value) ? value : fallback;
-  }
-  if (typeof value !== "string") return fallback;
-
-  const normalized = value.replace(/[^\d.,-]/g, "").replace(",", ".");
-  const parsed = Number.parseFloat(normalized);
-  return Number.isFinite(parsed) ? parsed : fallback;
-}
+  createBaseInvoice,
+  formatInvoiceNumber,
+  generateNextInvoiceNumber,
+  hasRequiredInvoiceFields,
+  mergeInvoice,
+  parseInvoiceNumber,
+  recalculateTotals,
+  sanitizeEditPatch,
+  sanitizeInvoice,
+  sanitizeInvoicePatch,
+} from "./invoice";
+import { parseDecimal, parseJsonAddress } from "./common";
+import type {
+  ParsedInvoiceData,
+  ParsedLineItem,
+  LineItemTemplate,
+} from "../types/parsed";
 
 /**
  * Safely trims a string value
@@ -92,17 +44,6 @@ function createLineItemKey(
   vatPercent: string,
 ): string {
   return `${description}|${unitPrice}|${vatPercent}`;
-}
-
-/**
- * Creates a unique key for bank info
- * @param bank - Bank name
- * @param iban - IBAN number
- * @param bic - BIC code
- * @returns Composite key string
- */
-function createBankKey(bank: string, iban: string, bic: string): string {
-  return `${bank}|${iban}|${bic}`;
 }
 
 /**
@@ -154,15 +95,15 @@ function processParsedLineItems(
     const description = safeStringValue(parsedLineItem.description);
     if (!description) continue;
 
-    const unitPrice = toNumber(parsedLineItem.unitPrice).toFixed(2);
-    const vatPercent = toNumber(parsedLineItem.vatPercent).toFixed(2);
+    const unitPrice = parseDecimal(parsedLineItem.unitPrice).toFixed(2);
+    const vatPercent = parseDecimal(parsedLineItem.vatPercent).toFixed(2);
     const key = createLineItemKey(description, unitPrice, vatPercent);
 
     if (!templateMap.has(key)) {
       templateMap.set(key, {
         description,
         unit: safeStringValue(parsedLineItem.unit) || "бр.",
-        quantity: toNumber(parsedLineItem.quantity, 1).toFixed(2),
+        quantity: parseDecimal(parsedLineItem.quantity, 1).toFixed(2),
         unitPrice,
         vatPercent,
       });
@@ -224,42 +165,6 @@ export function aggregateInvoicePrefillData(
     lineItemTemplates: Array.from(lineItemTemplateMap.values()),
     locationOptions: Array.from(locationSet),
   };
-}
-
-/**
- * Adds organization bank info to the bank options map if it exists
- * @param orgBank - Organization bank name
- * @param orgIban - Organization IBAN
- * @param orgBic - Organization BIC
- * @param bankMap - Map to store/update bank info
- */
-export function addOrganizationBankInfo(
-  orgBank: string | null | undefined,
-  orgIban: string | null | undefined,
-  orgBic: string | null | undefined,
-  bankMap: Map<string, BankInfo>,
-): void {
-  const bank = safeStringValue(orgBank);
-  const iban = safeStringValue(orgIban);
-  const bic = safeStringValue(orgBic);
-
-  if (bank || iban || bic) {
-    const key = createBankKey(bank, iban, bic);
-    bankMap.set(key, { bank, iban, bic });
-  }
-}
-
-/**
- * Generates the next invoice number based on series prefix and current number
- * @param prefix - Invoice series prefix (e.g., "INV")
- * @param currentNumber - Current invoice number
- * @returns Formatted invoice number suggestion
- */
-export function generateNextInvoiceNumber(
-  prefix: string | null | undefined,
-  currentNumber: number | string | null | undefined,
-): string {
-  return getNextInvoiceNumber(prefix, currentNumber);
 }
 
 /**
@@ -344,6 +249,20 @@ export function buildPrefillResponse(
   };
 }
 
+export {
+  createBaseInvoice,
+  formatInvoiceNumber,
+  generateNextInvoiceNumber,
+  hasRequiredInvoiceFields,
+  mergeInvoice,
+  parseJsonAddress,
+  parseInvoiceNumber,
+  recalculateTotals,
+  sanitizeEditPatch,
+  sanitizeInvoice,
+  sanitizeInvoicePatch,
+};
+
 export async function getFilePageCount(file: File): Promise<number | null> {
   try {
     const { parseOffice } = await import("officeparser");
@@ -425,23 +344,3 @@ export async function getFilePageCount(file: File): Promise<number | null> {
     return null;
   }
 }
-export function normalizeBulstat(value: string | undefined | null): string {
-  return (value ?? "").trim();
-}
-export const parseInvoiceSequence = (value: unknown): number => {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  const digits = String(value).replace(/\D/g, "");
-  if (!digits) {
-    return 0;
-  }
-
-  const parsed = parseInt(digits, 10);
-  return Number.isFinite(parsed) ? parsed : 0;
-};
-export const formatInvoiceSequence = (sequence: number): string => {
-  const safeSequence = Number.isFinite(sequence) ? Math.max(0, sequence) : 0;
-  return String(safeSequence).padStart(10, "0");
-};

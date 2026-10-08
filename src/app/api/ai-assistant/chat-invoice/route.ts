@@ -7,23 +7,23 @@ import { getCachedCompanyData } from "@/utility/registry-cache";
 import type { BulgarianInvoiceData } from "../../../../types";
 import { DEFAULT_INVOICE_NUMBER } from "@/utility/constants";
 import {
-  fetchExternalCompanyByEik,
-  normalizeText,
-  normalizeEik,
   createBaseInvoice,
   formatInvoiceNumber,
   generateNextInvoiceNumber,
-  mergeInvoice,
   hasRequiredInvoiceFields,
   parseJsonAddress,
+  mergeInvoice,
   sanitizeEditPatch,
   sanitizeInvoice,
   sanitizeInvoicePatch,
-} from "@/utility/api-helpers";
+} from "@/utility/helpers/api-helpers";
+import { fetchExternalCompanyByEik } from "@/utility/helpers/company";
+import { normalizeEik, normalizeText } from "@/utility/helpers/common";
 import { deductCredits } from "@/utility/credit-system";
 import { CREDIT_COSTS } from "@/utility/constants";
 import { extractPromptData, type Intent } from "./prompt-extraction";
 import { buildLatestTemplateInvoice } from "./latest-invoice-template";
+import type { AccountOrgSnapshot } from "@/utility/types/ai-assistant";
 
 type CompanyRole = "organization" | "contragent";
 type CompanyResolutionSource = "DB" | "CACHE" | "EXTERNAL";
@@ -59,31 +59,6 @@ type ChatResponse = {
       | "invalid-input"
       | "insufficient-credits";
   };
-};
-
-export type AccountOrgSnapshot = {
-  id: number;
-  name: string;
-  bulstat: string | null;
-  vatNumber: string | null;
-  molName: string | null;
-  address: unknown;
-  bank: string | null;
-  iban: string | null;
-  bic: string | null;
-  invoiceSeriesPrefix: string | null;
-  current_inv_number: string | number | null;
-  contragents: AccountContragentSnapshot[];
-};
-
-export type AccountContragentSnapshot = {
-  id: number;
-  name: string;
-  bulstat: string | null;
-  vatNumber: string | null;
-  molName: string | null;
-  address: unknown;
-  organizationId: number;
 };
 
 // ---------------------------------------------------------------------------

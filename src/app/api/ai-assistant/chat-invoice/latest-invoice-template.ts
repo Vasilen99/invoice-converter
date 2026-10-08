@@ -4,7 +4,7 @@ import {
   generateNextInvoiceNumber,
   parseJsonAddress,
   sanitizeInvoice,
-} from "@/utility/api-helpers";
+} from "@/utility/helpers/api-helpers";
 import { getTodayForInput } from "@/utility/date-formatter";
 
 type ParsedInvoiceData = {
@@ -110,7 +110,7 @@ export async function buildLatestTemplateInvoice(
   const mapped = sanitizeInvoice({
     invoiceNumber,
     invoiceDate: today,
-    taxEventDate: latestInvoice.taxEventDate ? today : today,
+    taxEventDate: today,
     location: pickFirstFilled(
       parsedData?.location,
       organizationAddress?.settlement,
