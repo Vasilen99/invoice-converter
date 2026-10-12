@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import type React from "react";
 
 const Dashboard = dynamic(() => import("@/page-components/dashboard"));
-
+const GlobalLoading = dynamic(() => import("@/components/GlobalLoading"));
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
@@ -14,6 +14,7 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
           <section className="bg-background h-full w-full overflow-y-auto px-4 py-6 lg:py-12">
             {children}
           </section>
+          <GlobalLoading />
         </main>
       </div>
     </div>

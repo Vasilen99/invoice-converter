@@ -40,10 +40,13 @@ import {
   generatedInvoicesLink,
   creditsLink,
   invoiceTemplateLink,
+  dashboardLink,
 } from "../../utility/links";
 import { useUserStore } from "@/store/user";
 import { PLATFORM_NAME } from "../../utility/constants";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useRouter } from "next/navigation";
+
 const NAVIGATION_CONFIG = [
   {
     labelKey: "dashboard.general",
@@ -191,7 +194,7 @@ function DashboardSidebarContent() {
   const t = useTranslations();
   const pathname = usePathname();
   const { logout, user } = useUserStore();
-
+  const router = useRouter();
   const accountName =
     user?.accountName && user.accountName.length > 15
       ? `${user.accountName.slice(0, 15)}...`
@@ -211,7 +214,10 @@ function DashboardSidebarContent() {
       >
         <SidebarHeader className="border-b border-sidebar-border">
           <FadeIn className="flex items-center gap-3 px-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:justify-center">
-            <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center shrink-0">
+            <div
+              onClick={() => router.push(dashboardLink)}
+              className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center shrink-0 cursor-pointer"
+            >
               <Building2 className="h-6 w-6 text-foreground" />
             </div>
             <div className="flex flex-col gap-1 group-data-[collapsible=icon]:hidden">

@@ -4,7 +4,6 @@ import { getUserServer } from "@/utility/get-user-server";
 import type { ApiAlert, ApiResponse } from "@/utility/types/api";
 
 export type AuthenticatedAccountContext = {
-  userSub: string;
   accountId: number;
 };
 
@@ -30,7 +29,6 @@ export async function resolveAuthenticatedAccountContext(): Promise<Authenticate
   }
 
   return {
-    userSub: user.sub,
     accountId: accountMember.accountId,
   };
 }

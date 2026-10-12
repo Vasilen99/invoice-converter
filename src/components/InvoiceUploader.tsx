@@ -218,12 +218,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
               ),
             );
           }
-        } catch (err) {
-          console.log(
-            "There was an error while saving the source document:",
-            err,
-          );
-
+        } catch (_err) {
           notifyAlert(
             "warning",
             "alerts.sourceDocumentSaveFailedHeader",

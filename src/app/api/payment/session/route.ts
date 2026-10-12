@@ -147,6 +147,20 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    if (!order) {
+      return NextResponse.json(
+        {
+          data: null,
+          alert: {
+            status: "error",
+            header: "Грешка при създаване на поръчка",
+            message:
+              "Не може да се създаде поръчка за плащане в момента. Моля, опитайте отново по-късно.",
+          },
+        },
+        { status: 500 },
+      );
+    }
     // Create Checkout Session for one-time purchase
     const params: Stripe.Checkout.SessionCreateParams = {
       payment_method_types: ["card"],
