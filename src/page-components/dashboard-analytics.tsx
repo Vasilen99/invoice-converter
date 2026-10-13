@@ -48,9 +48,7 @@ type DashboardAnalyticsProps = {
     id: number;
     contragents: {
       _count: {
-        organization: number;
-        registry: number;
-        invoices: number;
+        id: number;
       };
     }[];
     generatedInvoices: {
@@ -365,19 +363,27 @@ export default function DashboardAnalytics({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {creditsData.map((transaction, index) => (
-                  <TableRow className="text-center" key={index}>
-                    <TableCell>
-                      {creditTransactionsTypeMap[transaction.type]}
+                {creditsData && creditsData.length ? (
+                  creditsData.map((transaction, index) => (
+                    <TableRow className="text-center" key={index}>
+                      <TableCell>
+                        {creditTransactionsTypeMap[transaction.type]}
+                      </TableCell>
+                      <TableCell>
+                        {" "}
+                        {format(new Date(transaction.createdAt), "dd/MM/yyyy")}
+                      </TableCell>
+                      <TableCell>{transaction.balanceAfter}</TableCell>
+                      <TableCell>{transaction.amount}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center">
+                      {t("noTransactions")}
                     </TableCell>
-                    <TableCell>
-                      {" "}
-                      {format(new Date(transaction.createdAt), "dd/MM/yyyy")}
-                    </TableCell>
-                    <TableCell>{transaction.balanceAfter}</TableCell>
-                    <TableCell>{transaction.amount}</TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </div>
@@ -422,29 +428,39 @@ export default function DashboardAnalytics({
               <TableHead>{t("organizationName")}</TableHead>
               <TableHead>{t("bulstat")}</TableHead>
               <TableHead>{t("lastGeneratedInvoice")}</TableHead>
+              <TableHead>{t("contragentsCount")}</TableHead>
               <TableHead>{t("totalInvoices")}</TableHead>
               <TableHead>{t("totalAmount")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedOrganizations.map((organization) => (
-              <TableRow key={organization.id}>
-                <TableCell className="font-medium">
-                  {organization.name}
+            {sortedOrganizations && sortedOrganizations.length ? (
+              sortedOrganizations.map((organization) => (
+                <TableRow key={organization.id}>
+                  <TableCell className="font-medium">
+                    {organization.name}
+                  </TableCell>
+                  <TableCell>{organization.bulstat}</TableCell>
+                  <TableCell>
+                    {organization.latestGeneratedInvoiceDate
+                      ? format(
+                          new Date(organization.latestGeneratedInvoiceDate),
+                          "dd/MM/yyyy",
+                        )
+                      : "-"}
+                  </TableCell>
+                  <TableCell>{organization.contragents.length}</TableCell>
+                  <TableCell>{organization.generatedInvoicesCount}</TableCell>
+                  <TableCell>{organization.totalAmount}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center">
+                  {t("noOrganizations")}
                 </TableCell>
-                <TableCell>{organization.bulstat}</TableCell>
-                <TableCell>
-                  {organization.latestGeneratedInvoiceDate
-                    ? format(
-                        new Date(organization.latestGeneratedInvoiceDate),
-                        "dd/MM/yyyy",
-                      )
-                    : "-"}
-                </TableCell>
-                <TableCell>{organization.generatedInvoicesCount}</TableCell>
-                <TableCell>{organization.totalAmount}</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>

@@ -27,7 +27,7 @@ export async function GET() {
         },
         contragents: {
           select: {
-            _count: true,
+            id: true,
           },
         },
       },

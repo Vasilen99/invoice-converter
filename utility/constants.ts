@@ -151,3 +151,12 @@ export const AI_STEP_KEYS = [
   "step4",
   "step5",
 ] as const;
+
+export const NAVIGATIONS = [
+  { key: "home", href: "#hero" },
+  { key: "tools", href: "#ai-tools" },
+  { key: "whyUs", href: "#why-us" },
+  { key: "pricing", href: "#pricing" },
+  { key: "faq", href: "#faq" },
+  { key: "contactUs", href: "#contact-us" },
+];

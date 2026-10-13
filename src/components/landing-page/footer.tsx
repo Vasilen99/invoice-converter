@@ -1,5 +1,6 @@
 "use client";
 
+import { NAVIGATIONS } from "@/utility/constants";
 import { Zap, ArrowRight, ShieldCheck, Sparkles, Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -37,18 +38,15 @@ export const Footer = () => {
               {t("linksTitle")}
             </p>
             <nav className="flex flex-col gap-2.5 text-sm text-muted-foreground">
-              <a href="#hero" className="hover:text-foreground transition-colors">
-                {t("links.home")}
-              </a>
-              <a href="#solution" className="hover:text-foreground transition-colors">
-                {t("links.howItWorks")}
-              </a>
-              <a href="#features" className="hover:text-foreground transition-colors">
-                {t("links.features")}
-              </a>
-              <a href="#converter" className="hover:text-foreground transition-colors">
-                {t("links.converter")}
-              </a>
+              {NAVIGATIONS.map((nav) => (
+                <a
+                  key={nav.key}
+                  href={nav.href}
+                  className="hover:text-foreground transition-colors"
+                >
+                  {t(nav.key)}
+                </a>
+              ))}
             </nav>
           </div>
 

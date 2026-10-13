@@ -208,10 +208,7 @@ function DashboardSidebarContent() {
 
   return (
     <>
-      <Sidebar
-        collapsible="icon"
-        className="overflow-y-auto border-r border-border bg-sidebar"
-      >
+      <Sidebar collapsible="icon" className="border-r border-border bg-sidebar">
         <SidebarHeader className="border-b border-sidebar-border">
           <FadeIn className="flex items-center gap-3 px-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:justify-center">
             <div

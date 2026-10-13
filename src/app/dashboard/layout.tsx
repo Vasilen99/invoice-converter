@@ -3,6 +3,10 @@ import type React from "react";
 
 const Dashboard = dynamic(() => import("@/page-components/dashboard"));
 const GlobalLoading = dynamic(() => import("@/components/GlobalLoading"));
+const NavigationLoader = dynamic(() =>
+  import("@/components/NavigationLoader").then((mod) => mod.default),
+);
+
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
@@ -15,6 +19,7 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
             {children}
           </section>
           <GlobalLoading />
+          <NavigationLoader />
         </main>
       </div>
     </div>

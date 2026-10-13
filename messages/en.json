@@ -4,12 +4,15 @@
   },
   "header": {
     "home": "Home",
-    "howItWorks": "How it works",
-    "about": "About",
+    "whyUs": "Why us",
+    "pricing": "Pricing",
+    "tools": "Our tools",
     "themeToggle": "Toggle theme",
     "cta": "Convert now",
+    "faq": "FAQ",
     "login": "Log in",
     "account": "Account",
+    "contactUs": "Contact us",
     "dashboard": "Dashboard",
     "logout": "Log out"
   },
@@ -33,7 +36,7 @@
     "titleStart": "Any invoice.",
     "titleHighlight": "Bulgarian format.",
     "titleEnd": "In seconds.",
-    "subtitle": "Stop retyping invoices by hand. Upload a PDF from Stripe, PayPal, Wix or Google and AI will generate a fully compliant Bulgarian invoice — ready for your accountant.",
+    "subtitle": "Stop retyping invoices by hand. Upload a PDF from Stripe, PayPal, Wix or Google and AI will generate a fully compliant Bulgarian invoice - ready for your accountant.",
     "ctaPrimary": "Convert an invoice for free",
     "ctaSecondary": "See how it works",
     "trustedBy": "Works with invoices from"
@@ -43,20 +46,44 @@
     "subtitle": "Every month Bulgarian companies lose hours manually retyping foreign invoices.",
     "cards": {
       "manual": { "title": "Manual retyping", "desc": "Copying field by field from a PDF into a template. Every month. For every invoice." },
-      "errors": { "title": "Data errors", "desc": "One wrong digit in the company ID or VAT amount — and accounting sends the invoice back." },
+      "errors": { "title": "Data errors", "desc": "One wrong digit in the company ID or VAT amount - and accounting sends the invoice back." },
       "compliance": { "title": "VAT non-compliance", "desc": "Foreign invoices don't contain the mandatory fields required by Bulgarian law." },
       "time": { "title": "Wasted time", "desc": "15+ minutes per invoice. With 20 invoices a month, that's 5 hours of pure loss." }
     }
   },
-  "solution": {
-    "title": "One upload. Done.",
-    "subtitle": "AI extracts every field from the original invoice and transforms it into a fully compliant Bulgarian format.",
-    "steps": {
-      "upload": { "label": "Upload", "desc": "Drop a PDF invoice from any provider" },
-      "extract": { "label": "Extract", "desc": "AI reads and recognizes every field instantly" },
-      "generate": { "label": "Generate", "desc": "An invoice meeting all VAT law requirements is created" },
-      "download": { "label": "Download", "desc": "Get a perfect PDF, ready for accounting" }
-    }
+  "aiTools": {
+    "title": "Powered by AI Intelligence",
+    "subtitle": "Two powerful AI-driven tools to automate and streamline your invoice workflow.",
+    "tools": {
+      "converter": {
+        "title": "AI Converter",
+        "description": "Instantly transform foreign invoices into fully compliant Bulgarian format. Upload a PDF from any provider and let AI extract, recognize, and convert every field in seconds.",
+        "featuresLabel": "Key features",
+        "features": [
+          "Automatic invoice extraction and recognition",
+          "Full VAT law compliance with all mandatory fields",
+          "Support for Stripe, PayPal, Wix, Google, Shopify and more",
+          "Lightning-fast processing - PDF ready in under 30 seconds",
+          "Full control - review and edit every field before generating",
+          "Secure processing - files never stored on our servers"
+        ]
+      },
+      "assistant": {
+        "title": "AI Assistant",
+        "description": "Create and refine invoices through natural conversation. Describe what you need in plain language and let AI generate invoice drafts, make edits, and provide suggestions.",
+        "featuresLabel": "Key features",
+        "features": [
+          "Natural language invoice generation and editing",
+          "Smart company information lookup and auto-fill",
+          "Real-time draft preview and adjustments",
+          "Ask for changes in plain English - no forms to fill",
+          "Save and download invoices as PDF directly",
+          "Learn from your preferences for better results"
+        ]
+      }
+    },
+    "cta": "Try it now"
+
   },
   "pricing": {
     "title": "Transparent pricing, no surprises",
@@ -76,18 +103,103 @@
   },
   "providers": {
     "title": "Works with all popular platforms",
-    "subtitle": "Stripe, PayPal, Wix, Google, Shopify and many more — if it's a PDF invoice, we understand it."
+    "subtitle": "Stripe, PayPal, Wix, Google, Shopify and many more - if it's a PDF invoice, we understand it."
   },
   "features": {
     "title": "Why InvoiceAI?",
     "items": {
-      "ai": { "title": "AI accuracy", "desc": "GPT-4o reads even non-standard formats with over 99% precision." },
-      "compliance": { "title": "VAT law compliance", "desc": "All mandatory fields — company ID, VAT number, accountable person, tax base, amount in words." },
+      "ai": { "title": "AI accuracy", "desc": "GPT-5.6-luna reads even non-standard formats with over 99% precision." },
+      "compliance": { "title": "VAT law compliance", "desc": "All mandatory fields - company ID, VAT number, accountable person, tax base, amount in words." },
       "speed": { "title": "Lightning fast", "desc": "From upload to finished PDF in under 30 seconds." },
       "edit": { "title": "Full control", "desc": "Review and edit every field before generating." },
       "secure": { "title": "Secure", "desc": "Files are processed instantly and never stored on the server." },
-      "free": { "title": "No installation", "desc": "Works directly in the browser — on desktop, tablet or phone." }
+      "free": { "title": "No installation", "desc": "Works directly in the browser - on desktop, tablet or phone." }
     }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about InvoiceAI. Can't find what you're looking for? Reach out to our support team.",
+    "items": {
+      "conversionProcess": {
+        "title": "How does the invoice conversion process work?",
+        "desc": "Simply upload a PDF invoice from any provider (Stripe, PayPal, Wix, Google, Shopify, etc.) to our converter. Our AI extracts all data fields in seconds, automatically recognizes the invoice structure, and generates a fully compliant Bulgarian invoice. You can review and edit any field before downloading the final PDF - the entire process takes less than 30 seconds."
+      },
+      "chatProcess": {
+        "title": "How does the AI assistant process work?",
+        "desc": "With the AI assistant, you can create and edit invoices through natural language dialogue. Simply describe what you need in plain language and the AI will generate invoice drafts, make edits, and suggest improvements. You can review the draft in real-time, request changes in plain language, and save or download the invoices as PDF directly."
+      },
+      "complianceVat": {
+        "title": "How does InvoiceAI ensure VAT compliance?",
+        "desc": "Our AI is trained specifically on Bulgarian VAT law and regulatory requirements. Every converted invoice automatically includes all mandatory fields required by Bulgarian legislation: company ID (EIK/BULSTAT), VAT number, accountable person name, tax base, VAT amount, total amount in words, and proper invoice numbering. All converted invoices are ready to submit to your accountant without additional compliance work."
+      },
+      "creditSystem": {
+        "title": "How does our credit system work and what are they for?",
+        "desc": "Credits are the currency in InvoiceAI, used for various services including invoice conversion, interacting with the AI assistant, and other AI features. Each credit costs €0.160 when purchased individually, but larger credit packages offer discounts - up to 30% off our Corporate package. Credits never expire and can be used at any time. You only pay for what you use - convert 1 invoice or 1000, the flexible pricing meets your needs."
+      },
+      "creditsUsage": {
+        "title": "How many credits are used to convert an invoice?",
+        "desc": "Each time you convert an invoice with our AI converter, 3 credits are used. If you use the AI assistant to create or edit invoices, 1 credit is used per successful generation/edit of an invoice. Credits are only spent when you actually perform a conversion or interact with the AI assistant. Extracting an invoice template of your choice for reuse costs 8 credits. You can monitor your credit balance in \"My Profile\" and purchase additional credits at any time."
+      },
+      "invoiceLimits": {
+        "title": "Are there limits on file size or number of invoices I can convert?",
+        "desc": "There are no limits on the number of invoices you can convert as long as you have credits available. PDF files up to 20MB are supported. Our AI can handle single-page and multi-page invoices, even complex invoices with multiple line items and various formatting styles. For enterprise customers with very high volumes, we offer dedicated support and optimized processing - contact our sales team for custom solutions."
+      }
+    }
+  },
+ "contactForm": {
+    "title": "You have a question? Let's talk.",
+    "subtitle": "We're here to help you get the most out of the platform. Send us your questions and inquiries and we will get back to you as soon as possible.",
+    "content": {
+      "heading": "We're always here to help",
+      "description": "Whether you have questions about InvoiceAI's features, need help with integration or anything else, our team is ready to assist. We typically respond within 24 hours.",
+      "info": {
+        "email": {
+          "title": "Email support",
+          "desc": "Get detailed answers to your questions directly in your inbox."
+        },
+        "response": {
+          "title": "Fast response time",
+          "desc": "We strive to respond to all inquiries within 24 hours, usually even faster."
+        },
+        "available": {
+          "title": "Always available",
+          "desc": "Contact us whenever it's convenient for you - we're here to support your success."
+        }
+      }
+    },
+    "form": {
+      "nameLabel": "Name",
+      "namePlaceholder": "Ivan Petrov",
+      "emailLabel": "Email",
+      "emailPlaceholder": "email@example.com",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "What is your question or issue?",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Describe your question or issue in detail...",
+      "submit": "Send message",
+      "sending": "Sending..."
+    },
+    "success": "Thank you! We have received your message and will get back to you as soon as possible.",
+    "errors": {
+      "name": "Name is a required field, please fill it out.",
+      "email": "Email is a required field, please fill it out.",
+      "subject": "Subject is a required field, please fill it out.",
+      "message": "Message is a required field, please fill it out.",
+      "submit": "Something went wrong. Please try again later."
+    }
+  },
+  "customization": {
+    "title": "Reuse Your Templates with AI",
+    "subtitle": "Upload your existing invoice templates from your company or clients. GPT-6-Astra will extract the structure and layout, so you can instantly reuse them for all future invoices.",
+    "items": {
+      "extract": { "title": "Smart Extraction", "desc": "GPT-6-Astra analyzes your PDF, DOC, or DOCX templates and intelligently extracts the structure, layout, and formatting." },
+      "aiPowered": { "title": "AI-Powered Analysis", "desc": "Advanced AI recognizes invoice sections, field positions, and design patterns from any template format." },
+      "upload": { "title": "Multiple Formats", "desc": "Support for PDF, Microsoft Word (.doc, .docx), and any standard document format your company uses." },
+      "fast": { "title": "Instant Recognition", "desc": "Get your template analyzed and ready to use in seconds - no manual configuration needed." },
+      "reuse": { "title": "One-Click Reuse", "desc": "Once extracted, use your template as the default for all future invoices without any extra steps." },
+      "consistency": { "title": "Brand Consistency", "desc": "Ensure every invoice maintains your company's exact design, branding, and layout standards automatically." }
+    },
+    "cta": "Extract your template"
   },
   "finalCta": {
     "title": "Ready to save hours every month?",
@@ -98,12 +210,12 @@
     "tagline": "Turn any foreign invoice into a fully compliant Bulgarian one in under 30 seconds. No retyping, no errors, no headaches.",
     "cta": "Convert your first invoice free",
     "linksTitle": "Explore",
-    "links": {
-      "home": "Home",
-      "howItWorks": "How it works",
-      "features": "Features",
-      "converter": "Converter"
-    },
+    "home": "Home",
+    "whyUs": "Why us",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "tools": "Our tools",
+    "contactUs": "Contact us",
     "whyTitle": "Why teams trust us",
     "trust": {
       "secure": "Files never stored on our servers",
@@ -111,7 +223,7 @@
       "speed": "PDF ready in under 30 seconds"
     },
     "rights": "All rights reserved.",
-    "poweredBy": "Powered by GPT-4o · Built for WEB SERVICES BULGARIA LTD"
+    "poweredBy": "Powered by GPT-5.6-luna · Built for WEB SERVICES BULGARIA LTD"
   },
   "uploader": {
     "title": "Convert your invoice",
@@ -133,7 +245,7 @@
     "generating": "Generating…",
     "originalInvoice": "Original Invoice",
     "aiReading": "AI is reading your invoice",
-    "dataExtracted": "Data extracted — review and edit if needed",
+    "dataExtracted": "Data extracted - review and edit if needed",
     "generateInvoice": "Generate Bulgarian Invoice",
     "generatingPdf": "Generating PDF…",
     "downloadBulgarianPdf": "Download Bulgarian Invoice (PDF)",
@@ -227,6 +339,7 @@
     "areaChartTitle": "Generated invoices overview",
     "areaChartDescription": "Visualization of generated invoice counts for the selected period",
     "chartRangeLabel": "Period",
+    "noTransactions": "No transactions found",
     "chartRangeLastMonth": "Last month",
     "chartRangeLast3Months": "Last 3 months",
     "chartRangeLast6Months": "Last 6 months",
@@ -238,7 +351,8 @@
     "tableType": "Type",
     "tableDate": "Date",
     "tableMethod": "Method",
-    "tableAmount": "Кредити",
+    "tableAmount": "Credits amount",
+    "contragentsCount": "Contragents count",
     "tableBalanceAfter": "Balance after transaction",
     "tableTypePurchase": "Purchase",
     "tableTypeConsumption": "Consumption",
@@ -251,10 +365,11 @@
     "bulstat": "BULSTAT/EIK",
     "totalInvoices": "Total invoices",
     "tableTypeAdjustment": "Adjustment",
-  "organizationsSortLabel": "Sort organizations by",
-  "organizationsSortMostAmount": "Highest total amount",
-  "organizationsSortLatestGenerated": "Latest generated invoice",
-  "organizationsSortGeneratedCount": "Generated invoices count",
+    "organizationsSortLabel": "Sort organizations by",
+    "organizationsSortMostAmount": "Highest total amount",
+    "organizationsSortLatestGenerated": "Latest generated invoice",
+    "organizationsSortGeneratedCount": "Generated invoices count",
+    "noOrganizations": "No organizations found",
     "reports": "Reports",
     "aiConvertor": "AI Convertor",
     "aiAssistant": "AI Assistant",
@@ -282,7 +397,6 @@
     "localizations": "Localizations",
     "logout": "Log out",
     "actionButtons": "Action buttons",
-    "noOrganizations": "You don't have any organizations yet. Add your first organization to get started.",
     "invoiceTemplate": "Invoice Template"
   },
   "generatedInvoices": {
@@ -779,5 +893,4 @@
   "confirmationDialog": {
     "confirmCancel": "Cancel"
   }
-  
 }
