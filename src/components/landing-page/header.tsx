@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { NAVIGATIONS } from "@/utility/constants";
 export const Header = () => {
   const t = useTranslations("header");
   const [loginOpen, setLoginOpen] = useState(false);
@@ -33,21 +33,15 @@ export const Header = () => {
 
         {/* Nav */}
         <nav className="hidden sm:flex items-center gap-6 text-xs font-medium text-muted-foreground">
-          <a href="#hero" className="hover:text-foreground transition-colors">
-            {t("home")}
-          </a>
-          <a
-            href="#solution"
-            className="hover:text-foreground transition-colors"
-          >
-            {t("howItWorks")}
-          </a>
-          <a
-            href="#features"
-            className="hover:text-foreground transition-colors"
-          >
-            {t("about")}
-          </a>
+          {NAVIGATIONS.map((nav) => (
+            <a
+              key={nav.key}
+              href={nav.href}
+              className="hover:text-foreground transition-colors"
+            >
+              {t(nav.key)}
+            </a>
+          ))}
         </nav>
 
         <div className="flex items-center gap-3">

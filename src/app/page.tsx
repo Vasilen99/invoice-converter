@@ -4,12 +4,15 @@ import { Sparkles, ArrowRight, ArrowDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { FadeIn } from "../components/motion";
 import { FinalCta } from "@/components/landing-page/final-cta";
-import { Features } from "@/components/landing-page/features";
-import { Solution } from "@/components/landing-page/solution";
+import { WhyUs } from "@/components/landing-page/features";
 import { Problem } from "@/components/landing-page/problem";
 import { Header } from "@/components/landing-page/header";
 import { Footer } from "@/components/landing-page/footer";
 import { Pricing } from "@/components/landing-page/pricing";
+import { AITools } from "@/components/landing-page/ai-tools";
+import { Customization } from "@/components/landing-page/customization";
+import FAQLanding from "@/components/landing-page/faq";
+import { ContactUsForm } from "@/components/landing-page/contact-form";
 /* ─────────────────────────── Hero ─────────────────────────── */
 
 const PROVIDERS = [
@@ -119,9 +122,12 @@ const HomePage = () => {
         <div className="relative z-10">
           <Hero />
           <Problem />
-          <Solution />
-          <Features />
+          <Customization />
+          <AITools />
+          <WhyUs />
           <Pricing />
+          <FAQLanding />
+          <ContactUsForm />
           <FinalCta />
         </div>
       </main>

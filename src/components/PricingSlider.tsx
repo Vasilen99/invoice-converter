@@ -124,7 +124,7 @@ export const PricingSlider = ({
         </div>
       </FadeIn>
       <FadeIn
-        className={`mb-14 ${layout === "landing" ? "flex items-center justify-center" : ""} `}
+        className={`${layout === "landing" ? "flex items-center justify-center" : ""} `}
       >
         <div className="grid grid-cols-1 place-items-center place-content-center gap-8 bg-muted/30 rounded-2xl p-8 md:p-12 w-full max-w-100">
           <div className="flex flex-col justify-between w-full">

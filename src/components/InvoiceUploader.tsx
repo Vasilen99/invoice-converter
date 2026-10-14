@@ -218,12 +218,7 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
               ),
             );
           }
-        } catch (err) {
-          console.log(
-            "There was an error while saving the source document:",
-            err,
-          );
-
+        } catch (_err) {
           notifyAlert(
             "warning",
             "alerts.sourceDocumentSaveFailedHeader",
@@ -565,7 +560,11 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
   return (
     <div className="w-full">
-      <HeadingSection title={t("title")} subtitle={t("subtitle")} />
+      <HeadingSection
+        type="inner-page"
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
       {/* ── UPLOAD ZONE ── */}
       {invoices.length === 0 && (
         <UploadZone

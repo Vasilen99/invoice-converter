@@ -517,7 +517,11 @@ export const CreateInvoiceMain = ({ data }: CreateInvoiceMainProps) => {
 
   return (
     <section>
-      <HeadingSection title={t("header")} subtitle={t("subheader")} />
+      <HeadingSection
+        type="inner-page"
+        title={t("header")}
+        subtitle={t("subheader")}
+      />
       {!data ? (
         <NoAccountFallback />
       ) : (

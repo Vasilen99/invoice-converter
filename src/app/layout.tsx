@@ -10,6 +10,12 @@ import dynamic from "next/dynamic";
 const Alert = dynamic(() =>
   import("@/components/Alert").then((mod) => mod.AlertDemo),
 );
+const GlobalLoading = dynamic(() => import("@/components/GlobalLoading"));
+
+const NavigationLoader = dynamic(() =>
+  import("@/components/NavigationLoader").then((mod) => mod.default),
+);
+
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const Layout: React.FC<{ children: React.ReactNode }> = async ({
@@ -35,6 +41,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = async ({
           <AppProvider>
             {children}
             <Alert />
+            <GlobalLoading />
+            <NavigationLoader />
           </AppProvider>
         </NextIntlClientProvider>
       </body>

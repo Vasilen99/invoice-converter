@@ -171,7 +171,11 @@ export default function InvoiceTemplatePage({
     <NoAccountFallback />
   ) : (
     <section className="flex flex-col gap-6">
-      <HeadingSection title={t("header")} subtitle={t("subheader")} />
+      <HeadingSection
+        type="inner-page"
+        title={t("header")}
+        subtitle={t("subheader")}
+      />
 
       <div className="rounded-xl border border-border bg-card p-4 lg:p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">

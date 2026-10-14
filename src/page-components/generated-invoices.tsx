@@ -466,7 +466,11 @@ export default function GeneratedInvoices({
 
   return (
     <section className="space-y-6 pb-8">
-      <HeadingSection title={t("header")} subtitle={t("subheader")} />
+      <HeadingSection
+        type="inner-page"
+        title={t("header")}
+        subtitle={t("subheader")}
+      />
 
       {organizationsList.length === 0 ? (
         <p className="text-sm text-primary/60">{t("noOrganizations")}</p>

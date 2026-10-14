@@ -51,7 +51,11 @@ const CreditsPage = ({ accountData, packageData }: CreditsPageProps) => {
         <NoAccountFallback />
       ) : (
         <>
-          <HeadingSection title={t("header")} subtitle={t("subheader")} />
+          <HeadingSection
+            type="inner-page"
+            title={t("header")}
+            subtitle={t("subheader")}
+          />
           <span className="flex justify-start w-full mb-16">
             {t("creditsBalance")}:{" "}
             <span className="font-bold ml-2">

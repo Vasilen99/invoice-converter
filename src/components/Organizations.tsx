@@ -81,6 +81,7 @@ export default function Organizations({
         <FadeIn delay={0.01}>
           <div className="grid lg:grid-cols-2 lg:gap-0 grid-cols-1 gap-3 justify-between lg:items-start lg:mb-0 mb-6">
             <HeadingSection
+              type="inner-page"
               title={t("organizations.organizationsHeader")}
               subtitle={t("organizations.organizationsSubheader")}
             />

@@ -1,6 +1,7 @@
 "use client";
 
-import { Zap, ArrowRight, ShieldCheck, Sparkles, Clock } from "lucide-react";
+import { NAVIGATIONS } from "@/utility/constants";
+import { Zap, ShieldCheck, Sparkles, Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export const Footer = () => {
@@ -22,13 +23,6 @@ export const Footer = () => {
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mb-5">
               {t("tagline")}
             </p>
-            <a
-              href="#converter"
-              className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-colors group"
-            >
-              {t("cta")}
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-            </a>
           </div>
 
           {/* Quick links */}
@@ -37,18 +31,15 @@ export const Footer = () => {
               {t("linksTitle")}
             </p>
             <nav className="flex flex-col gap-2.5 text-sm text-muted-foreground">
-              <a href="#hero" className="hover:text-foreground transition-colors">
-                {t("links.home")}
-              </a>
-              <a href="#solution" className="hover:text-foreground transition-colors">
-                {t("links.howItWorks")}
-              </a>
-              <a href="#features" className="hover:text-foreground transition-colors">
-                {t("links.features")}
-              </a>
-              <a href="#converter" className="hover:text-foreground transition-colors">
-                {t("links.converter")}
-              </a>
+              {NAVIGATIONS.map((nav) => (
+                <a
+                  key={nav.key}
+                  href={nav.href}
+                  className="hover:text-foreground transition-colors"
+                >
+                  {t(nav.key)}
+                </a>
+              ))}
             </nav>
           </div>
 
