@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { FadeIn, Stagger, StaggerItem } from "../motion";
+import { Stagger, StaggerItem } from "../motion";
 
 import {
   BrainCircuit,
@@ -9,6 +9,7 @@ import {
   Lock,
   Globe,
 } from "lucide-react";
+import { HeadingSection } from "../HeadingSection";
 
 const featureIcons = {
   ai: BrainCircuit,
@@ -33,12 +34,7 @@ export const WhyUs = () => {
   return (
     <section id="why-us" className="relative py-18 px-4 scroll-mt-16">
       <div className="max-w-6xl mx-auto">
-        <FadeIn className="text-center mb-14">
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-foreground mb-4">
-            {t("title")}
-          </h2>
-        </FadeIn>
-
+        <HeadingSection title={t("title")} type="landing-section" />
         <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {featureKeys.map((key) => {
             const Icon = featureIcons[key];

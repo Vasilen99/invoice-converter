@@ -7,6 +7,7 @@ import { useGlobalStore } from "@/store/global";
 import { invoiceTemplateLink } from "@/utility/links";
 import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
+import { HeadingSection } from "../HeadingSection";
 
 const customizationIcons = {
   extract: Copy,
@@ -42,15 +43,11 @@ export const Customization = () => {
   return (
     <section id="customization" className="relative py-18 px-4 scroll-mt-16">
       <div className="max-w-6xl mx-auto">
-        <FadeIn className="text-center mb-14">
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-foreground mb-4">
-            {t("title")}
-          </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            {t("subtitle")}
-          </p>
-        </FadeIn>
-
+        <HeadingSection
+          title={t("title")}
+          subtitle={t("subtitle")}
+          type="landing-section"
+        />
         <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {customizationKeys.map((key) => {
             const Icon = customizationIcons[key];

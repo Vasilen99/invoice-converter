@@ -560,7 +560,11 @@ const InvoiceUploader = ({ account = null }: InvoiceUploaderProps) => {
 
   return (
     <div className="w-full">
-      <HeadingSection title={t("title")} subtitle={t("subtitle")} />
+      <HeadingSection
+        type="inner-page"
+        title={t("title")}
+        subtitle={t("subtitle")}
+      />
       {/* ── UPLOAD ZONE ── */}
       {invoices.length === 0 && (
         <UploadZone

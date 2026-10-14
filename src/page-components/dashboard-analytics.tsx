@@ -248,7 +248,11 @@ export default function DashboardAnalytics({
 
   return (
     <>
-      <HeadingSection title={t("header")} subtitle={t("subheader")} />
+      <HeadingSection
+        type="inner-page"
+        title={t("header")}
+        subtitle={t("subheader")}
+      />
       <div className="flex flex-col gap-6">
         <div className="grid lg:grid-cols-2 lg:grid-rows-1 grid-cols-1 grid-rows-2 lg:space-x-4 space-y-4">
           <Card>

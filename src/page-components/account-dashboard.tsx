@@ -93,6 +93,7 @@ export default function AccountDashboardPage({
   return (
     <section className="flex flex-col">
       <HeadingSection
+        type="inner-page"
         title={t("account.accountHeader")}
         subtitle={t("account.accountSubheader")}
       />

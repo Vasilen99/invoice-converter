@@ -1,7 +1,7 @@
 "use client";
 
 import { NAVIGATIONS } from "@/utility/constants";
-import { Zap, ArrowRight, ShieldCheck, Sparkles, Clock } from "lucide-react";
+import { Zap, ShieldCheck, Sparkles, Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export const Footer = () => {
@@ -23,13 +23,6 @@ export const Footer = () => {
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mb-5">
               {t("tagline")}
             </p>
-            <a
-              href="#converter"
-              className="btn-glow inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-colors group"
-            >
-              {t("cta")}
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-            </a>
           </div>
 
           {/* Quick links */}

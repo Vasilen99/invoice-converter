@@ -8,7 +8,9 @@ import { Send, CheckCircle2 } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { HeadingSection } from "../HeadingSection";
 import type React from "react";
+import { Button } from "../ui/button";
 
 type FormData = {
   name: string;
@@ -142,15 +144,11 @@ export function ContactUsForm() {
     <section id="contact-us" className="relative py-18 px-4 scroll-mt-16">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <FadeIn className="text-center mb-14">
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-foreground mb-4">
-            {t("title")}
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t("subtitle")}
-          </p>
-        </FadeIn>
-
+        <HeadingSection
+          title={t("title")}
+          subtitle={t("subtitle")}
+          type="landing-section"
+        />
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Left Column - Content */}
@@ -282,23 +280,25 @@ export function ContactUsForm() {
               )}
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full px-6 py-3 rounded-lg bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="w-4 h-4 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin" />
-                    {t("form.sending")}
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" />
-                    {t("form.submit")}
-                  </>
-                )}
-              </button>
+              <div className="flex justify-center">
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="mx-auto w-fit hover:cursor-pointer relative btn-glow inline-flex items-center justify-center gap-2 px-10 py-4 rounded-lg text-sm font-bold text-primary-foreground bg-primary hover:bg-primary/90 transition-all group"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-4 h-4 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin" />
+                      {t("form.sending")}
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      {t("form.submit")}
+                    </>
+                  )}
+                </Button>
+              </div>
             </form>
           </FadeIn>
         </div>

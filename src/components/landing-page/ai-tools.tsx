@@ -1,11 +1,12 @@
 "use client";
 import { useTranslations } from "next-intl";
-import { FadeIn, Stagger, StaggerItem } from "../motion";
+import { Stagger, StaggerItem } from "../motion";
 import { Zap, MessageSquare, ArrowRight } from "lucide-react";
 import { useUserStore } from "@/store/user";
 import { useGlobalStore } from "@/store/global";
 import { aiAssistantLink, aiConvertorLink } from "@/utility/links";
 import { Button } from "../ui/button";
+import { HeadingSection } from "../HeadingSection";
 const toolIcons = [Zap, MessageSquare];
 const toolKeys = ["converter", "assistant"] as const;
 
@@ -26,15 +27,11 @@ export const AITools = () => {
   return (
     <section id="ai-tools" className="relative py-18 px-4 scroll-mt-16">
       <div className="max-w-6xl mx-auto">
-        <FadeIn className="text-center mb-14">
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-foreground mb-4">
-            {t("title")}
-          </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            {t("subtitle")}
-          </p>
-        </FadeIn>
-
+        <HeadingSection
+          title={t("title")}
+          subtitle={t("subtitle")}
+          type="landing-section"
+        />
         <Stagger
           className="grid grid-cols-1 lg:grid-cols-2 gap-6"
           staggerDelay={0.2}

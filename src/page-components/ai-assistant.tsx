@@ -369,7 +369,11 @@ export function AIAssistantPage({ account }: { account: AccountContext }) {
     <div className="mx-auto flex h-[calc(100vh-8rem)] max-w-4xl flex-col">
       {/* Header */}
       <div className="flex flex-col shrink-0 items-center justify-between pb-6">
-        <HeadingSection title={t("title")} subtitle={t("subtitle")} />
+        <HeadingSection
+          type="inner-page"
+          title={t("title")}
+          subtitle={t("subtitle")}
+        />
         <Button
           variant="outline"
           size="sm"
